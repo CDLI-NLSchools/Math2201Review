@@ -57,6 +57,10 @@
   .thinNote{background:#fdf6ec;border:1px solid var(--accent2);border-radius:8px;padding:9px 12px;font-size:.88rem;line-height:1.45;}
   .modebar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
   #printArea{display:none;}
+  .sheetPrev{border:1px solid var(--line);background:#fff;color:#16281f;padding:20px;border-radius:6px;margin-top:12px;}
+  .sheetPrev .pq{margin-bottom:14px;}
+  .sheetPrev .ws{border-bottom:1px solid #ddd;}
+  .sheetPrev.editing{outline:2px dashed var(--acc);outline-offset:3px;}
   .ws{border:1.5px solid #b9b2a2;border-radius:4px;margin:8px 0 4px;}
   .nameline{display:flex;gap:30px;font-size:.95rem;margin-bottom:14px;}
   .nameline span{border-bottom:1px solid #444;padding:0 90px 2px 6px;}
@@ -1377,9 +1381,30 @@ function startSheet(){
   });
   html+='</div>';
   $("printArea").innerHTML=html;
-  $("session").innerHTML='<div class="card"><p>Your practice sheet is ready ('+res.items.length+' questions, with the answer key on its own pages at the end). Use your browser\u2019s print button, or press the button below.</p>'+(res.thin?'<p class="thinNote">Heads up: the question bank is still thin for this selection, so this sheet repeats practice on the same question shape (with new numbers) because there are not yet enough different questions to fill it.</p>':"")+'<p><button type="button" id="printBtn">Print / save the sheet</button></p></div>';
-  $("printBtn").addEventListener("click",function(){window.print();});
-  window.print();
+  $("session").innerHTML='<div class="card"><p>Your practice sheet is ready ('+res.items.length+' questions, with the answer key on its own pages at the end). It is shown below, exactly as it will print.</p>'
+    +(res.thin?'<p class="thinNote">Heads up: the question bank is still thin for this selection, so this sheet repeats practice on the same question shape (with new numbers) because there are not yet enough different questions to fill it.</p>':"")
+    +'<div class="row"><button type="button" id="editBtn">Edit the sheet</button><button type="button" id="copyBtn" class="sec">Copy for Google Docs / Word</button><button type="button" id="printBtn" class="sec">Print / save the sheet</button></div>'
+    +'<p class="hint" id="editHint" hidden>Editing is on: click any text in the sheet below and type to change it, or delete a question you do not want. What you see is what prints. The math is regular text, so numbers and symbols can be changed directly.</p>'
+    +'<p class="hint" id="copyStatus" role="status"></p>'
+    +'<div class="sheetPrev" id="sheetPrev">'+html+'</div></div>';
+  $("editBtn").addEventListener("click",function(){
+    var prev=$("sheetPrev"),on=prev.getAttribute("contenteditable")==="true";
+    if(on){prev.removeAttribute("contenteditable");prev.classList.remove("editing");$("editBtn").textContent="Edit the sheet";$("editHint").hidden=true;}
+    else{prev.setAttribute("contenteditable","true");prev.classList.add("editing");$("editBtn").textContent="Done editing";$("editHint").hidden=false;prev.focus();}
+  });
+  $("copyBtn").addEventListener("click",copySheet);
+  $("printBtn").addEventListener("click",function(){$("printArea").innerHTML=$("sheetPrev").innerHTML;window.print();});
+}
+function copySheet(){
+  var node=$("sheetPrev"),status=$("copyStatus");if(!node)return;
+  function done(ok){status.textContent=ok?"Copied. Open a Google Doc or a Word document and paste (Ctrl+V): the whole sheet lands there as editable text. Edit it there, then print from there.":"Copy did not work in this browser. You can still edit the sheet right here and print it.";}
+  function fallback(){try{var r=document.createRange();r.selectNodeContents(node);var sel=window.getSelection();sel.removeAllRanges();sel.addRange(r);var ok=document.execCommand("copy");sel.removeAllRanges();done(ok);}catch(e){done(false);}}
+  if(navigator.clipboard&&window.ClipboardItem){
+    try{
+      var item=new ClipboardItem({"text/html":new Blob([node.innerHTML],{type:"text/html"}),"text/plain":new Blob([node.innerText||""],{type:"text/plain"})});
+      navigator.clipboard.write([item]).then(function(){done(true);},function(){fallback();});
+    }catch(e){fallback();}
+  } else fallback();
 }
 function settingsToURL(){
   var s=settings();var p=new URLSearchParams();
