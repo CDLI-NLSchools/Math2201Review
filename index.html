@@ -44,6 +44,14 @@
   .ok{color:var(--good);font-weight:bold;} .notyet{color:var(--bad);font-weight:bold;}
   .sol{background:#fdf6ec;border-left:5px solid var(--accent2);padding:10px 12px;margin-top:8px;line-height:1.55;font-size:.9rem;display:none;}
   .sol.show{display:block;}
+  .reprow{margin-top:8px;}
+  .repbtn{font-size:.82rem;padding:5px 10px;}
+  .rep{display:none;background:#f4f6f5;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:8px;font-size:.9rem;}
+  .rep.show{display:block;}
+  .rep label{display:block;margin:6px 0;line-height:1.45;}
+  .rep select{margin-left:6px;max-width:100%;}
+  .rep textarea{width:100%;padding:7px;border:1px solid var(--line);border-radius:6px;font-size:.9rem;margin-top:4px;}
+  .repstat{font-size:.86rem;color:#4b5a61;margin-top:6px;line-height:1.45;}
   .hint{font-size:.82rem;color:#4b5a61;line-height:1.45;}
   .scoreline{font-size:.95rem;font-weight:bold;margin:6px 0 14px;}
   .thinNote{background:#fdf6ec;border:1px solid var(--accent2);border-radius:8px;padding:9px 12px;font-size:.88rem;line-height:1.45;}
@@ -1235,6 +1243,11 @@ function drawSet(units,inds,n,mix,orderMode,cap){
 /* ============ UI ============ */
 var $=function(id){return document.getElementById(id);};
 var state={units:[5],inds:[],midCap:false};
+/* Report-a-problem: a Google Form on the maintainer's personal account receives the
+   reports, and a nightly job reads them back, fixes what is verifiably fixable, and
+   flags the rest. The entry IDs are the form's pre-filled-link IDs. If url is ever
+   emptied, the panel falls back to copying the report text for the teacher. */
+var REPORT_FORM={url:"https://docs.google.com/forms/d/e/1FAIpQLSed8tcgNkhD-S0eAUxJGG1nwoGgPBYRhAjK9xGC8tRXf4TbsQ/viewform",typeEntry:"entry.1011402329",detailsEntry:"entry.309249440",extraEntry:"entry.2093753318"};
 function unitCheckboxes(){
   $("unitGrid").innerHTML=Object.keys(UNITS).map(function(u){
     return '<label class="chk"><input type="checkbox" class="unitChk" value="'+u+'"'+(state.units.indexOf(+u)>=0?" checked":"")+'> Unit '+u+": "+UNITS[u]+"</label>";
@@ -1289,14 +1302,49 @@ function startOnline(){
     }else{
       html+='<p>Your answer: <input type="text" class="ans" id="ans'+i+'" autocomplete="off"></p>';
     }
-    html+='<p><button type="button" data-check="'+i+'">Check</button> <button type="button" class="alt" data-sol="'+i+'">Show worked solution</button></p><div class="fb" id="fb'+i+'"></div><div class="sol" id="sol'+i+'"><b>Worked solution:</b> '+q.solution+'</div></div>';
+    html+='<p><button type="button" data-check="'+i+'">Check</button> <button type="button" class="alt" data-sol="'+i+'">Show worked solution</button></p><div class="fb" id="fb'+i+'"></div><div class="sol" id="sol'+i+'"><b>Worked solution:</b> '+q.solution+'</div>'
+      +'<p class="reprow"><button type="button" class="alt repbtn" data-rep="'+i+'">Report a problem</button></p>'
+      +'<div class="rep" id="rep'+i+'"><label>What is the problem?<select id="reptype'+i+'"><option>The question looks wrong or unclear</option><option>The worked solution doesn\'t work out</option><option>My answer was marked wrong but should be right</option><option>Something else is out of place</option></select></label>'
+      +'<label>Anything you noticed (optional)<textarea id="repnote'+i+'" rows="3"></textarea></label>'
+      +(REPORT_FORM.url?'<p><button type="button" data-repsend="'+i+'">Send report</button> <button type="button" class="alt" data-repcopy="'+i+'">Copy report text instead</button></p>':'<p><button type="button" data-repcopy="'+i+'">Copy report text</button></p>')
+      +'<div class="repstat" id="repstat'+i+'"></div></div></div>';
   });
   html+='<p><button type="button" id="againBtn">New set of questions</button></p></div>';
   box.innerHTML=html;updateScore();
   Array.prototype.forEach.call(box.querySelectorAll("[data-check]"),function(b){b.addEventListener("click",function(){checkQ(+b.getAttribute("data-check"));});});
   Array.prototype.forEach.call(box.querySelectorAll("[data-sol]"),function(b){b.addEventListener("click",function(){$("sol"+b.getAttribute("data-sol")).classList.toggle("show");});});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-rep]"),function(b){b.addEventListener("click",function(){$("rep"+b.getAttribute("data-rep")).classList.toggle("show");});});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-repsend]"),function(b){b.addEventListener("click",function(){openReport(+b.getAttribute("data-repsend"));});});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-repcopy]"),function(b){b.addEventListener("click",function(){copyReport(+b.getAttribute("data-repcopy"));});});
   $("againBtn").addEventListener("click",startOnline);
   box.scrollIntoView({behavior:"smooth"});
+}
+function plainText(h){var d=document.createElement("div");d.innerHTML=String(h).replace(/<br\s*\/?>/gi,"\n");return (d.textContent||"").replace(/[ \t]+/g," ").replace(/\s*\n\s*/g,"\n").trim();}
+function reportText(q,reason){
+  var e=q._entry,lines=[];
+  lines.push("Math 2201 Review - problem report");
+  lines.push("Entry: "+e.id+" | Unit "+e.unit+" ("+UNITS[e.unit]+") | Indicators: "+e.indicators.join(", ")+" | Level "+e.level);
+  lines.push("Problem type: "+reason);
+  lines.push("Question: "+plainText(q.prompt));
+  if(q.type==="mc"){lines.push("Options:");q.options.forEach(function(o,j){lines.push("  - "+plainText(o)+(j===q.correct?"  [marked as the correct answer]":""));});}
+  else if(q.type==="num"){lines.push("Stated answer: "+q.answer);}
+  else{lines.push("Accepted answer(s): "+q.answers.join(" / "));}
+  lines.push("Worked solution: "+plainText(q.solution));
+  return lines.join("\n");
+}
+function openReport(i){
+  var q=current[i],reason=$("reptype"+i).value,note=$("repnote"+i).value.trim();
+  var u=REPORT_FORM.url+"?usp=pp_url&"+REPORT_FORM.typeEntry+"="+encodeURIComponent(reason)+"&"+REPORT_FORM.detailsEntry+"="+encodeURIComponent(reportText(q,reason));
+  if(note)u+="&"+REPORT_FORM.extraEntry+"="+encodeURIComponent(note);
+  window.open(u,"_blank");
+  $("repstat"+i).textContent="The report form opened in a new tab with everything filled in - just press Submit there. Thank you for flagging it.";
+}
+function copyReport(i){
+  var q=current[i],note=$("repnote"+i).value.trim();
+  var txt=reportText(q,$("reptype"+i).value)+(note?("\nReporter note: "+note):"");
+  function done(){$("repstat"+i).textContent="Report copied - paste it to your teacher. Thank you for flagging it.";}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,done);}
+  else{var ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(err){}document.body.removeChild(ta);done();}
 }
 function updateScore(){$("score").textContent=checkedCount?("Score so far: "+correctCount+" of "+checkedCount+" checked."):"Check each question as you go \u2014 the worked solution is there when you want it.";}
 function checkQ(i){
@@ -1321,6 +1369,7 @@ function startSheet(){
     if(q.type==="mc"){html+='<div class="opts">'+q.options.map(function(o){return '<label style="display:block;margin:4px 0;">\u25CB '+o+'</label>';}).join("")+'</div>';}
     html+='<div class="ws" style="height:'+h+'px"></div></div>';
   });
+  html+='<p style="font-size:.85rem;color:#555;">Spotted a problem with a question on this sheet? Write down its unit and question number and let your teacher know.</p>';
   html+='<div class="keybreak"><h1 style="font-size:1.3rem;">Answer Key \u2014 with worked solutions</h1>';
   res.items.forEach(function(q,i){
     var ans=q.type==="mc"?esc(q.options[q.correct]):(q.type==="num"?fmt(q.answer):esc(q.answers[0]));
