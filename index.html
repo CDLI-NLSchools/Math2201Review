@@ -232,7 +232,11 @@ var UNIT_IND={
    A "gen" entry must produce at least 50 unique canonical questions (normalized prompt
    text + correct answer) in 2,000 test draws, or it must be registered as a "var" set
    holding at least 3 genuinely different static questions. Run the duplication audit
-   as a pre-commit check before any new item is added to this bank. */
+   as a pre-commit check before any new item is added to this bank.
+   Every multiple-choice question must have exactly 4 options (Jason's standard,
+   Oct 26, 2026): build exactly 3 distractors, and make sure no distractor can ever
+   equal the correct answer or another distractor, because mcq() silently drops
+   duplicates and the option count falls short. */
 var BANK=[];
 function E(id,unit,indicators,level,kind,gen){BANK.push({id:id,unit:unit,indicators:indicators,level:level,kind:kind,gen:gen});}
 
@@ -765,7 +769,7 @@ E("u2-domain-range",2,["4.1"],2,"gen",function(){
   var correct=a>0?"Domain: all real numbers; Range: y \u2265 "+k:"Domain: all real numbers; Range: y \u2264 "+k;
   return mcq("A quadratic function has vertex ("+h+", "+k+") and opens "+(a>0?"upward":"downward")+". What are its domain and range?",correct,
     [a>0?"Domain: all real numbers; Range: y \u2264 "+k:"Domain: all real numbers; Range: y \u2265 "+k,
-     "Domain: x \u2265 "+h+"; Range: all real numbers","Domain: all real numbers; Range: y \u2265 "+h],
+     "Domain: x \u2265 "+h+"; Range: all real numbers","Domain: x \u2265 "+h+"; Range: y "+(a>0?"\u2265":"\u2264")+" "+k],
     "Every quadratic has domain all real numbers. The vertex is the turning point: opening "+(a>0?"up, the smallest y is the vertex's y-value "+k:"down, the largest y is "+k)+", so the range is y "+(a>0?"\u2265":"\u2264")+" "+k+".",{a:a,h:h,k:k});
 });
 E("u2-vertex-form-params",2,["4.15"],1,"var",varset([
@@ -842,13 +846,13 @@ function radStr(a,b){return (a===1?"":a)+"\u221A"+b;}
 E("u4-mixed-to-entire",4,["1.1"],1,"gen",function(){
   var a=ri(2,9),b=pick([2,3,5,6,7,10,11,13,14,15]);var inside=a*a*b;
   var frame=pick(["Express "+radStr(a,b)+" as an entire radical.","Which entire radical is equal to "+radStr(a,b)+"?"]);
-  return mcq(frame,"\u221A"+inside,["\u221A"+(a*b),"\u221A"+(a*a+b),"\u221A"+(a+b)],
+  return mcq(frame,"\u221A"+inside,["\u221A"+(a*b),"\u221A"+(a*a+b),"\u221A"+(a*a*b*b)],
     "Bring the outside number in by squaring it: "+a+"\u00B2 \u00D7 "+b+" = "+(a*a)+" \u00D7 "+b+" = "+inside+", so "+radStr(a,b)+" = \u221A"+inside+".",{a:a,b:b});
 });
 E("u4-entire-to-mixed",4,["1.2"],1,"gen",function(){
   var a=ri(2,12),b=pick([2,3,5,6,7,10,11,13,14,15]);var n=a*a*b;
   var frame=pick(["Express \u221A"+n+" as a mixed radical in simplest form.","Write \u221A"+n+" as a mixed radical in simplest form."]);
-  return mcq(frame,radStr(a,b),[radStr(a+1,b),radStr(a,b+1),(n/2)+"\u221A2","\u221A"+(n-1)],
+  return mcq(frame,radStr(a,b),[radStr(a+1,b),radStr(a,b+1),"\u221A"+(n-1)],
     "Find the largest perfect square dividing "+n+": "+n+" = "+(a*a)+" \u00D7 "+b+". So \u221A"+n+" = "+a+"\u221A"+b+" = "+radStr(a,b)+".",{a:a,b:b,n:n});
 });
 E("u4-simplify-add",4,["1.6"],2,"gen",function(){
@@ -903,10 +907,11 @@ E("u4-order",4,["1.3"],2,"gen",function(){
   var asc=sorted.map(function(o){return o.s;}).join(", ");
   var shown=shuffle(items.slice());
   var shownStr=shown.map(function(o){return o.s;}).join(", ");
-  var rev=items.slice().sort(function(x,y){return y.v-x.v;}).map(function(o){return o.s;}).join(", ");
-  var swap2=[shown[1],shown[0],shown[3],shown[2]].map(function(o){return o.s;}).join(", ");
+  var rev=sorted.slice().reverse().map(function(o){return o.s;}).join(", ");
+  var rot=[sorted[1],sorted[2],sorted[3],sorted[0]].map(function(o){return o.s;}).join(", ");
+  var midswap=[sorted[0],sorted[2],sorted[1],sorted[3]].map(function(o){return o.s;}).join(", ");
   return mcq("Which list shows these radicals in order from least to greatest? "+shownStr,
-    asc,[shownStr,rev,swap2],
+    asc,[rev,rot,midswap],
     "Square each value (or estimate): "+sorted.map(function(o){return o.s+" \u2248 "+fmt(o.v);}).join(", ")+". Ordered least to greatest: <b>"+asc+"</b>.",{items:items});
 });
 </script>
