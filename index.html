@@ -627,6 +627,19 @@ E("u5-ci-samplesize",5,["8.18"],1,"var",varset([
     "Use a much larger random sample \u2014 roughly four times as many people, because the margin of error shrinks with the square root of the sample size",
     ["Ask exactly twice as many people \u2014 double the sample, half the error","Survey the same people twice and average the two results","Nothing \u2014 the sample size does not affect the margin of error"],
     "Margin of error behaves like 1 \u00F7 \u221An: quadrupling n halves it. Doubling the sample only shrinks it by a factor of about 1.4.",{});}
+,
+function(){return mcq("Four surveys ask the same question using random samples of 120, 480, 1,200 and 3,000 people. Which sample gives the LEAST margin of error?",
+    "3,000 \u2014 the largest sample, so its results vary least from the population value",
+    ["120 \u2014 the smallest sample has the least room for error","480 \u2014 a medium sample balances cost and accuracy","All four give the same margin of error \u2014 only the question matters"],
+    "Larger random samples sit closer to the population value, so their margins of error are smaller.",{});},
+  function(){return mcq("Four surveys ask the same question using random samples of 45, 180, 720 and 1,500 people. Which sample gives the GREATEST margin of error?",
+    "45 \u2014 the smallest sample, so it can stray furthest from the population value",
+    ["1,500 \u2014 the largest sample has the most room for error","720 \u2014 a medium sample is the least stable","All four give the same margin of error \u2014 only the question matters"],
+    "Small samples bounce around more: with only 45 people, the sample percentage can land far from the true one, which is exactly what a big margin of error says.",{});},
+  function(){return mcq("Instead of sampling, a town surveys EVERY household \u2014 a census. What happens to the margin of error?",
+    "There is no sampling margin of error \u2014 the count IS the population value, so there is no sampling gap to allow for",
+    ["It doubles, because there are more responses to process","It stays whatever it would be for a sample of 1,000","It becomes 100%, because the whole population was asked"],
+    "Margin of error exists because a sample might not mirror the population. Survey everyone and that particular uncertainty disappears (people can still misreport, but that is a different problem).",{});}
 ]));
 E("u5-ci-level",5,["8.18"],2,"var",varset([
   function(){return mcq("A researcher recomputes the same survey results at a 99% confidence level instead of 95%. What happens to the interval?",
@@ -641,6 +654,15 @@ E("u5-ci-level",5,["8.18"],2,"var",varset([
     "Its margin of error is larger than 3% \u2014 higher confidence is bought with a wider interval",
     ["Its margin of error is smaller than 3%","It is centred on a different percentage","It must be wrong, because a survey produces only one correct interval"],
     "Same data, same centre (51%). Raising the confidence level stretches the interval both ways, so the margin of error grows past 3%.",{});}
+,
+function(){return mcq("Intervals are computed from the SAME survey data at 90%, 95% and 99% confidence. Which statement is true?",
+    "All three are centred on the same value; the 99% interval is the widest and the 90% interval is the narrowest",
+    ["The 99% interval is the narrowest, because it is the most certain","Each confidence level gives an interval centred on a different value","Only the 95% interval can be correct"],
+    "The centre comes from the data and does not move. Demanding more confidence stretches the interval wider around that same centre.",{});},
+  function(){return mcq("A weather station reports mean June rainfall as 84 mm, with a 95% confidence interval of 78 mm to 90 mm. If the SAME data were reported at 99% confidence, what would the interval look like?",
+    "Still centred on 84 mm, but wider than 78 mm to 90 mm",
+    ["Still centred on 84 mm, but narrower \u2014 about 80 mm to 88 mm","Centred on 99 mm instead of 84 mm","Exactly the same: 78 mm to 90 mm"],
+    "Raising the confidence level never moves the centre and never narrows the interval \u2014 it widens it, so the method captures the true value more often.",{});}
 ]));
 E("u5-ci-majority",5,["8.19","8.21"],3,"gen",function(){
   var supported=Math.random()<0.5;var p,moe;
@@ -1043,6 +1065,15 @@ E("u7-counterexample",7,["2.4"],2,"var",varset([
     "3 \u00D7 5 = 15 \u2014 two odd numbers with an odd product",
     ["3 \u00D7 4 = 12 \u2014 but 4 is even, so the condition is not met","2 \u00D7 5 = 10 \u2014 but 2 is even, so the condition is not met","4 \u00D7 6 = 24 \u2014 both factors are even, so the condition is not met"],
     "A counterexample must use two odd numbers (the condition) and break the claim (an even product). Only 3 \u00D7 5 = 15 does that. The others smuggle in an even factor, so they never test the conjecture.",{});}
+,
+function(){return mcq("Conjecture: \u2018The square of a number is always greater than the number itself.\u2019 Which value is a counterexample?",
+    "\u00BD \u2014 its square is \u00BC, and \u00BC is less than \u00BD",
+    ["2 \u2014 its square is 4, which is greater than 2, so it agrees with the conjecture","3 \u2014 its square is 9, which is greater than 3, so it agrees with the conjecture","\u22121 \u2014 its square is 1, which is greater than \u22121, so it agrees with the conjecture"],
+    "A counterexample must break the claim. Squaring a number between 0 and 1 makes it SMALLER: \u00BD \u00D7 \u00BD = \u00BC, and \u00BC < \u00BD. The other values all agree with the conjecture, so they cannot refute it.",{});},
+  function(){return mcq("Conjecture: \u2018Dividing one natural number by another always gives a result smaller than the number you started with.\u2019 Which calculation is a counterexample?",
+    "6 \u00F7 1 = 6 \u2014 the result equals the starting number instead of being smaller",
+    ["6 \u00F7 2 = 3 \u2014 smaller than 6, so it agrees with the conjecture","6 \u00F7 3 = 2 \u2014 smaller than 6, so it agrees with the conjecture","6 \u00F7 6 = 1 \u2014 smaller than 6, so it agrees with the conjecture"],
+    "Dividing by 1 leaves a number unchanged, so the result is not smaller. One counterexample is enough to show the conjecture is false.",{});}
 ]));
 E("u7-inductive-false",7,["2.2"],1,"var",varset([
   function(){return mcq("A student notices 3, 5 and 7 are all prime and concludes \u2018every odd number is prime\u2019. Why might this inductive conclusion be false?",
@@ -1057,6 +1088,15 @@ E("u7-inductive-false",7,["2.2"],1,"var",varset([
     "2 \u2014 it is prime, and it is even",
     ["9 \u2014 it is odd","1 \u2014 it is neither prime nor composite","15 \u2014 it is odd and composite"],
     "A single counterexample destroys a universal claim. The student's list simply skipped 2, the one even prime \u2014 induction from a partial list is never a proof.",{});}
+,
+function(){return mcq("A fair coin has landed heads five times in a row. Marcus concludes it will land heads on every future toss. Why is this inductive conclusion unreliable?",
+    "Five tosses are a tiny sample \u2014 each toss is independent, so tails can still come up; a short streak does not establish a rule",
+    ["Because after five heads, tails is now due \u2014 the coin has to balance out","Because five heads in a row proves the coin must be rigged","Because inductive conclusions are always false"],
+    "Induction from a handful of cases is fragile. Nothing about the first five tosses changes the coin, and a longer run would very likely include tails.",{});},
+  function(){return mcq("A bakery's Saturday sales doubled three weeks running: 40, 80, then 160 loaves. The owner concludes sales will keep doubling and orders ingredients for 1,280 loaves in week 6. What is the weakness in this inductive reasoning?",
+    "The pattern rests on only three weeks and ignores real limits \u2014 oven space, staff and the number of customers in town cap how much can actually be sold",
+    ["Doubling patterns never continue past three terms","The arithmetic is wrong \u2014 week 6 would be 1,024 loaves, not 1,280","Inductive reasoning can never be used to plan a business"],
+    "Three observations make a shaky rule, and this one also runs into the real world: demand and capacity do not double forever. Week 6 at 1,280 follows the pattern (40, 80, 160, 320, 640, 1,280) \u2014 the flaw is trusting the pattern, not the arithmetic.",{});}
 ]));
 E("u7-valid-argument",7,["2.3"],2,"var",varset([
   function(){return mcq("Argument: \u2018All provincial parks charge an entry fee. Gros Morne is a provincial park. Therefore Gros Morne charges an entry fee.\u2019 (Take the premises as given.) Is the argument valid?",
@@ -1167,6 +1207,114 @@ E("u8-polygon-ratio",8,["5.2"],2,"gen",function(){
   return numq(frame,
     n,0.011,"Interior + exterior = 180\u00B0. With interior = "+r+" \u00D7 exterior: ("+r+" + 1) \u00D7 exterior = 180\u00B0, so each exterior angle is "+fmt(ext)+"\u00B0 (and each interior angle is "+fmt(interior)+"\u00B0). The exterior angles make one full turn: 360 \u00F7 "+fmt(ext)+" = <b>"+fmt(n)+" sides</b>.",{r:r,ext:ext});
 });
+E("u7-reasoning-type",7,["2.7"],2,"var",varset([
+  function(){return mcq("Which option uses DEDUCTIVE reasoning to show that the sum of two odd numbers is always even?",
+    "Let the two numbers be 2a + 1 and 2b + 1. Their sum is 2a + 2b + 2 = 2(a + b + 1), which is a multiple of 2 \u2014 so the sum is even for every pair of odd numbers",
+    ["3 + 5 = 8, 7 + 9 = 16 and 11 + 13 = 24 \u2014 in each case the sum is even","Let the two numbers be 2a + 1 and 2b + 1. Their sum is 2ab + 2, which is even","A calculator checked 500 random pairs of odd numbers and every sum came out even"],
+    "Deductive reasoning starts from a general form \u2014 every odd number can be written as 2a + 1 \u2014 and the algebra settles the claim for all cases at once. Checking examples, even 500 of them, is inductive: it can suggest the claim but never prove it. And the option giving the sum as 2ab + 2 is algebra gone wrong \u2014 that is not what the sum is.",{});},
+  function(){return mcq("Which option uses INDUCTIVE reasoning?",
+    "4 \u00D7 6 = 24, 2 \u00D7 8 = 16 and 10 \u00D7 12 = 120 \u2014 in every case tried, the product of two even numbers is even",
+    ["Let the numbers be 2a and 2b. Their product is 4ab = 2(2ab), a multiple of 2, so it is even","An even number is defined as a multiple of 2, and a product of multiples of 2 is a multiple of 2","Let one number be 2a + 1 and the other 2b + 1. Their product is 4ab + 2a + 2b + 1"],
+    "Inductive reasoning generalizes from specific cases that were actually tried. The other options argue from general forms or definitions \u2014 that is deduction (and the last one is even about odd numbers, not this claim).",{});},
+  function(){return mcq("Sam writes: \u2018The bus was late on Monday and on Tuesday, so it will be late again tomorrow.\u2019 What kind of reasoning is this?",
+    "Inductive \u2014 it predicts tomorrow from a few observed cases",
+    ["Deductive \u2014 the conclusion has to follow","A counterexample \u2014 it disproves the bus schedule","A proof \u2014 two examples are enough to prove a pattern"],
+    "Sam observed two cases and generalized to an unobserved one. That is induction: the conclusion is plausible, not guaranteed.",{});},
+  function(){return mcq("The angles in any triangle add to 180\u00B0. Priya uses that rule to work out the third angle of the triangle in her homework. What kind of reasoning is she using?",
+    "Deductive \u2014 she applies a general rule to a specific case",
+    ["Inductive \u2014 she is looking for a pattern in triangles","A counterexample \u2014 she is testing whether the rule fails","Circular \u2014 she assumes the very thing she is proving"],
+    "Deduction moves from the general to the specific: the rule covers every triangle, so it covers hers.",{});},
+  function(){return mcq("Which option uses DEDUCTIVE reasoning to show that the sum of three even integers is always even?",
+    "Write the integers as 2a, 2b and 2c. Their sum is 2a + 2b + 2c = 2(a + b + c), a multiple of 2, so the sum is even",
+    ["2 + 4 + 6 = 12 and 4 + 8 + 10 = 22 \u2014 the sums are even","Write the integers as 2a, 2b and 2c. Their sum is 2a + 2b + 2c = 6abc, which is even","A spreadsheet tested 500 triples of even integers and every sum was even"],
+    "Only the option that factors the sum as 2(a + b + c) proves the claim for every triple at once. Examples and spreadsheet checks are inductive, and 6abc is not the sum of 2a, 2b and 2c.",{});}
+]));
+E("u7-counterexample-gen",7,["2.4"],2,"gen",function(){
+  var pairs=[[3,4],[3,5],[4,6],[5,6],[2,5],[6,8],[6,9],[4,10],[6,10],[6,15],[8,12],[9,12],[10,15],[5,7],[4,7]];
+  var pr=pick(pairs),A=pr[0],B=pr[1];
+  function gg(x,y){while(y){var t=x%y;x=y;y=t;}return x;}
+  var L=A*B/gg(A,B);
+  var valid=[];for(var t=1;t<=8;t++){if((A*t)%B!==0)valid.push(t);}
+  var k=A*pick(valid);
+  var mults=[1,2,3,4].sort(function(){return Math.random()-0.5;}).slice(0,3);
+  var wrongs=mults.map(function(m){return String(L*m);});
+  var claim=pick(["Every number divisible by "+A+" is also divisible by "+B,"A multiple of "+A+" is always a multiple of "+B]);
+  return mcq("Conjecture: \u2018"+claim+".\u2019 Which value is a counterexample?",
+    String(k),wrongs,
+    k+" is divisible by "+A+" ("+A+" \u00D7 "+(k/A)+" = "+k+"), but "+k+" \u00F7 "+B+" is not a whole number, so it breaks the conjecture. Each other value is a multiple of "+B+" as well as "+A+", so those values agree with the conjecture instead of refuting it.",{A:A,B:B,k:k});
+});
+E("u7-sequence-gap",7,["2.1"],1,"gen",function(){
+  var fam=ri(0,2),terms=[],ans=0,sig={};
+  if(fam===0){var a0=ri(2,9),r=pick([2,3]);for(var i=0;i<6;i++)terms.push(a0*Math.pow(r,i));var g=pick([2,3,4]);ans=terms[g];sig={fam:"geo",a0:a0,r:r,g:g};}
+  else if(fam===1){var x=ri(1,4),y=ri(1,6);terms=[x,y];for(var i2=2;i2<7;i2++)terms.push(terms[i2-1]+terms[i2-2]);var g2=pick([3,4,5]);ans=terms[g2];sig={fam:"fib",x:x,y:y,g:g2};}
+  else{var s0=ri(2,9),d0=ri(1,4);terms=[s0];for(var i3=1;i3<6;i3++)terms.push(terms[i3-1]+d0+(i3-1));var g3=pick([3,4]);ans=terms[g3];sig={fam:"grow",s0:s0,d0:d0,g:g3};}
+  var shown=terms.slice();shown[sig.g]="___";
+  var ruleTxt=fam===0?"Each term is the one before it multiplied by "+sig.r+".":fam===1?"Each term is the sum of the two terms before it.":"The gaps between terms grow by 1 each time: +"+sig.d0+", +"+(sig.d0+1)+", +"+(sig.d0+2)+", and so on.";
+  var sigOut={fam:sig.fam,g:sig.g,terms:terms};if(sig.a0!==undefined){sigOut.a0=sig.a0;sigOut.r=sig.r;}if(sig.x!==undefined){sigOut.x=sig.x;sigOut.y=sig.y;}if(sig.s0!==undefined){sigOut.s0=sig.s0;sigOut.d0=sig.d0;}
+  return numq("Find the missing term in the pattern: "+shown.join(", "),ans,0.011,
+    ruleTxt+" The missing term is <b>"+ans+"</b>.",sigOut);
+});
+E("u7-proof-steps",7,["2.8"],3,"var",varset([
+  function(){return mcq("A number trick says: pick a number, add 6, double it, subtract 4, divide by 2, then subtract your starting number. (It always ends at 4 \u2014 try starting with 5.) A student 'proves' the trick with this algebra:<br>Step 1: Start with n. Add 6: n + 6.<br>Step 2: Double it: 2n + 6.<br>Step 3: Subtract 4: 2n + 2.<br>Step 4: Divide by 2, then subtract n: (n + 1) \u2212 n = 1 \u2014 so the trick always ends at 1.<br>The conclusion is wrong. In which step does the FIRST error occur?",
+    "Step 2 \u2014 doubling n + 6 gives 2n + 12, not 2n + 6: both terms must double",
+    ["Step 1 \u2014 adding 6 to n should give 6n","Step 3 \u2014 subtracting 4 from 2n + 6 should give 2n + 10","Step 4 \u2014 the division must be carried out before the subtraction"],
+    "Every later step follows correctly from the line before it \u2014 the damage is done when 2(n + 6) is written as 2n + 6 instead of 2n + 12. With that fixed, the proof ends at (2n + 8) \u00F7 2 \u2212 n = 4, exactly as the trick promises.",{});},
+  function(){return mcq("A number trick says: pick a number, multiply it by 3, add 9, divide by 3, then subtract your starting number. (It always ends at 3 \u2014 try starting with 2.) A student 'proves' the trick like this:<br>Step 1: Start with n. Multiply by 3: 3n.<br>Step 2: Add 9: 3n + 9.<br>Step 3: Divide by 3: n + 9.<br>Step 4: Subtract n: 9 \u2014 so the trick always ends at 9.<br>The conclusion is wrong. In which step does the FIRST error occur?",
+    "Step 3 \u2014 dividing 3n + 9 by 3 gives n + 3, not n + 9: both terms must be divided",
+    ["Step 1 \u2014 multiplying n by 3 should give n3","Step 2 \u2014 adding 9 to 3n should give 12n","Step 4 \u2014 subtracting n from n + 9 should give 9n"],
+    "Only the 3n was divided; the +9 slipped through untouched. Fixed, the proof reads (3n + 9) \u00F7 3 \u2212 n = (n + 3) \u2212 n = 3.",{});},
+  function(){return mcq("A number trick says: pick a number, add 4, multiply by 2, subtract 6, then divide by 2. (It always ends one MORE than your starting number \u2014 try starting with 5 and you get 6.) A student 'proves' the trick like this:<br>Step 1: Start with n. Add 4: n + 4.<br>Step 2: Multiply by 2: 2n + 8.<br>Step 3: Subtract 6: 2n + 2.<br>Step 4: Divide by 2: 2n + 1 \u2014 so the trick always ends at one more than DOUBLE your number.<br>The conclusion is wrong. In which step does the FIRST error occur?",
+    "Step 4 \u2014 dividing 2n + 2 by 2 gives n + 1, not 2n + 1: both terms must be divided",
+    ["Step 1 \u2014 adding 4 to n should give 4n","Step 2 \u2014 multiplying n + 4 by 2 should give 2n + 4","Step 3 \u2014 subtracting 6 from 2n + 8 should give 2n + 14"],
+    "Steps 1 to 3 are correct. The last division halves only the constant in the student's line: (2n + 2) \u00F7 2 = n + 1, which is exactly what the trick promises \u2014 one more than the starting number.",{});},
+  function(){return mcq("A number trick says: pick a number, double it, add 10, divide by 2, then subtract 3. (It always ends 2 above your starting number \u2014 try starting with 4 and you get 6.) A student 'proves' the trick like this:<br>Step 1: Start with n.<br>Step 2: Double it, then add 10: 2(n + 10) = 2n + 20.<br>Step 3: Divide by 2: n + 10.<br>Step 4: Subtract 3: n + 7 \u2014 so the trick always ends 7 above the starting number.<br>The conclusion is wrong. In which step does the FIRST error occur?",
+    "Step 2 \u2014 'double it, then add 10' means 2n + 10; writing 2(n + 10) adds the 10 BEFORE doubling, which doubles the 10 as well",
+    ["Step 1 \u2014 the starting number should have been called x, not n","Step 3 \u2014 dividing 2n + 20 by 2 should give 2n + 10","Step 4 \u2014 subtracting 3 from n + 10 should give n + 13"],
+    "The trick doubles first and adds 10 second: 2n + 10. The brackets quietly reversed that order. Done correctly: (2n + 10) \u00F7 2 \u2212 3 = n + 2.",{});}
+]));
+E("u5-ci-level-from-report",5,["8.21"],1,"gen",function(){
+  var phrases=[[19,20],[9,10],[18,20],[99,100],[17,20],[4,5],[49,50],[47,50]];
+  var ph=pick(phrases),k=ph[0],n=ph[1],level=Math.round(100*k/n);
+  var topic=pick(["a later school start time","a new community rink","the mayoral race","a proposed cellphone policy","a new ferry sailing","a four-day school week"]);
+  var N=pick([400,800,1200,2000]);
+  var cand=[100-level,level-5,level+5,k],distractors=[];
+  cand.forEach(function(d){if(d!==level&&d>0&&d<100&&distractors.indexOf(d)<0)distractors.push(d);});
+  distractors=distractors.slice(0,3);
+  var extras=[level-10,level+10,level-15,level+15];
+  while(distractors.length<3){var e=extras.pop();if(e!==undefined&&e!==level&&e>0&&e<100&&distractors.indexOf(e)<0)distractors.push(e);else if(e===undefined)break;}
+  return mcq("A news report about "+topic+", based on a survey of "+N+" people, says the results are \u2018accurate "+k+" times out of "+n+"\u2019. What confidence level is the report claiming?",
+    level+"%",distractors.map(function(d){return d+"%";}),
+    k+" times out of "+n+" is the fraction "+k+"/"+n+" = "+level+"%. A confidence level reported as a fraction of times converts straight to that percent.",{k:k,n:n,level:level});
+});
+E("u5-ci-shrink",5,["8.18"],2,"gen",function(){
+  var d=pick([2,3,4,5,10]);
+  var m2=d===10?pick([0.5,1,1.5,2]):pick([1,1.5,2,2.5,3]);
+  var base=pick([50,80,100,120,150,200,250,300,400]);
+  var grow=Math.random()<0.6,n0,n1,moe0,ans;
+  if(grow){n0=base;n1=base*d*d;moe0=m2*d;ans=m2;}
+  else{n0=base*d*d;n1=base;moe0=m2;ans=m2*d;}
+  return numq("A survey of "+n0+" people reports a margin of error of \u00B1"+fmt(moe0)+" percentage points. The survey is repeated with "+n1+" people, using the same method. What is the new margin of error, in percentage points? (Just the number.)",
+    ans,0.011,
+    "Margin of error changes like 1 \u00F7 \u221An. Going from "+n0+" to "+n1+" people multiplies the sample by "+(grow?(d*d):"1/"+(d*d))+", so the margin of error "+(grow?"divides":"multiplies")+" by "+d+": "+fmt(moe0)+" "+(grow?"\u00F7":"\u00D7")+" "+d+" = <b>"+fmt(ans)+"</b> percentage points.",{n0:n0,n1:n1,moe0:moe0,d:d,ans:ans});
+});
+E("u5-poll-position",5,["8.20","8.22"],3,"var",varset([
+  function(){return mcq("An advertisement announces: \u2018In a survey, 80% of users said our toothpaste gave them a cleaner feeling!\u2019 The fine print says the survey is accurate within \u00B14 percentage points, 9 times out of 10. Which statement is the honest summary of the survey?",
+    "The survey supports a range of about 76% to 84% \u2014 the ad quotes the single middle number as if it were exact",
+    ["At least 80% for sure \u2014 that is the number the survey found","The range is 72% to 88%, because the margin counts twice on each side","The ad is fair \u2014 being right 9 times out of 10 makes the 80% nearly exact"],
+    "80% \u00B1 4 points gives 76% to 84%. The honest figure could sit several points either side of the advertised one.",{});},
+  function(){return mcq("Two candidates poll at 47% and 44%, with a margin of error of \u00B14 points. The first candidate's campaign claims: \u2018We have a clear lead.\u2019 Is the claim supported?",
+    "No \u2014 the intervals (43% to 51% and 40% to 48%) overlap, so the trailing candidate could actually be ahead",
+    ["Yes \u2014 47 is greater than 44, so the lead is real","Yes \u2014 the margin of error applies only to the trailing candidate","No \u2014 any poll with a margin of error is worthless"],
+    "A lead smaller than the margin of error is not a secure lead. With \u00B14 points, the true support could run the other way.",{});},
+  function(){return mcq("A survey at a school of 1,200 students finds 68% \u00B1 5 points favour a later start time. The principal announces: \u2018At least 800 of our students want this change.\u2019 Is the announcement justified by the survey?",
+    "Not necessarily \u2014 the interval reaches down to 63%, and 63% of 1,200 is 756 students, which is below 800",
+    ["Yes \u2014 68% of 1,200 is 816 students, comfortably over 800","Yes \u2014 a survey of a whole school gives exact figures","No \u2014 the true figure could be fewer than 600 students"],
+    "The middle estimate (816) clears 800, but the interval's low end (756) does not. A claim of 'at least 800' needs the whole interval above 800.",{});},
+  function(){return mcq("In a town of 25,000 voters, a poll finds 54% \u00B1 3 points support a new arena. A councillor says: \u2018Somewhere between 12,000 and 15,000 voters back this.\u2019 Is she reading the poll correctly?",
+    "Yes \u2014 51% to 57% of 25,000 voters is 12,750 to 14,250 voters, which sits inside the range she quoted",
+    ["No \u2014 the range is 13,500 voters, give or take 3 voters","No \u2014 a percentage from a sample can never be applied to a whole population","Yes \u2014 exactly 13,500 voters support the arena"],
+    "Apply both ends of the interval to the population: 0.51 \u00D7 25,000 = 12,750 and 0.57 \u00D7 25,000 = 14,250. Her wider range safely contains the poll's range.",{});}
+]));
 </script>
 
 <script>
