@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math 2201 Review — Practice Question Bank</title>
+<style>
+  :root{--ink:#1c2b33;--accent:#0f766e;--accent2:#b45309;--bg:#f7f5f0;--card:#ffffff;--line:#d8d2c4;--good:#15803d;--bad:#b91c1c;}
+  *{box-sizing:border-box;font-family:Verdana,Geneva,sans-serif;}
+  body{margin:0;background:var(--bg);color:var(--ink);}
+  .wrap{max-width:920px;margin:0 auto;padding:20px 16px 40px;}
+  h1{font-size:1.35rem;margin:0 0 4px;}
+  h2{font-size:1.05rem;margin:0 0 10px;}
+  .sub{font-size:.9rem;color:#4b5a61;margin:0 0 16px;line-height:1.45;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px;}
+  .presetrow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  button{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:.9rem;cursor:pointer;}
+  button.alt{background:#fff;color:var(--accent);border:1.5px solid var(--accent);}
+  button.amber{background:var(--accent2);}
+  button:hover{opacity:.88;}
+  button:disabled{opacity:.45;cursor:default;}
+  .grid{display:flex;flex-wrap:wrap;gap:6px 18px;}
+  label.chk{font-size:.9rem;display:inline-flex;align-items:center;gap:6px;padding:3px 0;cursor:pointer;}
+  .indbox{max-height:180px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:8px 12px;background:#fff;}
+  .indbox label{display:block;font-size:.83rem;padding:2px 0;cursor:pointer;}
+  details{margin-top:10px;}
+  summary{cursor:pointer;font-weight:bold;font-size:.9rem;color:var(--accent);}
+  .adv{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin-top:10px;}
+  .adv label{font-size:.85rem;display:flex;flex-direction:column;gap:4px;}
+  input[type=number]{width:76px;padding:7px;border:1px solid var(--line);border-radius:6px;font-size:.9rem;}
+  input[type=text].ans{width:170px;padding:8px;border:1px solid var(--line);border-radius:6px;font-size:.95rem;}
+  select{padding:7px;border:1px solid var(--line);border-radius:6px;font-size:.9rem;}
+  .q{margin-bottom:18px;}
+  .qhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;}
+  .tag{display:inline-block;font-size:.7rem;font-weight:bold;letter-spacing:.04em;padding:2px 8px;border-radius:20px;color:#fff;background:var(--accent);}
+  .tag.lvl{background:#4b5a61;} .tag.ind{background:var(--accent2);}
+  .prompt{line-height:1.55;font-size:.96rem;}
+  .prompt table{border-collapse:collapse;margin:8px 0;}
+  .prompt th,.prompt td{border:1px solid var(--line);padding:4px 10px;text-align:center;font-size:.9rem;}
+  .opts{margin:10px 0 4px;display:flex;flex-direction:column;gap:6px;}
+  .opts label{font-size:.93rem;display:flex;gap:8px;align-items:flex-start;cursor:pointer;line-height:1.4;}
+  .fb{margin-top:10px;font-size:.9rem;line-height:1.5;display:none;}
+  .fb.show{display:block;}
+  .ok{color:var(--good);font-weight:bold;} .notyet{color:var(--bad);font-weight:bold;}
+  .sol{background:#fdf6ec;border-left:5px solid var(--accent2);padding:10px 12px;margin-top:8px;line-height:1.55;font-size:.9rem;display:none;}
+  .sol.show{display:block;}
+  .hint{font-size:.82rem;color:#4b5a61;line-height:1.45;}
+  .scoreline{font-size:.95rem;font-weight:bold;margin:6px 0 14px;}
+  .thinNote{background:#fdf6ec;border:1px solid var(--accent2);border-radius:8px;padding:9px 12px;font-size:.88rem;line-height:1.45;}
+  .modebar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+  #printArea{display:none;}
+  .ws{border:1.5px solid #b9b2a2;border-radius:4px;margin:8px 0 4px;}
+  .nameline{display:flex;gap:30px;font-size:.95rem;margin-bottom:14px;}
+  .nameline span{border-bottom:1px solid #444;padding:0 90px 2px 6px;}
+  @media print{
+    #app{display:none !important;}
+    #printArea{display:block !important;}
+    body{background:#fff;}
+    .keybreak{page-break-before:always;}
+    .pq{page-break-inside:avoid;margin-bottom:14px;}
+    .solp{page-break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <h1>Math 2201 Review</h1>
+  <p class="sub">Fresh practice questions for Mathematics 2201, drawn by unit or by curriculum indicator.
+  Most questions are generated new every time, so you can practise the same skill again and get a different question.
+  Work online, or print a practice sheet with an answer key.</p>
+
+  <div class="card">
+    <h2>1. What do you want to practise?</h2>
+    <div class="presetrow">
+      <button type="button" id="presetMid" class="alt">Mid-course review (Units 1–4, Radicals to 4.3)</button>
+      <button type="button" id="presetFinal" class="alt">Final review (Units 5–8)</button>
+      <button type="button" id="presetAll" class="alt">All units</button>
+    </div>
+    <div class="grid" id="unitGrid"></div>
+    <p class="hint" style="margin:10px 0 4px;">By indicator (optional — leave all unchecked to use every indicator in the units you picked):</p>
+    <div class="indbox" id="indBox"></div>
+    <div class="adv">
+      <label>Number of questions
+        <input type="number" id="countIn" min="1" max="60" value="10">
+      </label>
+      <label>Order
+        <select id="orderIn">
+          <option value="unit">Unit order</option>
+          <option value="random">Random order</option>
+        </select>
+      </label>
+    </div>
+    <details id="advBox">
+      <summary>Advanced options — question levels</summary>
+      <p class="hint">Levels follow the course Table of Specifications. The default mix matches the exams:
+      about 20% Level 1 (quick, one or two steps), 60% Level 2 (application — carry out the prescribed method),
+      20% Level 3 (higher-end thinking: analyse, justify, evaluate, transfer).</p>
+      <div class="adv">
+        <label>Level 1 %<input type="number" id="lv1" min="0" max="100" value="20"></label>
+        <label>Level 2 %<input type="number" id="lv2" min="0" max="100" value="60"></label>
+        <label>Level 3 %<input type="number" id="lv3" min="0" max="100" value="20"></label>
+      </div>
+    </details>
+    <div class="modebar">
+      <button type="button" id="goOnline">Practice online</button>
+      <button type="button" id="goSheet" class="amber">Make a practice sheet</button>
+      <button type="button" id="copyLink" class="alt">Copy link to these settings</button>
+    </div>
+    <p class="hint" id="poolInfo"></p>
+  </div>
+
+  <div id="session"></div>
+</div>
+
+<div id="printArea"></div>
+
+<script>
+"use strict";
+/* ============ helpers ============ */
+function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+function rf(a,b){return a+Math.random()*(b-a);}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function sum(a){return a.reduce(function(s,n){return s+n;},0);}
+function mean(a){return sum(a)/a.length;}
+function sorted(a){return a.slice().sort(function(x,y){return x-y;});}
+function median(a){var s=sorted(a),m=Math.floor(s.length/2);return s.length%2?s[m]:(s[m-1]+s[m])/2;}
+function modes(a){var f={},mx=0,i;for(i=0;i<a.length;i++){f[a[i]]=(f[a[i]]||0)+1;if(f[a[i]]>mx)mx=f[a[i]];}if(mx<=1)return[];return Object.keys(f).filter(function(k){return f[k]===mx;}).map(Number).sort(function(x,y){return x-y;});}
+function rngOf(a){return Math.max.apply(null,a)-Math.min.apply(null,a);}
+function pvar(a){var m=mean(a);return mean(a.map(function(x){return (x-m)*(x-m);}));}
+function psd(a){return Math.sqrt(pvar(a));}
+function fmt(n,d){if(d===undefined)d=2;var s=(Math.round(n*Math.pow(10,d))/Math.pow(10,d)).toFixed(d);if(s.indexOf('.')>=0){s=s.replace(/0+$/,'').replace(/\.$/,'');}return s;}
+function fmtF(n,d){return (Math.round(n*Math.pow(10,d))/Math.pow(10,d)).toFixed(d);}
+function normCdf(z){var t=1/(1+0.2316419*Math.abs(z));var d=0.3989422804014327*Math.exp(-z*z/2);var p=d*t*(0.31938153+t*(-0.35656378+t*(1.78147794+t*(-1.82125598+t*1.33027443))));return z>=0?1-p:p;}
+function zTab(z){z=Math.round(z*100)/100;return Math.round(normCdf(z)*10000)/10000;}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+function mcq(prompt,correct,distractors,solution,params){
+  var seen={},opts=[{t:String(correct),ok:true}];
+  distractors.forEach(function(d){d=String(d);if(d!==String(correct)&&!seen[d]){seen[d]=1;opts.push({t:d,ok:false});}});
+  opts=shuffle(opts);var ci=opts.findIndex(function(o){return o.ok;});
+  return {prompt:prompt,type:"mc",options:opts.map(function(o){return o.t;}),correct:ci,solution:solution,_p:params||{}};
+}
+function numq(prompt,answer,tol,solution,params){return {prompt:prompt,type:"num",answer:answer,tol:tol,solution:solution,_p:params||{}};}
+function textq(prompt,answers,solution,params){return {prompt:prompt,type:"text",answers:answers.map(function(a){return a.toLowerCase();}),solution:solution,_p:params||{}};}
+function varset(list){return function(){var f=pick(list);return f();};}
+
+/* ============ curriculum map (codes verified against the Math 2201 Curriculum Guide) ============ */
+var UNITS={
+ 1:"Acute Triangle Trigonometry",2:"Quadratic Functions",3:"Quadratic Equations",4:"Radicals",
+ 5:"Statistical Reasoning",6:"Proportional Reasoning",7:"Inductive and Deductive Reasoning",
+ 8:"Properties of Angles and Triangles"};
+var INDICATORS={
+ "7.1":"Draw a diagram to represent a problem that involves the sine law or the cosine law",
+ "7.2":"Solve a contextual problem using the sine law or the cosine law",
+ "7.3":"Solve a contextual problem that involves more than one triangle",
+ "4.1":"Determine the domain and range of a quadratic function",
+ "4.2":"Solve a contextual problem involving the characteristics of a quadratic function",
+ "4.4":"Determine the intercepts of the graph of a quadratic function",
+ "4.5":"Express a quadratic equation in factored form, given the zeros",
+ "4.10":"Determine the characteristics of y = ax\u00B2 + bx + c through the parameters a, b, c",
+ "4.11":"Determine the coordinates of the vertex of a quadratic function",
+ "4.12":"Determine the vertex given the equation and the axis of symmetry",
+ "4.13":"Determine the equation of the axis of symmetry using the x-intercepts",
+ "4.14":"Sketch the graph of a quadratic function",
+ "4.15":"Determine the characteristics of y = a(x \u2212 h)\u00B2 + k through the parameters h and k",
+ "4.16":"Determine the quadratic function given the characteristics of its graph",
+ "4.3":"Solve a contextual problem by modelling with a quadratic equation",
+ "4.6":"Explain the relationships among roots, zeros and x-intercepts",
+ "4.7":"Explain why a quadratic graph may have zero, one or two x-intercepts",
+ "4.8":"Determine, by factoring, the roots of a quadratic equation",
+ "4.9":"Determine, using the quadratic formula, the roots of a quadratic equation",
+ "1.1":"Express a mixed radical as an entire radical",
+ "1.2":"Express an entire radical as a mixed radical",
+ "1.4":"Compare and order radical expressions",
+ "1.5":"Identify values for which a radical expression is defined",
+ "1.6":"Simplify radical expressions using operations",
+ "1.7":"Rationalize the monomial denominator of a radical expression",
+ "1.9":"Determine the roots of a radical equation algebraically",
+ "1.11":"Explain why some roots of a radical equation are extraneous",
+ "PK.1":"Prior knowledge: measures of central tendency (Unit 5, Section 1 \u2014 uncoded in the guide)",
+ "8.6":"Use dispersion to describe the differences between two sets of data",
+ "8.7":"Create frequency tables and graphs from a set of data",
+ "8.8":"Explain, using examples, the meaning of standard deviation",
+ "8.9":"Calculate, using technology, the population standard deviation of a data set",
+ "8.10":"Solve a contextual problem that involves the interpretation of standard deviation",
+ "8.11":"Explain the properties of a normal curve",
+ "8.12":"Determine if a data set approximates a normal distribution",
+ "8.13":"Compare the properties of two or more normally distributed data sets",
+ "8.14":"Solve a contextual problem that involves normal distribution",
+ "8.15":"Determine and explain the z-score for a value in a normally distributed data set",
+ "8.16":"Apply standard deviation to decisions (warranties, insurance, opinion polls)",
+ "8.17":"Explain the significance of a confidence interval, margin of error or confidence level",
+ "8.18":"Explain how sample size affects confidence intervals and margin of error",
+ "8.19":"Make inferences about a population from sample data, using confidence intervals",
+ "8.20":"Give media examples where confidence intervals support a position",
+ "8.21":"Interpret confidence intervals and margin of error in media examples",
+ "8.22":"Support a position by analyzing statistical data presented in the media",
+ "6.2":"Determine an unknown dimension of a 2-D shape using proportional reasoning",
+ "6.5":"Explain the effect of a change in scale factor on the area of a 2-D shape",
+ "6.9":"Determine an unknown dimension of a 3-D object, given a scale diagram or model",
+ "6.10":"Explain the effect of a change in scale factor on surface area and volume",
+ "6.14":"Solve a problem involving relationships among scale factors, areas and volumes",
+ "6.16":"Determine and compare rates and unit rates",
+ "6.17":"Make and justify a decision, using rates",
+ "6.19":"Explain the relationship between the slope of a graph and a rate",
+ "6.23":"Solve a rate problem that requires isolating a variable",
+ "2.1":"Make conjectures by observing patterns and identifying properties",
+ "2.2":"Explain why inductive reasoning may lead to a false conjecture",
+ "2.3":"Determine if a given argument is valid",
+ "2.4":"Provide a counterexample to disprove a conjecture",
+ "2.7":"Compare inductive and deductive reasoning",
+ "2.8":"Identify errors in a given proof",
+ "5.1":"Generalize relationships between angle pairs formed by transversals and parallel lines",
+ "5.3":"Prove angle properties, including the sum of the angles in a triangle",
+ "5.5":"Generalize a rule for the sum of the interior angles of a polygon",
+ "5.6":"Prove, using deductive reasoning, that two triangles are congruent",
+ "5.8":"Determine measures of angles in a diagram with parallel lines, angles and triangles",
+ "5.9":"Determine if lines are parallel given angle measures at a transversal",
+ "5.11":"Solve a contextual problem that involves angles or triangles"
+};
+var UNIT_IND={
+ 1:["7.1","7.2","7.3"],2:["4.1","4.2","4.4","4.5","4.10","4.11","4.12","4.13","4.14","4.15","4.16"],
+ 3:["4.3","4.6","4.7","4.8","4.9"],4:["1.1","1.2","1.4","1.5","1.6","1.7","1.9","1.11"],
+ 5:["PK.1","8.6","8.7","8.8","8.9","8.10","8.11","8.12","8.13","8.14","8.15","8.16","8.17","8.18","8.19","8.20","8.21","8.22"],
+ 6:["6.2","6.5","6.9","6.10","6.14","6.16","6.17","6.19","6.23"],
+ 7:["2.1","2.2","2.3","2.4","2.7","2.8"],8:["5.1","5.3","5.5","5.6","5.8","5.9","5.11"]};
+</script>
+
+<script>
+/* ============ THE BANK — Unit 5: Statistical Reasoning ============ */
+/* ============ BANK ADMISSION RULE (adopted Oct 26, 2026, from the bank duplication audit) ============
+   A "gen" entry must produce at least 50 unique canonical questions (normalized prompt
+   text + correct answer) in 2,000 test draws, or it must be registered as a "var" set
+   holding at least 3 genuinely different static questions. Run the duplication audit
+   as a pre-commit check before any new item is added to this bank. */
+var BANK=[];
+function E(id,unit,indicators,level,kind,gen){BANK.push({id:id,unit:unit,indicators:indicators,level:level,kind:kind,gen:gen});}
+
+/* --- measures of centre (prior knowledge, Section 1) --- */
+E("u5-centre-mean",5,["PK.1"],1,"gen",function(){
+  var c=pick([{w:"quiz marks",u:""},{w:"daily high temperatures",u:"\u00B0C"},{w:"goals per game",u:""},{w:"pages read each day",u:""}]);
+  var n=ri(5,7),base=ri(4,14),data=[],i;for(i=0;i<n;i++)data.push(base+ri(-4,6));
+  var m=mean(data);
+  return numq("A student records these "+c.w+": <b>"+data.join(", ")+"</b>. What is the <b>mean</b>?",
+    Math.round(m*100)/100,0.011,
+    "Add the values: "+data.join(" + ")+" = "+fmt(sum(data))+". There are "+n+" values, so the mean is "+fmt(sum(data))+" \u00F7 "+n+" = <b>"+fmt(m)+"</b>.",
+    {data:data});
+});
+E("u5-centre-median",5,["PK.1"],1,"gen",function(){
+  var n=pick([6,8]),base=ri(5,15),data=[],i;for(i=0;i<n;i++)data.push(base+ri(-5,7));
+  var md=median(data),s=sorted(data),lo=s[n/2-1],hi=s[n/2];
+  return numq("Find the <b>median</b> of: <b>"+data.join(", ")+"</b>.",
+    md,0.011,
+    "In order: "+s.join(", ")+". With "+n+" values the median is the average of the two middle values, "+lo+" and "+hi+": ("+lo+" + "+hi+") \u00F7 2 = <b>"+fmt(md)+"</b>.",
+    {data:data});
+});
+E("u5-centre-mode",5,["PK.1"],1,"gen",function(){
+  var cols=["red","blue","green","black","purple","orange"];
+  var win=pick(cols),others=shuffle(cols.filter(function(c){return c!==win;}));
+  var list=[win,win,win];var k=ri(2,3);for(var i=0;i<k;i++){list.push(others[i%others.length]);if(i<2)list.push(others[(i+1)%others.length]);}
+  list=shuffle(list);
+  return textq("A class votes for a poster colour. The votes are: <b>"+list.join(", ")+"</b>. What is the <b>mode</b>? (Type the colour.)",
+    [win],
+    "Count each colour: "+win+" appears 3 times, more than any other colour, so the mode is <b>"+win+"</b>. The mode is the most useful measure for data in categories.",
+    {win:win,list:list});
+});
+E("u5-choosing-measure",5,["PK.1"],2,"var",varset([
+  function(){return mcq("A school store manager asks students to name their favourite hoodie design so she knows which design to order most of. Which measure of central tendency is most useful for this decision?",
+    "The mode, because the data are categories and the most common choice is what matters",
+    ["The mean, because it uses every student's answer","The median, because it is the middle answer when the designs are listed","The range, because it shows how spread out the choices are"],
+    "The answers are categories, not numbers, so only the mode can be found \u2014 and the most-chosen design is exactly what she needs to order.",{});},
+  function(){return mcq("At a small company, most workers earn about $650 a week, but the owner earns $3,800 a week. Which statement best describes a typical worker's earnings?",
+    "The median, because the owner's salary pulls the mean well above what most workers earn",
+    ["The mean, because it includes every salary in the company","The mode, because it is the salary paid most often in every company","The range, because it is unaffected by the owner's salary"],
+    "One very large value pulls the mean up. The median sits in the middle of the workers' actual salaries, so it describes a typical worker far better.",{});},
+  function(){return mcq("A data set contains one value that is far lower than all the others. What is the effect of that value?",
+    "It pulls the mean down, while the median is barely affected",
+    ["It pulls the median down by about the same amount as the mean","It changes the mode of the data set","It leaves the range unchanged"],
+    "The mean uses every value, so an extreme value drags it. The median depends only on the middle position, and the range must grow because the lowest value dropped.",{});}
+]));
+/* --- dispersion (8.6) --- */
+E("u5-range",5,["8.6"],1,"gen",function(){
+  var c=pick(["daily step counts (thousands)","lengths of fish caught (cm)","marks on a quiz","laps swum each day"]);
+  var n=ri(5,6),base=ri(8,20),data=[],i;for(i=0;i<n;i++)data.push(base+ri(-6,9));
+  return numq("Find the <b>range</b> of these "+c+": <b>"+data.join(", ")+"</b>.",
+    rngOf(data),0.001,
+    "Range = highest \u2212 lowest = "+Math.max.apply(null,data)+" \u2212 "+Math.min.apply(null,data)+" = <b>"+rngOf(data)+"</b>.",
+    {data:data});
+});
+E("u5-outlier-range",5,["8.6"],2,"gen",function(){
+  var lo=ri(5,10),cluster=[],i;for(i=0;i<5;i++)cluster.push(lo+ri(0,5));
+  var out=Math.max.apply(null,cluster)+ri(18,30);var data=shuffle(cluster.concat([out]));
+  var without=rngOf(cluster);
+  var correct=out+" is the outlier, and the range without it is "+without;
+  return mcq("For the data set <b>"+data.join(", ")+"</b>, which statement is correct?",correct,
+    [Math.min.apply(null,data)+" is the outlier, and the range without it is "+without,
+     out+" is the outlier, and the range without it is "+rngOf(data),
+     "There is no outlier, and the range is "+rngOf(data)],
+    "The value "+out+" sits far above the cluster "+cluster.join(", ")+". Without it, the range is "+Math.max.apply(null,cluster)+" \u2212 "+Math.min.apply(null,cluster)+" = "+without+". With it, the range stretches to "+rngOf(data)+", which is why one outlier can make a set look far more spread out than it really is.",
+    {data:data,out:out,without:without});
+});
+E("u5-dispersion-compare",5,["8.6"],2,"gen",function(){
+  var ctx=pick([
+    {who:"Two couriers",unit:"parcels delivered each day",avg:"average"},
+    {who:"Two classes",unit:"marks on the same test",avg:"mean mark"},
+    {who:"Two goalies",unit:"saves per game",avg:"average"}]);
+  var ra=ri(4,8),rb=ra+ri(12,22),swap=Math.random()<0.5;
+  var A=swap?rb:ra,B=swap?ra:rb;
+  var winner=A<B?"A":"B";
+  return mcq(ctx.who+" both have the same "+ctx.avg+" for "+ctx.unit+". Person A/class A's results have a range of "+A+"; B's have a range of "+B+". Which statement is correct?",
+    winner+" is more consistent, because "+winner+"'s results stay closer to the shared "+ctx.avg,
+    [(winner==="A"?"B":"A")+" is more consistent, because a larger range means steadier results",
+     "Both are equally consistent, because their "+ctx.avg+"s are equal",
+     "Consistency cannot be compared without knowing each median"],
+    "Both have the same centre, so compare the spread. The smaller range ("+Math.min(A,B)+") means results cluster closer to the "+ctx.avg+" \u2014 that is the more consistent performance. Equal means say nothing about consistency.",
+    {A:A,B:B,winner:winner});
+});
+E("u5-ad-claim",5,["8.6"],3,"gen",function(){
+  var base=[ri(4,8),ri(6,10),ri(5,9),ri(8,12),ri(6,9),ri(9,13),ri(7,11)];
+  var big=ri(220,360);var data=base.concat([big]);var m=mean(data),md=median(data);
+  var claim=Math.round(m);
+  return mcq("A gym advertises: \u201COur members lose an average of "+claim+" lb in their first month!\u201D The amounts actually lost by eight members were <b>"+data.join(", ")+"</b> lb. Why is the advertisement misleading?",
+    "It uses the mean, which one member's "+big+" lb loss pulls far above what a typical member loses (the median loss is "+fmt(md)+" lb)",
+    ["It uses the median, which one large loss pulls up","The range of the losses is too small to support the claim","The mode of the losses is higher than the advertised average"],
+    "Mean = "+fmt(sum(data))+" \u00F7 8 = "+fmt(m)+" \u2248 "+claim+", so the gym used the mean. But sorted, the middle values give a median of "+fmt(md)+" lb \u2014 a far better picture of a typical member. One extreme value did all the work in the ad.",
+    {data:data,mean:m,median:md,big:big});
+});
+/* --- frequency tables, histograms, polygons (8.7) --- */
+E("u5-freq-total",5,["8.7"],1,"gen",function(){
+  var rows=ri(3,4),fs=[],i;for(i=0;i<rows;i++)fs.push(ri(2,14));
+  return numq("A frequency table for the number of siblings students have has frequencies "+fs.join(", ")+" in its rows. How many students were surveyed?",
+    sum(fs),0.001,"The total frequency is the total number of students: "+fs.join(" + ")+" = <b>"+sum(fs)+"</b>.",{fs:fs});
+});
+E("u5-freq-missing",5,["8.7"],1,"gen",function(){
+  var total=pick([40,50,60,45,55]);var a=ri(8,16),b=ri(6,14),c=ri(4,10);var miss=total-a-b-c;
+  while(miss<2){a--;miss=total-a-b-c;}
+  return numq("A grouped frequency table has a total of "+total+" values. Three of its intervals have frequencies "+a+", "+b+" and "+c+". What is the frequency of the remaining interval?",
+    miss,0.001,"The frequencies must add to the total: "+total+" \u2212 ("+a+" + "+b+" + "+c+") = "+total+" \u2212 "+(a+b+c)+" = <b>"+miss+"</b>.",{total:total,a:a,b:b,c:c});
+});
+E("u5-freq-countin",5,["8.7"],2,"gen",function(){
+  var w=pick([5,10]);var lo=ri(0,3)*w;var hi=lo+w;
+  var data=[],i;for(i=0;i<18;i++)data.push(ri(0,hi+w+8));
+  var cnt=data.filter(function(x){return x>=lo&&x<hi;}).length;
+  return numq("Using the class intervals from the course (lower value included, upper value excluded), how many of these values fall in the interval <b>"+lo+"\u2013"+hi+"</b>?<br><b>"+data.join(", ")+"</b>",
+    cnt,0.001,"Count the values that are at least "+lo+" and less than "+hi+": there are <b>"+cnt+"</b>. A value of exactly "+hi+" would belong to the next interval, not this one.",{data:data,lo:lo,hi:hi});
+});
+E("u5-relfreq",5,["8.7"],1,"gen",function(){
+  var pcts=[5,10,12.5,15,20,25,30,40,50,60,75,80],totals=[40,60,80,100,120,160,200,240];
+  var total,pct,f,guard=0;
+  do{total=pick(totals);pct=pick(pcts);f=total*pct/100;guard++;}while(f!==Math.floor(f)&&guard<60);
+  var ctx=pick(["In a frequency table, an interval has","In a survey table, the interval with the most responses has","A grouped table of test scores shows an interval with"]);
+  return numq(ctx+" frequency "+f+" out of a total of "+total+" values. What is its <b>relative frequency</b>, as a percent? (Just the number.)",
+    pct,0.11,"Relative frequency = "+f+" \u00F7 "+total+" = "+fmt(f/total,4)+", which is <b>"+fmt(pct)+"%</b>.",{f:f,total:total});
+});
+E("u5-relfreq-rev",5,["8.7"],2,"gen",function(){
+  var pcts=[5,10,12.5,15,20,25,30,35,40,45,50,60,75,80],totals=[40,60,80,100,120,150,200,240,300];
+  var total,pct,f,guard=0;
+  do{total=pick(totals);pct=pick(pcts);f=total*pct/100;guard++;}while(f!==Math.floor(f)&&guard<60);
+  var ctx=pick(["An interval's","In a grouped table of marks, one interval's","For the interval containing the middle values, the"]);
+  return numq(ctx+" relative frequency is "+fmt(pct)+"%, and the table's total is "+total+" values. What is the interval's frequency?",
+    f,0.001,fmt(pct)+"% of "+total+" = "+fmt(pct/100,4)+" \u00D7 "+total+" = <b>"+f+"</b>.",{total:total,pct:pct});
+});
+E("u5-histogram-read",5,["8.7"],2,"gen",function(){
+  var labels=["0\u20139","10\u201319","20\u201329","30\u201339"];var fs=[ri(2,7),ri(8,13),ri(5,10),ri(1,5)];
+  var ans=fs[2]+fs[3];
+  var rows=labels.map(function(l,i){return "<tr><td>"+l+"</td><td>"+fs[i]+"</td></tr>";}).join("");
+  return numq("A histogram is built from this table of daily high temperatures recorded over "+sum(fs)+" days:<table><tr><th>Temperature (\u00B0C)</th><th>Frequency</th></tr>"+rows+"</table>On how many days was the high temperature <b>20\u00B0C or more</b>?",
+    ans,0.001,"Add the frequencies for 20\u201329 and 30\u201339: "+fs[2]+" + "+fs[3]+" = <b>"+ans+"</b> days.",{fs:fs});
+});
+E("u5-midpoint",5,["8.7"],1,"gen",function(){
+  var w=pick([4,5,10,20]);var lo=ri(0,12)*w;var hi=lo+w-1;var mid=(lo+hi)/2;
+  var tail=pick([""," (from a frequency table)"," (from a table of daily high temperatures)"," (from a grouped table of sprint times)"]);
+  return numq("What is the <b>midpoint</b> of the interval "+lo+"\u2013"+hi+tail+"?",
+    mid,0.011,"Midpoint = ("+lo+" + "+hi+") \u00F7 2 = <b>"+fmt(mid)+"</b>. A frequency polygon plots each interval's frequency at its midpoint.",{lo:lo,hi:hi});
+});
+E("u5-polygon-point",5,["8.7"],2,"gen",function(){
+  var w=pick([10]);var lo=ri(0,4)*w;var hi=lo+w-1;var mid=(lo+hi)/2;var f=ri(3,12);
+  return mcq("A frequency polygon is drawn for a table in which the interval "+lo+"\u2013"+hi+" has frequency "+f+". At which point is that interval's polygon point plotted?",
+    "("+fmt(mid)+", "+f+")",
+    ["("+lo+", "+f+")","("+hi+", "+f+")","("+f+", "+fmt(mid)+")"],
+    "Polygon points go at (midpoint, frequency). The midpoint of "+lo+"\u2013"+hi+" is "+fmt(mid)+", so the point is ("+fmt(mid)+", "+f+").",
+    {lo:lo,hi:hi,mid:mid,f:f});
+});
+E("u5-histogram-concepts",5,["8.7"],2,"var",varset([
+  function(){return mcq("Why do the bars in a histogram touch each other, while the bars in a bar graph do not?",
+    "A histogram's intervals are continuous number ranges with no gaps between them; a bar graph shows separate categories",
+    ["Histogram bars are always wider than bar graph bars","Touching bars make the frequencies easier to add","A histogram has no vertical axis, so the bars join together"],
+    "A histogram groups a continuous measurement into intervals that run into each other, so the bars touch. A bar graph compares separate categories, so its bars stay apart.",{});},
+  function(){return mcq("Which statement about a histogram is correct?",
+    "The exact values are hidden by grouping, so counts per interval can be read but individual values cannot",
+    ["The exact data values can be read off the bars","The height of each bar is the midpoint of its interval","The bars must all be the same height when the intervals are equal"],
+    "Once values are grouped into an interval, the graph shows only how many fell in \u2014 the individual values are gone. That is the trade-off of grouping.",{});},
+  function(){return mcq("A histogram of coffee-shop wait times has its tallest bar over the interval 5\u20139 minutes. What can you conclude?",
+    "More waits fell in the 5\u20139 minute interval than in any other single interval",
+    ["The average wait was exactly 7 minutes","Every wait was between 5 and 9 minutes","The longest wait was 9 minutes"],
+    "The tallest bar marks the interval with the highest frequency. Grouped bars hide the exact values, so neither the true average nor the longest wait can be read off the graph.",{});}
+]));
+E("u5-polygon-compare",5,["8.7"],3,"gen",function(){
+  var ctx=pick(["ferry routes' passenger counts per crossing","city bus routes' passenger counts per trip","school shuttle routes' rider counts per run","commuter train routes' passenger counts per trip"]);
+  var lo1=pick([20,25,30,35,40]),hi1=lo1+9;var bHi=pick([49,59,69,79]);
+  return mcq("Two "+ctx+" are drawn as frequency polygons on the same axes. Route A's polygon is tall and narrow, peaked at "+lo1+"\u2013"+hi1+" passengers. Route B's polygon is low and wide, spread from 0\u20139 up to "+(bHi-9)+"\u2013"+bHi+" passengers. Which statement is correct?",
+    "Route B's passenger counts are more spread out, because its polygon covers a much wider range of intervals",
+    ["Route A carries more passengers in total, because its polygon is taller","Both routes are equally consistent, because both polygons peak","Route B's mean is exactly "+fmt(bHi-4.5,1)+" passengers, the midpoint of its widest interval"],
+    "A polygon stretched over many intervals means the values vary widely \u2014 Route B is far more spread out. Height alone does not give a total, and a midpoint is not a mean.",{lo1:lo1});
+});
+</script>
+
+<script>
+/* --- standard deviation (8.8, 8.9, 8.10, 8.16) --- */
+E("u5-sd-calc",5,["8.9"],2,"gen",function(){
+  var sets=[[4,6,8,10,12],[10,12,14,16],[2,5,8,11,14],[6,9,10,11,14],[15,17,19,21,23],[3,7,8,12,15]];
+  var data=pick(sets).map(function(x){return x+ri(0,3);});
+  var m=mean(data),v=pvar(data),sd=Math.sqrt(v);
+  var devs=data.map(function(x){return fmt(x-m);}).join(", ");
+  return numq("Using technology (or the formula), find the <b>population standard deviation</b> of <b>"+data.join(", ")+"</b>, to two decimal places. The mean is "+fmt(m)+".",
+    Math.round(sd*100)/100,0.011,
+    "Deviations from the mean: "+devs+". Square them and average: the variance is "+fmt(v)+". Then \u03C3 = \u221A"+fmt(v)+" \u2248 <b>"+fmt(sd)+"</b>.",
+    {data:data});
+});
+E("u5-sd-from-variance",5,["8.9"],1,"gen",function(){
+  var sd=pick([0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,11,12]);var v=sd*sd;
+  var frame=pick(["The variance of a data set is "+fmt(v)+". What is its <b>standard deviation</b>?",
+    "A data set has variance "+fmt(v)+". Find its <b>standard deviation</b>.",
+    "The scores in a quiz have variance "+fmt(v)+". What is the <b>standard deviation</b> of the scores?"]);
+  return numq(frame,
+    sd,0.011,"Standard deviation is the square root of the variance: \u221A"+fmt(v)+" = <b>"+fmt(sd)+"</b>.",{v:v});
+});
+E("u5-sd-meaning",5,["8.8"],1,"var",varset([
+  function(){return mcq("What does the standard deviation of a data set measure?",
+    "How far the values typically lie from the mean",
+    ["The difference between the largest and smallest values","The value in the middle of the data set","How many values the data set contains"],
+    "Standard deviation is a typical distance from the mean. The largest-minus-smallest description is the range, and the middle value is the median.",{});},
+  function(){return mcq("A data set has a standard deviation of 0. What does that tell you about the set?",
+    "Every value in the set is the same",
+    ["The mean of the set is 0","The set contains no values","The values are spread as far apart as possible"],
+    "If every value equals the mean, every deviation is 0, so the standard deviation is 0 \u2014 the set has no spread at all.",{});},
+  function(){return mcq("Two sets have the same mean. Set P has a standard deviation of 2; Set Q has a standard deviation of 11. What does that tell you?",
+    "Set Q's values are spread much farther from the mean than Set P's",
+    ["Set Q's values must all be larger than Set P's","Set P has more values than Set Q","Nothing \u2014 standard deviation cannot be compared between sets"],
+    "Standard deviation is measured in the data's own units as a typical distance from the mean, so 11 means far more spread than 2.",{});}
+]));
+E("u5-sd-compare",5,["8.8"],2,"gen",function(){
+  var m=ri(20,60),d1=pick([2,3]),d2=pick([9,10,12]);
+  var A=[m-d1,m,m+d1],B=[m-d2,m,m+d2];var swap=Math.random()<0.5;
+  var first=swap?B:A,second=swap?A:B;var wider=swap?"A":"B";
+  return mcq("Set A is "+first.join(", ")+". Set B is "+second.join(", ")+". Both sets have mean "+m+". Which statement is correct?",
+    "Set "+wider+" has the larger standard deviation, because its values lie farther from the mean",
+    ["Set "+(wider==="A"?"B":"A")+" has the larger standard deviation, because its values are closer together","Both sets have the same standard deviation, because they have the same mean","Neither set has a standard deviation, because they have only three values"],
+    "Both sets are centred at "+m+", but Set "+wider+"'s values sit "+(wider==="A"?(swap?d2:d1):(swap?d1:d2))+" units away while the other's sit closer. Farther from the mean means a larger standard deviation, whatever the mean is.",
+    {A:A,B:B,wider:wider,m:m});
+});
+E("u5-sd-interpret",5,["8.10"],2,"gen",function(){
+  var ctx=pick([
+    {who:"Two bus drivers complete the same route",thing:"times",unit:"minutes",m:ri(25,40)},
+    {who:"Two machines fill bottles",thing:"fill amounts",unit:"mL",m:ri(480,520)},
+    {who:"Two archers shoot rounds",thing:"scores",unit:"points",m:ri(70,90)}]);
+  var small=ri(2,5),big=small+ri(4,8);
+  return mcq(ctx.who+" with the same mean ("+ctx.m+" "+ctx.unit+"). One has a standard deviation of "+small+" "+ctx.unit+"; the other, "+big+" "+ctx.unit+". Which one is more consistent, and why?",
+    "The one with standard deviation "+small+", because a smaller standard deviation means the "+ctx.thing+" cluster closer to the mean",
+    ["The one with standard deviation "+big+", because a larger standard deviation means steadier "+ctx.thing,"Neither \u2014 consistency cannot be compared when the means are equal","Both are equally consistent, because they share the same mean"],
+    "Consistency is about spread, not centre. A standard deviation of "+small+" means results typically land within about "+small+" "+ctx.unit+" of the mean \u2014 much steadier than "+big+".",
+    {small:small,big:big});
+});
+E("u5-sd-decisions",5,["8.16"],3,"var",varset([
+  function(){return mcq("A brand of light bulb has a mean life of 1,000 hours with a standard deviation of 80 hours. The bulbs are sold with an 840-hour warranty. What does the standard deviation say about warranty claims?",
+    "Very few bulbs should fail before 840 hours, because the warranty length is 2 standard deviations below the mean",
+    ["About half the bulbs will fail before 840 hours, because 840 is below the mean","Claims cannot be predicted, because the standard deviation is smaller than the mean","Every bulb will last at least 840 hours, because the standard deviation is only 80"],
+    "840 is (1,000 \u2212 840) \u00F7 80 = 2 standard deviations below the mean. On a normal curve only about 2.5% of bulbs fall below that, so claims should be rare.",{mean:1000,sd:80,w:840});},
+  function(){return mcq("A company is choosing which freezer model to cover with a 6-year warranty. Model A has a mean life of 9 years with a standard deviation of 1.5 years. Model B has a mean life of 11 years with a standard deviation of 3 years. Which model should produce fewer warranty claims?",
+    "Model A, because 6 years is 2 standard deviations below its mean, but only about 1.7 standard deviations below Model B's mean, so far fewer Model A units fail early despite the lower mean",
+    ["Model B, because its mean life is higher","Model B, because its larger standard deviation means more long-lived units","Both will produce the same number of claims, because both means are above 6 years"],
+    "What matters is how far the warranty sits below the mean, in standard deviations: A: (9 \u2212 6) \u00F7 1.5 = 2; B: (11 \u2212 6) \u00F7 3 \u2248 1.7. Model B's wider spread puts a bigger share of its units below 6 years.",{a:{m:9,s:1.5},b:{m:11,s:3},w:6});},
+  function(){return mcq("An insurance company compares two groups of drivers. Both groups have the same mean annual claim amount, $750. Group A's claims have a standard deviation of $120; Group B's, $540. Which group is harder for the company to predict, and why?",
+    "Group B, because its much larger standard deviation means claim amounts vary far more widely around the same mean",
+    ["Group A, because its smaller standard deviation hides the large claims","Neither \u2014 prediction depends only on the mean claim amount","Group B is easier to predict, because a larger standard deviation averages out over more drivers"],
+    "Predictability is about spread. Group B's claims typically land hundreds of dollars from the mean in either direction, so the company faces far more uncertainty, even though the means match.",{});},
+  function(){return mcq("A pollster warns a candidate: \u201CYour support is 52% with a margin of error of \u00B14 points, so we cannot yet say you are ahead.\u201D Why is the warning fair, using standard-deviation thinking?",
+    "The interval reaches below 50%, so the true support could be a minority \u2014 the estimate is not spread out enough from 50% to be sure",
+    ["Because 52% is less than two margins of error above zero","Because a margin of error always means the poll is wrong","Because support above 50% can never be claimed from a sample"],
+    "The confidence interval is 48%\u201356%. Since it includes values below half, the lead is inside the poll's natural variability \u2014 the same idea as a value sitting within about one standard deviation of a boundary.",{});}
+]));
+/* --- normal curve (8.11-8.14) --- */
+E("u5-normal-props",5,["8.11","8.13"],1,"var",varset([
+  function(){return mcq("Which statement about a normal distribution is true?",
+    "It is symmetric, and its mean, median and mode are all equal",
+    ["Its mean is larger than its median","It is skewed to the right","Its total area under the curve is 100"],
+    "A normal curve is a single symmetric hump centred on the mean, so mean = median = mode, and the total area under the curve is 1 (100% of the data).",{});},
+  function(){return mcq("Two caf\u00E9s both serve lunch in a mean time of 14 minutes. Caf\u00E9 A has a standard deviation of 2 minutes; Caf\u00E9 B, 5 minutes. What do the two normal curves look like?",
+    "Caf\u00E9 A's curve is taller and narrower; Caf\u00E9 B's is shorter and wider, and both are centred at 14",
+    ["Caf\u00E9 B's curve is taller and narrower, because its times vary more","Both curves are identical, because the means are equal","Caf\u00E9 A's curve is centred at 2 and Caf\u00E9 B's at 5"],
+    "Same mean means the same centre. A smaller standard deviation squeezes the data toward the centre, so the curve grows taller and narrower to keep the same total area.",{});},
+  function(){return mcq("What does the standard deviation do to the shape of a normal curve?",
+    "A larger standard deviation makes the curve wider and flatter; a smaller one makes it taller and narrower",
+    ["It moves the curve left or right along the axis","It makes the curve skewed toward the larger values","It has no effect on the shape, only on the labels"],
+    "The mean sets the centre; the standard deviation sets the spread, and the curve's width follows it.",{});}
+]));
+E("u5-isnormal",5,["8.12"],2,"var",varset([
+  function(){return mcq("Which data set would be expected to approximate a normal distribution?",
+    "The heights of 500 randomly chosen adults",
+    ["The number of pets owned by students in a class","The daily high temperature on the coldest day of each winter month","The jersey numbers of players on a hockey team"],
+    "Heights pile up symmetrically around a central value with fewer and fewer people toward the extremes \u2014 the normal shape. Pet counts are small whole numbers bunched at 0, 1 and 2, and jersey numbers are labels, not measurements.",{});},
+  function(){return mcq("A teacher plots her class's marks and gets a histogram with one hump, but the hump leans left with a long tail of low marks stretching down. Does the data approximate a normal distribution?",
+    "No \u2014 a normal curve is symmetric, and this distribution is skewed by the tail of low marks",
+    ["Yes \u2014 any single-humped histogram is normal","Yes \u2014 the tail proves the standard deviation is large","No \u2014 normal data can never come from a class of students"],
+    "Symmetry is the test. A long tail on one side means the data are skewed, however the rest looks; a normal curve's two halves mirror each other.",{});},
+  function(){return mcq("Which is the best first check of whether a data set approximates a normal distribution?",
+    "Graph it and look for a single-peaked, roughly symmetric bell shape centred near the mean and median",
+    ["Check that the standard deviation is larger than the mean","Check that there are exactly 100 values in the set","Check that the highest and lowest values are equal"],
+    "Normal data announce themselves in the graph: one peak, mirror-image sides, and centre measures that nearly coincide.",{});}
+]));
+E("u5-compare-normal",5,["8.13"],2,"gen",function(){
+  var m=ri(10,20),s1=ri(1,3),s2=s1+ri(2,4);
+  return mcq("Two bakeries' morning prep times are normally distributed with the same mean, "+m+" minutes. Bakery A has a standard deviation of "+s1+" minutes; Bakery B, "+s2+" minutes. Which statement is correct?",
+    "Bakery B's times are more spread out, and its curve is wider and flatter",
+    ["Bakery A's times are more spread out, because a small standard deviation means more variation","Both bakeries are equally consistent, because their means are equal","Bakery B must have the higher mean, because its standard deviation is larger"],
+    "The standard deviation is the spread. "+s2+" > "+s1+", so Bakery B varies more, and its normal curve spreads wider and flatter to keep the same area.",{m:m,s1:s1,s2:s2});
+});
+E("u5-empirical",5,["8.14"],2,"gen",function(){
+  var ctx=pick([{w:"mass of loaves of bread",u:"g"},{w:"lifespan of a brand of battery",u:"hours"},{w:"finishing times in a fun run",u:"minutes"},{w:"length of fish of one species",u:"cm"}]);
+  var mu=ri(20,60)*10,sd=pick([5,10,15,20]);var k=pick([1,2]);var pct=k===1?68:95;
+  return numq("The "+ctx.w+" is normally distributed with mean "+mu+" "+ctx.u+" and standard deviation "+sd+" "+ctx.u+". About what percent of the values lie between "+(mu-k*sd)+" and "+(mu+k*sd)+" "+ctx.u+"? (Just the number.)",
+    pct,0.01,"That interval is the mean \u00B1 "+k+" standard deviation"+(k>1?"s":"")+". By the empirical rule, about <b>"+pct+"%</b> of a normal distribution lies within "+k+" standard deviation"+(k>1?"s":"")+" of the mean.",{mu:mu,sd:sd,k:k});
+});
+E("u5-normal-count",5,["8.14"],2,"gen",function(){
+  var N=pick([400,800,1000,2000]);var mu=ri(30,60),sd=pick([4,5,6,8,10]);
+  var side=Math.random()<0.5;var ans=side?0.16*N:0.025*N;var thr=side?mu+sd:mu+2*sd;
+  return numq("Heights of seedlings are normally distributed with mean "+mu+" cm and standard deviation "+sd+" cm. Out of "+N+" seedlings, about how many are taller than "+thr+" cm?",
+    Math.round(ans),N*0.01+1,"Above the mean + "+(side?1:2)+" standard deviation"+(side?"":"s")+" lies about "+(side?"16%":"2.5%")+" of a normal distribution (half of the "+(side?"32%":"5%")+" outside \u00B1"+(side?1:2)+"\u03C3). "+(side?"0.16":"0.025")+" \u00D7 "+N+" = <b>"+Math.round(ans)+"</b>.",{N:N,mu:mu,sd:sd});
+});
+/* --- z-scores (8.15) --- */
+E("u5-z-calc",5,["8.15"],1,"gen",function(){
+  var mu=ri(30,80),sd=pick([4,5,8,10]);var zd=pick([-2,-1.5,-1,-0.5,0.5,1,1.5,2,2.5]);var x=mu+zd*sd;
+  return numq("A value of "+x+" comes from a normal distribution with mean "+mu+" and standard deviation "+sd+". What is its <b>z-score</b>?",
+    zd,0.011,"z = (x \u2212 \u03BC) \u00F7 \u03C3 = ("+x+" \u2212 "+mu+") \u00F7 "+sd+" = <b>"+fmt(zd)+"</b>. The z-score counts how many standard deviations the value sits from the mean.",{mu:mu,sd:sd,x:x});
+});
+E("u5-z-compare",5,["8.15"],2,"gen",function(){
+  var people=[["Alex","Sam"],["Priya","Noor"],["Jack","Owen"],["Mia","Ella"],["Liam","Lucas"]];
+  var pr=pick(people);
+  function mk(){var mu=ri(55,75),sd=pick([5,8,10]),z=pick([0.5,1,1.5,2,2.5]);return {mu:mu,sd:sd,z:z,x:mu+z*sd};}
+  var a=mk(),b=mk(),guard=0;while(b.z===a.z&&guard++<20){b=mk();}
+  var winner=a.z>b.z?pr[0]:pr[1];
+  return mcq(pr[0]+" scored "+a.x+" on a test with mean "+a.mu+" and standard deviation "+a.sd+". "+pr[1]+" scored "+b.x+" on a different test with mean "+b.mu+" and standard deviation "+b.sd+". Who did better, relative to their class?",
+    winner+", with a z-score of "+fmt(Math.max(a.z,b.z))+" compared to "+fmt(Math.min(a.z,b.z)),
+    [(winner===pr[0]?pr[1]:pr[0])+", because that raw score is on the harder test","They did equally well, because both scored above their means","Whoever scored the higher raw mark, since z-scores ignore the class results"],
+    pr[0]+"'s z = ("+a.x+" \u2212 "+a.mu+") \u00F7 "+a.sd+" = "+fmt(a.z)+"; "+pr[1]+"'s z = ("+b.x+" \u2212 "+b.mu+") \u00F7 "+b.sd+" = "+fmt(b.z)+". Z-scores put both on the same scale, and "+winner+"'s is higher.",{a:a,b:b,winner:winner});
+});
+E("u5-z-backwards",5,["8.15"],2,"gen",function(){
+  var mu=ri(30,60),sd=pick([4,6,8]);var z=pick([1.5,1.8,2,-1.5,0.8]);var x=mu+z*sd;
+  return numq("Tomato plants in a greenhouse have heights with mean "+mu+" cm and standard deviation "+sd+" cm. A plant is "+fmt(Math.abs(z))+" standard deviations "+(z>=0?"above":"below")+" the mean. How tall is the plant, in cm?",
+    Math.round(x*10)/10,0.06,"Work backwards: x = \u03BC + z\u03C3 = "+mu+" + ("+fmt(z)+")("+sd+") = <b>"+fmt(x)+"</b> cm.",{mu:mu,sd:sd,z:z});
+});
+E("u5-z-prob",5,["8.15"],2,"gen",function(){
+  var mags=[0.25,0.3,0.5,0.6,0.64,0.75,0.85,0.9,1,1.18,1.2,1.25,1.5,1.75,1.8,1.86,1.97,2,2.1,2.25,2.4,2.5,2.8];
+  var a=pick(mags)*(Math.random()<0.5?-1:1);
+  var right=Math.random()<0.4;var cdf=zTab(a);var ans=right?Math.round((1-cdf)*10000)/10000:cdf;
+  var lead=pick(["Using the standard normal table, find","For the standard normal distribution, find"]);
+  return numq(lead+" P(z "+(right?">":"<")+" "+fmt(a)+"). Give your answer as a decimal to four places (for example, 0.1234).",
+    ans,0.0011,"The table gives the area to the left: P(z < "+fmt(a)+") = "+fmtF(cdf,4)+(right?". The right tail is 1 \u2212 "+fmtF(cdf,4)+" = <b>"+fmtF(ans,4)+"</b>":"."),{a:a,right:right});
+});
+E("u5-z-applied",5,["8.15"],3,"gen",function(){
+  var FAMS=[
+    {w:"amount of sleep teenagers get on school nights",unit:"hours",mus:[[7.2,0.8],[7.6,0.9],[8.1,0.7],[6.9,1.1]],hi:{verb:"sleep at least",zs:[1,1.5,2]},lo:{verb:"sleep less than",zs:[-1,-1.5,-2]}},
+    {w:"lifetimes of a brand of light bulb",unit:"hours",mus:[[1200,90],[1100,120],[1350,75],[1000,150]],hi:{verb:"last at least",zs:[1,1.5,2]},lo:{verb:"burn out in less than",zs:[-1,-1.25,-2]}},
+    {w:"masses of bags of apples",unit:"kg",mus:[[2.5,0.3],[3,0.4],[4.2,0.5],[1.8,0.25]],hi:{verb:"weigh at least",zs:[1,1.5,2.5]},lo:{verb:"weigh less than",zs:[-1,-1.5,-2]}},
+    {w:"scores on a provincial exam",unit:"points",mus:[[68,9],[72,8],[65,11],[75,10]],hi:{verb:"score at least",zs:[1,1.5,2]},lo:{verb:"score less than",zs:[-1,-1.5,-2]}},
+    {w:"morning commute times for city workers",unit:"minutes",mus:[[38,7],[42,9],[35,6],[47,10]],hi:{verb:"take at least",zs:[1,1.5,2]},lo:{verb:"take less than",zs:[-1,-1.5,-2]}},
+    {w:"heights of tomato plants",unit:"cm",mus:[[54,6],[61,7.5],[48,5],[57,8]],hi:{verb:"grow to at least",zs:[1,1.5,2]},lo:{verb:"grow to less than",zs:[-1,-1.5,-2]}}
+  ];
+  var fam=pick(FAMS);var ms=pick(fam.mus);var mu=ms[0],sd=ms[1];
+  var up=Math.random()<0.5;var dir=up?fam.hi:fam.lo;var z0=pick(dir.zs);
+  var thr=Math.round((mu+z0*sd)*10)/10;
+  var z=(thr-mu)/sd;var cdf=zTab(z);var p=up?1-cdf:cdf;var pct=Math.round(p*10000)/100;
+  return numq("Values for "+fam.w+" are normally distributed with mean "+fmt(mu)+" "+fam.unit+" and standard deviation "+fmt(sd)+" "+fam.unit+". What percent (to two decimal places) "+dir.verb+" "+fmt(thr,1)+" "+fam.unit+"? (Just the number.)",
+    pct,0.06,"z = ("+fmt(thr,1)+" \u2212 "+fmt(mu)+") \u00F7 "+fmt(sd)+" = "+fmt(z)+". From the table, the area "+(up?"to the right of":"to the left of")+" z = "+fmt(z)+" is "+fmt(p,4)+", about <b>"+fmt(pct)+"%</b>.",{ctx:{thr:thr,mu:mu,sd:sd,verb:dir.verb}});
+});
+</script>
+
+<script>
+/* --- confidence intervals (8.17-8.22) --- */
+E("u5-ci-endpoint",5,["8.17"],2,"gen",function(){
+  var p=pick([52,57,63,68,74,81]);var moe=Math.round(rf(3,7)*2)/2;var askUp=Math.random()<0.5;
+  var ans=askUp?p+moe:p-moe;
+  return numq("A survey reports that "+p+"% of residents support a new rink, with a margin of error of \u00B1"+fmt(moe)+" percentage points. What is the "+(askUp?"upper":"lower")+" endpoint of the confidence interval, as a percent? (Just the number.)",
+    ans,0.011,"Confidence interval = "+p+"% \u00B1 "+fmt(moe)+", so the interval runs from "+fmt(p-moe)+"% to "+fmt(p+moe)+"%. The "+(askUp?"upper":"lower")+" endpoint is <b>"+fmt(ans)+"%</b>.",{p:p,moe:moe,askUp:askUp});
+});
+E("u5-ci-from-endpoints",5,["8.17"],1,"gen",function(){
+  var fam=pick([
+    {pre:"A 95% confidence interval for the percentage of residents who support a new arena runs from ",unit:"%",mus:[38,42.5,47,51.5,55,58.5,63,67,71.5,74],halfs:[1.8,2.4,2.9,3.1,3.6,4.2,4.8]},
+    {pre:"A 95% confidence interval for mean battery life runs from ",unit:" hours",mus:[16.5,17.6,18.4,19.2,20.5,22.8],halfs:[0.6,0.8,1.1,1.4,1.9,2.3]},
+    {pre:"A 95% confidence interval for the mean quiz score runs from ",unit:" points",mus:[71.5,74,76.5,79,82.5],halfs:[1.5,2,2.6,3.4,4.1]}]);
+  var mid=pick(fam.mus),half=pick(fam.halfs);var askMoe=Math.random()<0.5;
+  return numq(fam.pre+fmt(mid-half)+fam.unit+" to "+fmt(mid+half)+fam.unit+". What is the "+(askMoe?"margin of error":"mean at the centre of the interval")+"?",
+    askMoe?half:mid,0.011,"The interval is centred at ("+fmt(mid-half)+" + "+fmt(mid+half)+") \u00F7 2 = "+fmt(mid)+", and it stretches "+fmt(half)+" each way, so the margin of error is \u00B1"+fmt(half)+". The "+(askMoe?"margin of error":"centre")+" is <b>"+fmt(askMoe?half:mid)+"</b>.",{mid:mid,half:half,askMoe:askMoe});
+});
+E("u5-ci-count",5,["8.19"],2,"gen",function(){
+  var p=ri(52,68),moe=pick([3,4,5]);var N=pick([800,1200,2000,18000]);var askMax=Math.random()<0.5;
+  var ans=Math.round(N*(askMax?p+moe:p-moe)/100);
+  return numq("In a town of "+N+" voters, a poll finds "+p+"% \u00B1 "+moe+" support a proposal. About how many voters is the "+(askMax?"largest":"smallest")+" plausible number of supporters?",
+    ans,N*0.002+1,"The interval is "+(p-moe)+"% to "+(p+moe)+"%. The "+(askMax?"top":"bottom")+" end is "+(askMax?p+moe:p-moe)+"% of "+N+" = <b>"+ans+"</b> voters.",{p:p,moe:moe,N:N,askMax:askMax});
+});
+E("u5-ci-samplesize",5,["8.18"],1,"var",varset([
+  function(){return mcq("The same survey is run three times with random samples of 25, 250 and 2,500 people. Which sample gives the smallest margin of error, and why?",
+    "The sample of 2,500 \u2014 larger random samples vary less from the population value, so the interval narrows",
+    ["The sample of 25 \u2014 fewer people means fewer mistakes","All three give the same margin of error, because the survey is the same","The sample of 250 \u2014 medium samples are the most reliable"],
+    "Margin of error shrinks as the sample grows: more data averages out the randomness. (Roughly, multiplying the sample by 100 divides the margin of error by 10.)",{});},
+  function(){return mcq("A town polls 80 riders and finds 58% \u00B1 10% use the bus daily. It polls 800 riders and gets 58% \u00B1 3%. What changed?",
+    "The larger sample narrowed the margin of error, so the estimate is more precise",
+    ["The larger sample changed the true percentage","The margin of error grew because more people were asked","Nothing \u2014 the percentages are the same, so both polls say the same thing"],
+    "Same centre, tighter interval: 55%\u201361% instead of 48%\u201368%. Bigger random samples pin the value down more closely.",{});},
+  function(){return mcq("A polling firm wants to cut its margin of error roughly in half. What should it do to its sample?",
+    "Use a much larger random sample \u2014 roughly four times as many people, because the margin of error shrinks with the square root of the sample size",
+    ["Ask exactly twice as many people \u2014 double the sample, half the error","Survey the same people twice and average the two results","Nothing \u2014 the sample size does not affect the margin of error"],
+    "Margin of error behaves like 1 \u00F7 \u221An: quadrupling n halves it. Doubling the sample only shrinks it by a factor of about 1.4.",{});}
+]));
+E("u5-ci-level",5,["8.18"],2,"var",varset([
+  function(){return mcq("A researcher recomputes the same survey results at a 99% confidence level instead of 95%. What happens to the interval?",
+    "It gets wider \u2014 being right more often requires allowing a bigger range",
+    ["It gets narrower \u2014 higher confidence means a better estimate","It stays the same \u2014 the confidence level does not affect the interval","The centre moves to 99%"],
+    "There is a trade-off: to capture the true value 99 times out of 100 instead of 95, the interval must stretch. Higher confidence, wider interval, same centre.",{});},
+  function(){return mcq("What does a 95% confidence level mean?",
+    "In the long run, intervals built this way capture the true population value about 95 times out of 100 (19 times out of 20)",
+    ["95% of the sample agreed with the result","There is a 95% chance this one interval is exactly centred on the true value","95% of the population was surveyed"],
+    "The 95% describes the method's long-run success rate: repeat the survey many times and about 19 of every 20 intervals contain the true value.",{});},
+  function(){return mcq("Two reports use the SAME survey. One gives a 90% confidence interval of 51% \u00B1 3%. The other gives a 99% interval from the same data. What must be true of the 99% interval?",
+    "Its margin of error is larger than 3% \u2014 higher confidence is bought with a wider interval",
+    ["Its margin of error is smaller than 3%","It is centred on a different percentage","It must be wrong, because a survey produces only one correct interval"],
+    "Same data, same centre (51%). Raising the confidence level stretches the interval both ways, so the margin of error grows past 3%.",{});}
+]));
+E("u5-ci-majority",5,["8.19","8.21"],3,"gen",function(){
+  var supported=Math.random()<0.5;var p,moe;
+  if(supported){moe=pick([2,3,4]);p=ri(50+moe+2,68);}else{moe=pick([4,5,6]);p=ri(51,49+moe);}
+  var lo=p-moe,hi=p+moe;
+  return mcq("A headline announces: \u201CMost teens support a later school start time!\u201D The survey behind it found "+p+"% support, with a margin of error of \u00B1"+moe+" points. Is the headline justified?",
+    supported?"Yes \u2014 the whole interval, "+lo+"% to "+hi+"%, sits above 50%, so a majority is plausible throughout":"No \u2014 the interval, "+lo+"% to "+hi+"%, dips below 50%, so support could actually be a minority",
+    [supported?"No \u2014 surveys can never justify the word \u2018most\u2019":"Yes \u2014 "+p+"% is more than half, and that settles it",
+     "Yes \u2014 the margin of error is small enough to ignore","The headline is justified only if the sample was larger than 1,000"],
+    "\u2018Most\u2019 means more than 50%. The interval runs "+lo+"%\u2013"+hi+"%"+(supported?", entirely above 50%, so the claim holds up.":", and it crosses below 50%, so the honest headline is \u2018about half of teens support\u2026\u2019.")+" Always check whether the whole interval clears the claim's bar.",
+    {p:p,moe:moe,supported:supported});
+});
+E("u5-media",5,["8.20","8.21","8.22"],3,"var",varset([
+  function(){return mcq("A news report says support for a new ferry sailing is 56% and calls it \u2018overwhelming\u2019. The poll's margin of error is \u00B16 points. What is the fairest criticism?",
+    "\u2018Overwhelmingly\u2019 is too strong \u2014 the interval 50%\u201362% is consistent with support being barely half",
+    ["The report is fine, because 56% is a majority","The poll must be wrong, because its margin of error is positive","Nothing \u2014 word choice does not matter in statistics"],
+    "56% \u00B1 6 gives 50%\u201362%. A result that could be a coin-flip is real support, but \u2018overwhelming\u2019 overstates what the numbers carry.",{});},
+  function(){return mcq("A website headline reads: \u2018Nine out of ten dentists recommend our toothpaste!\u2019 No sample size, margin of error, or survey method is reported. Why should a reader be cautious?",
+    "With no sample size or margin of error, there is no way to judge how much the result could vary \u2014 the claim is uncheckable",
+    ["Because dentists cannot be surveyed about toothpaste","Because nine out of ten is not a percentage","Because all advertising statistics are invented"],
+    "A statistic without its method \u2014 how many were asked, how they were chosen, and the margin of error \u2014 cannot be evaluated. Nine could be nine of ten people in one office.",{});},
+  function(){return mcq("A radio station asks listeners to text in whether the town should build a new arena. By midnight, 78% of texts say yes. The station reports \u2018the town strongly supports the arena\u2019. What is the biggest problem?",
+    "The sample is self-selected \u2014 people who feel strongly (and who listen to that station) did the choosing, so it does not represent the town",
+    ["78% is not a large enough majority","The poll was taken at night","Text messages cannot be counted accurately"],
+    "Voluntary samples over-represent strong opinions and the station's own audience. A random sample of the town, even a much smaller one, would say far more.",{});},
+  function(){return mcq("A community garden group reports: \u2018In our survey of 300 residents, 67% \u00B1 4 support expanding the garden.\u2019 A councillor says the survey proves most residents support the expansion. Is the councillor right?",
+    "Yes \u2014 the interval 63%\u201371% lies entirely above 50%, so a majority is supported throughout the interval",
+    ["No \u2014 67% of a sample never proves anything about residents","No \u2014 the margin of error means support could be under half","Yes \u2014 but only because 300 is a large sample"],
+    "The whole confidence interval clears 50%, so the majority claim is as solid as polling gets: the plausible range for true support is 63%\u201371%.",{});}
+]));
+E("u5-interpret-ci",5,["8.21"],2,"var",varset([
+  function(){return mcq("A poll reports a candidate at 49% with a margin of error of \u00B13.1 points, 19 times out of 20. What is the correct reading?",
+    "The candidate's true support is plausibly between 45.9% and 52.1%, and intervals built this way are right about 19 times in 20",
+    ["The candidate will get exactly 49% of the vote","The candidate is definitely behind, because 49% is less than half","The margin of error means the poll is off by exactly 3.1 points"],
+    "Add and subtract the margin of error: 45.9%\u201352.1%. The \u201819 times out of 20\u2019 is the confidence level \u2014 the method's long-run record, not a guarantee for this one poll.",{p:49,moe:3.1});},
+  function(){return mcq("A city survey of 400 adults finds 62% support a new compost pickup, with a margin of error of \u00B14.9 points, 19 times out of 20. What is the correct reading?",
+    "True support is plausibly between 57.1% and 66.9%, and intervals built this way contain the truth about 19 times in 20",
+    ["Exactly 62% of all adults in the city support the pickup","Support is certainly between 57.1% and 66.9% \u2014 the survey method cannot miss","The result is off by exactly 4.9 people out of the 400 surveyed"],
+    "Add and subtract the margin of error: 62 \u2212 4.9 = 57.1 and 62 + 4.9 = 66.9. \u201819 times out of 20\u2019 describes the method's long-run success rate, not a promise about this one survey.",{p:62,moe:4.9});},
+  function(){return mcq("A poll reports 38% of voters preferring a four-day school week, with a margin of error of \u00B13 points, 19 times out of 20. Which statement is correct?",
+    "The true share of all voters who prefer it is plausibly somewhere from 35% to 41%",
+    ["There is a 95% chance the true share is exactly 38%","The share of all voters is 38%, give or take exactly 3 people","Any result outside 35% to 41% would prove the poll was rigged"],
+    "The confidence interval is 38 \u00B1 3, that is 35% to 41%. It is a plausible range for the true value, built by a method that works about 19 times in 20 \u2014 not a certainty and not a count of people.",{p:38,moe:3});}
+]));
+/* ============ Unit 1: Acute Triangle Trigonometry ============ */
+function angFmt(x){return fmt(x,1)+"\u00B0";}
+E("u1-law-choice",1,["7.1","7.2"],1,"var",varset([
+  function(){return mcq("In triangle ABC you know two angles and the side between them. Which law starts the solution?",
+    "The sine law \u2014 an angle and its opposite side form a complete pair",
+    ["The cosine law \u2014 it needs no angles","The tangent ratio \u2014 it works in any triangle","The Pythagorean theorem \u2014 first find the third angle"],
+    "Two angles give the third by the angle sum, and the known side sits opposite a known angle: a complete sine-law pair. (Pythagoras and the tangent ratio are for right triangles only.)",{});},
+  function(){return mcq("In triangle PQR you know two sides and the angle between them, and you need the third side. Which law do you use?",
+    "The cosine law \u2014 it is built for the side-angle-side case",
+    ["The sine law \u2014 it only needs the two sides","The sine law, after splitting the triangle in two","The Pythagorean theorem, because two sides are known"],
+    "With no angle-opposite-side pair, the sine law has nothing to anchor to. The cosine law, c\u00B2 = a\u00B2 + b\u00B2 \u2212 2ab cos C, handles SAS directly.",{});},
+  function(){return mcq("You know all three sides of an acute triangle and need its largest angle. Which law, and why?",
+    "The cosine law, rearranged \u2014 it is the only one that uses three sides to give an angle",
+    ["The sine law, because three sides give three ratios","The tangent ratio, using the two longest sides","No law is needed \u2014 the largest angle is always 90\u00B0"],
+    "cos A = (b\u00B2 + c\u00B2 \u2212 a\u00B2) \u00F7 (2bc) uses exactly the three sides. The largest angle sits opposite the longest side.",{});}
+]));
+E("u1-sine-side",1,["7.2"],2,"gen",function(){
+  var A=pick([35,40,50,55,65]),B=pick([45,60,70,80]);var a=ri(8,20);
+  var b=a*Math.sin(B*Math.PI/180)/Math.sin(A*Math.PI/180);
+  return numq("In \u25B3ABC, \u2220A = "+A+"\u00B0, \u2220B = "+B+"\u00B0, and side a = "+a+" cm (opposite \u2220A). Find side b, to one decimal place, in cm.",
+    Math.round(b*10)/10,0.06,"Sine law: b \u00F7 sin "+B+"\u00B0 = a \u00F7 sin "+A+"\u00B0 = "+a+" \u00F7 "+fmt(Math.sin(A*Math.PI/180),4)+". So b = "+fmt(b,4)+" \u2248 <b>"+fmt(b,1)+" cm</b>.",{A:A,B:B,a:a});
+});
+E("u1-sine-angle",1,["7.2"],2,"gen",function(){
+  var tri=pick([{n:"DEF",u:"m"},{n:"ABC",u:"cm"},{n:"PQR",u:"km"}]);
+  var A=pick([25,30,35,40,45,50,55,60]),a=pick([6,7,8,9,10,11,12,13,14,15,16]);
+  var bts=[50,55,60,65,70,75,80].filter(function(x){return x>A+15&&A+x<175;});
+  var Btar=pick(bts);
+  var bTrue=a*Math.sin(Btar*Math.PI/180)/Math.sin(A*Math.PI/180);
+  var b=Math.round(bTrue*10)/10;
+  var Brev=Math.round(Math.asin(b*Math.sin(A*Math.PI/180)/a)*180/Math.PI);
+  var L1=tri.n.charAt(0),L2=tri.n.charAt(1),l1=L1.toLowerCase(),l2=L2.toLowerCase();
+  return numq("In \u25B3"+tri.n+", \u2220"+L1+" = "+A+"\u00B0, side "+l1+" = "+a+" "+tri.u+" (opposite \u2220"+L1+"), and side "+l2+" = "+fmt(b,1)+" "+tri.u+". Find \u2220"+L2+", to the nearest degree.",
+    Brev,1.1,"Sine law: sin "+L2+" = "+l2+" \u00D7 sin "+L1+" \u00F7 "+l1+" = "+fmt(b,1)+" \u00D7 sin "+A+"\u00B0 \u00F7 "+a+" \u2248 "+fmt(b*Math.sin(A*Math.PI/180)/a,4)+". So \u2220"+L2+" = sin\u207B\u00B9("+fmt(b*Math.sin(A*Math.PI/180)/a,4)+") \u2248 <b>"+Brev+"\u00B0</b> (the triangle is acute).",{A:A,a:a,b:b,Brev:Brev});
+});
+E("u1-cosine-side",1,["7.2"],2,"gen",function(){
+  var C=pick([50,60,70,80]),a=ri(6,14),b=ri(6,14);
+  var c=Math.sqrt(a*a+b*b-2*a*b*Math.cos(C*Math.PI/180));
+  return numq("In \u25B3PQR, sides p = "+a+" km and q = "+b+" km meet at \u2220R = "+C+"\u00B0 between them. Find the side opposite \u2220R, to one decimal place, in km.",
+    Math.round(c*10)/10,0.06,"Cosine law: r\u00B2 = p\u00B2 + q\u00B2 \u2212 2pq cos R = "+(a*a)+" + "+(b*b)+" \u2212 2("+a+")("+b+")cos "+C+"\u00B0 \u2248 "+fmt(c*c,2)+". So r \u2248 <b>"+fmt(c,1)+" km</b>.",{a:a,b:b,C:C});
+});
+E("u1-cosine-angle",1,["7.2"],2,"gen",function(){
+  var Atar=pick([45,55,65,75]);var b=ri(6,12),c=ri(6,12);
+  var aTrue=Math.sqrt(b*b+c*c-2*b*c*Math.cos(Atar*Math.PI/180));
+  var a=Math.round(aTrue*10)/10;
+  var cosA=(b*b+c*c-a*a)/(2*b*c);var Arev=Math.round(Math.acos(cosA)*180/Math.PI);
+  return numq("A triangle has sides "+fmt(a,1)+", "+b+" and "+c+". Find the angle opposite the side of length "+fmt(a,1)+", to the nearest degree.",
+    Arev,1.1,"Cosine law rearranged: cos A = (b\u00B2 + c\u00B2 \u2212 a\u00B2) \u00F7 (2bc) = ("+(b*b)+" + "+(c*c)+" \u2212 "+fmt(a*a,2)+") \u00F7 "+(2*b*c)+" \u2248 "+fmt(cosA,4)+". So A \u2248 <b>"+Arev+"\u00B0</b>.",{b:b,c:c,Arev:Arev,a:a});
+});
+E("u1-two-triangles",1,["7.3"],3,"gen",function(){
+  var AB=pick([11,12,13]),BC=pick([8,9,10]),angB=pick([60,70,80]);
+  var AC=Math.sqrt(AB*AB+BC*BC-2*AB*BC*Math.cos(angB*Math.PI/180));
+  var angDAC=pick([50,55]),angD=pick([60,65]);var angACD=180-angDAC-angD;
+  var CD=AC*Math.sin(angDAC*Math.PI/180)/Math.sin(angD*Math.PI/180);
+  return numq("A surveyor maps two fields that share the diagonal AC. In \u25B3ABC, AB = "+AB+" m, BC = "+BC+" m and \u2220B = "+angB+"\u00B0. In the second field, \u25B3ACD, \u2220DAC = "+angDAC+"\u00B0 and \u2220D = "+angD+"\u00B0. Find the length of CD, to one decimal place, in m.",
+    Math.round(CD*10)/10,0.16,
+    "Step 1 \u2014 the shared side, from \u25B3ABC (cosine law): AC\u00B2 = "+(AB*AB)+" + "+(BC*BC)+" \u2212 2("+AB+")("+BC+")cos "+angB+"\u00B0, so AC \u2248 "+fmt(AC,2)+" m. Step 2 \u2014 use AC in \u25B3ACD: its third angle is 180 \u2212 "+angDAC+" \u2212 "+angD+" = "+angACD+"\u00B0, and the sine law gives CD \u00F7 sin "+angDAC+"\u00B0 = AC \u00F7 sin "+angD+"\u00B0, so CD \u2248 "+fmt(AC,2)+" \u00D7 sin "+angDAC+"\u00B0 \u00F7 sin "+angD+"\u00B0 \u2248 <b>"+fmt(CD,1)+" m</b>. The first triangle exists to produce the side the second triangle needs.",{AB:AB,BC:BC,angB:angB,AC:AC,angDAC:angDAC,angD:angD});
+});
+</script>
+
+<script>
+/* ============ Unit 2: Quadratic Functions ============ */
+function quadStr(a,b,c){var s=(a===1?"":a===-1?"\u2212":""+a)+"x\u00B2";if(b!==0)s+=" "+(b>0?"+":"\u2212")+" "+(Math.abs(b)===1?"":Math.abs(b))+"x";if(c!==0)s+=" "+(c>0?"+":"\u2212")+" "+Math.abs(c);return s;}
+E("u2-vertex-x",2,["4.12"],1,"gen",function(){
+  var a=pick([1,1,2,-1]),h=ri(-5,6)||2;var b=-2*a*h;var c=a*h*h+ri(-6,6);
+  return numq("What is the x-coordinate of the vertex of y = "+quadStr(a,b,c)+"?",
+    h,0.011,"Axis of symmetry: x = \u2212b \u00F7 (2a) = \u2212("+b+") \u00F7 "+(2*a)+" = <b>"+h+"</b>. The vertex sits on the axis of symmetry.",{a:a,b:b,c:c});
+});
+E("u2-vertex-value",2,["4.11"],2,"gen",function(){
+  var a=pick([1,2,-1]),h=ri(-4,5),k=ri(-8,12);var b=-2*a*h,c=a*h*h+k;
+  return numq("Find the "+(a>0?"minimum":"maximum")+" value of y = "+quadStr(a,b,c)+".",
+    k,0.011,"The vertex is at x = \u2212b \u00F7 (2a) = "+h+". Substituting: y = "+a+"("+h+")\u00B2 + ("+b+")("+h+") + ("+c+") = <b>"+k+"</b>. Since a "+(a>0?"> 0, the parabola opens up and this is a minimum.":"< 0, the parabola opens down and this is a maximum."),{a:a,h:h,k:k});
+});
+E("u2-axis-from-intercepts",2,["4.13"],1,"gen",function(){
+  var p=ri(-10,-1),q=ri(1,10);var mid=(p+q)/2;
+  var frame=pick([
+    "A parabola has x-intercepts "+p+" and "+q+". What is the equation of its axis of symmetry? Give your answer as x = (a number).",
+    "The graph of a parabola crosses the x-axis at "+p+" and "+q+". What is the equation of its axis of symmetry? Give your answer as x = (a number)."]);
+  return numq(frame,mid,0.011,"The axis of symmetry passes midway between the intercepts: x = ("+p+" + "+q+") \u00F7 2 = <b>"+fmt(mid)+"</b>.",{p:p,q:q});
+});
+E("u2-xintercepts",2,["4.4"],2,"gen",function(){
+  var p=ri(-9,-1),q=ri(1,10);var b=-(p+q),c=p*q;
+  var factored=Math.random()<0.5;
+  var prompt=factored? "A parabola has equation y = (x "+(p>0?"\u2212 "+p:"+ "+(-p))+")(x "+(q>0?"\u2212 "+q:"+ "+(-q))+"). What is the larger x-intercept?"
+                     : "Find the larger x-intercept of y = "+quadStr(1,b,c)+".";
+  return numq(prompt,q,0.011,"Factor: y = (x "+(p>0?"\u2212 "+p:"+ "+(-p))+")(x "+(q>0?"\u2212 "+q:"+ "+(-q))+"). The intercepts are x = "+p+" and x = "+q+"; the larger is <b>"+q+"</b>.",{p:p,q:q});
+});
+E("u2-factored-coeffs",2,["4.5"],2,"gen",function(){
+  var p=ri(-7,-2),q=ri(2,7);var askB=Math.random()<0.5;
+  return numq("A quadratic function has zeros "+p+" and "+q+", so its equation can be written y = (x \u2212 ("+p+"))(x \u2212 ("+q+")). Expanded into the form y = x\u00B2 + bx + c, what is the value of "+(askB?"b":"c")+"?",
+    askB?-(p+q):p*q,0.011,"Expanding: (x \u2212 ("+p+"))(x \u2212 ("+q+")) = x\u00B2 \u2212 ("+(p+q)+")x + ("+(p*q)+"), so b = "+(-(p+q))+" and c = "+(p*q)+". The asked coefficient is <b>"+(askB?-(p+q):p*q)+"</b>.",{p:p,q:q,askB:askB});
+});
+E("u2-domain-range",2,["4.1"],2,"gen",function(){
+  var a=pick([1,-1,2]),h=ri(-4,4),k=ri(-6,10);
+  var correct=a>0?"Domain: all real numbers; Range: y \u2265 "+k:"Domain: all real numbers; Range: y \u2264 "+k;
+  return mcq("A quadratic function has vertex ("+h+", "+k+") and opens "+(a>0?"upward":"downward")+". What are its domain and range?",correct,
+    [a>0?"Domain: all real numbers; Range: y \u2264 "+k:"Domain: all real numbers; Range: y \u2265 "+k,
+     "Domain: x \u2265 "+h+"; Range: all real numbers","Domain: all real numbers; Range: y \u2265 "+h],
+    "Every quadratic has domain all real numbers. The vertex is the turning point: opening "+(a>0?"up, the smallest y is the vertex's y-value "+k:"down, the largest y is "+k)+", so the range is y "+(a>0?"\u2265":"\u2264")+" "+k+".",{a:a,h:h,k:k});
+});
+E("u2-vertex-form-params",2,["4.15"],1,"var",varset([
+  function(){return mcq("In y = (x \u2212 3)\u00B2 + 5, what is the vertex?",
+    "(3, 5) \u2014 the graph of y = x\u00B2 shifted right 3 and up 5",
+    ["(\u22123, 5) \u2014 shifted left 3 and up 5","(3, \u22125) \u2014 shifted right 3 and down 5","(5, 3) \u2014 the numbers swap places"],
+    "Vertex form y = a(x \u2212 h)\u00B2 + k has vertex (h, k). The minus sign in (x \u2212 3) means h = +3.",{});},
+  function(){return mcq("What does the value of a do in y = a(x \u2212 h)\u00B2 + k?",
+    "If |a| > 1 the parabola narrows; if a < 0 it opens downward",
+    ["It moves the vertex left or right","It moves the vertex up or down","It changes only the y-intercept"],
+    "h shifts sideways, k shifts vertically, and a controls opening direction and width \u2014 the \u2018stretch\u2019 of the parabola.",{});},
+  function(){return mcq("The graph of y = x\u00B2 is shifted left 4 and down 2. What is its equation?",
+    "y = (x + 4)\u00B2 \u2212 2",
+    ["y = (x \u2212 4)\u00B2 + 2","y = (x + 4)\u00B2 + 2","y = (x \u2212 4)\u00B2 \u2212 2"],
+    "Left 4 means h = \u22124, written (x \u2212 (\u22124)) = (x + 4); down 2 means k = \u22122.",{});}
+]));
+E("u2-eq-from-vertex",2,["4.16"],2,"gen",function(){
+  var h=ri(-4,4),k=ri(-5,5),a=pick([1,2,3,-1]);var dx=pick([1,2]);var px=h+dx,py=a*dx*dx+k;
+  return numq("A parabola has vertex ("+h+", "+k+") and passes through ("+px+", "+py+"). Using y = a(x \u2212 h)\u00B2 + k, find the value of a.",
+    a,0.011,"Substitute the point: "+py+" = a("+px+" \u2212 ("+h+"))\u00B2 + ("+k+") \u2192 "+py+" = "+(dx*dx)+"a + ("+k+") \u2192 a = ("+py+" \u2212 ("+k+")) \u00F7 "+(dx*dx)+" = <b>"+a+"</b>.",{h:h,k:k,a:a});
+});
+E("u2-max-context",2,["4.2"],3,"gen",function(){
+  var v=pick([10,20,30,40,50,60,70]),h0=pick([0,2,5,8,10,12,15,20,25,30]);
+  var thing=pick(["A ball is thrown upward","A firework shell is launched upward","A water jet from a fountain arcs upward"]);
+  var tmax=v/10,hmax=-5*tmax*tmax+v*tmax+h0;
+  return numq(thing+". Its height after t seconds is h(t) = \u22125t\u00B2 + "+v+"t"+(h0?" + "+h0:"")+" metres. What is the maximum height it reaches, in metres?",
+    hmax,0.11,"The maximum is at the vertex: t = \u2212b \u00F7 (2a) = \u2212"+v+" \u00F7 (\u221210) = "+fmt(tmax,1)+" s. Then h("+fmt(tmax,1)+") = \u22125("+fmt(tmax*tmax,2)+") + "+v+"("+fmt(tmax,1)+") + "+h0+" = <b>"+fmt(hmax,1)+" m</b>.",{v:v,h0:h0});
+});
+/* ============ Unit 3: Quadratic Equations ============ */
+E("u3-factor-solve",3,["4.8"],2,"gen",function(){
+  var p=ri(-8,-1),q=ri(1,9);var b=-(p+q),c=p*q;var askBig=Math.random()<0.5;
+  return numq("Solve by factoring: "+quadStr(1,b,c)+" = 0. Give the "+(askBig?"larger":"smaller")+" root.",
+    askBig?q:p,0.011,"Factor: (x "+(p>0?"\u2212 "+p:"+ "+(-p))+")(x "+(q>0?"\u2212 "+q:"+ "+(-q))+") = 0, so x = "+p+" or x = "+q+" (check by substituting back). The "+(askBig?"larger":"smaller")+" root is <b>"+(askBig?q:p)+"</b>.",{p:p,q:q,askBig:askBig});
+});
+E("u3-formula",3,["4.9"],2,"gen",function(){
+  var a=pick([1,1,2]),b=ri(-9,9)||3,c=ri(-8,8)||-4;var D=b*b-4*a*c,guard=0;
+  while((D<=0||Math.sqrt(D)===Math.floor(Math.sqrt(D)))&&guard++<60){b=ri(-9,9)||3;c=ri(-8,8)||-4;D=b*b-4*a*c;}
+  var r1=(-b+Math.sqrt(D))/(2*a),r2=(-b-Math.sqrt(D))/(2*a);var big=Math.max(r1,r2);
+  return numq("Use the quadratic formula to solve "+quadStr(a,b,c)+" = 0. Give the larger root, to two decimal places.",
+    Math.round(big*100)/100,0.011,"D = b\u00B2 \u2212 4ac = "+D+". x = ("+(-b)+" \u00B1 \u221A"+D+") \u00F7 "+(2*a)+", giving x \u2248 "+fmt(r1)+" or x \u2248 "+fmt(r2)+". The larger root is <b>"+fmt(big)+"</b>.",{a:a,b:b,c:c,D:D});
+});
+E("u3-discriminant",3,["4.7"],2,"gen",function(){
+  var kind=pick(["two","one","zero"]);var a=pick([1,2]),b,c,D;
+  if(kind==="one"){b=pick([4,6]);c=b*b/(4*a);D=0;}
+  else if(kind==="two"){b=ri(3,9);c=ri(-6,3);D=b*b-4*a*c;if(D<=0){c=-5;D=b*b-4*a*c;}}
+  else{b=ri(1,4);c=ri(3,9);D=b*b-4*a*c;if(D>=0){b=1;c=9;D=1-4*a*9;}}
+  var correct=kind==="two"?"Two x-intercepts \u2014 the discriminant is positive":kind==="one"?"One x-intercept \u2014 the discriminant is zero":"No x-intercepts \u2014 the discriminant is negative";
+  return mcq("How many x-intercepts does the graph of y = "+quadStr(a,b,c)+" have?",correct,
+    ["Two x-intercepts \u2014 the discriminant is positive","One x-intercept \u2014 the discriminant is zero","No x-intercepts \u2014 the discriminant is negative","It is impossible to tell without graphing"].filter(function(s){return s!==correct;}),
+    "Discriminant = b\u00B2 \u2212 4ac = "+(b*b)+" \u2212 "+(4*a*c)+" = "+D+". "+(D>0?"Positive, so the parabola crosses the x-axis twice.":D===0?"Zero, so the vertex just touches the x-axis \u2014 one intercept (a repeated root).":"Negative, so the parabola never reaches the x-axis."),{a:a,b:b,c:c,D:D});
+});
+E("u3-roots-zeros",3,["4.6"],1,"var",varset([
+  function(){return mcq("The equation x\u00B2 \u2212 5x + 6 = 0 has roots 2 and 3. What does that say about the function f(x) = x\u00B2 \u2212 5x + 6?",
+    "Its zeros are 2 and 3, and its graph crosses the x-axis at (2, 0) and (3, 0)",
+    ["Its vertex is at (2, 3)","Its y-intercept is 6 and its maximum is 3","Its zeros are \u22122 and \u22123, the opposite signs"],
+    "Roots of the equation, zeros of the function and x-intercepts of the graph are three names for the same numbers \u2014 where the function\u2019s value is 0.",{});},
+  function(){return mcq("A quadratic function\u2019s graph touches the x-axis at exactly one point. What is true of the corresponding equation?",
+    "It has one root, repeated \u2014 the discriminant is zero",
+    ["It has two different roots","It has no roots at all","Its discriminant is positive"],
+    "Touching at one point means one x-intercept, which matches a repeated root and D = 0.",{});},
+  function(){return mcq("The graph of a quadratic function crosses the x-axis at x = \u22124 and x = 1. What are the roots of the corresponding quadratic equation?",
+    "\u22124 and 1 \u2014 the x-intercepts of the graph are exactly the roots of the equation",
+    ["4 and \u22121, the opposite signs","There are no roots, because the graph crosses the axis","Only 1 \u2014 a root cannot be negative"],
+    "Roots of the equation, zeros of the function and x-intercepts of the graph are the same numbers, signs included.",{});}
+]));
+E("u3-context-area",3,["4.3"],3,"gen",function(){
+  var w=ri(3,15),d=ri(2,12);var A=w*(w+d);
+  var obj=pick(["garden","patio","deck","vegetable plot","parking pad"]);
+  return numq("A rectangular "+obj+"'s length is "+d+" m more than its width. Its area is "+A+" m\u00B2. What is the width, in metres?",
+    w,0.011,"Let the width be w. Then w(w + "+d+") = "+A+" \u2192 w\u00B2 + "+d+"w \u2212 "+A+" = 0 \u2192 (w + "+(w+d)+")(w \u2212 "+w+") = 0. The roots are w = "+w+" and w = \u2212"+(w+d)+"; a width cannot be negative, so the width is <b>"+w+" m</b>.",{w:w,d:d});
+});
+/* ============ Unit 4: Radicals ============ */
+function radStr(a,b){return (a===1?"":a)+"\u221A"+b;}
+E("u4-mixed-to-entire",4,["1.1"],1,"gen",function(){
+  var a=ri(2,9),b=pick([2,3,5,6,7,10,11,13,14,15]);var inside=a*a*b;
+  var frame=pick(["Express "+radStr(a,b)+" as an entire radical.","Which entire radical is equal to "+radStr(a,b)+"?"]);
+  return mcq(frame,"\u221A"+inside,["\u221A"+(a*b),"\u221A"+(a*a+b),"\u221A"+(a+b)],
+    "Bring the outside number in by squaring it: "+a+"\u00B2 \u00D7 "+b+" = "+(a*a)+" \u00D7 "+b+" = "+inside+", so "+radStr(a,b)+" = \u221A"+inside+".",{a:a,b:b});
+});
+E("u4-entire-to-mixed",4,["1.2"],1,"gen",function(){
+  var a=ri(2,12),b=pick([2,3,5,6,7,10,11,13,14,15]);var n=a*a*b;
+  var frame=pick(["Express \u221A"+n+" as a mixed radical in simplest form.","Write \u221A"+n+" as a mixed radical in simplest form."]);
+  return mcq(frame,radStr(a,b),[radStr(a+1,b),radStr(a,b+1),(n/2)+"\u221A2","\u221A"+(n-1)],
+    "Find the largest perfect square dividing "+n+": "+n+" = "+(a*a)+" \u00D7 "+b+". So \u221A"+n+" = "+a+"\u221A"+b+" = "+radStr(a,b)+".",{a:a,b:b,n:n});
+});
+E("u4-simplify-add",4,["1.6"],2,"gen",function(){
+  var b=pick([2,3,5,6,7,10,11,13]);var a1=pick([2,3,4,5]);var a2=pick([2,3,4,5,6].filter(function(x){return x!==a1;}));
+  var n1=a1*a1*b,n2=a2*a2*b;var tot=a1+a2;
+  return mcq("Simplify: \u221A"+n1+" + \u221A"+n2+".",
+    radStr(tot,b),[radStr(tot+1,b),radStr(tot,b+1),"\u221A"+(n1+n2)],
+    "\u221A"+n1+" = "+radStr(a1,b)+" and \u221A"+n2+" = "+radStr(a2,b)+". Like radicals add: ("+a1+" + "+a2+")\u221A"+b+" = "+radStr(tot,b)+". (You cannot just add the numbers under the roots.)",{b:b,a1:a1,a2:a2});
+});
+E("u4-multiply",4,["1.4"],2,"gen",function(){
+  var k=pick([2,3,5,6,7,10,11,13,14,15]);var i=ri(1,3),j=ri(1,3);var x=k*i*i,y=k*j*j;
+  return numq("The product \u221A"+x+" \u00D7 \u221A"+y+" is a whole number. What is it?",
+    k*i*j,0.011,"\u221A"+x+" \u00D7 \u221A"+y+" = \u221A("+x+" \u00D7 "+y+") = \u221A"+(x*y)+". Notice "+x+" = "+k+" \u00D7 "+(i*i)+" and "+y+" = "+k+" \u00D7 "+(j*j)+", so the product is "+k+" \u00D7 "+i+" \u00D7 "+j+" = <b>"+(k*i*j)+"</b>.",{p:[x,y]});
+});
+E("u4-rationalize",4,["1.7"],2,"gen",function(){
+  var d=pick([2,3,5,6,7,10,11,13,14,15]);var c=d*ri(1,5);
+  var frame=pick(["Rationalize the denominator: "+c+" \u00F7 \u221A"+d+".","Write "+c+" \u00F7 \u221A"+d+" with a rational denominator."]);
+  return mcq(frame,(c/d)+"\u221A"+d,["\u221A"+(c*d),c+"\u221A"+d+"\u00F7"+d,(c/d)+"\u221A"+(d*d)],
+    "Multiply top and bottom by \u221A"+d+": "+c+"\u221A"+d+" \u00F7 "+d+" = "+(c/d)+"\u221A"+d+". The denominator is now the rational number "+d+".",{c:c,d:d});
+});
+E("u4-restrictions",4,["1.5"],1,"gen",function(){
+  var a=ri(-6,15);var flipped=Math.random()<0.5;
+  var rad=flipped?"("+a+" \u2212 x)":"(x "+(a>=0?"\u2212 "+a:"+ "+(-a))+")";
+  var frame=pick(["For which values of x is the expression \u221A"+rad+" defined?","State the restriction on x so that \u221A"+rad+" is a real number."]);
+  return mcq(frame,
+    flipped?"x \u2264 "+a:"x \u2265 "+a,[flipped?"x \u2265 "+a:"x \u2264 "+a,"x > 0","All real numbers"],
+    "The radicand cannot be negative: "+(flipped?a+" \u2212 x \u2265 0 gives x \u2264 "+a:"x "+(a>=0?"\u2212 "+a:"+ "+(-a))+" \u2265 0 gives x \u2265 "+a)+".",{a:a,flipped:flipped});
+});
+E("u4-radical-equation",4,["1.9"],2,"gen",function(){
+  var b=ri(3,7),a=ri(1,15);var x=b*b-a;
+  return numq("Solve \u221A(x + "+a+") = "+b+". Give the value of x.",
+    x,0.011,"Square both sides: x + "+a+" = "+(b*b)+", so x = "+(b*b)+" \u2212 "+a+" = <b>"+x+"</b>. Check: \u221A("+x+" + "+a+") = \u221A"+(b*b)+" = "+b+" \u2713.",{a:a,b:b});
+});
+E("u4-extraneous",4,["1.11"],3,"gen",function(){
+  var b=pick([1,2,3,4]);var r=2*b+ri(1,6);var e=2*b+1-r;var a=b*b-r*e;
+  var radicand="x + "+a;
+  var frame=pick([
+    "Solving \u221A("+radicand+") = x \u2212 "+b+" by squaring both sides gives two candidates: x = "+r+" and x = "+e+". Which one is extraneous, and why?",
+    "A student solves \u221A("+radicand+") = x \u2212 "+b+" by squaring and gets two candidates: x = "+r+" and x = "+e+". Which candidate is extraneous, and why?",
+    "Squaring both sides of \u221A("+radicand+") = x \u2212 "+b+" produces the candidates x = "+r+" and x = "+e+". Which one is extraneous, and why?"]);
+  return mcq(frame,
+    "x = "+e+" is extraneous \u2014 substituting it makes the right side negative, but a square root is never negative",
+    ["x = "+r+" is extraneous \u2014 it is the larger answer","Neither \u2014 squaring never creates false roots","Both are extraneous, so the equation has no solution"],
+    "Check x = "+e+": \u221A("+e+" + "+a+") = \u221A"+(e+a)+" = "+Math.sqrt(e+a)+", but x \u2212 "+b+" = "+(e-b)+" < 0. A principal square root cannot equal a negative number, so x = "+e+" crept in when we squared. x = "+r+" checks: \u221A"+(r+a)+" = "+Math.sqrt(r+a)+" = "+(r-b)+" \u2713.",{b:b,r:r,e:e,a:a});
+});
+E("u4-order",4,["1.3"],2,"gen",function(){
+  var base=ri(5,10),g1=ri(2,4),g2=ri(2,4),g3=ri(2,5);
+  var ins=[base,base+g1,base+g1+g2,base+g1+g2+g3];
+  function render(n){var c=Math.floor(Math.sqrt(n));if(c*c===n)return ""+c;var r=n;var co=1;for(var d=2;d*d<=r;d++){while(r%(d*d)===0){r/=(d*d);co*=d;}}return (co>1?co:"")+"\u221A"+r;}
+  var items=ins.map(function(n){return {s:render(n),v:Math.sqrt(n)};});
+  var sorted=items.slice().sort(function(x,y){return x.v-y.v;});
+  var asc=sorted.map(function(o){return o.s;}).join(", ");
+  var shown=shuffle(items.slice());
+  var shownStr=shown.map(function(o){return o.s;}).join(", ");
+  var rev=items.slice().sort(function(x,y){return y.v-x.v;}).map(function(o){return o.s;}).join(", ");
+  var swap2=[shown[1],shown[0],shown[3],shown[2]].map(function(o){return o.s;}).join(", ");
+  return mcq("Which list shows these radicals in order from least to greatest? "+shownStr,
+    asc,[shownStr,rev,swap2],
+    "Square each value (or estimate): "+sorted.map(function(o){return o.s+" \u2248 "+fmt(o.v);}).join(", ")+". Ordered least to greatest: <b>"+asc+"</b>.",{items:items});
+});
+</script>
+
+<script>
+/* ============ Unit 6: Proportional Reasoning ============ */
+E("u6-scale-factor",6,["6.9"],1,"gen",function(){
+  var k=pick([8,9,10,12,15,18,20,24,25,30,40,50,60]);var model=pick([3,4,5,6,7,8,9,10,12,14]);var real=model*k;
+  var frame=pick([
+    "On a model, a part measures "+model+" cm. On the real object it measures "+real+" cm. What is the scale factor (actual \u00F7 model)?",
+    "A scale drawing shows a length of "+model+" cm for an object that is really "+real+" cm long. What is the scale factor (actual \u00F7 model)?",
+    "A map feature measures "+model+" cm on the map and "+real+" cm on the ground. What is the scale factor (actual \u00F7 model)?"]);
+  return numq(frame,
+    k,0.011,"Scale factor = "+real+" \u00F7 "+model+" = <b>"+k+"</b>. The scale is 1 : "+k+".",{k:k,model:model});
+});
+E("u6-unknown-dimension",6,["6.9"],2,"gen",function(){
+  var k=pick([10,12,15,20,24,25,30,40,50,60,100]);var obj=pick([{w:"toy car",u:"cm"},{w:"model boat",u:"cm"},{w:"dollhouse room",u:"cm"},{w:"model train",u:"cm"},{w:"miniature lighthouse",u:"cm"},{w:"model airplane",u:"cm"}]);
+  var modelDim=pick([3,4,5,6,7,8,9,10,12,14]);var real=modelDim*k;
+  return numq("A "+obj.w+" is built to a scale of 1 : "+k+". A part that is "+modelDim+" "+obj.u+" long on the model represents what length on the real object, in "+obj.u+"?",
+    real,0.011,"Multiply by the scale factor: "+modelDim+" \u00D7 "+k+" = <b>"+real+" "+obj.u+"</b>.",{k:k,modelDim:modelDim});
+});
+E("u6-area-scale",6,["6.5","6.14"],2,"gen",function(){
+  var k=pick([2,3,4,5,6,8,10]);var areaD=pick([3,4,5,6,7,8,9,10,12,14,15,16,18,20,24,25]);
+  var obj=pick(["room","garden plot","mural","kitchen floor","rug design"]);
+  var real=areaD*k*k;
+  return numq("A scale diagram uses scale factor "+k+" (diagram : actual = 1 : "+k+"). A "+obj+" has area "+areaD+" cm\u00B2 on the diagram. What is its actual area, in cm\u00B2?",
+    real,0.011,"Areas scale by the square of the scale factor: "+areaD+" \u00D7 "+k+"\u00B2 = "+areaD+" \u00D7 "+(k*k)+" = <b>"+real+" cm\u00B2</b>. (Lengths scale by "+k+"; areas by "+k+"\u00B2; volumes by "+k+"\u00B3.)",{k:k,areaD:areaD});
+});
+E("u6-volume-scale",6,["6.10","6.14"],2,"gen",function(){
+  var k=pick([2,3,4,5,6,10]);var askVol=Math.random()<0.5;var base=pick([3,4,5,6,8,10,12,15,20,25]);var f=askVol?k*k*k:k*k;var ans=base*f;
+  var obj=pick(["model car","aquarium","storage tank","dollhouse"]);
+  return numq("A "+obj+" is built at scale 1 : "+k+". The model\u2019s "+(askVol?"volume is "+base+" cm\u00B3":"surface area is "+base+" cm\u00B2")+". What is the corresponding measurement for the real object, in the same cubic/square units?",
+    ans,0.011,(askVol?"Volumes":"Surface areas")+" scale by "+(askVol?k+"\u00B3 = "+f:k+"\u00B2 = "+f)+": "+base+" \u00D7 "+f+" = <b>"+ans+"</b>.",{k:k,base:base,askVol:askVol});
+});
+E("u6-unit-rate",6,["6.17"],1,"gen",function(){
+  var ctxs=[
+    {pre:"A case of juice boxes costs $",q:24,u:"dollars per juice box"},
+    {pre:"A spool holds ribbon costing $",q:15,u:"dollars per metre of ribbon"},
+    {pre:"A pack of granola bars costs $",q:12,u:"dollars per granola bar"},
+    {pre:"A bag of dog treats costs $",q:30,u:"dollars per treat"},
+    {pre:"A box of pencils costs $",q:20,u:"dollars per pencil"},
+    {pre:"A crate of oranges costs $",q:18,u:"dollars per orange"}];
+  var ctx=pick(ctxs);var rate=pick([0.5,0.6,0.75,0.8,0.9,1,1.1,1.2,1.25,1.4,1.5,1.6,1.75,1.8,2,2.2,2.4,2.5,2.8,3,3.5,4]);
+  var total=Math.round(rate*ctx.q*100)/100;
+  return numq(ctx.pre+fmt(total)+", and the pack holds "+ctx.q+". What is the unit rate, in "+ctx.u+"? (Just the number.)",
+    rate,0.011,"Unit rate = total cost \u00F7 quantity = "+fmt(total)+" \u00F7 "+ctx.q+" = <b>$"+fmt(rate)+"</b>.",{rate:rate,total:total});
+});
+E("u6-better-buy",6,["6.17"],2,"gen",function(){
+  var prod=pick([{w:"juice boxes",u:"juice box"},{w:"granola bars",u:"granola bar"},{w:"pencils",u:"pencil"},{w:"batteries",u:"battery"},{w:"muffins",u:"muffin"},{w:"golf balls",u:"golf ball"}]);
+  var q1=pick([3,4,5,6,8,10]);var q2=q1*pick([2,3]);
+  var r1=pick([0.9,1.1,1.2,1.4,1.5,1.6,1.8,2,2.2,2.5]);var r2=Math.round((r1-pick([0.1,0.15,0.2,0.25,0.3,0.4]))*100)/100;
+  var p1=Math.round(r1*q1*100)/100,p2=Math.round(r2*q2*100)/100;var swap=Math.random()<0.5;
+  var A={q:swap?q2:q1,p:swap?p2:p1},B={q:swap?q1:q2,p:swap?p1:p2};
+  var winner=A.p/A.q<B.p/B.q?"The first option":"The second option";
+  return mcq("Option 1: "+A.q+" "+prod.w+" for $"+fmt(A.p)+". Option 2: "+B.q+" "+prod.w+" for $"+fmt(B.p)+". Which is the better buy?",
+    winner+" \u2014 its unit rate is $"+fmt(Math.min(A.p/A.q,B.p/B.q))+" per "+prod.u+", the lower of the two",
+    [(winner==="The first option"?"The second option":"The first option")+" \u2014 a bigger package is always cheaper per item","They are the same value \u2014 the prices scale exactly","Whichever costs less overall, regardless of quantity"],
+    "Unit rates: Option 1: "+fmt(A.p)+" \u00F7 "+A.q+" = $"+fmt(A.p/A.q)+"; Option 2: "+fmt(B.p)+" \u00F7 "+B.q+" = $"+fmt(B.p/B.q)+". Compare unit rates, not sticker prices \u2014 "+winner.toLowerCase()+" wins.",{A:A,B:B});
+});
+E("u6-rate-solve",6,["6.1"],2,"gen",function(){
+  var ctxs=[
+    function(R,T){return "A tap delivers "+R+" litres of water per minute. How many minutes does it take to fill a "+T+" L tank?";},
+    function(R,T){return "A cyclist rides at a steady "+R+" km/h. How many hours does a "+T+" km ride take?";},
+    function(R,T){return "A garden hose delivers "+R+" litres of water per minute. How many minutes does it take to fill a "+T+" L barrel?";},
+    function(R,T){return "A printer prints "+R+" pages per minute. How many minutes does it take to print "+T+" pages?";},
+    function(R,T){return "A snowplow clears "+R+" km of road per hour. How many hours does it take to clear "+T+" km?";},
+    function(R,T){return "A download runs at "+R+" MB per second. How many seconds does a "+T+" MB file take?";},
+    function(R,T){return "A bottling machine fills "+R+" bottles per minute. How many minutes does it take to fill "+T+" bottles?";},
+    function(R,T){return "A painter covers "+R+" m\u00B2 of wall per hour. How many hours does a "+T+" m\u00B2 wall take?";}];
+  var rate=pick([4,5,6,8,9,10,12,15,16,18,20,24]);var t=pick([2,3,4,5,6,7,8,9]);var total=rate*t;
+  return numq(pick(ctxs)(rate,total),
+    t,0.011,"Amount = rate \u00D7 time, so time = amount \u00F7 rate = "+total+" \u00F7 "+rate+" = <b>"+t+"</b>. Isolating the variable first keeps the arithmetic in one step.",{t:t,total:total,rate:rate});
+});
+E("u6-slope-rate",6,["6.19"],2,"var",varset([
+  function(){return mcq("A graph shows distance from home (km) against time (h) for a drive. The line passes through (0, 0) and (2, 110). What does the slope of the line represent, and what is it?",
+    "The speed: 110 \u00F7 2 = 55 km/h \u2014 the slope of a distance\u2013time graph is the rate of travel",
+    ["The total distance: 110 km","The time taken: 2 h","The acceleration: 55 km/h\u00B2"],
+    "Slope = rise \u00F7 run = change in distance \u00F7 change in time, which is exactly a rate: 55 km/h.",{});},
+  function(){return mcq("On a graph of water volume (L) versus time (min), a filling tank's line rises 60 L over 4 min. What is the slope, and what does it mean?",
+    "15 L/min \u2014 the rate at which water is flowing into the tank",
+    ["60 L \u2014 the tank's capacity","4 min \u2014 the time to fill the tank","240 L/min \u2014 rise times run"],
+    "Slope = 60 \u00F7 4 = 15, and its units (L per min) name the rate directly.",{});},
+  function(){return mcq("A graph of distance travelled (km) against fuel used (L) for a delivery van is a straight line through (0, 0) and (25, 300). What does its slope represent, and what is it?",
+    "Fuel efficiency: 300 \u00F7 25 = 12 km per litre \u2014 the slope is distance per unit of fuel",
+    ["The fuel used on the trip: 25 L","The distance travelled: 300 km","12 L per km \u2014 slope is fuel divided by distance"],
+    "Slope = rise \u00F7 run = km \u00F7 L, a rate of travel per litre: 12 km/L.",{});}
+]));
+E("u6-poster-cost",6,["6.14","6.17"],3,"gen",function(){
+  var kw=pick([1.5,2,2.5,3,3.5,4,5]);var W=10*kw,H=15*kw;var area=W*H;var rate=pick([0.02,0.03,0.04,0.05,0.06,0.08,0.1,0.12]);var cost=area*rate;
+  var frame=pick([
+    "A photo 10 cm by 15 cm is enlarged so its width becomes "+fmt(W)+" cm (the height scales in proportion). A print shop charges $"+fmt(rate)+" per cm\u00B2 of print area. What does the enlarged print cost, in dollars? (Just the number.)",
+    "A print shop enlarges a 10 cm by 15 cm photo to a width of "+fmt(W)+" cm, keeping the proportions. Printing costs $"+fmt(rate)+" per cm\u00B2. What is the cost of the enlarged print, in dollars? (Just the number.)"]);
+  return numq(frame,Math.round(cost*100)/100,0.02,"Scale factor = "+fmt(W)+" \u00F7 10 = "+fmt(kw)+", so the height becomes 15 \u00D7 "+fmt(kw)+" = "+fmt(H)+" cm. Area = "+fmt(W)+" \u00D7 "+fmt(H)+" = "+fmt(area)+" cm\u00B2 (that is the original 150 cm\u00B2 times "+fmt(kw)+"\u00B2, as areas scale by k\u00B2). Cost = "+fmt(area)+" \u00D7 $"+fmt(rate)+" = <b>$"+fmt(cost)+"</b>.",{kw:kw,area:area,rate:rate});
+});
+/* ============ Unit 7: Inductive and Deductive Reasoning ============ */
+E("u7-pattern-next",7,["2.1"],1,"gen",function(){
+  var a=ri(2,6),b=ri(1,9);var terms=[1,2,3,4].map(function(n){return a*n+b;});
+  var askN=pick([8,10,12]);var ans=a*askN+b;
+  return numq("A pattern begins "+terms.join(", ")+", \u2026 The rule is linear. What is term "+askN+" of the pattern?",
+    ans,0.011,"Each term grows by "+a+": term n is "+a+"n + "+b+". Term "+askN+" = "+a+"("+askN+") + "+b+" = <b>"+ans+"</b>. (Spotted by observing the pattern, then justifying with the rule \u2014 inductive reasoning at work.)",{a:a,b:b,askN:askN});
+});
+E("u7-pattern-quad",7,["2.1"],2,"gen",function(){
+  var c=pick([0,1,2,3,4,5,6,8,10]);var obj=pick(["tiles","matchsticks","beads"]);var terms=[1,2,3,4].map(function(n){return n*n+c;});var askN=pick([6,7,8,9,10,11,12,13,14,15]);var ans=askN*askN+c;
+  return numq("A pattern of figures is built from "+obj+": figure 1 uses "+terms[0]+" "+obj+", figure 2 uses "+terms[1]+", figure 3 uses "+terms[2]+", figure 4 uses "+terms[3]+". How many "+obj+" does figure "+askN+" use?",
+    ans,0.011,"The counts are 1\u00B2"+(c?" + "+c:"")+", 2\u00B2"+(c?" + "+c:"")+", 3\u00B2"+(c?" + "+c:"")+", \u2026 so figure n uses n\u00B2"+(c?" + "+c:"")+" "+obj+". Figure "+askN+" uses "+askN+"\u00B2"+(c?" + "+c:"")+" = <b>"+ans+"</b>.",{c:c,askN:askN});
+});
+E("u7-counterexample",7,["2.4"],2,"var",varset([
+  function(){return mcq("Conjecture: \u2018All prime numbers are odd.\u2019 Which value is a counterexample?",
+    "2 \u2014 it is prime but not odd",
+    ["9 \u2014 it is odd but not prime","15 \u2014 it is odd and composite","1 \u2014 it is neither prime nor composite"],
+    "A counterexample must satisfy the conjecture's condition (prime) and break its claim (odd). Only 2 does both: it is prime, and it is even. One counterexample is enough to kill a conjecture.",{});},
+  function(){return mcq("Conjecture: \u2018Every number divisible by 3 is also divisible by 6.\u2019 Which value is a counterexample?",
+    "9 \u2014 divisible by 3, but 9 \u00F7 6 is not whole",
+    ["12 \u2014 divisible by both 3 and 6","18 \u2014 divisible by both 3 and 6","4 \u2014 not divisible by 3 or 6"],
+    "9 meets the condition (divisible by 3) but fails the claim (not divisible by 6). 12 and 18 support the conjecture; 4 never meets its condition.",{});},
+  function(){return mcq("Conjecture: \u2018The product of two odd numbers is always even.\u2019 Which calculation is a counterexample?",
+    "3 \u00D7 5 = 15 \u2014 two odd numbers with an odd product",
+    ["3 \u00D7 4 = 12 \u2014 but 4 is even, so the condition is not met","2 \u00D7 5 = 10 \u2014 but 2 is even, so the condition is not met","4 \u00D7 6 = 24 \u2014 both factors are even, so the condition is not met"],
+    "A counterexample must use two odd numbers (the condition) and break the claim (an even product). Only 3 \u00D7 5 = 15 does that. The others smuggle in an even factor, so they never test the conjecture.",{});}
+]));
+E("u7-inductive-false",7,["2.2"],1,"var",varset([
+  function(){return mcq("A student notices 3, 5 and 7 are all prime and concludes \u2018every odd number is prime\u2019. Why might this inductive conclusion be false?",
+    "Inductive reasoning generalizes from a few cases \u2014 an unchecked case (like 9 = 3 \u00D7 3) can break the pattern",
+    ["Because 3, 5 and 7 are not really prime","Because odd numbers cannot be studied by patterns","Because conclusions need at least ten examples to be allowed"],
+    "Induction spots a pattern in observed cases but never checks them all. The very next odd numbers include 9, which is composite \u2014 the conjecture fails.",{});},
+  function(){return mcq("Which statement best compares inductive and deductive reasoning?",
+    "Inductive reasoning moves from examples to a general conjecture that might be false; deductive reasoning starts from accepted facts and its conclusions must follow",
+    ["Inductive reasoning is always wrong and deductive reasoning is always right","Deductive reasoning is based on examples; inductive reasoning is based on definitions","They are two names for the same process"],
+    "Induction suggests; deduction proves. A conjecture from induction still needs a deductive proof \u2014 or one counterexample ends it.",{});},
+  function(){return mcq("A student lists the primes 3, 5, 7, 11 and 13, notices they are all odd, and concludes every prime number is odd. Which number is a counterexample?",
+    "2 \u2014 it is prime, and it is even",
+    ["9 \u2014 it is odd","1 \u2014 it is neither prime nor composite","15 \u2014 it is odd and composite"],
+    "A single counterexample destroys a universal claim. The student's list simply skipped 2, the one even prime \u2014 induction from a partial list is never a proof.",{});}
+]));
+E("u7-valid-argument",7,["2.3"],2,"var",varset([
+  function(){return mcq("Argument: \u2018All provincial parks charge an entry fee. Gros Morne is a provincial park. Therefore Gros Morne charges an entry fee.\u2019 (Take the premises as given.) Is the argument valid?",
+    "Yes \u2014 if the premises are true, the conclusion must follow: the park belongs to the group the first statement covers",
+    ["No \u2014 because Gros Morne is actually a national park, the argument is invalid","No \u2014 arguments about fees are never valid","Yes \u2014 because the conclusion happens to be true"],
+    "Validity is about the logic, not the real-world facts. (Gros Morne is in fact a national park, which makes a premise false in reality \u2014 but the argument's form is valid: membership in the group forces the conclusion.)",{});},
+  function(){return mcq("Argument: \u2018All squares are rectangles. This shape is a rectangle. Therefore this shape is a square.\u2019 Is the argument valid?",
+    "No \u2014 being a rectangle does not force the shape to be a square; the reasoning runs the rule backwards",
+    ["Yes \u2014 squares and rectangles are the same thing","Yes \u2014 the conclusion is true for some shapes","No \u2014 because no shape can be both"],
+    "The premise covers squares inside rectangles, but rectangles form the bigger group. Membership in the bigger group says nothing about the smaller one \u2014 the argument is invalid.",{});},
+  function(){return mcq("Argument: \u2018All teachers at this school have a classroom key. Ms. Lee has a classroom key. Therefore Ms. Lee is a teacher at this school.\u2019 Is the argument valid?",
+    "No \u2014 having a key does not force her to be a teacher here; custodians and substitutes hold keys too, so the reasoning runs the rule backwards",
+    ["Yes \u2014 the conclusion sounds reasonable","Yes \u2014 every statement in the argument is about the school","No \u2014 an argument is only valid if it contains numbers"],
+    "The premise puts teachers inside the bigger group of key-holders. Membership in the bigger group cannot prove membership in the smaller one \u2014 the same backwards step as the rectangle argument.",{});}
+]));
+E("u7-proof-error",7,["2.8"],3,"var",varset([
+  function(){return mcq("A famous fake proof starts with a = b, multiplies out to reach (a \u2212 b)(a + b) = b(a \u2212 b), then cancels (a \u2212 b) from both sides \u2014 and ends with 2 = 1. Where is the error?",
+    "Cancelling (a \u2212 b) divides both sides by a \u2212 b, which is 0 \u2014 division by zero is not allowed",
+    ["The error is in the first line: a can never equal b","The error is that (a + b) should be (a \u2212 b)","There is no error; the proof shows 2 = 1"],
+    "Since a = b, a \u2212 b = 0. Every later step is fine algebra \u2014 but that one cancellation divides by zero, and from a false step anything can \u2018follow\u2019.",{});},
+  function(){return mcq("A student \u2018proves\u2019 that every triangle is isosceles by drawing an angle bisector and a perpendicular bisector, then claiming two pairs of congruent triangles force the two sides equal. What kind of flaw should you look for first?",
+    "The proof leans on the diagram \u2014 the intersection point was drawn inside the triangle, but in general it falls outside, changing the argument",
+    ["Triangles can never be proved congruent","Angle bisectors do not exist in all triangles","The flaw is arithmetic in the side lengths"],
+    "Deductive proofs must follow from stated facts, not from how one picture happens to look. A diagram-based assumption is the classic hidden flaw.",{});},
+  function(){return mcq("A student \u2018proves\u2019 that \u22121 = 1: \u2018Since (\u22121)\u00B2 = 1\u00B2, taking the square root of both sides gives \u22121 = 1.\u2019 What is the flaw?",
+    "Taking the square root loses the sign \u2014 x\u00B2 = y\u00B2 only implies x = \u00B1y, not x = y",
+    ["The arithmetic is wrong: (\u22121)\u00B2 is \u22121, not 1","You are never allowed to square both sides of an equation","There is no flaw \u2014 the proof is correct"],
+    "Squaring is not reversible on its own: both 1 and \u22121 square to 1. The step treats the square root as if it restored the original number exactly.",{});}
+]));
+/* ============ Unit 8: Properties of Angles and Triangles ============ */
+E("u8-triangle-sum",8,["5.3"],1,"gen",function(){
+  var a=ri(35,75),b=ri(35,75);while(a+b>160){b=ri(30,60);}
+  var c=180-a-b;
+  return numq("Two angles of a triangle measure "+a+"\u00B0 and "+b+"\u00B0. What is the measure of the third angle, in degrees?",
+    c,0.011,"The interior angles of a triangle sum to 180\u00B0: 180 \u2212 "+a+" \u2212 "+b+" = <b>"+c+"\u00B0</b>.",{a:a,b:b});
+});
+E("u8-co-interior",8,["5.8"],2,"gen",function(){
+  var a=ri(55,160);var b=180-a;
+  var frame=pick([
+    "Two parallel lines are cut by a transversal. A co-interior angle measures "+a+"\u00B0. What is the measure of the co-interior angle on the same side of the transversal, in degrees?",
+    "Two parallel rails are cut by a straight crossing path. On the same side of the path, one co-interior angle measures "+a+"\u00B0. What is the measure of the other co-interior angle on that side, in degrees?"]);
+  return numq(frame,b,0.011,"Co-interior angles between parallel lines are supplementary: 180 \u2212 "+a+" = <b>"+b+"\u00B0</b>.",{a:a});
+});
+E("u8-alternate-algebra",8,["5.8"],2,"gen",function(){
+  var x=ri(8,20);var a=3,b=ri(1,15);var val=a*x+b;
+  return numq("Two parallel lines are cut by a transversal. Alternate interior angles measure ("+a+"x + "+b+")\u00B0 and "+val+"\u00B0. Find x.",
+    x,0.011,"Alternate interior angles between parallel lines are equal: "+a+"x + "+b+" = "+val+" \u2192 "+a+"x = "+(val-b)+" \u2192 x = <b>"+x+"</b>.",{x:x});
+});
+E("u8-polygon-sum",8,["5.2"],1,"gen",function(){
+  var n=ri(3,30);var s=(n-2)*180;
+  var frame=pick([
+    "What is the sum of the interior angles of a polygon with "+n+" sides, in degrees?",
+    "A polygon has "+n+" sides. What is the sum of its interior angles, in degrees?",
+    "How many degrees do the interior angles of a "+n+"-sided polygon add up to?"]);
+  return numq(frame,
+    s,0.011,"Sum = ("+n+" \u2212 2) \u00D7 180\u00B0 = "+(n-2)+" \u00D7 180\u00B0 = <b>"+s+"\u00B0</b>.",{n:n});
+});
+E("u8-regular-angle",8,["5.1"],1,"gen",function(){
+  var n=ri(3,30);var sum=(n-2)*180;var each=sum/n;
+  var names={3:"equilateral triangle",4:"square",5:"regular pentagon",6:"regular hexagon",7:"regular heptagon",8:"regular octagon",9:"regular nonagon",10:"regular decagon",11:"regular hendecagon",12:"regular dodecagon"};
+  var frame=pick(["What is the measure of each interior angle of a regular polygon with "+n+" sides, in degrees? (A decimal is fine.)",
+    "Find the measure of one interior angle of a regular "+n+"-gon, in degrees. (A decimal is fine.)",
+    "A regular polygon has "+n+" sides. What is the measure of each of its interior angles, in degrees? (A decimal is fine.)"]);
+  if(names[n]&&Math.random()<0.5)frame="What is the measure of each interior angle of a "+names[n]+" (a regular "+n+"-gon), in degrees? (A decimal is fine.)";
+  return numq(frame,
+    each,0.011,"Sum of interior angles = ("+n+" \u2212 2) \u00D7 180\u00B0 = "+sum+"\u00B0. All "+n+" angles are equal: "+sum+" \u00F7 "+n+" = <b>"+fmt(each)+"\u00B0</b>.",{n:n});
+});
+E("u8-exterior",8,["5.11"],2,"gen",function(){
+  var a=ri(30,70),b=ri(30,70);var ext=a+b;
+  return numq("In a triangle, the two non-adjacent interior angles measure "+a+"\u00B0 and "+b+"\u00B0. What is the measure of the exterior angle at the third vertex, in degrees?",
+    ext,0.011,"The exterior angle equals the sum of the two remote interior angles: "+a+" + "+b+" = <b>"+ext+"\u00B0</b>. It is also 180\u00B0 minus the adjacent interior angle \u2014 the two facts agree.",{a:a,b:b});
+});
+E("u8-congruent",8,["5.6"],1,"var",varset([
+  function(){return mcq("Which piece of information is NOT enough, on its own, to prove two triangles congruent?",
+    "Three pairs of equal angles (AAA) \u2014 the triangles could be different sizes",
+    ["Three pairs of equal sides (SSS)","Two sides and the contained angle (SAS)","Two angles and the side between them (ASA)"],
+    "AAA fixes the shape but not the size \u2014 those triangles are similar, not necessarily congruent. Congruence needs at least one side length anchored.",{});},
+  function(){return mcq("Two triangles share a side, have another pair of sides equal, and the angles between those sides are equal. Which congruence rule applies?",
+    "SAS \u2014 two sides and the contained angle",
+    ["SSS \u2014 three sides","ASA \u2014 two angles and a side","AAA \u2014 three angles"],
+    "The equal angle sits between the two equal sides, which is exactly the side-angle-side pattern.",{});},
+  function(){return mcq("Two triangles have two pairs of equal angles, and the side between those two angles is the same length in both triangles. Which rule proves the triangles congruent?",
+    "ASA \u2014 two angles and the side between them",
+    ["SAS \u2014 two sides and the contained angle","SSS \u2014 three sides","AAA \u2014 three angles"],
+    "The equal side sits between the two equal angles in each triangle, which is the angle-side-angle pattern.",{});}
+]));
+E("u8-parallel-check",8,["5.9"],2,"var",varset([
+  function(){return mcq("A transversal cuts two lines. Corresponding angles measure 112\u00B0 and 112\u00B0. What can you conclude?",
+    "The lines are parallel \u2014 equal corresponding angles is one of the tests for parallel lines",
+    ["The lines are not parallel, because the angles should add to 180\u00B0","Nothing \u2014 angle measures cannot tell us about parallel lines","The lines are perpendicular"],
+    "When a transversal makes corresponding angles equal, the lines are parallel. (Supplementary is the test for co-interior angles, a different pair.)",{});},
+  function(){return mcq("A transversal cuts two lines, and co-interior angles measure 105\u00B0 and 82\u00B0. Are the lines parallel?",
+    "No \u2014 co-interior angles between parallel lines must be supplementary, and 105 + 82 = 187 \u2260 180",
+    ["Yes \u2014 any two angles formed by a transversal prove the lines parallel","Yes \u2014 because both angles are obtuse and acute in balance","No \u2014 because co-interior angles must be equal"],
+    "For parallel lines, co-interior angles add to exactly 180\u00B0. 187\u00B0 misses, so the lines are not parallel.",{});},
+  function(){return mcq("A transversal cuts two lines, and a pair of alternate exterior angles both measure 74\u00B0. What can you conclude?",
+    "The lines are parallel \u2014 equal alternate exterior angles is one of the tests for parallel lines",
+    ["The lines are not parallel \u2014 alternate angles must add to 180\u00B0","Nothing \u2014 angles outside the lines give no information","The lines are perpendicular"],
+    "Equal corresponding angles, equal alternate angles, or supplementary co-interior angles each certify parallel lines. Here the alternate exterior pair matches at 74\u00B0.",{});}
+]));
+E("u8-polygon-ratio",8,["5.2"],2,"gen",function(){
+  var r=pick([1,2,3,4,5,7,8,9,11,14,15,17,19,23,29,35]);var ext=180/(r+1);var n=360/ext;var interior=r*ext;
+  var frame=pick([
+    "In a regular polygon, each interior angle is "+r+" times as large as each exterior angle. How many sides does the polygon have?",
+    "Each interior angle of a regular polygon is "+r+" times each exterior angle. How many sides does the polygon have?",
+    "A regular polygon's interior angle is "+r+" times its exterior angle. Find the number of sides.",
+    "For a regular polygon, the ratio of an interior angle to its exterior angle is "+r+" : 1. How many sides does it have?"]);
+  return numq(frame,
+    n,0.011,"Interior + exterior = 180\u00B0. With interior = "+r+" \u00D7 exterior: ("+r+" + 1) \u00D7 exterior = 180\u00B0, so each exterior angle is "+fmt(ext)+"\u00B0 (and each interior angle is "+fmt(interior)+"\u00B0). The exterior angles make one full turn: 360 \u00F7 "+fmt(ext)+" = <b>"+fmt(n)+" sides</b>.",{r:r,ext:ext});
+});
+</script>
+
+<script>
+/* ============ selection engine ============ */
+/* Mid-course scope (Table of Specifications, verified Oct 26, 2026): the mid-course
+   exam samples Unit 4 only to Section 4.3, so the two Radical Equations entries
+   (Section 4.4) are flagged postMid and held out whenever the Mid preset is active.
+   Picking Unit 4 directly still serves the full unit. */
+BANK.forEach(function(e){if(e.id==="u4-radical-equation"||e.id==="u4-extraneous")e.postMid=true;});
+function poolFor(units,inds,cap){
+  return BANK.filter(function(e){
+    if(cap&&e.postMid)return false;
+    if(units.indexOf(e.unit)<0)return false;
+    if(inds&&inds.length){return e.indicators.some(function(c){return inds.indexOf(c)>=0;});}
+    return true;
+  });
+}
+function levelTargets(n,mix){
+  var tot=mix[0]+mix[1]+mix[2];if(tot<=0)mix=[20,60,20],tot=100;
+  var raw=mix.map(function(p){return n*p/tot;});
+  var base=raw.map(Math.floor);var left=n-sum(base);
+  var order=[0,1,2].sort(function(a,b){return (raw[b]-base[b])-(raw[a]-base[a]);});
+  for(var i=0;i<left;i++)base[order[i%3]]++;
+  return base;
+}
+function canonQ(q){ // canonical form of a generated question: normalized prompt + correct answer
+  function norm(s){return String(s).replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim();}
+  var a;
+  if(q.type==="mc")a="MC:"+norm(q.options[q.correct]);
+  else if(q.type==="num")a="NUM:"+(Math.round(q.answer*10000)/10000);
+  else a="TXT:"+q.answers.slice().sort().join("|");
+  return norm(q.prompt)+" || "+a;
+}
+function drawSet(units,inds,n,mix,orderMode,cap){
+  var pool=poolFor(units,inds,cap);if(!pool.length||n<1)return{items:[],short:0,pool:0,thin:false};
+  var targets=levelTargets(n,mix);var chosen=[],used={};
+  function take(level,count){
+    var cands=shuffle(pool.filter(function(e){return e.level===level&&!used[e.id];}));
+    var i=0;while(count>0&&i<cands.length){chosen.push(cands[i]);used[cands[i].id]=1;i++;count--;}
+    return count;
+  }
+  var missing=0;
+  for(var L=1;L<=3;L++){missing+=take(L,targets[L-1]);}
+  var short=0;
+  while(missing>0){ // first, reuse generators at levels still short of target (fresh numbers every draw)
+    var gens=pool.filter(function(e){return e.kind==="gen";});
+    if(!gens.length)break;
+    var counts={1:0,2:0,3:0};chosen.forEach(function(e){counts[e.level]++;});
+    var shortLevels=[1,2,3].filter(function(L){return counts[L]<targets[L-1];});
+    var pref=shortLevels.length?gens.filter(function(e){return shortLevels.indexOf(e.level)>=0;}):[];
+    if(shortLevels.length&&!pref.length)break; // no generator can serve the short levels; fall through to other entries
+    chosen.push(pick(pref.length?pref:gens));missing--;short++;
+  }
+  if(missing>0){ // next, fill from any remaining entries at other levels
+    var rest=shuffle(pool.filter(function(e){return !used[e.id];}));
+    var j=0;while(missing>0&&j<rest.length){chosen.push(rest[j]);used[rest[j].id]=1;j++;missing--;}
+  }
+  while(missing>0){ // last resort: reuse any entries (generators preferred) so the set still reaches the requested count
+    var src=pool.filter(function(e){return e.kind==="gen";});
+    if(!src.length)src=pool.slice(); // no generators in the pool: reuse variant sets (the dedupe guard below prefers unused statics)
+    if(!src.length)break;
+    chosen.push(pick(src));missing--;short++;
+  }
+  // generate the questions, with a dedupe guard: a reused entry is redrawn (bounded
+  // retries) until its canonical question differs from every question already in the set
+  var items=[],seenC={};
+  chosen.forEach(function(e){
+    var q=e.gen(),c=canonQ(q),tries=0;
+    while(seenC[c]&&tries<25){q=e.gen();c=canonQ(q);tries++;}
+    seenC[c]=1;q._entry=e;items.push(q);
+  });
+  if(orderMode==="unit"){items.sort(function(a,b){return a._entry.unit-b._entry.unit;});}
+  else{items=shuffle(items);}
+  var dup=false,seen2={};
+  items.forEach(function(q){var c=canonQ(q);if(seen2[c])dup=true;seen2[c]=1;});
+  return {items:items,reused:short,pool:pool.length,thin:(dup||items.length<n)};
+}
+/* ============ UI ============ */
+var $=function(id){return document.getElementById(id);};
+var state={units:[5],inds:[],midCap:false};
+function unitCheckboxes(){
+  $("unitGrid").innerHTML=Object.keys(UNITS).map(function(u){
+    return '<label class="chk"><input type="checkbox" class="unitChk" value="'+u+'"'+(state.units.indexOf(+u)>=0?" checked":"")+'> Unit '+u+": "+UNITS[u]+"</label>";
+  }).join("");
+  Array.prototype.forEach.call(document.querySelectorAll(".unitChk"),function(cb){
+    cb.addEventListener("change",function(){state.midCap=false;readUnits();renderIndicators();updatePoolInfo();});
+  });
+}
+function readUnits(){
+  state.units=Array.prototype.map.call(document.querySelectorAll(".unitChk:checked"),function(cb){return +cb.value;});
+}
+function renderIndicators(){
+  var codes=[];state.units.forEach(function(u){(UNIT_IND[u]||[]).forEach(function(c){if(codes.indexOf(c)<0)codes.push(c);});});
+  $("indBox").innerHTML=codes.length?codes.map(function(c){
+    return '<label><input type="checkbox" class="indChk" value="'+c+'"'+(state.inds.indexOf(c)>=0?" checked":"")+"> <b>"+c+"</b> \u2014 "+esc(INDICATORS[c]||"")+"</label>";
+  }).join(""):'<span class="hint">Pick at least one unit above.</span>';
+  Array.prototype.forEach.call(document.querySelectorAll(".indChk"),function(cb){
+    cb.addEventListener("change",function(){state.midCap=false;readInds();updatePoolInfo();});
+  });
+}
+function readInds(){
+  state.inds=Array.prototype.map.call(document.querySelectorAll(".indChk:checked"),function(cb){return cb.value;});
+}
+function updatePoolInfo(){
+  var p=poolFor(state.units,state.inds,state.midCap);
+  var byL={1:0,2:0,3:0};p.forEach(function(e){byL[e.level]++;});
+  $("poolInfo").textContent=p.length?"Question bank for this selection: "+p.length+" question templates (Level 1: "+byL[1]+", Level 2: "+byL[2]+", Level 3: "+byL[3]+"). Generators make a fresh question every draw."+(state.midCap?" Mid-course scope: Unit 4 stops at Section 4.3, so the Radical Equations questions are held out.":""):
+   "No questions match that selection yet \u2014 try adding a unit or clearing the indicator filter.";
+}
+function settings(){
+  readUnits();readInds();
+  return {units:state.units.slice(),inds:state.inds.slice(),midCap:state.midCap,
+    count:Math.max(1,Math.min(60,+$("countIn").value||10)),
+    order:$("orderIn").value,
+    mix:[+$("lv1").value||0,+$("lv2").value||0,+$("lv3").value||0]};
+}
+function tags(q){
+  var e=q._entry;
+  return '<span class="tag">Unit '+e.unit+'</span> <span class="tag ind">'+e.indicators.join(", ")+'</span> <span class="tag lvl">Level '+e.level+'</span>';
+}
+var current=null,checkedCount=0,correctCount=0;
+function startOnline(){
+  var s=settings();var res=drawSet(s.units,s.inds,s.count,s.mix,s.order,s.midCap);
+  current=res.items;checkedCount=0;correctCount=0;
+  var box=$("session");
+  if(!current.length){box.innerHTML='<div class="card"><p>No questions match that selection yet.</p></div>';return;}
+  var html='<div class="card"><h2>Online practice</h2>'+(res.thin?'<p class="thinNote">Heads up: the question bank is still thin for this selection, so this set repeats practice on the same question shape (with new numbers) because there are not yet enough different questions to fill it.</p>':"")+'<p class="scoreline" id="score"></p>';
+  current.forEach(function(q,i){
+    html+='<div class="q" id="q'+i+'"><div class="qhead"><b>Question '+(i+1)+'</b> '+tags(q)+'</div><div class="prompt">'+q.prompt+'</div>';
+    if(q.type==="mc"){
+      html+='<div class="opts">'+q.options.map(function(o,j){return '<label><input type="radio" name="opt'+i+'" value="'+j+'"> <span>'+o+'</span></label>';}).join("")+'</div>';
+    }else{
+      html+='<p>Your answer: <input type="text" class="ans" id="ans'+i+'" autocomplete="off"></p>';
+    }
+    html+='<p><button type="button" data-check="'+i+'">Check</button> <button type="button" class="alt" data-sol="'+i+'">Show worked solution</button></p><div class="fb" id="fb'+i+'"></div><div class="sol" id="sol'+i+'"><b>Worked solution:</b> '+q.solution+'</div></div>';
+  });
+  html+='<p><button type="button" id="againBtn">New set of questions</button></p></div>';
+  box.innerHTML=html;updateScore();
+  Array.prototype.forEach.call(box.querySelectorAll("[data-check]"),function(b){b.addEventListener("click",function(){checkQ(+b.getAttribute("data-check"));});});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-sol]"),function(b){b.addEventListener("click",function(){$("sol"+b.getAttribute("data-sol")).classList.toggle("show");});});
+  $("againBtn").addEventListener("click",startOnline);
+  box.scrollIntoView({behavior:"smooth"});
+}
+function updateScore(){$("score").textContent=checkedCount?("Score so far: "+correctCount+" of "+checkedCount+" checked."):"Check each question as you go \u2014 the worked solution is there when you want it.";}
+function checkQ(i){
+  var q=current[i],ok=false,given=null;
+  if(q.type==="mc"){var sel=document.querySelector('input[name="opt'+i+'"]:checked');if(!sel){$("fb"+i).innerHTML='<span class="notyet">Pick an option first.</span>';$("fb"+i).classList.add("show");return;}given=+sel.value;ok=(given===q.correct);}
+  else if(q.type==="num"){var v=parseFloat(($("ans"+i).value||"").replace(/[$,%\u00B0]/g,""));if(isNaN(v)){$("fb"+i).innerHTML='<span class="notyet">Type a number first.</span>';$("fb"+i).classList.add("show");return;}ok=Math.abs(v-q.answer)<=q.tol;}
+  else{var t=($("ans"+i).value||"").trim().toLowerCase().replace(/\s+/g," ");ok=q.answers.some(function(a){return t===a.replace(/\s+/g," ");});}
+  var fb=$("fb"+i);fb.classList.add("show");
+  if(!fb.dataset.done){checkedCount++;if(ok)correctCount++;fb.dataset.done="1";updateScore();}
+  fb.innerHTML=ok?'<span class="ok">Correct.</span> Nice work.':'<span class="notyet">Not quite.</span> Try again, or open the worked solution.';
+  if(ok)$("sol"+i).classList.remove("show");
+}
+function startSheet(){
+  var s=settings();var res=drawSet(s.units,s.inds,s.count,s.mix,s.order,s.midCap);
+  if(!res.items.length){$("session").innerHTML='<div class="card"><p>No questions match that selection yet.</p></div>';return;}
+  var unitNames=s.units.map(function(u){return "Unit "+u;}).join(", ");
+  var html='<div class="nameline"><div>Name:<span></span></div><div>Date:<span></span></div></div>';
+  html+='<h1 style="font-size:1.3rem;">Math 2201 \u2014 Practice Sheet</h1><p>'+unitNames+(s.inds.length?(" \u00B7 Indicators: "+s.inds.join(", ")):"")+' \u00B7 '+res.items.length+' questions \u00B7 Show all workings in the space provided.</p>';
+  res.items.forEach(function(q,i){
+    var h=q._entry.level===3?170:(q.type==="mc"?120:150);
+    html+='<div class="pq"><p><b>'+(i+1)+'.</b> <span style="font-size:.8rem;color:#555;">(Unit '+q._entry.unit+' \u00B7 '+q._entry.indicators.join(", ")+' \u00B7 Level '+q._entry.level+')</span></p><div class="prompt">'+q.prompt+'</div>';
+    if(q.type==="mc"){html+='<div class="opts">'+q.options.map(function(o){return '<label style="display:block;margin:4px 0;">\u25CB '+o+'</label>';}).join("")+'</div>';}
+    html+='<div class="ws" style="height:'+h+'px"></div></div>';
+  });
+  html+='<div class="keybreak"><h1 style="font-size:1.3rem;">Answer Key \u2014 with worked solutions</h1>';
+  res.items.forEach(function(q,i){
+    var ans=q.type==="mc"?esc(q.options[q.correct]):(q.type==="num"?fmt(q.answer):esc(q.answers[0]));
+    html+='<div class="solp"><p><b>'+(i+1)+'.</b> Answer: <b>'+ans+'</b></p><div style="line-height:1.5;font-size:.92rem;">'+q.solution+'</div></div>';
+  });
+  html+='</div>';
+  $("printArea").innerHTML=html;
+  $("session").innerHTML='<div class="card"><p>Your practice sheet is ready ('+res.items.length+' questions, with the answer key on its own pages at the end). Use your browser\u2019s print button, or press the button below.</p>'+(res.thin?'<p class="thinNote">Heads up: the question bank is still thin for this selection, so this sheet repeats practice on the same question shape (with new numbers) because there are not yet enough different questions to fill it.</p>':"")+'<p><button type="button" id="printBtn">Print / save the sheet</button></p></div>';
+  $("printBtn").addEventListener("click",function(){window.print();});
+  window.print();
+}
+function settingsToURL(){
+  var s=settings();var p=new URLSearchParams();
+  if(s.units.length===4&&s.units.join()==="1,2,3,4"&&s.midCap)p.set("preset","mid");
+  else if(s.units.slice().sort().join()==="5,6,7,8")p.set("preset","final");
+  else if(s.units.length)p.set("unit",s.units.join(","));
+  if(s.inds.length)p.set("indicator",s.inds.join(","));
+  p.set("count",s.count);p.set("order",s.order);
+  if(s.mix.join()!=="20,60,20")p.set("levels",s.mix.join(","));
+  return location.pathname+"?"+p.toString();
+}
+function applyURL(){
+  var p=new URLSearchParams(location.search);var touched=false;
+  if(p.get("preset")==="mid"){state.units=[1,2,3,4];state.midCap=true;touched=true;}
+  else if(p.get("preset")==="final"){state.units=[5,6,7,8];touched=true;}
+  else if(p.get("unit")){state.units=p.get("unit").split(",").map(Number).filter(function(u){return UNITS[u];});touched=true;}
+  if(p.get("indicator")){state.inds=p.get("indicator").split(",").map(function(x){return x.trim();});touched=true;}
+  if(p.get("count"))$("countIn").value=p.get("count");
+  if(p.get("order"))$("orderIn").value=p.get("order");
+  if(p.get("levels")){var lv=p.get("levels").split(",").map(Number);if(lv.length===3){$("lv1").value=lv[0];$("lv2").value=lv[1];$("lv3").value=lv[2];$("advBox").open=true;}}
+  return touched;
+}
+function setPreset(units,cap){state.units=units;state.inds=[];state.midCap=!!cap;unitCheckboxes();renderIndicators();updatePoolInfo();}
+$("presetMid").addEventListener("click",function(){setPreset([1,2,3,4],true);});
+$("presetFinal").addEventListener("click",function(){setPreset([5,6,7,8]);});
+$("presetAll").addEventListener("click",function(){setPreset([1,2,3,4,5,6,7,8]);});
+$("goOnline").addEventListener("click",startOnline);
+$("goSheet").addEventListener("click",startSheet);
+$("copyLink").addEventListener("click",function(){
+  var url=location.origin+settingsToURL();
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url);}
+  $("poolInfo").textContent="Link copied (or copy it from the address bar): "+url;
+  history.replaceState(null,"",settingsToURL());
+});
+var urlTouched=applyURL();
+unitCheckboxes();renderIndicators();updatePoolInfo();
+if(urlTouched&&(new URLSearchParams(location.search).get("unit")||new URLSearchParams(location.search).get("preset")||new URLSearchParams(location.search).get("indicator"))){
+  if((new URLSearchParams(location.search).get("mode"))==="sheet"){startSheet();}else{startOnline();}
+}
+</script>
+</body>
+</html>
