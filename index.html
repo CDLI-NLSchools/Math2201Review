@@ -425,17 +425,17 @@ E("u5-centre-mean",5,["PK.1"],1,"gen",function(){
   var c=pick([{w:"quiz marks",u:""},{w:"daily high temperatures",u:"\u00B0C"},{w:"goals per game",u:""},{w:"pages read each day",u:""}]);
   var n=ri(5,7),base=ri(4,14),data=[],i;for(i=0;i<n;i++)data.push(base+ri(-4,6));
   var m=mean(data);
-  return numq("A student records these "+c.w+": <b>"+data.join(", ")+"</b>. What is the <b>mean</b>?",
+  return numq("A student records these "+c.w+": <b>\\(\\{"+data.join(", ")+"\\}\\)</b>. What is the <b>mean</b>?",
     Math.round(m*100)/100,0.011,
-    "Add the values: "+data.join(" + ")+" = "+fmt(sum(data))+". There are "+n+" values, so the mean is "+fmt(sum(data))+" \u00F7 "+n+" = <b>"+fmt(m)+"</b>.",
+    "Add the values: \\("+data.join(" + ")+" = "+fmt(sum(data))+"\\). There are "+n+" values, so the mean is <b>\\("+fmt(sum(data))+" \\div "+n+" = "+fmt(m)+"\\)</b>.",
     {data:data});
 });
 E("u5-centre-median",5,["PK.1"],1,"gen",function(){
   var n=pick([6,8]),base=ri(5,15),data=[],i;for(i=0;i<n;i++)data.push(base+ri(-5,7));
   var md=median(data),s=sorted(data),lo=s[n/2-1],hi=s[n/2];
-  return numq("Find the <b>median</b> of: <b>"+data.join(", ")+"</b>.",
+  return numq("Find the <b>median</b> of: <b>\\(\\{"+data.join(", ")+"\\}\\)</b>.",
     md,0.011,
-    "In order: "+s.join(", ")+". With "+n+" values the median is the average of the two middle values, "+lo+" and "+hi+": ("+lo+" + "+hi+") \u00F7 2 = <b>"+fmt(md)+"</b>.",
+    "In order: \\(\\{"+s.join(", ")+"\\}\\). With "+n+" values the median is the average of the two middle values, \\("+lo+"\\) and \\("+hi+"\\): <b>\\(\\frac{"+lo+" + "+hi+"}{2} = "+fmt(md)+"\\)</b>.",
     {data:data});
 });
 E("u5-centre-mode",5,["PK.1"],1,"gen",function(){
@@ -466,21 +466,21 @@ E("u5-choosing-measure",5,["PK.1"],2,"var",varset([
 E("u5-range",5,["8.6"],1,"gen",function(){
   var c=pick(["daily step counts (thousands)","lengths of fish caught (cm)","marks on a quiz","laps swum each day"]);
   var n=ri(5,6),base=ri(8,20),data=[],i;for(i=0;i<n;i++)data.push(base+ri(-6,9));
-  return numq("Find the <b>range</b> of these "+c+": <b>"+data.join(", ")+"</b>.",
+  return numq("Find the <b>range</b> of these "+c+": <b>\\(\\{"+data.join(", ")+"\\}\\)</b>.",
     rngOf(data),0.001,
-    "Range = highest \u2212 lowest = "+Math.max.apply(null,data)+" \u2212 "+Math.min.apply(null,data)+" = <b>"+rngOf(data)+"</b>.",
+    "Range <b>\\(= \\text{highest} - \\text{lowest} = "+Math.max.apply(null,data)+" - "+Math.min.apply(null,data)+" = "+rngOf(data)+"\\)</b>.",
     {data:data});
 });
 E("u5-outlier-range",5,["8.6"],2,"gen",function(){
   var lo=ri(5,10),cluster=[],i;for(i=0;i<5;i++)cluster.push(lo+ri(0,5));
   var out=Math.max.apply(null,cluster)+ri(18,30);var data=shuffle(cluster.concat([out]));
   var without=rngOf(cluster);
-  var correct=out+" is the outlier, and the range without it is "+without;
-  return mcq("For the data set <b>"+data.join(", ")+"</b>, which statement is correct?",correct,
-    [Math.min.apply(null,data)+" is the outlier, and the range without it is "+without,
-     out+" is the outlier, and the range without it is "+rngOf(data),
-     "There is no outlier, and the range is "+rngOf(data)],
-    "The value "+out+" sits far above the cluster "+cluster.join(", ")+". Without it, the range is "+Math.max.apply(null,cluster)+" \u2212 "+Math.min.apply(null,cluster)+" = "+without+". With it, the range stretches to "+rngOf(data)+", which is why one outlier can make a set look far more spread out than it really is.",
+  var correct="\\("+out+"\\) is the outlier, and the range without it is \\("+without+"\\)";
+  return mcq("For the data set <b>\\(\\{"+data.join(", ")+"\\}\\)</b>, which statement is correct?",correct,
+    ["\\("+Math.min.apply(null,data)+"\\) is the outlier, and the range without it is \\("+without+"\\)",
+     "\\("+out+"\\) is the outlier, and the range without it is \\("+rngOf(data)+"\\)",
+     "There is no outlier, and the range is \\("+rngOf(data)+"\\)"],
+    "The value \\("+out+"\\) sits far above the cluster \\(\\{"+cluster.join(", ")+"\\}\\). Without it, the range is \\("+Math.max.apply(null,cluster)+" - "+Math.min.apply(null,cluster)+" = "+without+"\\). With it, the range stretches to \\("+rngOf(data)+"\\), which is why one outlier can make a set look far more spread out than it really is.",
     {data:data,out:out,without:without});
 });
 E("u5-dispersion-compare",5,["8.6"],2,"gen",function(){
@@ -491,78 +491,78 @@ E("u5-dispersion-compare",5,["8.6"],2,"gen",function(){
   var ra=ri(4,8),rb=ra+ri(12,22),swap=Math.random()<0.5;
   var A=swap?rb:ra,B=swap?ra:rb;
   var winner=A<B?"A":"B";
-  return mcq(ctx.who+" both have the same "+ctx.avg+" for "+ctx.unit+". Person A/class A's results have a range of "+A+"; B's have a range of "+B+". Which statement is correct?",
+  return mcq(ctx.who+" both have the same "+ctx.avg+" for "+ctx.unit+". Person A/class A's results have a range of \\("+A+"\\); B's have a range of \\("+B+"\\). Which statement is correct?",
     winner+" is more consistent, because "+winner+"'s results stay closer to the shared "+ctx.avg,
     [(winner==="A"?"B":"A")+" is more consistent, because a larger range means steadier results",
      "Both are equally consistent, because their "+ctx.avg+"s are equal",
      "Consistency cannot be compared without knowing each median"],
-    "Both have the same centre, so compare the spread. The smaller range ("+Math.min(A,B)+") means results cluster closer to the "+ctx.avg+" \u2014 that is the more consistent performance. Equal means say nothing about consistency.",
+    "Both have the same centre, so compare the spread. The smaller range (\\("+Math.min(A,B)+"\\)) means results cluster closer to the "+ctx.avg+" \u2014 that is the more consistent performance. Equal means say nothing about consistency.",
     {A:A,B:B,winner:winner});
 });
 E("u5-ad-claim",5,["8.6"],3,"gen",function(){
   var base=[ri(4,8),ri(6,10),ri(5,9),ri(8,12),ri(6,9),ri(9,13),ri(7,11)];
   var big=ri(220,360);var data=base.concat([big]);var m=mean(data),md=median(data);
   var claim=Math.round(m);
-  return mcq("A gym advertises: \u201COur members lose an average of "+claim+" lb in their first month!\u201D The amounts actually lost by eight members were <b>"+data.join(", ")+"</b> lb. Why is the advertisement misleading?",
-    "It uses the mean, which one member's "+big+" lb loss pulls far above what a typical member loses (the median loss is "+fmt(md)+" lb)",
+  return mcq("A gym advertises: \u201COur members lose an average of "+claim+" lb in their first month!\u201D The amounts actually lost by eight members were <b>\\(\\{"+data.join(", ")+"\\}\\)</b> lb. Why is the advertisement misleading?",
+    "It uses the mean, which one member's \\("+big+"\\) lb loss pulls far above what a typical member loses (the median loss is \\("+fmt(md)+"\\) lb)",
     ["It uses the median, which one large loss pulls up","The range of the losses is too small to support the claim","The mode of the losses is higher than the advertised average"],
-    "Mean = "+fmt(sum(data))+" \u00F7 8 = "+fmt(m)+" \u2248 "+claim+", so the gym used the mean. But sorted, the middle values give a median of "+fmt(md)+" lb \u2014 a far better picture of a typical member. One extreme value did all the work in the ad.",
+    "Mean \\(= "+fmt(sum(data))+" \\div 8 = "+fmt(m)+" \\approx "+claim+"\\), so the gym used the mean. But sorted, the middle values give a median of \\("+fmt(md)+"\\) lb \u2014 a far better picture of a typical member. One extreme value did all the work in the ad.",
     {data:data,mean:m,median:md,big:big});
 });
 /* --- frequency tables, histograms, polygons (8.7) --- */
 E("u5-freq-total",5,["8.7"],1,"gen",function(){
   var rows=ri(3,4),fs=[],i;for(i=0;i<rows;i++)fs.push(ri(2,14));
-  return numq("A frequency table for the number of siblings students have has frequencies "+fs.join(", ")+" in its rows. How many students were surveyed?",
-    sum(fs),0.001,"The total frequency is the total number of students: "+fs.join(" + ")+" = <b>"+sum(fs)+"</b>.",{fs:fs});
+  return numq("A frequency table for the number of siblings students have has frequencies \\("+fs.join(", ")+"\\) in its rows. How many students were surveyed?",
+    sum(fs),0.001,"The total frequency is the total number of students: <b>\\("+fs.join(" + ")+" = "+sum(fs)+"\\)</b>.",{fs:fs});
 });
 E("u5-freq-missing",5,["8.7"],1,"gen",function(){
   var total=pick([40,50,60,45,55]);var a=ri(8,16),b=ri(6,14),c=ri(4,10);var miss=total-a-b-c;
   while(miss<2){a--;miss=total-a-b-c;}
   return numq("A grouped frequency table has a total of "+total+" values. Three of its intervals have frequencies "+a+", "+b+" and "+c+". What is the frequency of the remaining interval?",
-    miss,0.001,"The frequencies must add to the total: "+total+" \u2212 ("+a+" + "+b+" + "+c+") = "+total+" \u2212 "+(a+b+c)+" = <b>"+miss+"</b>.",{total:total,a:a,b:b,c:c});
+    miss,0.001,"The frequencies must add to the total: <b>\\("+total+" - ("+a+" + "+b+" + "+c+") = "+total+" - "+(a+b+c)+" = "+miss+"\\)</b>.",{total:total,a:a,b:b,c:c});
 });
 E("u5-freq-countin",5,["8.7"],2,"gen",function(){
   var w=pick([5,10]);var lo=ri(0,3)*w;var hi=lo+w;
   var data=[],i;for(i=0;i<18;i++)data.push(ri(0,hi+w+8));
   var cnt=data.filter(function(x){return x>=lo&&x<hi;}).length;
-  return numq("Using the class intervals from the course (lower value included, upper value excluded), how many of these values fall in the interval <b>"+lo+"\u2013"+hi+"</b>?<br><b>"+data.join(", ")+"</b>",
-    cnt,0.001,"Count the values that are at least "+lo+" and less than "+hi+": there are <b>"+cnt+"</b>. A value of exactly "+hi+" would belong to the next interval, not this one.",{data:data,lo:lo,hi:hi});
+  return numq("Using the class intervals from the course (lower value included, upper value excluded), how many of these values fall in the interval <b>\\("+lo+"\\text{-}"+hi+"\\)</b>?<br><b>\\(\\{"+data.join(", ")+"\\}\\)</b>",
+    cnt,0.001,"Count the values that are at least \\("+lo+"\\) and less than \\("+hi+"\\): there are <b>\\("+cnt+"\\)</b>. A value of exactly \\("+hi+"\\) would belong to the next interval, not this one.",{data:data,lo:lo,hi:hi});
 });
 E("u5-relfreq",5,["8.7"],1,"gen",function(){
   var pcts=[5,10,12.5,15,20,25,30,40,50,60,75,80],totals=[40,60,80,100,120,160,200,240];
   var total,pct,f,guard=0;
   do{total=pick(totals);pct=pick(pcts);f=total*pct/100;guard++;}while(f!==Math.floor(f)&&guard<60);
   var ctx=pick(["In a frequency table, an interval has","In a survey table, the interval with the most responses has","A grouped table of test scores shows an interval with"]);
-  return numq(ctx+" frequency "+f+" out of a total of "+total+" values. What is its <b>relative frequency</b>, as a percent? (Just the number.)",
-    pct,0.11,"Relative frequency = "+f+" \u00F7 "+total+" = "+fmt(f/total,4)+", which is <b>"+fmt(pct)+"%</b>.",{f:f,total:total});
+  return numq(ctx+" frequency \\("+f+"\\) out of a total of \\("+total+"\\) values. What is its <b>relative frequency</b>, as a percent? (Just the number.)",
+    pct,0.11,"Relative frequency \\(= \\frac{"+f+"}{"+total+"} = "+fmt(f/total,4)+"\\), which is <b>\\("+fmt(pct)+"\\%\\)</b>.",{f:f,total:total});
 });
 E("u5-relfreq-rev",5,["8.7"],2,"gen",function(){
   var pcts=[5,10,12.5,15,20,25,30,35,40,45,50,60,75,80],totals=[40,60,80,100,120,150,200,240,300];
   var total,pct,f,guard=0;
   do{total=pick(totals);pct=pick(pcts);f=total*pct/100;guard++;}while(f!==Math.floor(f)&&guard<60);
   var ctx=pick(["An interval's","In a grouped table of marks, one interval's","For the interval containing the middle values, the"]);
-  return numq(ctx+" relative frequency is "+fmt(pct)+"%, and the table's total is "+total+" values. What is the interval's frequency?",
-    f,0.001,fmt(pct)+"% of "+total+" = "+fmt(pct/100,4)+" \u00D7 "+total+" = <b>"+f+"</b>.",{total:total,pct:pct});
+  return numq(ctx+" relative frequency is \\("+fmt(pct)+"\\%\\), and the table's total is \\("+total+"\\) values. What is the interval's frequency?",
+    f,0.001,"<b>\\("+fmt(pct)+"\\% \\text{ of } "+total+" = "+fmt(pct/100,4)+" \\times "+total+" = "+f+"\\)</b>.",{total:total,pct:pct});
 });
 E("u5-histogram-read",5,["8.7"],2,"gen",function(){
-  var labels=["0\u20139","10\u201319","20\u201329","30\u201339"];var fs=[ri(2,7),ri(8,13),ri(5,10),ri(1,5)];
+  var labels=["\\(0\\text{-}9\\)","\\(10\\text{-}19\\)","\\(20\\text{-}29\\)","\\(30\\text{-}39\\)"];var fs=[ri(2,7),ri(8,13),ri(5,10),ri(1,5)];
   var ans=fs[2]+fs[3];
-  var rows=labels.map(function(l,i){return "<tr><td>"+l+"</td><td>"+fs[i]+"</td></tr>";}).join("");
-  return numq("A histogram is built from this table of daily high temperatures recorded over "+sum(fs)+" days:<table><tr><th>Temperature (\u00B0C)</th><th>Frequency</th></tr>"+rows+"</table>On how many days was the high temperature <b>20\u00B0C or more</b>?",
-    ans,0.001,"Add the frequencies for 20\u201329 and 30\u201339: "+fs[2]+" + "+fs[3]+" = <b>"+ans+"</b> days.",{fs:fs});
+  var rows=labels.map(function(l,i){return "<tr><td>"+l+"</td><td>\\("+fs[i]+"\\)</td></tr>";}).join("");
+  return numq("A histogram is built from this table of daily high temperatures recorded over "+sum(fs)+" days:<table><tr><th>Temperature (\u00B0C)</th><th>Frequency</th></tr>"+rows+"</table>On how many days was the high temperature <b>\\(20^\\circ \\text{C}\\) or more</b>?",
+    ans,0.001,"Add the frequencies for \\(20\\text{-}29\\) and \\(30\\text{-}39\\): <b>\\("+fs[2]+" + "+fs[3]+" = "+ans+"\\)</b> days.",{fs:fs});
 });
 E("u5-midpoint",5,["8.7"],1,"gen",function(){
   var w=pick([4,5,10,20]);var lo=ri(0,12)*w;var hi=lo+w-1;var mid=(lo+hi)/2;
   var tail=pick([""," (from a frequency table)"," (from a table of daily high temperatures)"," (from a grouped table of sprint times)"]);
-  return numq("What is the <b>midpoint</b> of the interval "+lo+"\u2013"+hi+tail+"?",
-    mid,0.011,"Midpoint = ("+lo+" + "+hi+") \u00F7 2 = <b>"+fmt(mid)+"</b>. A frequency polygon plots each interval's frequency at its midpoint.",{lo:lo,hi:hi});
+  return numq("What is the <b>midpoint</b> of the interval \\("+lo+"\\text{-}"+hi+"\\)"+tail+"?",
+    mid,0.011,"Midpoint <b>\\(= \\frac{"+lo+" + "+hi+"}{2} = "+fmt(mid)+"\\)</b>. A frequency polygon plots each interval's frequency at its midpoint.",{lo:lo,hi:hi});
 });
 E("u5-polygon-point",5,["8.7"],2,"gen",function(){
   var w=pick([10]);var lo=ri(0,4)*w;var hi=lo+w-1;var mid=(lo+hi)/2;var f=ri(3,12);
-  return mcq("A frequency polygon is drawn for a table in which the interval "+lo+"\u2013"+hi+" has frequency "+f+". At which point is that interval's polygon point plotted?",
-    "("+fmt(mid)+", "+f+")",
-    ["("+lo+", "+f+")","("+hi+", "+f+")","("+f+", "+fmt(mid)+")"],
-    "Polygon points go at (midpoint, frequency). The midpoint of "+lo+"\u2013"+hi+" is "+fmt(mid)+", so the point is ("+fmt(mid)+", "+f+").",
+  return mcq("A frequency polygon is drawn for a table in which the interval \\("+lo+"\\text{-}"+hi+"\\) has frequency \\("+f+"\\). At which point is that interval's polygon point plotted?",
+    "\\(("+fmt(mid)+", "+f+")\\)",
+    ["\\(("+lo+", "+f+")\\)","\\(("+hi+", "+f+")\\)","\\(("+f+", "+fmt(mid)+")\\)"],
+    "Polygon points go at \\((\\text{midpoint}, \\text{frequency})\\). The midpoint of \\("+lo+"\\text{-}"+hi+"\\) is \\("+fmt(mid)+"\\), so the point is \\(("+fmt(mid)+", "+f+")\\).",
     {lo:lo,hi:hi,mid:mid,f:f});
 });
 E("u5-histogram-concepts",5,["8.7"],2,"var",varset([
@@ -574,17 +574,17 @@ E("u5-histogram-concepts",5,["8.7"],2,"var",varset([
     "The exact values are hidden by grouping, so counts per interval can be read but individual values cannot",
     ["The exact data values can be read off the bars","The height of each bar is the midpoint of its interval","The bars must all be the same height when the intervals are equal"],
     "Once values are grouped into an interval, the graph shows only how many fell in \u2014 the individual values are gone. That is the trade-off of grouping.",{});},
-  function(){return mcq("A histogram of coffee-shop wait times has its tallest bar over the interval 5\u20139 minutes. What can you conclude?",
-    "More waits fell in the 5\u20139 minute interval than in any other single interval",
-    ["The average wait was exactly 7 minutes","Every wait was between 5 and 9 minutes","The longest wait was 9 minutes"],
+  function(){return mcq("A histogram of coffee-shop wait times has its tallest bar over the interval \\(5\\text{-}9\\) minutes. What can you conclude?",
+    "More waits fell in the \\(5\\text{-}9\\) minute interval than in any other single interval",
+    ["The average wait was exactly \\(7\\) minutes","Every wait was between \\(5\\) and \\(9\\) minutes","The longest wait was \\(9\\) minutes"],
     "The tallest bar marks the interval with the highest frequency. Grouped bars hide the exact values, so neither the true average nor the longest wait can be read off the graph.",{});}
 ]));
 E("u5-polygon-compare",5,["8.7"],3,"gen",function(){
   var ctx=pick(["ferry routes' passenger counts per crossing","city bus routes' passenger counts per trip","school shuttle routes' rider counts per run","commuter train routes' passenger counts per trip"]);
   var lo1=pick([20,25,30,35,40]),hi1=lo1+9;var bHi=pick([49,59,69,79]);
-  return mcq("Two "+ctx+" are drawn as frequency polygons on the same axes. Route A's polygon is tall and narrow, peaked at "+lo1+"\u2013"+hi1+" passengers. Route B's polygon is low and wide, spread from 0\u20139 up to "+(bHi-9)+"\u2013"+bHi+" passengers. Which statement is correct?",
+  return mcq("Two "+ctx+" are drawn as frequency polygons on the same axes. Route A's polygon is tall and narrow, peaked at \\("+lo1+"\\text{-}"+hi1+"\\) passengers. Route B's polygon is low and wide, spread from \\(0\\text{-}9\\) up to \\("+(bHi-9)+"\\text{-}"+bHi+"\\) passengers. Which statement is correct?",
     "Route B's passenger counts are more spread out, because its polygon covers a much wider range of intervals",
-    ["Route A carries more passengers in total, because its polygon is taller","Both routes are equally consistent, because both polygons peak","Route B's mean is exactly "+fmt(bHi-4.5,1)+" passengers, the midpoint of its widest interval"],
+    ["Route A carries more passengers in total, because its polygon is taller","Both routes are equally consistent, because both polygons peak","Route B's mean is exactly \\("+fmt(bHi-4.5,1)+"\\) passengers, the midpoint of its widest interval"],
     "A polygon stretched over many intervals means the values vary widely \u2014 Route B is far more spread out. Height alone does not give a total, and a midpoint is not a mean.",{lo1:lo1});
 });
 </script>
@@ -596,41 +596,41 @@ E("u5-sd-calc",5,["8.9"],2,"gen",function(){
   var data=pick(sets).map(function(x){return x+ri(0,3);});
   var m=mean(data),v=pvar(data),sd=Math.sqrt(v);
   var devs=data.map(function(x){return fmt(x-m);}).join(", ");
-  return numq("Using technology (or the formula), find the <b>population standard deviation</b> of <b>"+data.join(", ")+"</b>, to two decimal places. The mean is "+fmt(m)+".",
+  return numq("Using technology (or the formula), find the <b>population standard deviation</b> of <b>\\(\\{"+data.join(", ")+"\\}\\)</b>, to two decimal places. The mean is \\("+fmt(m)+"\\).",
     Math.round(sd*100)/100,0.011,
-    "Deviations from the mean: "+devs+". Square them and average: the variance is "+fmt(v)+". Then \u03C3 = \u221A"+fmt(v)+" \u2248 <b>"+fmt(sd)+"</b>.",
+    "Deviations from the mean: \\("+devs+"\\). Square them and average: the variance is \\("+fmt(v)+"\\). Then <b>\\(\\sigma = \\sqrt{"+fmt(v)+"} \\approx "+fmt(sd)+"\\)</b>.",
     {data:data});
 });
 E("u5-sd-from-variance",5,["8.9"],1,"gen",function(){
   var sd=pick([0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9,9.5,10,11,12]);var v=sd*sd;
-  var frame=pick(["The variance of a data set is "+fmt(v)+". What is its <b>standard deviation</b>?",
-    "A data set has variance "+fmt(v)+". Find its <b>standard deviation</b>.",
-    "The scores in a quiz have variance "+fmt(v)+". What is the <b>standard deviation</b> of the scores?"]);
+  var frame=pick(["The variance of a data set is \\("+fmt(v)+"\\). What is its <b>standard deviation</b>?",
+    "A data set has variance \\("+fmt(v)+"\\). Find its <b>standard deviation</b>.",
+    "The scores in a quiz have variance \\("+fmt(v)+"\\). What is the <b>standard deviation</b> of the scores?"]);
   return numq(frame,
-    sd,0.011,"Standard deviation is the square root of the variance: \u221A"+fmt(v)+" = <b>"+fmt(sd)+"</b>.",{v:v});
+    sd,0.011,"Standard deviation is the square root of the variance: <b>\\(\\sqrt{"+fmt(v)+"} = "+fmt(sd)+"\\)</b>.",{v:v});
 });
 E("u5-sd-meaning",5,["8.8"],1,"var",varset([
   function(){return mcq("What does the standard deviation of a data set measure?",
     "How far the values typically lie from the mean",
     ["The difference between the largest and smallest values","The value in the middle of the data set","How many values the data set contains"],
     "Standard deviation is a typical distance from the mean. The largest-minus-smallest description is the range, and the middle value is the median.",{});},
-  function(){return mcq("A data set has a standard deviation of 0. What does that tell you about the set?",
+  function(){return mcq("A data set has a standard deviation of \\(0\\). What does that tell you about the set?",
     "Every value in the set is the same",
-    ["The mean of the set is 0","The set contains no values","The values are spread as far apart as possible"],
-    "If every value equals the mean, every deviation is 0, so the standard deviation is 0 \u2014 the set has no spread at all.",{});},
-  function(){return mcq("Two sets have the same mean. Set P has a standard deviation of 2; Set Q has a standard deviation of 11. What does that tell you?",
+    ["The mean of the set is \\(0\\)","The set contains no values","The values are spread as far apart as possible"],
+    "If every value equals the mean, every deviation is \\(0\\), so the standard deviation is \\(0\\) \u2014 the set has no spread at all.",{});},
+  function(){return mcq("Two sets have the same mean. Set P has a standard deviation of \\(2\\); Set Q has a standard deviation of \\(11\\). What does that tell you?",
     "Set Q's values are spread much farther from the mean than Set P's",
     ["Set Q's values must all be larger than Set P's","Set P has more values than Set Q","Nothing \u2014 standard deviation cannot be compared between sets"],
-    "Standard deviation is measured in the data's own units as a typical distance from the mean, so 11 means far more spread than 2.",{});}
+    "Standard deviation is measured in the data's own units as a typical distance from the mean, so \\(11\\) means far more spread than \\(2\\).",{});}
 ]));
 E("u5-sd-compare",5,["8.8"],2,"gen",function(){
   var m=ri(20,60),d1=pick([2,3]),d2=pick([9,10,12]);
   var A=[m-d1,m,m+d1],B=[m-d2,m,m+d2];var swap=Math.random()<0.5;
   var first=swap?B:A,second=swap?A:B;var wider=swap?"A":"B";
-  return mcq("Set A is "+first.join(", ")+". Set B is "+second.join(", ")+". Both sets have mean "+m+". Which statement is correct?",
+  return mcq("Set A is \\(\\{"+first.join(", ")+"\\}\\). Set B is \\(\\{"+second.join(", ")+"\\}\\). Both sets have mean \\("+m+"\\). Which statement is correct?",
     "Set "+wider+" has the larger standard deviation, because its values lie farther from the mean",
     ["Set "+(wider==="A"?"B":"A")+" has the larger standard deviation, because its values are closer together","Both sets have the same standard deviation, because they have the same mean","Neither set has a standard deviation, because they have only three values"],
-    "Both sets are centred at "+m+", but Set "+wider+"'s values sit "+(wider==="A"?(swap?d2:d1):(swap?d1:d2))+" units away while the other's sit closer. Farther from the mean means a larger standard deviation, whatever the mean is.",
+    "Both sets are centred at \\("+m+"\\), but Set "+wider+"'s values sit \\("+(wider==="A"?(swap?d2:d1):(swap?d1:d2))+"\\) units away while the other's sit closer. Farther from the mean means a larger standard deviation, whatever the mean is.",
     {A:A,B:B,wider:wider,m:m});
 });
 E("u5-sd-interpret",5,["8.10"],2,"gen",function(){
@@ -639,39 +639,39 @@ E("u5-sd-interpret",5,["8.10"],2,"gen",function(){
     {who:"Two machines fill bottles",thing:"fill amounts",unit:"mL",m:ri(480,520)},
     {who:"Two archers shoot rounds",thing:"scores",unit:"points",m:ri(70,90)}]);
   var small=ri(2,5),big=small+ri(4,8);
-  return mcq(ctx.who+" with the same mean ("+ctx.m+" "+ctx.unit+"). One has a standard deviation of "+small+" "+ctx.unit+"; the other, "+big+" "+ctx.unit+". Which one is more consistent, and why?",
-    "The one with standard deviation "+small+", because a smaller standard deviation means the "+ctx.thing+" cluster closer to the mean",
-    ["The one with standard deviation "+big+", because a larger standard deviation means steadier "+ctx.thing,"Neither \u2014 consistency cannot be compared when the means are equal","Both are equally consistent, because they share the same mean"],
-    "Consistency is about spread, not centre. A standard deviation of "+small+" means results typically land within about "+small+" "+ctx.unit+" of the mean \u2014 much steadier than "+big+".",
+  return mcq(ctx.who+" with the same mean (\\("+ctx.m+"\\) "+ctx.unit+"). One has a standard deviation of \\("+small+"\\) "+ctx.unit+"; the other, \\("+big+"\\) "+ctx.unit+". Which one is more consistent, and why?",
+    "The one with standard deviation \\("+small+"\\), because a smaller standard deviation means the "+ctx.thing+" cluster closer to the mean",
+    ["The one with standard deviation \\("+big+"\\), because a larger standard deviation means steadier "+ctx.thing,"Neither \u2014 consistency cannot be compared when the means are equal","Both are equally consistent, because they share the same mean"],
+    "Consistency is about spread, not centre. A standard deviation of \\("+small+"\\) means results typically land within about \\("+small+"\\) "+ctx.unit+" of the mean \u2014 much steadier than \\("+big+"\\).",
     {small:small,big:big});
 });
 E("u5-sd-decisions",5,["8.16"],3,"var",varset([
-  function(){return mcq("A brand of light bulb has a mean life of 1,000 hours with a standard deviation of 80 hours. The bulbs are sold with an 840-hour warranty. What does the standard deviation say about warranty claims?",
-    "Very few bulbs should fail before 840 hours, because the warranty length is 2 standard deviations below the mean",
-    ["About half the bulbs will fail before 840 hours, because 840 is below the mean","Claims cannot be predicted, because the standard deviation is smaller than the mean","Every bulb will last at least 840 hours, because the standard deviation is only 80"],
-    "840 is (1,000 \u2212 840) \u00F7 80 = 2 standard deviations below the mean. On a normal curve only about 2.5% of bulbs fall below that, so claims should be rare.",{mean:1000,sd:80,w:840});},
-  function(){return mcq("A company is choosing which freezer model to cover with a 6-year warranty. Model A has a mean life of 9 years with a standard deviation of 1.5 years. Model B has a mean life of 11 years with a standard deviation of 3 years. Which model should produce fewer warranty claims?",
-    "Model A, because 6 years is 2 standard deviations below its mean, but only about 1.7 standard deviations below Model B's mean, so far fewer Model A units fail early despite the lower mean",
-    ["Model B, because its mean life is higher","Model B, because its larger standard deviation means more long-lived units","Both will produce the same number of claims, because both means are above 6 years"],
-    "What matters is how far the warranty sits below the mean, in standard deviations: A: (9 \u2212 6) \u00F7 1.5 = 2; B: (11 \u2212 6) \u00F7 3 \u2248 1.7. Model B's wider spread puts a bigger share of its units below 6 years.",{a:{m:9,s:1.5},b:{m:11,s:3},w:6});},
+  function(){return mcq("A brand of light bulb has a mean life of \\(1{,}000\\) hours with a standard deviation of \\(80\\) hours. The bulbs are sold with an \\(840\\)-hour warranty. What does the standard deviation say about warranty claims?",
+    "Very few bulbs should fail before \\(840\\) hours, because the warranty length is \\(2\\) standard deviations below the mean",
+    ["About half the bulbs will fail before \\(840\\) hours, because \\(840\\) is below the mean","Claims cannot be predicted, because the standard deviation is smaller than the mean","Every bulb will last at least \\(840\\) hours, because the standard deviation is only \\(80\\)"],
+    "\\(840\\) is \\(\\frac{1{,}000 - 840}{80} = 2\\) standard deviations below the mean. On a normal curve only about \\(2.5\\%\\) of bulbs fall below that, so claims should be rare.",{mean:1000,sd:80,w:840});},
+  function(){return mcq("A company is choosing which freezer model to cover with a \\(6\\)-year warranty. Model A has a mean life of \\(9\\) years with a standard deviation of \\(1.5\\) years. Model B has a mean life of \\(11\\) years with a standard deviation of \\(3\\) years. Which model should produce fewer warranty claims?",
+    "Model A, because \\(6\\) years is \\(2\\) standard deviations below its mean, but only about \\(1.7\\) standard deviations below Model B's mean, so far fewer Model A units fail early despite the lower mean",
+    ["Model B, because its mean life is higher","Model B, because its larger standard deviation means more long-lived units","Both will produce the same number of claims, because both means are above \\(6\\) years"],
+    "What matters is how far the warranty sits below the mean, in standard deviations: A: \\(\\frac{9 - 6}{1.5} = 2\\); B: \\(\\frac{11 - 6}{3} \\approx 1.7\\). Model B's wider spread puts a bigger share of its units below \\(6\\) years.",{a:{m:9,s:1.5},b:{m:11,s:3},w:6});},
   function(){return mcq("An insurance company compares two groups of drivers. Both groups have the same mean annual claim amount, $750. Group A's claims have a standard deviation of $120; Group B's, $540. Which group is harder for the company to predict, and why?",
     "Group B, because its much larger standard deviation means claim amounts vary far more widely around the same mean",
     ["Group A, because its smaller standard deviation hides the large claims","Neither \u2014 prediction depends only on the mean claim amount","Group B is easier to predict, because a larger standard deviation averages out over more drivers"],
     "Predictability is about spread. Group B's claims typically land hundreds of dollars from the mean in either direction, so the company faces far more uncertainty, even though the means match.",{});},
-  function(){return mcq("A pollster warns a candidate: \u201CYour support is 52% with a margin of error of \u00B14 points, so we cannot yet say you are ahead.\u201D Why is the warning fair, using standard-deviation thinking?",
-    "The interval reaches below 50%, so the true support could be a minority \u2014 the estimate is not spread out enough from 50% to be sure",
-    ["Because 52% is less than two margins of error above zero","Because a margin of error always means the poll is wrong","Because support above 50% can never be claimed from a sample"],
-    "The confidence interval is 48%\u201356%. Since it includes values below half, the lead is inside the poll's natural variability \u2014 the same idea as a value sitting within about one standard deviation of a boundary.",{});}
+  function(){return mcq("A pollster warns a candidate: \u201CYour support is \\(52\\%\\) with a margin of error of \\(\\pm 4\\) points, so we cannot yet say you are ahead.\u201D Why is the warning fair, using standard-deviation thinking?",
+    "The interval reaches below \\(50\\%\\), so the true support could be a minority \u2014 the estimate is not spread out enough from \\(50\\%\\) to be sure",
+    ["Because \\(52\\%\\) is less than two margins of error above zero","Because a margin of error always means the poll is wrong","Because support above \\(50\\%\\) can never be claimed from a sample"],
+    "The confidence interval is \\(48\\% \\text{ to } 56\\%\\). Since it includes values below half, the lead is inside the poll's natural variability \u2014 the same idea as a value sitting within about one standard deviation of a boundary.",{});}
 ]));
 /* --- normal curve (8.11-8.14) --- */
 E("u5-normal-props",5,["8.11","8.13"],1,"var",varset([
   function(){return mcq("Which statement about a normal distribution is true?",
     "It is symmetric, and its mean, median and mode are all equal",
-    ["Its mean is larger than its median","It is skewed to the right","Its total area under the curve is 100"],
-    "A normal curve is a single symmetric hump centred on the mean, so mean = median = mode, and the total area under the curve is 1 (100% of the data).",{});},
-  function(){return mcq("Two caf\u00E9s both serve lunch in a mean time of 14 minutes. Caf\u00E9 A has a standard deviation of 2 minutes; Caf\u00E9 B, 5 minutes. What do the two normal curves look like?",
-    "Caf\u00E9 A's curve is taller and narrower; Caf\u00E9 B's is shorter and wider, and both are centred at 14",
-    ["Caf\u00E9 B's curve is taller and narrower, because its times vary more","Both curves are identical, because the means are equal","Caf\u00E9 A's curve is centred at 2 and Caf\u00E9 B's at 5"],
+    ["Its mean is larger than its median","It is skewed to the right","Its total area under the curve is \\(100\\)"],
+    "A normal curve is a single symmetric hump centred on the mean, so mean = median = mode, and the total area under the curve is \\(1\\) (\\(100\\%\\) of the data).",{});},
+  function(){return mcq("Two caf\u00E9s both serve lunch in a mean time of \\(14\\) minutes. Caf\u00E9 A has a standard deviation of \\(2\\) minutes; Caf\u00E9 B, \\(5\\) minutes. What do the two normal curves look like?",
+    "Caf\u00E9 A's curve is taller and narrower; Caf\u00E9 B's is shorter and wider, and both are centred at \\(14\\)",
+    ["Caf\u00E9 B's curve is taller and narrower, because its times vary more","Both curves are identical, because the means are equal","Caf\u00E9 A's curve is centred at \\(2\\) and Caf\u00E9 B's at \\(5\\)"],
     "Same mean means the same centre. A smaller standard deviation squeezes the data toward the centre, so the curve grows taller and narrower to keep the same total area.",{});},
   function(){return mcq("What does the standard deviation do to the shape of a normal curve?",
     "A larger standard deviation makes the curve wider and flatter; a smaller one makes it taller and narrower",
@@ -680,7 +680,7 @@ E("u5-normal-props",5,["8.11","8.13"],1,"var",varset([
 ]));
 E("u5-isnormal",5,["8.12"],2,"var",varset([
   function(){return mcq("Which data set would be expected to approximate a normal distribution?",
-    "The heights of 500 randomly chosen adults",
+    "The heights of \\(500\\) randomly chosen adults",
     ["The number of pets owned by students in a class","The daily high temperature on the coldest day of each winter month","The jersey numbers of players on a hockey team"],
     "Heights pile up symmetrically around a central value with fewer and fewer people toward the extremes \u2014 the normal shape. Pet counts are small whole numbers bunched at 0, 1 and 2, and jersey numbers are labels, not measurements.",{});},
   function(){return mcq("A teacher plots her class's marks and gets a histogram with one hump, but the hump leans left with a long tail of low marks stretching down. Does the data approximate a normal distribution?",
@@ -689,39 +689,39 @@ E("u5-isnormal",5,["8.12"],2,"var",varset([
     "Symmetry is the test. A long tail on one side means the data are skewed, however the rest looks; a normal curve's two halves mirror each other.",{});},
   function(){return mcq("Which is the best first check of whether a data set approximates a normal distribution?",
     "Graph it and look for a single-peaked, roughly symmetric bell shape centred near the mean and median",
-    ["Check that the standard deviation is larger than the mean","Check that there are exactly 100 values in the set","Check that the highest and lowest values are equal"],
+    ["Check that the standard deviation is larger than the mean","Check that there are exactly \\(100\\) values in the set","Check that the highest and lowest values are equal"],
     "Normal data announce themselves in the graph: one peak, mirror-image sides, and centre measures that nearly coincide.",{});}
 ]));
 E("u5-compare-normal",5,["8.13"],2,"gen",function(){
   var m=ri(10,20),s1=ri(1,3),s2=s1+ri(2,4);
-  var q = mcq("Two bakeries' morning prep times are normally distributed with the same mean, "+m+" minutes. Bakery A has a standard deviation of "+s1+" minutes; Bakery B, "+s2+" minutes. Which statement is correct?",
+  var q = mcq("Two bakeries' morning prep times are normally distributed with the same mean, \\("+m+"\\) minutes. Bakery A has a standard deviation of \\("+s1+"\\) minutes; Bakery B, \\("+s2+"\\) minutes. Which statement is correct?",
     "Bakery B's times are more spread out, and its curve is wider and flatter",
     ["Bakery A's times are more spread out, because a small standard deviation means more variation","Both bakeries are equally consistent, because their means are equal","Bakery B must have the higher mean, because its standard deviation is larger"],
-    "The standard deviation is the spread. "+s2+" > "+s1+", so Bakery B varies more, and its normal curve spreads wider and flatter to keep the same area.",{m:m,s1:s1,s2:s2});
+    "The standard deviation is the spread. \\("+s2+" > "+s1+"\\), so Bakery B varies more, and its normal curve spreads wider and flatter to keep the same area.",{m:m,s1:s1,s2:s2});
   q.figure = normSVG({mu:m, sd:s1, curve2:{sd:s2, tagA:"A: \u03C3 = "+s1, tagB:"B: \u03C3 = "+s2}});
   return q;
 });
 E("u5-empirical",5,["8.14"],2,"gen",function(){
   var ctx=pick([{w:"mass of loaves of bread",u:"g"},{w:"lifespan of a brand of battery",u:"hours"},{w:"finishing times in a fun run",u:"minutes"},{w:"length of fish of one species",u:"cm"}]);
   var mu=ri(20,60)*10,sd=pick([5,10,15,20]);var k=pick([1,2]);var pct=k===1?68:95;
-  var q = numq("The "+ctx.w+" is normally distributed with mean "+mu+" "+ctx.u+" and standard deviation "+sd+" "+ctx.u+". About what percent of the values lie between "+(mu-k*sd)+" and "+(mu+k*sd)+" "+ctx.u+"? (Just the number.)",
-    pct,0.01,"That interval is the mean \u00B1 "+k+" standard deviation"+(k>1?"s":"")+". By the empirical rule, about <b>"+pct+"%</b> of a normal distribution lies within "+k+" standard deviation"+(k>1?"s":"")+" of the mean.",{mu:mu,sd:sd,k:k});
+  var q = numq("The "+ctx.w+" is normally distributed with mean \\("+mu+"\\) "+ctx.u+" and standard deviation \\("+sd+"\\) "+ctx.u+". About what percent of the values lie between \\("+(mu-k*sd)+"\\) and \\("+(mu+k*sd)+"\\) "+ctx.u+"? (Just the number.)",
+    pct,0.01,"That interval is the mean \\(\\pm "+k+"\\) standard deviation"+(k>1?"s":"")+". By the empirical rule, about <b>\\("+pct+"\\%\\)</b> of a normal distribution lies within \\("+k+"\\) standard deviation"+(k>1?"s":"")+" of the mean.",{mu:mu,sd:sd,k:k});
   q.figure = normSVG({mu:mu, sd:sd, lo:mu-k*sd, hi:mu+k*sd});
   return q;
 });
 E("u5-normal-count",5,["8.14"],2,"gen",function(){
   var N=pick([400,800,1000,2000]);var mu=ri(30,60),sd=pick([4,5,6,8,10]);
   var side=Math.random()<0.5;var ans=side?0.16*N:0.025*N;var thr=side?mu+sd:mu+2*sd;
-  var q = numq("Heights of seedlings are normally distributed with mean "+mu+" cm and standard deviation "+sd+" cm. Out of "+N+" seedlings, about how many are taller than "+thr+" cm?",
-    Math.round(ans),N*0.01+1,"Above the mean + "+(side?1:2)+" standard deviation"+(side?"":"s")+" lies about "+(side?"16%":"2.5%")+" of a normal distribution (half of the "+(side?"32%":"5%")+" outside \u00B1"+(side?1:2)+"\u03C3). "+(side?"0.16":"0.025")+" \u00D7 "+N+" = <b>"+Math.round(ans)+"</b>.",{N:N,mu:mu,sd:sd});
+  var q = numq("Heights of seedlings are normally distributed with mean \\("+mu+"\\) cm and standard deviation \\("+sd+"\\) cm. Out of "+N+" seedlings, about how many are taller than \\("+thr+"\\) cm?",
+    Math.round(ans),N*0.01+1,"Above the mean \\(+ "+(side?1:2)+"\\) standard deviation"+(side?"":"s")+" lies about \\("+(side?"16\\%":"2.5\\%")+"\\) of a normal distribution (half of the \\("+(side?"32\\%":"5\\%")+"\\) outside \\(\\pm "+(side?1:2)+"\\sigma\\)). <b>\\("+(side?"0.16":"0.025")+" \\times "+N+" = "+Math.round(ans)+"\\)</b>.",{N:N,mu:mu,sd:sd});
   q.figure = normSVG({mu:mu, sd:sd, lo:thr, hi:mu+3.4*sd, cuts:[{v:thr, label:""+thr}]});
   return q;
 });
 /* --- z-scores (8.15) --- */
 E("u5-z-calc",5,["8.15"],1,"gen",function(){
   var mu=ri(30,80),sd=pick([4,5,8,10]);var zd=pick([-2,-1.5,-1,-0.5,0.5,1,1.5,2,2.5]);var x=mu+zd*sd;
-  return numq("A value of "+x+" comes from a normal distribution with mean "+mu+" and standard deviation "+sd+". What is its <b>z-score</b>?",
-    zd,0.011,"z = (x \u2212 \u03BC) \u00F7 \u03C3 = ("+x+" \u2212 "+mu+") \u00F7 "+sd+" = <b>"+fmt(zd)+"</b>. The z-score counts how many standard deviations the value sits from the mean.",{mu:mu,sd:sd,x:x});
+  return numq("A value of \\("+x+"\\) comes from a normal distribution with mean \\("+mu+"\\) and standard deviation \\("+sd+"\\). What is its <b>z-score</b>?",
+    zd,0.011,"<b>\\(z = \\frac{"+x+" - "+mu+"}{"+sd+"} = "+fmt(zd)+"\\)</b>. The z-score counts how many standard deviations the value sits from the mean.",{mu:mu,sd:sd,x:x});
 });
 E("u5-z-compare",5,["8.15"],2,"gen",function(){
   var people=[["Alex","Sam"],["Priya","Noor"],["Jack","Owen"],["Mia","Ella"],["Liam","Lucas"]];
@@ -729,23 +729,23 @@ E("u5-z-compare",5,["8.15"],2,"gen",function(){
   function mk(){var mu=ri(55,75),sd=pick([5,8,10]),z=pick([0.5,1,1.5,2,2.5]);return {mu:mu,sd:sd,z:z,x:mu+z*sd};}
   var a=mk(),b=mk(),guard=0;while(b.z===a.z&&guard++<20){b=mk();}
   var winner=a.z>b.z?pr[0]:pr[1];
-  return mcq(pr[0]+" scored "+a.x+" on a test with mean "+a.mu+" and standard deviation "+a.sd+". "+pr[1]+" scored "+b.x+" on a different test with mean "+b.mu+" and standard deviation "+b.sd+". Who did better, relative to their class?",
-    winner+", with a z-score of "+fmt(Math.max(a.z,b.z))+" compared to "+fmt(Math.min(a.z,b.z)),
+  return mcq(pr[0]+" scored \\("+a.x+"\\) on a test with mean \\("+a.mu+"\\) and standard deviation \\("+a.sd+"\\). "+pr[1]+" scored \\("+b.x+"\\) on a different test with mean \\("+b.mu+"\\) and standard deviation \\("+b.sd+"\\). Who did better, relative to their class?",
+    winner+", with a z-score of \\("+fmt(Math.max(a.z,b.z))+"\\) compared to \\("+fmt(Math.min(a.z,b.z))+"\\)",
     [(winner===pr[0]?pr[1]:pr[0])+", because that raw score is on the harder test","They did equally well, because both scored above their means","Whoever scored the higher raw mark, since z-scores ignore the class results"],
-    pr[0]+"'s z = ("+a.x+" \u2212 "+a.mu+") \u00F7 "+a.sd+" = "+fmt(a.z)+"; "+pr[1]+"'s z = ("+b.x+" \u2212 "+b.mu+") \u00F7 "+b.sd+" = "+fmt(b.z)+". Z-scores put both on the same scale, and "+winner+"'s is higher.",{a:a,b:b,winner:winner});
+    pr[0]+"'s \\(z = \\frac{"+a.x+" - "+a.mu+"}{"+a.sd+"} = "+fmt(a.z)+"\\); "+pr[1]+"'s \\(z = \\frac{"+b.x+" - "+b.mu+"}{"+b.sd+"} = "+fmt(b.z)+"\\). Z-scores put both on the same scale, and "+winner+"'s is higher.",{a:a,b:b,winner:winner});
 });
 E("u5-z-backwards",5,["8.15"],2,"gen",function(){
   var mu=ri(30,60),sd=pick([4,6,8]);var z=pick([1.5,1.8,2,-1.5,0.8]);var x=mu+z*sd;
-  return numq("Tomato plants in a greenhouse have heights with mean "+mu+" cm and standard deviation "+sd+" cm. A plant is "+fmt(Math.abs(z))+" standard deviations "+(z>=0?"above":"below")+" the mean. How tall is the plant, in cm?",
-    Math.round(x*10)/10,0.06,"Work backwards: x = \u03BC + z\u03C3 = "+mu+" + ("+fmt(z)+")("+sd+") = <b>"+fmt(x)+"</b> cm.",{mu:mu,sd:sd,z:z});
+  return numq("Tomato plants in a greenhouse have heights with mean \\("+mu+"\\) cm and standard deviation \\("+sd+"\\) cm. A plant is \\("+fmt(Math.abs(z))+"\\) standard deviations "+(z>=0?"above":"below")+" the mean. How tall is the plant, in cm?",
+    Math.round(x*10)/10,0.06,"Work backwards: <b>\\(x = \\mu + z\\sigma = "+mu+" + ("+fmt(z)+")("+sd+") = "+fmt(x)+"\\)</b> cm.",{mu:mu,sd:sd,z:z});
 });
 E("u5-z-prob",5,["8.15"],2,"gen",function(){
   var mags=[0.25,0.3,0.5,0.6,0.64,0.75,0.85,0.9,1,1.18,1.2,1.25,1.5,1.75,1.8,1.86,1.97,2,2.1,2.25,2.4,2.5,2.8];
   var a=pick(mags)*(Math.random()<0.5?-1:1);
   var right=Math.random()<0.4;var cdf=zTab(a);var ans=right?Math.round((1-cdf)*10000)/10000:cdf;
   var lead=pick(["Using the standard normal table, find","For the standard normal distribution, find"]);
-  var q = numq(lead+" P(z "+(right?">":"<")+" "+fmt(a)+"). Give your answer as a decimal to four places (for example, 0.1234).",
-    ans,0.0011,"The table gives the area to the left: P(z < "+fmt(a)+") = "+fmtF(cdf,4)+(right?". The right tail is 1 \u2212 "+fmtF(cdf,4)+" = <b>"+fmtF(ans,4)+"</b>":"."),{a:a,right:right});
+  var q = numq(lead+" \\(P(z "+(right?">":"<")+" "+fmt(a)+")\\). Give your answer as a decimal to four places (for example, 0.1234).",
+    ans,0.0011,"The table gives the area to the left: \\(P(z < "+fmt(a)+") = "+fmtF(cdf,4)+"\\)"+(right?". The right tail is <b>\\(1 - "+fmtF(cdf,4)+" = "+fmtF(ans,4)+"\\)</b>":"."),{a:a,right:right});
   q.figure = normSVG({mu:0, sd:1, lo:(right? a : -3.4), hi:(right? 3.4 : a), cuts:[{v:a, label:"z = "+fmt(a)}]});
   return q;
 });
@@ -762,8 +762,8 @@ E("u5-z-applied",5,["8.15"],3,"gen",function(){
   var up=Math.random()<0.5;var dir=up?fam.hi:fam.lo;var z0=pick(dir.zs);
   var thr=Math.round((mu+z0*sd)*10)/10;
   var z=(thr-mu)/sd;var cdf=zTab(z);var p=up?1-cdf:cdf;var pct=Math.round(p*10000)/100;
-  return numq("Values for "+fam.w+" are normally distributed with mean "+fmt(mu)+" "+fam.unit+" and standard deviation "+fmt(sd)+" "+fam.unit+". What percent (to two decimal places) "+dir.verb+" "+fmt(thr,1)+" "+fam.unit+"? (Just the number.)",
-    pct,0.06,"z = ("+fmt(thr,1)+" \u2212 "+fmt(mu)+") \u00F7 "+fmt(sd)+" = "+fmt(z)+". From the table, the area "+(up?"to the right of":"to the left of")+" z = "+fmt(z)+" is "+fmt(p,4)+", about <b>"+fmt(pct)+"%</b>.",{ctx:{thr:thr,mu:mu,sd:sd,verb:dir.verb}});
+  return numq("Values for "+fam.w+" are normally distributed with mean \\("+fmt(mu)+"\\) "+fam.unit+" and standard deviation \\("+fmt(sd)+"\\) "+fam.unit+". What percent (to two decimal places) "+dir.verb+" \\("+fmt(thr,1)+"\\) "+fam.unit+"? (Just the number.)",
+    pct,0.06,"\\(z = \\frac{"+fmt(thr,1)+" - "+fmt(mu)+"}{"+fmt(sd)+"} = "+fmt(z)+"\\). From the table, the area "+(up?"to the right of":"to the left of")+" \\(z = "+fmt(z)+"\\) is \\("+fmt(p,4)+"\\), about <b>\\("+fmt(pct)+"\\%\\)</b>.",{ctx:{thr:thr,mu:mu,sd:sd,verb:dir.verb}});
 });
 </script>
 
@@ -772,116 +772,117 @@ E("u5-z-applied",5,["8.15"],3,"gen",function(){
 E("u5-ci-endpoint",5,["8.17"],2,"gen",function(){
   var p=pick([52,57,63,68,74,81]);var moe=Math.round(rf(3,7)*2)/2;var askUp=Math.random()<0.5;
   var ans=askUp?p+moe:p-moe;
-  return numq("A survey reports that "+p+"% of residents support a new rink, with a margin of error of \u00B1"+fmt(moe)+" percentage points. What is the "+(askUp?"upper":"lower")+" endpoint of the confidence interval, as a percent? (Just the number.)",
-    ans,0.011,"Confidence interval = "+p+"% \u00B1 "+fmt(moe)+", so the interval runs from "+fmt(p-moe)+"% to "+fmt(p+moe)+"%. The "+(askUp?"upper":"lower")+" endpoint is <b>"+fmt(ans)+"%</b>.",{p:p,moe:moe,askUp:askUp});
+  return numq("A survey reports that \\("+p+"\\%\\) of residents support a new rink, with a margin of error of \\(\\pm "+fmt(moe)+"\\) percentage points. What is the "+(askUp?"upper":"lower")+" endpoint of the confidence interval, as a percent? (Just the number.)",
+    ans,0.011,"Confidence interval \\(= "+p+"\\% \\pm "+fmt(moe)+"\\), so the interval runs from \\("+fmt(p-moe)+"\\% \\text{ to } "+fmt(p+moe)+"\\%\\). The "+(askUp?"upper":"lower")+" endpoint is <b>\\("+fmt(ans)+"\\%\\)</b>.",{p:p,moe:moe,askUp:askUp});
 });
 E("u5-ci-from-endpoints",5,["8.17"],1,"gen",function(){
   var fam=pick([
-    {pre:"A 95% confidence interval for the percentage of residents who support a new arena runs from ",unit:"%",mus:[38,42.5,47,51.5,55,58.5,63,67,71.5,74],halfs:[1.8,2.4,2.9,3.1,3.6,4.2,4.8]},
-    {pre:"A 95% confidence interval for mean battery life runs from ",unit:" hours",mus:[16.5,17.6,18.4,19.2,20.5,22.8],halfs:[0.6,0.8,1.1,1.4,1.9,2.3]},
-    {pre:"A 95% confidence interval for the mean quiz score runs from ",unit:" points",mus:[71.5,74,76.5,79,82.5],halfs:[1.5,2,2.6,3.4,4.1]}]);
+    {pre:"A \\(95\\%\\) confidence interval for the percentage of residents who support a new arena runs from ",unit:"%",mus:[38,42.5,47,51.5,55,58.5,63,67,71.5,74],halfs:[1.8,2.4,2.9,3.1,3.6,4.2,4.8]},
+    {pre:"A \\(95\\%\\) confidence interval for mean battery life runs from ",unit:" hours",mus:[16.5,17.6,18.4,19.2,20.5,22.8],halfs:[0.6,0.8,1.1,1.4,1.9,2.3]},
+    {pre:"A \\(95\\%\\) confidence interval for the mean quiz score runs from ",unit:" points",mus:[71.5,74,76.5,79,82.5],halfs:[1.5,2,2.6,3.4,4.1]}]);
   var mid=pick(fam.mus),half=pick(fam.halfs);var askMoe=Math.random()<0.5;
-  return numq(fam.pre+fmt(mid-half)+fam.unit+" to "+fmt(mid+half)+fam.unit+". What is the "+(askMoe?"margin of error":"mean at the centre of the interval")+"?",
-    askMoe?half:mid,0.011,"The interval is centred at ("+fmt(mid-half)+" + "+fmt(mid+half)+") \u00F7 2 = "+fmt(mid)+", and it stretches "+fmt(half)+" each way, so the margin of error is \u00B1"+fmt(half)+". The "+(askMoe?"margin of error":"centre")+" is <b>"+fmt(askMoe?half:mid)+"</b>.",{mid:mid,half:half,askMoe:askMoe});
+  var ep=function(v){return "\\("+fmt(v)+(fam.unit==="%"?"\\%":"")+"\\)";};
+  return numq(fam.pre+ep(mid-half)+(fam.unit==="%"?"":fam.unit)+" to "+ep(mid+half)+(fam.unit==="%"?"":fam.unit)+". What is the "+(askMoe?"margin of error":"mean at the centre of the interval")+"?",
+    askMoe?half:mid,0.011,"The interval is centred at \\(\\frac{"+fmt(mid-half)+" + "+fmt(mid+half)+"}{2} = "+fmt(mid)+"\\), and it stretches \\("+fmt(half)+"\\) each way, so the margin of error is \\(\\pm "+fmt(half)+"\\). The "+(askMoe?"margin of error":"centre")+" is <b>\\("+fmt(askMoe?half:mid)+"\\)</b>.",{mid:mid,half:half,askMoe:askMoe});
 });
 E("u5-ci-count",5,["8.19"],2,"gen",function(){
   var p=ri(52,68),moe=pick([3,4,5]);var N=pick([800,1200,2000,18000]);var askMax=Math.random()<0.5;
   var ans=Math.round(N*(askMax?p+moe:p-moe)/100);
-  return numq("In a town of "+N+" voters, a poll finds "+p+"% \u00B1 "+moe+" support a proposal. About how many voters is the "+(askMax?"largest":"smallest")+" plausible number of supporters?",
-    ans,N*0.002+1,"The interval is "+(p-moe)+"% to "+(p+moe)+"%. The "+(askMax?"top":"bottom")+" end is "+(askMax?p+moe:p-moe)+"% of "+N+" = <b>"+ans+"</b> voters.",{p:p,moe:moe,N:N,askMax:askMax});
+  return numq("In a town of "+N+" voters, a poll finds \\("+p+"\\% \\pm "+moe+"\\) support a proposal. About how many voters is the "+(askMax?"largest":"smallest")+" plausible number of supporters?",
+    ans,N*0.002+1,"The interval is \\("+(p-moe)+"\\% \\text{ to } "+(p+moe)+"\\%\\). The "+(askMax?"top":"bottom")+" end is <b>\\("+(askMax?p+moe:p-moe)+"\\% \\text{ of } "+N+" = "+ans+"\\)</b> voters.",{p:p,moe:moe,N:N,askMax:askMax});
 });
 E("u5-ci-samplesize",5,["8.18"],1,"var",varset([
-  function(){return mcq("The same survey is run three times with random samples of 25, 250 and 2,500 people. Which sample gives the smallest margin of error, and why?",
-    "The sample of 2,500 \u2014 larger random samples vary less from the population value, so the interval narrows",
-    ["The sample of 25 \u2014 fewer people means fewer mistakes","All three give the same margin of error, because the survey is the same","The sample of 250 \u2014 medium samples are the most reliable"],
-    "Margin of error shrinks as the sample grows: more data averages out the randomness. (Roughly, multiplying the sample by 100 divides the margin of error by 10.)",{});},
-  function(){return mcq("A town polls 80 riders and finds 58% \u00B1 10% use the bus daily. It polls 800 riders and gets 58% \u00B1 3%. What changed?",
+  function(){return mcq("The same survey is run three times with random samples of \\(25\\), \\(250\\) and \\(2{,}500\\) people. Which sample gives the smallest margin of error, and why?",
+    "The sample of \\(2{,}500\\) \u2014 larger random samples vary less from the population value, so the interval narrows",
+    ["The sample of \\(25\\) \u2014 fewer people means fewer mistakes","All three give the same margin of error, because the survey is the same","The sample of \\(250\\) \u2014 medium samples are the most reliable"],
+    "Margin of error shrinks as the sample grows: more data averages out the randomness. (Roughly, multiplying the sample by \\(100\\) divides the margin of error by \\(10\\).)",{});},
+  function(){return mcq("A town polls 80 riders and finds \\(58\\% \\pm 10\\%\\) use the bus daily. It polls 800 riders and gets \\(58\\% \\pm 3\\%\\). What changed?",
     "The larger sample narrowed the margin of error, so the estimate is more precise",
     ["The larger sample changed the true percentage","The margin of error grew because more people were asked","Nothing \u2014 the percentages are the same, so both polls say the same thing"],
-    "Same centre, tighter interval: 55%\u201361% instead of 48%\u201368%. Bigger random samples pin the value down more closely.",{});},
+    "Same centre, tighter interval: \\(55\\% \\text{ to } 61\\%\\) instead of \\(48\\% \\text{ to } 68\\%\\). Bigger random samples pin the value down more closely.",{});},
   function(){return mcq("A polling firm wants to cut its margin of error roughly in half. What should it do to its sample?",
     "Use a much larger random sample \u2014 roughly four times as many people, because the margin of error shrinks with the square root of the sample size",
     ["Ask exactly twice as many people \u2014 double the sample, half the error","Survey the same people twice and average the two results","Nothing \u2014 the sample size does not affect the margin of error"],
-    "Margin of error behaves like 1 \u00F7 \u221An: quadrupling n halves it. Doubling the sample only shrinks it by a factor of about 1.4.",{});}
+    "Margin of error behaves like \\(\\frac{1}{\\sqrt{n}}\\): quadrupling \\(n\\) halves it. Doubling the sample only shrinks it by a factor of about \\(1.4\\).",{});}
 ,
-function(){return mcq("Four surveys ask the same question using random samples of 120, 480, 1,200 and 3,000 people. Which sample gives the LEAST margin of error?",
-    "3,000 \u2014 the largest sample, so its results vary least from the population value",
-    ["120 \u2014 the smallest sample has the least room for error","480 \u2014 a medium sample balances cost and accuracy","All four give the same margin of error \u2014 only the question matters"],
+function(){return mcq("Four surveys ask the same question using random samples of \\(120\\), \\(480\\), \\(1{,}200\\) and \\(3{,}000\\) people. Which sample gives the LEAST margin of error?",
+    "\\(3{,}000\\) \u2014 the largest sample, so its results vary least from the population value",
+    ["\\(120\\) \u2014 the smallest sample has the least room for error","\\(480\\) \u2014 a medium sample balances cost and accuracy","All four give the same margin of error \u2014 only the question matters"],
     "Larger random samples sit closer to the population value, so their margins of error are smaller.",{});},
-  function(){return mcq("Four surveys ask the same question using random samples of 45, 180, 720 and 1,500 people. Which sample gives the GREATEST margin of error?",
-    "45 \u2014 the smallest sample, so it can stray furthest from the population value",
-    ["1,500 \u2014 the largest sample has the most room for error","720 \u2014 a medium sample is the least stable","All four give the same margin of error \u2014 only the question matters"],
-    "Small samples bounce around more: with only 45 people, the sample percentage can land far from the true one, which is exactly what a big margin of error says.",{});},
+  function(){return mcq("Four surveys ask the same question using random samples of \\(45\\), \\(180\\), \\(720\\) and \\(1{,}500\\) people. Which sample gives the GREATEST margin of error?",
+    "\\(45\\) \u2014 the smallest sample, so it can stray furthest from the population value",
+    ["\\(1{,}500\\) \u2014 the largest sample has the most room for error","\\(720\\) \u2014 a medium sample is the least stable","All four give the same margin of error \u2014 only the question matters"],
+    "Small samples bounce around more: with only \\(45\\) people, the sample percentage can land far from the true one, which is exactly what a big margin of error says.",{});},
   function(){return mcq("Instead of sampling, a town surveys EVERY household \u2014 a census. What happens to the margin of error?",
     "There is no sampling margin of error \u2014 the count IS the population value, so there is no sampling gap to allow for",
-    ["It doubles, because there are more responses to process","It stays whatever it would be for a sample of 1,000","It becomes 100%, because the whole population was asked"],
+    ["It doubles, because there are more responses to process","It stays whatever it would be for a sample of \\(1{,}000\\)","It becomes \\(100\\%\\), because the whole population was asked"],
     "Margin of error exists because a sample might not mirror the population. Survey everyone and that particular uncertainty disappears (people can still misreport, but that is a different problem).",{});}
 ]));
 E("u5-ci-level",5,["8.18"],2,"var",varset([
-  function(){return mcq("A researcher recomputes the same survey results at a 99% confidence level instead of 95%. What happens to the interval?",
+  function(){return mcq("A researcher recomputes the same survey results at a \\(99\\%\\) confidence level instead of \\(95\\%\\). What happens to the interval?",
     "It gets wider \u2014 being right more often requires allowing a bigger range",
-    ["It gets narrower \u2014 higher confidence means a better estimate","It stays the same \u2014 the confidence level does not affect the interval","The centre moves to 99%"],
-    "There is a trade-off: to capture the true value 99 times out of 100 instead of 95, the interval must stretch. Higher confidence, wider interval, same centre.",{});},
-  function(){return mcq("What does a 95% confidence level mean?",
-    "In the long run, intervals built this way capture the true population value about 95 times out of 100 (19 times out of 20)",
-    ["95% of the sample agreed with the result","There is a 95% chance this one interval is exactly centred on the true value","95% of the population was surveyed"],
-    "The 95% describes the method's long-run success rate: repeat the survey many times and about 19 of every 20 intervals contain the true value.",{});},
-  function(){return mcq("Two reports use the SAME survey. One gives a 90% confidence interval of 51% \u00B1 3%. The other gives a 99% interval from the same data. What must be true of the 99% interval?",
-    "Its margin of error is larger than 3% \u2014 higher confidence is bought with a wider interval",
-    ["Its margin of error is smaller than 3%","It is centred on a different percentage","It must be wrong, because a survey produces only one correct interval"],
-    "Same data, same centre (51%). Raising the confidence level stretches the interval both ways, so the margin of error grows past 3%.",{});}
+    ["It gets narrower \u2014 higher confidence means a better estimate","It stays the same \u2014 the confidence level does not affect the interval","The centre moves to \\(99\\%\\)"],
+    "There is a trade-off: to capture the true value \\(99\\) times out of \\(100\\) instead of \\(95\\), the interval must stretch. Higher confidence, wider interval, same centre.",{});},
+  function(){return mcq("What does a \\(95\\%\\) confidence level mean?",
+    "In the long run, intervals built this way capture the true population value about \\(95\\) times out of \\(100\\) (\\(19\\) times out of \\(20\\))",
+    ["\\(95\\%\\) of the sample agreed with the result","There is a \\(95\\%\\) chance this one interval is exactly centred on the true value","\\(95\\%\\) of the population was surveyed"],
+    "The \\(95\\%\\) describes the method's long-run success rate: repeat the survey many times and about \\(19\\) of every \\(20\\) intervals contain the true value.",{});},
+  function(){return mcq("Two reports use the SAME survey. One gives a \\(90\\%\\) confidence interval of \\(51\\% \\pm 3\\%\\). The other gives a \\(99\\%\\) interval from the same data. What must be true of the \\(99\\%\\) interval?",
+    "Its margin of error is larger than \\(3\\%\\) \u2014 higher confidence is bought with a wider interval",
+    ["Its margin of error is smaller than \\(3\\%\\)","It is centred on a different percentage","It must be wrong, because a survey produces only one correct interval"],
+    "Same data, same centre (\\(51\\%\\)). Raising the confidence level stretches the interval both ways, so the margin of error grows past \\(3\\%\\).",{});}
 ,
-function(){return mcq("Intervals are computed from the SAME survey data at 90%, 95% and 99% confidence. Which statement is true?",
-    "All three are centred on the same value; the 99% interval is the widest and the 90% interval is the narrowest",
-    ["The 99% interval is the narrowest, because it is the most certain","Each confidence level gives an interval centred on a different value","Only the 95% interval can be correct"],
+function(){return mcq("Intervals are computed from the SAME survey data at \\(90\\%\\), \\(95\\%\\) and \\(99\\%\\) confidence. Which statement is true?",
+    "All three are centred on the same value; the \\(99\\%\\) interval is the widest and the \\(90\\%\\) interval is the narrowest",
+    ["The \\(99\\%\\) interval is the narrowest, because it is the most certain","Each confidence level gives an interval centred on a different value","Only the \\(95\\%\\) interval can be correct"],
     "The centre comes from the data and does not move. Demanding more confidence stretches the interval wider around that same centre.",{});},
-  function(){return mcq("A weather station reports mean June rainfall as 84 mm, with a 95% confidence interval of 78 mm to 90 mm. If the SAME data were reported at 99% confidence, what would the interval look like?",
-    "Still centred on 84 mm, but wider than 78 mm to 90 mm",
-    ["Still centred on 84 mm, but narrower \u2014 about 80 mm to 88 mm","Centred on 99 mm instead of 84 mm","Exactly the same: 78 mm to 90 mm"],
+  function(){return mcq("A weather station reports mean June rainfall as \\(84\\) mm, with a \\(95\\%\\) confidence interval of \\(78\\) mm to \\(90\\) mm. If the SAME data were reported at \\(99\\%\\) confidence, what would the interval look like?",
+    "Still centred on \\(84\\) mm, but wider than \\(78\\) mm to \\(90\\) mm",
+    ["Still centred on \\(84\\) mm, but narrower \u2014 about \\(80\\) mm to \\(88\\) mm","Centred on \\(99\\) mm instead of \\(84\\) mm","Exactly the same: \\(78\\) mm to \\(90\\) mm"],
     "Raising the confidence level never moves the centre and never narrows the interval \u2014 it widens it, so the method captures the true value more often.",{});}
 ]));
 E("u5-ci-majority",5,["8.19","8.21"],3,"gen",function(){
   var supported=Math.random()<0.5;var p,moe;
   if(supported){moe=pick([2,3,4]);p=ri(50+moe+2,68);}else{moe=pick([4,5,6]);p=ri(51,49+moe);}
   var lo=p-moe,hi=p+moe;
-  return mcq("A headline announces: \u201CMost teens support a later school start time!\u201D The survey behind it found "+p+"% support, with a margin of error of \u00B1"+moe+" points. Is the headline justified?",
-    supported?"Yes \u2014 the whole interval, "+lo+"% to "+hi+"%, sits above 50%, so a majority is plausible throughout":"No \u2014 the interval, "+lo+"% to "+hi+"%, dips below 50%, so support could actually be a minority",
-    [supported?"No \u2014 surveys can never justify the word \u2018most\u2019":"Yes \u2014 "+p+"% is more than half, and that settles it",
-     "Yes \u2014 the margin of error is small enough to ignore","The headline is justified only if the sample was larger than 1,000"],
-    "\u2018Most\u2019 means more than 50%. The interval runs "+lo+"%\u2013"+hi+"%"+(supported?", entirely above 50%, so the claim holds up.":", and it crosses below 50%, so the honest headline is \u2018about half of teens support\u2026\u2019.")+" Always check whether the whole interval clears the claim's bar.",
+  return mcq("A headline announces: \u201CMost teens support a later school start time!\u201D The survey behind it found \\("+p+"\\%\\) support, with a margin of error of \\(\\pm "+moe+"\\) points. Is the headline justified?",
+    supported?"Yes \u2014 the whole interval, \\("+lo+"\\% \\text{ to } "+hi+"\\%\\), sits above \\(50\\%\\), so a majority is plausible throughout":"No \u2014 the interval, \\("+lo+"\\% \\text{ to } "+hi+"\\%\\), dips below \\(50\\%\\), so support could actually be a minority",
+    [supported?"No \u2014 surveys can never justify the word \u2018most\u2019":"Yes \u2014 \\("+p+"\\%\\) is more than half, and that settles it",
+     "Yes \u2014 the margin of error is small enough to ignore","The headline is justified only if the sample was larger than \\(1{,}000\\)"],
+    "\u2018Most\u2019 means more than \\(50\\%\\). The interval runs \\("+lo+"\\% \\text{ to } "+hi+"\\%\\)"+(supported?", entirely above \\(50\\%\\), so the claim holds up.":", and it crosses below \\(50\\%\\), so the honest headline is \u2018about half of teens support\u2026\u2019.")+" Always check whether the whole interval clears the claim's bar.",
     {p:p,moe:moe,supported:supported});
 });
 E("u5-media",5,["8.20","8.21","8.22"],3,"var",varset([
-  function(){return mcq("A news report says support for a new ferry sailing is 56% and calls it \u2018overwhelming\u2019. The poll's margin of error is \u00B16 points. What is the fairest criticism?",
-    "\u2018Overwhelmingly\u2019 is too strong \u2014 the interval 50%\u201362% is consistent with support being barely half",
-    ["The report is fine, because 56% is a majority","The poll must be wrong, because its margin of error is positive","Nothing \u2014 word choice does not matter in statistics"],
-    "56% \u00B1 6 gives 50%\u201362%. A result that could be a coin-flip is real support, but \u2018overwhelming\u2019 overstates what the numbers carry.",{});},
+  function(){return mcq("A news report says support for a new ferry sailing is \\(56\\%\\) and calls it \u2018overwhelming\u2019. The poll's margin of error is \\(\\pm 6\\) points. What is the fairest criticism?",
+    "\u2018Overwhelmingly\u2019 is too strong \u2014 the interval \\(50\\% \\text{ to } 62\\%\\) is consistent with support being barely half",
+    ["The report is fine, because \\(56\\%\\) is a majority","The poll must be wrong, because its margin of error is positive","Nothing \u2014 word choice does not matter in statistics"],
+    "\\(56\\% \\pm 6\\) gives \\(50\\% \\text{ to } 62\\%\\). A result that could be a coin-flip is real support, but \u2018overwhelming\u2019 overstates what the numbers carry.",{});},
   function(){return mcq("A website headline reads: \u2018Nine out of ten dentists recommend our toothpaste!\u2019 No sample size, margin of error, or survey method is reported. Why should a reader be cautious?",
     "With no sample size or margin of error, there is no way to judge how much the result could vary \u2014 the claim is uncheckable",
     ["Because dentists cannot be surveyed about toothpaste","Because nine out of ten is not a percentage","Because all advertising statistics are invented"],
     "A statistic without its method \u2014 how many were asked, how they were chosen, and the margin of error \u2014 cannot be evaluated. Nine could be nine of ten people in one office.",{});},
-  function(){return mcq("A radio station asks listeners to text in whether the town should build a new arena. By midnight, 78% of texts say yes. The station reports \u2018the town strongly supports the arena\u2019. What is the biggest problem?",
+  function(){return mcq("A radio station asks listeners to text in whether the town should build a new arena. By midnight, \\(78\\%\\) of texts say yes. The station reports \u2018the town strongly supports the arena\u2019. What is the biggest problem?",
     "The sample is self-selected \u2014 people who feel strongly (and who listen to that station) did the choosing, so it does not represent the town",
-    ["78% is not a large enough majority","The poll was taken at night","Text messages cannot be counted accurately"],
+    ["\\(78\\%\\) is not a large enough majority","The poll was taken at night","Text messages cannot be counted accurately"],
     "Voluntary samples over-represent strong opinions and the station's own audience. A random sample of the town, even a much smaller one, would say far more.",{});},
-  function(){return mcq("A community garden group reports: \u2018In our survey of 300 residents, 67% \u00B1 4 support expanding the garden.\u2019 A councillor says the survey proves most residents support the expansion. Is the councillor right?",
-    "Yes \u2014 the interval 63%\u201371% lies entirely above 50%, so a majority is supported throughout the interval",
-    ["No \u2014 67% of a sample never proves anything about residents","No \u2014 the margin of error means support could be under half","Yes \u2014 but only because 300 is a large sample"],
-    "The whole confidence interval clears 50%, so the majority claim is as solid as polling gets: the plausible range for true support is 63%\u201371%.",{});}
+  function(){return mcq("A community garden group reports: \u2018In our survey of 300 residents, \\(67\\% \\pm 4\\) support expanding the garden.\u2019 A councillor says the survey proves most residents support the expansion. Is the councillor right?",
+    "Yes \u2014 the interval \\(63\\% \\text{ to } 71\\%\\) lies entirely above \\(50\\%\\), so a majority is supported throughout the interval",
+    ["No \u2014 \\(67\\%\\) of a sample never proves anything about residents","No \u2014 the margin of error means support could be under half","Yes \u2014 but only because \\(300\\) is a large sample"],
+    "The whole confidence interval clears \\(50\\%\\), so the majority claim is as solid as polling gets: the plausible range for true support is \\(63\\% \\text{ to } 71\\%\\).",{});}
 ]));
 E("u5-interpret-ci",5,["8.21"],2,"var",varset([
-  function(){return mcq("A poll reports a candidate at 49% with a margin of error of \u00B13.1 points, 19 times out of 20. What is the correct reading?",
-    "The candidate's true support is plausibly between 45.9% and 52.1%, and intervals built this way are right about 19 times in 20",
-    ["The candidate will get exactly 49% of the vote","The candidate is definitely behind, because 49% is less than half","The margin of error means the poll is off by exactly 3.1 points"],
-    "Add and subtract the margin of error: 45.9%\u201352.1%. The \u201819 times out of 20\u2019 is the confidence level \u2014 the method's long-run record, not a guarantee for this one poll.",{p:49,moe:3.1});},
-  function(){return mcq("A city survey of 400 adults finds 62% support a new compost pickup, with a margin of error of \u00B14.9 points, 19 times out of 20. What is the correct reading?",
-    "True support is plausibly between 57.1% and 66.9%, and intervals built this way contain the truth about 19 times in 20",
-    ["Exactly 62% of all adults in the city support the pickup","Support is certainly between 57.1% and 66.9% \u2014 the survey method cannot miss","The result is off by exactly 4.9 people out of the 400 surveyed"],
-    "Add and subtract the margin of error: 62 \u2212 4.9 = 57.1 and 62 + 4.9 = 66.9. \u201819 times out of 20\u2019 describes the method's long-run success rate, not a promise about this one survey.",{p:62,moe:4.9});},
-  function(){return mcq("A poll reports 38% of voters preferring a four-day school week, with a margin of error of \u00B13 points, 19 times out of 20. Which statement is correct?",
-    "The true share of all voters who prefer it is plausibly somewhere from 35% to 41%",
-    ["There is a 95% chance the true share is exactly 38%","The share of all voters is 38%, give or take exactly 3 people","Any result outside 35% to 41% would prove the poll was rigged"],
-    "The confidence interval is 38 \u00B1 3, that is 35% to 41%. It is a plausible range for the true value, built by a method that works about 19 times in 20 \u2014 not a certainty and not a count of people.",{p:38,moe:3});}
+  function(){return mcq("A poll reports a candidate at \\(49\\%\\) with a margin of error of \\(\\pm 3.1\\) points, \\(19\\) times out of \\(20\\). What is the correct reading?",
+    "The candidate's true support is plausibly between \\(45.9\\%\\) and \\(52.1\\%\\), and intervals built this way are right about \\(19\\) times in \\(20\\)",
+    ["The candidate will get exactly \\(49\\%\\) of the vote","The candidate is definitely behind, because \\(49\\%\\) is less than half","The margin of error means the poll is off by exactly \\(3.1\\) points"],
+    "Add and subtract the margin of error: \\(45.9\\% \\text{ to } 52.1\\%\\). The \u2018\\(19\\) times out of \\(20\\)\u2019 is the confidence level \u2014 the method's long-run record, not a guarantee for this one poll.",{p:49,moe:3.1});},
+  function(){return mcq("A city survey of 400 adults finds \\(62\\%\\) support a new compost pickup, with a margin of error of \\(\\pm 4.9\\) points, \\(19\\) times out of \\(20\\). What is the correct reading?",
+    "True support is plausibly between \\(57.1\\%\\) and \\(66.9\\%\\), and intervals built this way contain the truth about \\(19\\) times in \\(20\\)",
+    ["Exactly \\(62\\%\\) of all adults in the city support the pickup","Support is certainly between \\(57.1\\%\\) and \\(66.9\\%\\) \u2014 the survey method cannot miss","The result is off by exactly \\(4.9\\) people out of the \\(400\\) surveyed"],
+    "Add and subtract the margin of error: \\(62 - 4.9 = 57.1\\) and \\(62 + 4.9 = 66.9\\). \u2018\\(19\\) times out of \\(20\\)\u2019 describes the method's long-run success rate, not a promise about this one survey.",{p:62,moe:4.9});},
+  function(){return mcq("A poll reports \\(38\\%\\) of voters preferring a four-day school week, with a margin of error of \\(\\pm 3\\) points, \\(19\\) times out of \\(20\\). Which statement is correct?",
+    "The true share of all voters who prefer it is plausibly somewhere from \\(35\\%\\) to \\(41\\%\\)",
+    ["There is a \\(95\\%\\) chance the true share is exactly \\(38\\%\\)","The share of all voters is \\(38\\%\\), give or take exactly \\(3\\) people","Any result outside \\(35\\%\\) to \\(41\\%\\) would prove the poll was rigged"],
+    "The confidence interval is \\(38 \\pm 3\\), that is \\(35\\% \\text{ to } 41\\%\\). It is a plausible range for the true value, built by a method that works about \\(19\\) times in \\(20\\) \u2014 not a certainty and not a count of people.",{p:38,moe:3});}
 ]));
 /* ============ Unit 1: Acute Triangle Trigonometry ============ */
 function angFmt(x){return fmt(x,1)+"\u00B0";}
@@ -1502,9 +1503,9 @@ E("u5-ci-level-from-report",5,["8.21"],1,"gen",function(){
   distractors=distractors.slice(0,3);
   var extras=[level-10,level+10,level-15,level+15];
   while(distractors.length<3){var e=extras.pop();if(e!==undefined&&e!==level&&e>0&&e<100&&distractors.indexOf(e)<0)distractors.push(e);else if(e===undefined)break;}
-  return mcq("A news report about "+topic+", based on a survey of "+N+" people, says the results are \u2018accurate "+k+" times out of "+n+"\u2019. What confidence level is the report claiming?",
-    level+"%",distractors.map(function(d){return d+"%";}),
-    k+" times out of "+n+" is the fraction "+k+"/"+n+" = "+level+"%. A confidence level reported as a fraction of times converts straight to that percent.",{k:k,n:n,level:level});
+  return mcq("A news report about "+topic+", based on a survey of "+N+" people, says the results are \u2018accurate \\("+k+"\\) times out of \\("+n+"\\)\u2019. What confidence level is the report claiming?",
+    "\\("+level+"\\%\\)",distractors.map(function(d){return "\\("+d+"\\%\\)";}),
+    "\\("+k+"\\) times out of \\("+n+"\\) is the fraction \\(\\frac{"+k+"}{"+n+"} = "+level+"\\%\\). A confidence level reported as a fraction of times converts straight to that percent.",{k:k,n:n,level:level});
 });
 E("u5-ci-shrink",5,["8.18"],2,"gen",function(){
   var d=pick([2,3,4,5,10]);
@@ -1513,27 +1514,27 @@ E("u5-ci-shrink",5,["8.18"],2,"gen",function(){
   var grow=Math.random()<0.6,n0,n1,moe0,ans;
   if(grow){n0=base;n1=base*d*d;moe0=m2*d;ans=m2;}
   else{n0=base*d*d;n1=base;moe0=m2;ans=m2*d;}
-  return numq("A survey of "+n0+" people reports a margin of error of \u00B1"+fmt(moe0)+" percentage points. The survey is repeated with "+n1+" people, using the same method. What is the new margin of error, in percentage points? (Just the number.)",
+  return numq("A survey of \\("+n0+"\\) people reports a margin of error of \\(\\pm "+fmt(moe0)+"\\) percentage points. The survey is repeated with \\("+n1+"\\) people, using the same method. What is the new margin of error, in percentage points? (Just the number.)",
     ans,0.011,
-    "Margin of error changes like 1 \u00F7 \u221An. Going from "+n0+" to "+n1+" people multiplies the sample by "+(grow?(d*d):"1/"+(d*d))+", so the margin of error "+(grow?"divides":"multiplies")+" by "+d+": "+fmt(moe0)+" "+(grow?"\u00F7":"\u00D7")+" "+d+" = <b>"+fmt(ans)+"</b> percentage points.",{n0:n0,n1:n1,moe0:moe0,d:d,ans:ans});
+    "Margin of error changes like \\(\\frac{1}{\\sqrt{n}}\\). Going from \\("+n0+"\\) to \\("+n1+"\\) people multiplies the sample by \\("+(grow?(d*d):"\\frac{1}{"+(d*d)+"}")+"\\), so the margin of error "+(grow?"divides":"multiplies")+" by \\("+d+"\\): <b>\\("+fmt(moe0)+" "+(grow?"\\div ":"\\times ")+d+" = "+fmt(ans)+"\\)</b> percentage points.",{n0:n0,n1:n1,moe0:moe0,d:d,ans:ans});
 });
 E("u5-poll-position",5,["8.20","8.22"],3,"var",varset([
-  function(){return mcq("An advertisement announces: \u2018In a survey, 80% of users said our toothpaste gave them a cleaner feeling!\u2019 The fine print says the survey is accurate within \u00B14 percentage points, 9 times out of 10. Which statement is the honest summary of the survey?",
-    "The survey supports a range of about 76% to 84% \u2014 the ad quotes the single middle number as if it were exact",
-    ["At least 80% for sure \u2014 that is the number the survey found","The range is 72% to 88%, because the margin counts twice on each side","The ad is fair \u2014 being right 9 times out of 10 makes the 80% nearly exact"],
-    "80% \u00B1 4 points gives 76% to 84%. The honest figure could sit several points either side of the advertised one.",{});},
-  function(){return mcq("Two candidates poll at 47% and 44%, with a margin of error of \u00B14 points. The first candidate's campaign claims: \u2018We have a clear lead.\u2019 Is the claim supported?",
-    "No \u2014 the intervals (43% to 51% and 40% to 48%) overlap, so the trailing candidate could actually be ahead",
-    ["Yes \u2014 47 is greater than 44, so the lead is real","Yes \u2014 the margin of error applies only to the trailing candidate","No \u2014 any poll with a margin of error is worthless"],
-    "A lead smaller than the margin of error is not a secure lead. With \u00B14 points, the true support could run the other way.",{});},
-  function(){return mcq("A survey at a school of 1,200 students finds 68% \u00B1 5 points favour a later start time. The principal announces: \u2018At least 800 of our students want this change.\u2019 Is the announcement justified by the survey?",
-    "Not necessarily \u2014 the interval reaches down to 63%, and 63% of 1,200 is 756 students, which is below 800",
-    ["Yes \u2014 68% of 1,200 is 816 students, comfortably over 800","Yes \u2014 a survey of a whole school gives exact figures","No \u2014 the true figure could be fewer than 600 students"],
-    "The middle estimate (816) clears 800, but the interval's low end (756) does not. A claim of 'at least 800' needs the whole interval above 800.",{});},
-  function(){return mcq("In a town of 25,000 voters, a poll finds 54% \u00B1 3 points support a new arena. A councillor says: \u2018Somewhere between 12,000 and 15,000 voters back this.\u2019 Is she reading the poll correctly?",
-    "Yes \u2014 51% to 57% of 25,000 voters is 12,750 to 14,250 voters, which sits inside the range she quoted",
-    ["No \u2014 the range is 13,500 voters, give or take 3 voters","No \u2014 a percentage from a sample can never be applied to a whole population","Yes \u2014 exactly 13,500 voters support the arena"],
-    "Apply both ends of the interval to the population: 0.51 \u00D7 25,000 = 12,750 and 0.57 \u00D7 25,000 = 14,250. Her wider range safely contains the poll's range.",{});}
+  function(){return mcq("An advertisement announces: \u2018In a survey, \\(80\\%\\) of users said our toothpaste gave them a cleaner feeling!\u2019 The fine print says the survey is accurate within \\(\\pm 4\\) percentage points, \\(9\\) times out of \\(10\\). Which statement is the honest summary of the survey?",
+    "The survey supports a range of about \\(76\\% \\text{ to } 84\\%\\) \u2014 the ad quotes the single middle number as if it were exact",
+    ["At least \\(80\\%\\) for sure \u2014 that is the number the survey found","The range is \\(72\\% \\text{ to } 88\\%\\), because the margin counts twice on each side","The ad is fair \u2014 being right \\(9\\) times out of \\(10\\) makes the \\(80\\%\\) nearly exact"],
+    "\\(80\\% \\pm 4\\) points gives \\(76\\% \\text{ to } 84\\%\\). The honest figure could sit several points either side of the advertised one.",{});},
+  function(){return mcq("Two candidates poll at \\(47\\%\\) and \\(44\\%\\), with a margin of error of \\(\\pm 4\\) points. The first candidate's campaign claims: \u2018We have a clear lead.\u2019 Is the claim supported?",
+    "No \u2014 the intervals (\\(43\\% \\text{ to } 51\\%\\) and \\(40\\% \\text{ to } 48\\%\\)) overlap, so the trailing candidate could actually be ahead",
+    ["Yes \u2014 \\(47\\) is greater than \\(44\\), so the lead is real","Yes \u2014 the margin of error applies only to the trailing candidate","No \u2014 any poll with a margin of error is worthless"],
+    "A lead smaller than the margin of error is not a secure lead. With \\(\\pm 4\\) points, the true support could run the other way.",{});},
+  function(){return mcq("A survey at a school of 1,200 students finds \\(68\\% \\pm 5\\) points favour a later start time. The principal announces: \u2018At least \\(800\\) of our students want this change.\u2019 Is the announcement justified by the survey?",
+    "Not necessarily \u2014 the interval reaches down to \\(63\\%\\), and \\(63\\%\\) of \\(1{,}200\\) is \\(756\\) students, which is below \\(800\\)",
+    ["Yes \u2014 \\(68\\%\\) of \\(1{,}200\\) is \\(816\\) students, comfortably over \\(800\\)","Yes \u2014 a survey of a whole school gives exact figures","No \u2014 the true figure could be fewer than \\(600\\) students"],
+    "The middle estimate (\\(816\\)) clears \\(800\\), but the interval's low end (\\(756\\)) does not. A claim of 'at least \\(800\\)' needs the whole interval above \\(800\\).",{});},
+  function(){return mcq("In a town of 25,000 voters, a poll finds \\(54\\% \\pm 3\\) points support a new arena. A councillor says: \u2018Somewhere between \\(12{,}000\\) and \\(15{,}000\\) voters back this.\u2019 Is she reading the poll correctly?",
+    "Yes \u2014 \\(51\\% \\text{ to } 57\\%\\) of \\(25{,}000\\) voters is \\(12{,}750\\) to \\(14{,}250\\) voters, which sits inside the range she quoted",
+    ["No \u2014 the range is \\(13{,}500\\) voters, give or take \\(3\\) voters","No \u2014 a percentage from a sample can never be applied to a whole population","Yes \u2014 exactly \\(13{,}500\\) voters support the arena"],
+    "Apply both ends of the interval to the population: \\(0.51 \\times 25{,}000 = 12{,}750\\) and \\(0.57 \\times 25{,}000 = 14{,}250\\). Her wider range safely contains the poll's range.",{});}
 ]));
 E("u7-valid-chains",7,["2.3"],2,"var",varset([
   function(){return mcq("Premises: Rex is a Chocolate Lab. All Chocolate Labs are brown. What can be deduced?",
@@ -1560,30 +1561,30 @@ E("u7-valid-chains",7,["2.3"],2,"var",varset([
 E("u5-ci-build",5,["8.21"],1,"gen",function(){
   var p=ri(38,72),m=pick([2,2.5,3,3.5,4,4.5,5]);
   var topic=pick(["a new arena","a later school start","the mayoral race","a cellphone ban in class","a new ferry sailing","a four-day school week"]);
-  var phrase=pick(["19 times out of 20","9 times out of 10","99 times out of 100"]);
+  var phrase=pick(["\\(19\\) times out of \\(20\\)","\\(9\\) times out of \\(10\\)","\\(99\\) times out of \\(100\\)"]);
   var lo=p-m,hi=p+m;
-  function rng(x,y){return fmt(x)+"% to "+fmt(y)+"%";}
-  return mcq("A poll finds "+p+"% support for "+topic+", with a margin of error of \u00B1"+fmt(m)+" percentage points, accurate "+phrase+". What is the confidence interval for the true level of support?",
+  function rng(x,y){return "\\("+fmt(x)+"\\% \\text{ to } "+fmt(y)+"\\%\\)";}
+  return mcq("A poll finds \\("+p+"\\%\\) support for "+topic+", with a margin of error of \\(\\pm "+fmt(m)+"\\) percentage points, accurate "+phrase+". What is the confidence interval for the true level of support?",
     rng(lo,hi),[rng(p,hi),rng(lo,p),rng(p-2*m,p+2*m)],
-    "The interval runs the margin of error in BOTH directions from the result: "+p+"% \u2212 "+fmt(m)+" = "+fmt(lo)+"% and "+p+"% + "+fmt(m)+" = "+fmt(hi)+"%.",{p:p,m:m});
+    "The interval runs the margin of error in BOTH directions from the result: \\("+p+"\\% - "+fmt(m)+" = "+fmt(lo)+"\\%\\) and \\("+p+"\\% + "+fmt(m)+" = "+fmt(hi)+"\\%\\).",{p:p,m:m});
 });
 E("u5-ci-read-report",5,["8.21"],2,"var",varset([
-  function(){return mcq("A survey reports a confidence interval of 74.9% to 79.1%, accurate 9 times out of 10. What are the margin of error and the confidence level?",
-    "Margin of error 2.1 points; confidence level 90%",
-    ["Margin of error 4.2 points; confidence level 90%","Margin of error 2.1 points; confidence level 95%","Margin of error 77 points; confidence level 90%"],
-    "The interval is 4.2 points wide, so the margin of error is half of that: 2.1 points either side of the centre, 77%. And 9 times out of 10 is a 90% confidence level.",{});},
-  function(){return mcq("A fisheries report gives a 90% confidence interval for the mean weight of cod of 3.0 kg to 3.4 kg. What are the reported mean and the margin of error?",
-    "Mean 3.2 kg; margin of error \u00B10.2 kg",
-    ["Mean 3.0 kg; margin of error \u00B10.4 kg","Mean 3.4 kg; margin of error \u00B10.2 kg","Mean 3.2 kg; margin of error \u00B10.4 kg"],
-    "The mean is the midpoint: (3.0 + 3.4) / 2 = 3.2 kg. The margin of error is half the width: (3.4 \u2212 3.0) / 2 = 0.2 kg.",{});},
-  function(){return mcq("A survey reports a 90% confidence level, a margin of error of \u00B13 points, and a confidence interval of 57% to 63%. What percentage did the survey itself find?",
-    "60% \u2014 the interval is centred on the survey result",
-    ["57% \u2014 the bottom of the interval is the result","63% \u2014 the top of the interval is the result","90% \u2014 the confidence level is the result"],
-    "The interval is built as result \u00B1 margin: 60% \u2212 3 = 57% and 60% + 3 = 63%. The reported percentage is the centre, 60%.",{});},
-  function(){return mcq("A factory reports that 85% of its batteries pass a 100-hour test, accurate within \u00B12.5 percentage points, 19 times out of 20. What is the confidence interval for the true pass rate?",
-    "82.5% to 87.5%",
-    ["85% to 87.5%","82.5% to 85%","80% to 90%"],
-    "Apply the margin in both directions: 85 \u2212 2.5 = 82.5 and 85 + 2.5 = 87.5.",{});}
+  function(){return mcq("A survey reports a confidence interval of \\(74.9\\% \\text{ to } 79.1\\%\\), accurate \\(9\\) times out of \\(10\\). What are the margin of error and the confidence level?",
+    "Margin of error \\(2.1\\) points; confidence level \\(90\\%\\)",
+    ["Margin of error \\(4.2\\) points; confidence level \\(90\\%\\)","Margin of error \\(2.1\\) points; confidence level \\(95\\%\\)","Margin of error \\(77\\) points; confidence level \\(90\\%\\)"],
+    "The interval is \\(4.2\\) points wide, so the margin of error is half of that: \\(2.1\\) points either side of the centre, \\(77\\%\\). And \\(9\\) times out of \\(10\\) is a \\(90\\%\\) confidence level.",{});},
+  function(){return mcq("A fisheries report gives a \\(90\\%\\) confidence interval for the mean weight of cod of \\(3.0\\) kg to \\(3.4\\) kg. What are the reported mean and the margin of error?",
+    "Mean \\(3.2\\) kg; margin of error \\(\\pm 0.2\\) kg",
+    ["Mean \\(3.0\\) kg; margin of error \\(\\pm 0.4\\) kg","Mean \\(3.4\\) kg; margin of error \\(\\pm 0.2\\) kg","Mean \\(3.2\\) kg; margin of error \\(\\pm 0.4\\) kg"],
+    "The mean is the midpoint: \\(\\frac{3.0 + 3.4}{2} = 3.2\\) kg. The margin of error is half the width: \\(\\frac{3.4 - 3.0}{2} = 0.2\\) kg.",{});},
+  function(){return mcq("A survey reports a \\(90\\%\\) confidence level, a margin of error of \\(\\pm 3\\) points, and a confidence interval of \\(57\\%\\) to \\(63\\%\\). What percentage did the survey itself find?",
+    "\\(60\\%\\) \u2014 the interval is centred on the survey result",
+    ["\\(57\\%\\) \u2014 the bottom of the interval is the result","\\(63\\%\\) \u2014 the top of the interval is the result","\\(90\\%\\) \u2014 the confidence level is the result"],
+    "The interval is built as result \\(\\pm\\) margin: \\(60\\% - 3 = 57\\%\\) and \\(60\\% + 3 = 63\\%\\). The reported percentage is the centre, \\(60\\%\\).",{});},
+  function(){return mcq("A factory reports that \\(85\\%\\) of its batteries pass a 100-hour test, accurate within \\(\\pm 2.5\\) percentage points, \\(19\\) times out of \\(20\\). What is the confidence interval for the true pass rate?",
+    "\\(82.5\\% \\text{ to } 87.5\\%\\)",
+    ["\\(85\\% \\text{ to } 87.5\\%\\)","\\(82.5\\% \\text{ to } 85\\%\\)","\\(80\\% \\text{ to } 90\\%\\)"],
+    "Apply the margin in both directions: \\(85 - 2.5 = 82.5\\) and \\(85 + 2.5 = 87.5\\).",{});}
 ]));
 E("u2-params-characteristics",2,["4.10"],1,"gen",function(){
   var mode=ri(0,2),a=pick([-3,-2,-1,1,2,3]),b=ri(-8,8)||3,c=ri(-9,9)||4;
