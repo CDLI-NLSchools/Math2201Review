@@ -103,6 +103,14 @@
           <option value="random">Random order</option>
         </select>
       </label>
+      <label>Working space on print sheets
+        <select id="wsIn">
+          <option value="1">Full space</option>
+          <option value="0.5">Half space</option>
+          <option value="0.25">A little space</option>
+          <option value="0">None — use your own paper</option>
+        </select>
+      </label>
     </div>
     <details id="advBox">
       <summary>Advanced options — question levels</summary>
@@ -3233,6 +3241,7 @@ function settings(){
   return {units:state.units.slice(),inds:state.inds.slice(),midCap:state.midCap,
     count:Math.max(1,Math.min(60,+$("countIn").value||10)),
     order:$("orderIn").value,
+    ws:($("wsIn")?parseFloat($("wsIn").value):1),
     mix:[+$("lv1").value||0,+$("lv2").value||0,+$("lv3").value||0]};
 }
 function tags(q){
@@ -3315,13 +3324,15 @@ function startSheet(){
   if(!res.items.length){$("session").innerHTML='<div class="card"><p>No questions match that selection yet.</p></div>';return;}
   var unitNames=s.units.map(function(u){return "Unit "+u;}).join(", ");
   var html='<div class="nameline"><div>Name:<span></span></div><div>Date:<span></span></div></div>';
-  html+='<h1 style="font-size:1.3rem;">Math 2201 \u2014 Practice Sheet</h1><p>'+unitNames+(s.inds.length?(" \u00B7 Indicators: "+s.inds.join(", ")):"")+' \u00B7 '+res.items.length+' questions \u00B7 Show all workings in the space provided.</p>';
+  var wsf=(typeof s.ws==="number"&&!isNaN(s.ws))?s.ws:1;
+  html+='<h1 style="font-size:1.3rem;">Math 2201 \u2014 Practice Sheet</h1><p>'+unitNames+(s.inds.length?(" \u00B7 Indicators: "+s.inds.join(", ")):"")+' \u00B7 '+res.items.length+' questions \u00B7 '+(wsf>0?'Show all workings in the space provided.':'Show all workings on your own paper.')+'</p>';
   res.items.forEach(function(q,i){
-    var h=q._entry.level===3?170:(q.type==="mc"?120:150);
+    var h=Math.round((q._entry.level===3?170:(q.type==="mc"?120:150))*wsf);
     html+='<div class="pq"><p><b>'+(i+1)+'.</b> <span style="font-size:.8rem;color:#555;">(Unit '+q._entry.unit+' \u00B7 '+q._entry.indicators.join(", ")+' \u00B7 Level '+q._entry.level+')</span></p><div class="prompt">'+q.prompt+'</div>';
     if(q.figure)html+='<div class="fig">'+q.figure+'</div>';
     if(q.type==="mc"){html+='<div class="opts">'+q.options.map(function(o){return '<label style="display:block;margin:4px 0;">\u25CB '+o+'</label>';}).join("")+'</div>';}
-    html+='<div class="ws" style="height:'+h+'px"></div></div>';
+    if(h>0)html+='<div class="ws" style="height:'+h+'px"></div>';
+    html+='</div>';
   });
   html+='<p style="font-size:.85rem;color:#555;">Spotted a problem with a question on this sheet? Write down its unit and question number and let your teacher know.</p>';
   html+='<div class="keybreak"><h1 style="font-size:1.3rem;">Answer Key \u2014 with worked solutions</h1>';
@@ -3363,6 +3374,7 @@ function settingsToURL(){
   else if(s.units.length)p.set("unit",s.units.join(","));
   if(s.inds.length)p.set("indicator",s.inds.join(","));
   p.set("count",s.count);p.set("order",s.order);
+  if(s.ws!==1)p.set("ws",s.ws);
   if(s.mix.join()!=="20,60,20")p.set("levels",s.mix.join(","));
   return location.pathname+"?"+p.toString();
 }
@@ -3374,6 +3386,7 @@ function applyURL(){
   if(p.get("indicator")){state.inds=p.get("indicator").split(",").map(function(x){return x.trim();});touched=true;}
   if(p.get("count"))$("countIn").value=p.get("count");
   if(p.get("order"))$("orderIn").value=p.get("order");
+  if(p.get("ws")!==null&&$("wsIn"))$("wsIn").value=p.get("ws");
   if(p.get("levels")){var lv=p.get("levels").split(",").map(Number);if(lv.length===3){$("lv1").value=lv[0];$("lv2").value=lv[1];$("lv3").value=lv[2];$("advBox").open=true;}}
   return touched;
 }
