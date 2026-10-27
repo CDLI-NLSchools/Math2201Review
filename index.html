@@ -2658,6 +2658,222 @@ E("u8-exterior-algebra",8,["5.11"],3,"gen",function(){
     {p:p,q:q2,r:r,s:s,t:t,u:u,x0:x0,A1:A1,A2:A2,E:E});
 });
 
+/* ============ Tranche 7 (Oct 27): finish-line pass, tranche 2 of 3 ============
+   Unit 2 +4, Unit 3 +4, Unit 4 +4, Unit 8 +3 (bank 177 -> 192). Same
+   reworked-template sources as tranche 6, mapped by topic, nothing verbatim.
+   Adds a second Level 3 for Unit 8 and another for Unit 2. */
+
+/* --- Unit 2: Quadratic Functions --- */
+E("u2-concavity",2,["4.10"],1,"gen",function(){
+  var a=0,tries=0;while(a===0&&tries<40){a=ri(-9,9);tries++;}
+  var b=ri(-9,9),c=ri(-12,12),up=a>0;
+  var key=up?"It opens upward, and its vertex is a minimum":"It opens downward, and its vertex is a maximum";
+  return mcq("Which statement describes the graph of y = "+quadStr(a,b,c)+"?",
+    key,
+    [up?"It opens upward, and its vertex is a maximum":"It opens downward, and its vertex is a minimum",
+     up?"It opens downward, and its vertex is a maximum":"It opens upward, and its vertex is a minimum",
+     up?"It opens downward, and its vertex is a minimum":"It opens upward, and its vertex is a maximum"],
+    "The sign of the x² coefficient decides the opening: a = "+a+" is "+(up?"positive, so the parabola opens upward and the vertex is the lowest point — a minimum":"negative, so the parabola opens downward and the vertex is the highest point — a maximum")+". The other terms shift the graph but do not change its opening.",
+    {a:a,b:b,c:c,up:up});
+});
+E("u2-vertex-form-eval",2,["4.15"],2,"gen",function(){
+  var a=0,tries=0;while(a===0&&tries<40){a=ri(-4,4);tries++;}
+  var h=ri(-6,6),k=ri(-10,10),d=ri(1,5),sgn=Math.random()<0.5?1:-1;
+  var x=h+sgn*d,ans=a*d*d+k;
+  var aTxt=a===1?"":(a===-1?"−":a);
+  var hTxt=h===0?"x":(h>0?"(x − "+h+")":"(x + "+(-h)+")");
+  return numq("A quadratic function is given by f(x) = "+aTxt+(h===0?"x²":hTxt+"²")+" "+(k>0?"+ "+k:(k<0?"− "+(-k):""))+". What is f("+x+")?",
+    ans,0.011,
+    "Substitute x = "+x+": the squared part is ("+x+" "+(h>0?"− "+h:(h<0?"+ "+(-h):""))+")² = ("+(sgn*d)+")² = "+(d*d)+". So f("+x+") = "+a+" × "+(d*d)+" "+(k>0?"+ "+k:(k<0?"− "+(-k):""))+" = <b>"+ans+"</b>. (The sign of "+(sgn*d)+" disappears when it is squared.)",
+    {a:a,h:h,k:k,d:d,ans:ans});
+});
+E("u2-factored-y-intercept",2,["4.4"],2,"gen",function(){
+  var a=0,tries=0;while(a===0&&tries<40){a=ri(-3,3);tries++;}
+  var pool=[-6,-5,-4,-3,-2,-1,1,2,3,4,5,6];
+  var r1=pick(pool),r2=pick(pool.filter(function(x){return x!==r1;}));
+  var ans=a*r1*r2;
+  function fac(r){return r>0?"(x − "+r+")":"(x + "+(-r)+")";}
+  return numq("What is the y-intercept of the graph of f(x) = "+(a===1?"":(a===-1?"−":a))+fac(r1)+fac(r2)+"?",
+    ans,0.011,
+    "The y-intercept occurs at x = 0: f(0) = "+a+" × ("+(0-r1)+") × ("+(0-r2)+") = "+a+" × "+(r1*r2)+" = <b>"+ans+"</b>. (The x-intercepts are "+r1+" and "+r2+"; the y-intercept is a times their product.)",
+    {a:a,r1:r1,r2:r2,ans:ans});
+});
+E("u2-max-height",2,["4.2"],3,"gen",function(){
+  var k=ri(3,9),B=10*k,C=ri(2,30),max=C+5*k*k;
+  var ctx=pick([["ball","kicked"],["stone","thrown"],["water jet","a fountain"],["flare","fired"]]);
+  return numq("A "+ctx[0]+" is "+ctx[1]+". Its height is h(t) = −5t² + "+B+"t + "+C+" metres, t seconds after it starts. What is the greatest height it reaches, in metres?",
+    max,0.011,
+    "The vertex is at t = "+B+" ÷ 10 = "+k+" s. Substituting: h("+k+") = −5 × "+(k*k)+" + "+B+" × "+k+" + "+C+" = "+(-5*k*k)+" + "+(B*k)+" + "+C+" = <b>"+max+" m</b>.",
+    {B:B,C:C,k:k,max:max});
+});
+
+/* --- Unit 3: Quadratic Equations --- */
+E("u3-formula-substitution",3,["4.9"],1,"var",varset([
+  function(){return mcq("To solve x² − 5x + 3 = 0 with the quadratic formula, which substitution is correct?",
+    "x = (5 ± √(25 − 12)) / 2",
+    ["x = (−5 ± √(25 − 12)) / 2","x = (5 ± √(25 + 12)) / 2","x = (5 ± √(5 − 12)) / 2"],
+    "Here a = 1, b = −5, c = 3. The formula starts with −b = 5, and the discriminant is b² − 4ac = 25 − 12. The denominator is 2a = 2.",
+    {});},
+  function(){return mcq("To solve 2x² + 3x − 4 = 0 with the quadratic formula, which substitution is correct?",
+    "x = (−3 ± √(9 + 32)) / 4",
+    ["x = (3 ± √(9 + 32)) / 4","x = (−3 ± √(9 − 32)) / 4","x = (−3 ± √(9 + 32)) / 2"],
+    "Here a = 2, b = 3, c = −4. The formula starts with −b = −3, the discriminant is 9 − 4(2)(−4) = 9 + 32, and the denominator is 2a = 4.",
+    {});},
+  function(){return mcq("To solve x² + 7x + 2 = 0 with the quadratic formula, which substitution is correct?",
+    "x = (−7 ± √(49 − 8)) / 2",
+    ["x = (7 ± √(49 − 8)) / 2","x = (−7 ± √(49 + 8)) / 2","x = (−7 ± √(7 − 8)) / 2"],
+    "Here a = 1, b = 7, c = 2. The formula starts with −b = −7, and the discriminant is b² − 4ac = 49 − 8. The denominator is 2a = 2.",
+    {});},
+  function(){return mcq("To solve 3x² − 4x − 6 = 0 with the quadratic formula, which substitution is correct?",
+    "x = (4 ± √(16 + 72)) / 6",
+    ["x = (−4 ± √(16 + 72)) / 6","x = (4 ± √(16 − 72)) / 6","x = (4 ± √(16 + 72)) / 3"],
+    "Here a = 3, b = −4, c = −6. The formula starts with −b = 4, the discriminant is 16 − 4(3)(−6) = 16 + 72, and the denominator is 2a = 6.",
+    {});}
+]));
+E("u3-factor-difference",3,["4.8"],2,"gen",function(){
+  var a=ri(1,5),k=ri(2,15),ax=a===1?"x":a+"x";
+  var key="("+ax+" − "+k+")("+ax+" + "+k+")";
+  return mcq("Factor fully: "+(a===1?"x²":(a*a)+"x²")+" − "+(k*k)+".",
+    key,
+    ["("+ax+" + "+k+")("+ax+" + "+k+")","("+ax+" − "+k+")("+ax+" − "+k+")","("+ax+" − "+(k*k)+")("+ax+" + "+(k*k)+")"],
+    "This is a difference of squares: "+(a===1?"x²":(a*a)+"x²")+" is ("+ax+")² and "+(k*k)+" is "+k+"². A difference of squares factors as (first − second)(first + second): <b>"+key+"</b>.",
+    {a:a,k:k});
+});
+E("u3-discriminant-nature",3,["4.7"],2,"gen",function(){
+  var mode=ri(0,2),a,b,c,D;
+  if(mode===0){
+    var pool=[-7,-6,-5,-4,-3,-2,-1,1,2,3,4,5,6,7];
+    var r1=pick(pool),r2=pick(pool.filter(function(x){return x!==r1;}));
+    a=1;b=-(r1+r2);c=r1*r2;
+  }else if(mode===1){
+    var m=ri(2,5),af=pick([1,4]);a=af;b=2*m*Math.sqrt(af);c=m*m;
+  }else{
+    a=1;b=ri(-4,4);c=Math.floor(b*b/4)+ri(1,6);
+  }
+  D=b*b-4*a*c;
+  var nature=mode===0?"two different real roots":(mode===1?"one repeated real root":"no real roots");
+  var key="D = "+D+"; "+nature;
+  var others=["two different real roots","one repeated real root","no real roots"].filter(function(x){return x!==nature;});
+  var wrongD=D===0?4:-D;
+  return mcq("For the equation "+quadStr(a,b,c)+" = 0, what is the discriminant, and what does it say about the roots?",
+    key,
+    ["D = "+D+"; "+others[0],"D = "+D+"; "+others[1],"D = "+wrongD+"; "+nature],
+    "D = b² − 4ac = ("+b+")² − 4 × "+a+" × "+c+" = "+(b*b)+" − "+(4*a*c)+" = "+D+". "+(mode===0?"Since D > 0, the equation has two different real roots.":(mode===1?"Since D = 0, the equation has one repeated real root.":"Since D < 0, the equation has no real roots (its graph never crosses the x-axis).")),
+    {a:a,b:b,c:c,D:D,mode:mode});
+});
+E("u3-root-difference",3,["4.6"],3,"gen",function(){
+  var r=ri(2,12),d=ri(1,8),S=2*r+d,K=r*(r+d);
+  var frame=pick([
+    "The roots of x² − "+S+"x + k = 0 differ by "+d+". What is the value of k?",
+    "A quadratic equation x² − "+S+"x + k = 0 has two roots, and the larger root is "+d+" more than the smaller root. What is the value of k?"
+  ]);
+  return numq(frame,K,0.011,
+    "For x² − Sx + k, the sum of the roots is S = "+S+" and the product is k. If the roots differ by "+d+", they are ("+S+" − "+d+") ÷ 2 = "+r+" and "+r+" + "+d+" = "+(r+d)+". So k = "+r+" × "+(r+d)+" = <b>"+K+"</b>.",
+    {r:r,d:d,S:S,K:K});
+});
+
+/* --- Unit 4: Radicals --- */
+E("u4-entire-cube",4,["1.1"],1,"gen",function(){
+  var a=ri(2,6),b=pick([2,3,4,5,6,7,9,10,11,13,14,15,18,20]);
+  var key="∛"+(a*a*a*b);
+  return mcq("Express "+a+"∛"+b+" as an entire radical.",
+    key,
+    ["∛"+(a*b),"∛"+(a*a*b),"∛"+((a+1)*(a+1)*(a+1)*b)],
+    "The coefficient must be cubed to move under a cube root: "+a+" = ∛"+(a*a*a)+". So "+a+"∛"+b+" = ∛("+((a*a*a))+" × "+b+") = <b>"+key+"</b>. (Squaring the coefficient would be right for a square root, not a cube root.)",
+    {a:a,b:b});
+});
+E("u4-product-simplify",4,["1.6"],2,"gen",function(){
+  var m=pick([2,3,5,6,7,10,11,13]),a=ri(2,6),b=ri(2,6),mode=ri(0,1);
+  var A=a*a*m,B=mode===0?b*b:b*b*m;
+  var key,ds;
+  if(mode===0){
+    key=radStr(a*b,m);
+    var cand=[radStr(a+b,m),"√"+(A*B),radStr(a*b,m+1),radStr(a*b+1,m)];ds=[];
+    for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
+  }else{
+    key=String(a*b*m);
+    var cand2=[String(a*b),String((a+b)*m),String(a*b*m+m),radStr(a*b,m)];ds=[];
+    for(var i2=0;i2<cand2.length&&ds.length<3;i2++){if(cand2[i2]!==key&&ds.indexOf(cand2[i2])<0)ds.push(cand2[i2]);}
+  }
+  return mcq("Simplify: √"+A+" × √"+B+". Give the answer in simplest form.",
+    key,ds,
+    "Simplify each radical first: √"+A+" = "+radStr(a,m)+" and √"+B+" = "+(mode===0?b:radStr(b,m))+". Multiplying: "+(mode===0?a+" × "+b+" = "+(a*b)+", giving <b>"+key+"</b>.":a+" × "+b+" × ("+m+") because √"+m+" × √"+m+" = "+m+", giving <b>"+key+"</b>."),
+    {a:a,b:b,m:m,mode:mode,A:A,B:B});
+});
+E("u4-add-unlike",4,["1.6"],2,"gen",function(){
+  var m=pick([2,3,5,6,7,10,11,13]),a=ri(1,6),b=ri(1,6),tries=0;
+  while(b===a&&tries<40){b=ri(1,6);tries++;}
+  var A=a*a*m,B=b*b*m,key=radStr(a+b,m);
+  var cand=["√"+(A+B),radStr(a*b,m),radStr(a+b+1,m),radStr(Math.abs(a-b),m)],ds=[];
+  for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
+  return mcq("Simplify: √"+A+" + √"+B+". Give the answer in simplest radical form.",
+    key,ds,
+    "Simplify each term first: √"+A+" = "+radStr(a,m)+" and √"+B+" = "+radStr(b,m)+". They are like radicals, so add the coefficients: "+a+" + "+b+" = "+(a+b)+", giving <b>"+key+"</b>. (The numbers under the roots are never added together.)",
+    {a:a,b:b,m:m,A:A,B:B});
+});
+E("u4-diagonal-radical",4,["1.6"],3,"gen",function(){
+  var s=ri(2,6),m=pick([2,3,5,6,7,10]);
+  var r0=2*m,t=1,f;for(f=2;f*f<=r0;f++){while(r0%(f*f)===0){r0/=(f*f);t*=f;}}
+  var key=r0===1?String(s*t):radStr(s*t,r0);
+  var cand=[radStr(s,m),radStr(2*s,m),"√"+(2*s*s*m),r0===1?String(2*s*t):radStr(s*t+1,r0)],ds=[];
+  for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
+  var ctx=pick(["square tile","square panel","square garden plot","square poster"]);
+  return mcq("A "+ctx+" has side length "+radStr(s,m)+" m. What is the length of its diagonal, in simplest radical form?",
+    key,ds,
+    "By Pythagoras, the diagonal is √2 times the side: "+radStr(s,m)+" × √2 = "+s+"√"+(2*m)+". Simplifying √"+(2*m)+" = "+(r0===1?t:radStr(t,r0))+" gives the diagonal as <b>"+key+" m</b>.",
+    {s:s,m:m,t:t,r0:r0});
+});
+
+/* --- Unit 8: Properties of Angles and Triangles --- */
+E("u8-cointerior-algebra",8,["5.8"],2,"gen",function(){
+  function expr(cf,kn){return cf+"x"+(kn>0?" + "+kn:(kn<0?" − "+(-kn):""));}
+  var x0,a,b,c2,d,V1,V2,tries=0;
+  do{
+    x0=ri(4,14);V1=ri(70,120);V2=180-V1;
+    a=ri(2,6);b=V1-a*x0;c2=ri(2,6);d=V2-c2*x0;tries++;
+  }while((b===0||d===0||b<-25||b>35||d<-25||d>35)&&tries<90);
+  var mode=ri(0,1),ans=mode===0?V1:V2;
+  var q=numq("Two parallel lines are cut by a transversal. Two co-interior angles measure ("+expr(a,b)+")° and ("+expr(c2,d)+")°. What is the measure of the "+(mode===0?"first":"second")+" of these angles, in degrees?",
+    ans,0.011,
+    "Co-interior angles between parallel lines are supplementary: ("+expr(a,b)+") + ("+expr(c2,d)+") = 180. Solving gives x = "+x0+". The first angle is "+a+" × "+x0+(b>0?" + "+b:" − "+(-b))+" = "+V1+"° and the second is "+V2+"°, so the angle asked for is <b>"+ans+"°</b>.",
+    {a:a,b:b,c:c2,d:d,x0:x0,V1:V1,V2:V2,mode:mode,ans:ans});
+  q.figure=transversalSVG("TR","("+expr(a,b)+")°","BR","?");
+  return q;
+});
+E("u8-congruence-perimeter",8,["5.6"],3,"gen",function(){
+  var s=ri(6,16),s2=ri(5,16),s3,tries=0;
+  do{s3=ri(5,18);tries++;}while((s3>=s+s2||s3<=Math.abs(s-s2))&&tries<60);
+  var a=ri(2,5),x0=ri(3,12),b,safe=0;
+  do{b=s-a*x0;safe++;if(b===0||b<-15||b>25){x0=ri(3,12);}}while((b===0||b<-15||b>25)&&safe<60);
+  var P=s+s2+s3,mode=ri(0,1),ans=mode===0?x0:P;
+  return numq("△ABC ≅ △DEF, with the vertices in corresponding order. AB = "+s+" cm, BC = "+s2+" cm and CA = "+s3+" cm. Side DE measures ("+a+"x "+(b>0?"+ "+b:"− "+(-b))+") cm. "+(mode===0?"What is the value of x?":"What is the perimeter of △DEF, in cm?"),
+    ans,0.011,
+    "Corresponding vertices match in order, so side DE corresponds to side AB: "+a+"x "+(b>0?"+ "+b:"− "+(-b))+" = "+s+", giving x = "+x0+". Congruent triangles have the same perimeter: "+s+" + "+s2+" + "+s3+" = "+P+" cm."+(mode===0?" So x = <b>"+x0+"</b>.":" So the perimeter of △DEF is <b>"+P+" cm</b>."),
+    {s:s,s2:s2,s3:s3,a:a,b:b,x0:x0,P:P,mode:mode,ans:ans});
+});
+E("u8-angle-chase",8,["5.8"],3,"var",varset([
+  function(){return mcq("Two parallel lines are cut by a transversal. ∠x forms a co-interior pair with a 64° angle. ∠y is vertically opposite ∠x. ∠z is a corresponding angle to ∠y. What is the measure of ∠z?",
+    "116°",
+    ["64°","128°","90°"],
+    "Co-interior angles are supplementary: ∠x = 180° − 64° = 116°. Vertically opposite angles are equal: ∠y = 116°. Corresponding angles are equal: ∠z = 116°.",
+    {});},
+  function(){return mcq("In △ABC, ∠A = 52° and ∠B = 68°. ∠e is the exterior angle at C. ∠f forms a co-interior pair with ∠e where a transversal cuts two parallel lines. ∠g is vertically opposite ∠f. What is the measure of ∠g?",
+    "60°",
+    ["120°","68°","180°"],
+    "The exterior angle equals the sum of the remote interiors: ∠e = 52° + 68° = 120°. Co-interior angles are supplementary: ∠f = 180° − 120° = 60°. Vertically opposite angles are equal: ∠g = 60°.",
+    {});},
+  function(){return mcq("In an isosceles triangle the vertex angle measures 38°. ∠b is one of the base angles. ∠h is the exterior angle at that same base vertex. A second diagram shows ∠j as an alternate interior angle equal to ∠h (the lines are parallel). What is the measure of ∠j?",
+    "109°",
+    ["71°","38°","142°"],
+    "Base angle: ∠b = (180° − 38°) ÷ 2 = 71°. Exterior angle on a straight line: ∠h = 180° − 71° = 109°. Alternate interior angles between parallel lines are equal: ∠j = 109°.",
+    {});},
+  function(){return mcq("Each interior angle of a regular pentagon measures 108°. In a triangle drawn beside the pentagon, one angle is supplementary to 108° and a second angle measures 47°. What is the measure of the triangle's third angle?",
+    "61°",
+    ["72°","108°","119°"],
+    "The supplementary angle is 180° − 108° = 72°. The triangle's angles add to 180°: 180° − 72° − 47° = 61°.",
+    {});}
+]));
+
 /* ============ selection engine ============ */
 /* Mid-course scope (Table of Specifications, verified Oct 26, 2026): the mid-course
    exam samples Unit 4 only to Section 4.3, so the two Radical Equations entries
