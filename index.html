@@ -57,6 +57,8 @@
   .thinNote{background:#fdf6ec;border:1px solid var(--accent2);border-radius:8px;padding:9px 12px;font-size:.88rem;line-height:1.45;}
   .modebar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
   #printArea{display:none;}
+  .fig{margin:8px 0 4px;}
+  .fig svg{max-width:100%;height:auto;}
   .sheetPrev{border:1px solid var(--line);background:#fff;color:#16281f;padding:20px;border-radius:6px;margin-top:12px;}
   .sheetPrev .pq{margin-bottom:14px;}
   .sheetPrev .ws{border-bottom:1px solid #ddd;}
@@ -155,6 +157,155 @@ function mcq(prompt,correct,distractors,solution,params){
 function numq(prompt,answer,tol,solution,params){return {prompt:prompt,type:"num",answer:answer,tol:tol,solution:solution,_p:params||{}};}
 function textq(prompt,answers,solution,params){return {prompt:prompt,type:"text",answers:answers.map(function(a){return a.toLowerCase();}),solution:solution,_p:params||{}};}
 function varset(list){return function(){var f=pick(list);return f();};}
+/* ============ diagram figures (parameterized inline SVG, generated with the question) ============
+   A question object may carry q.figure: an SVG string drawn from the SAME values as the
+   question text, so the diagram always matches the numbers. Renderers insert it under the
+   prompt, online and on the print sheet. Conventions: side i of a triangle is OPPOSITE
+   vertex i; vertices are indexed 0,1,2 = A,B,C slots (letters supplied by the caller). */
+var FIG_INK="#17352a",FIG_SHADE="#cfe4d6",FIG_ACC="#2e7d4f",FIG_ALT="#b3541e";
+function _vsub(p,q){return [p[0]-q[0],p[1]-q[1]];}
+function _vlen(v){return Math.sqrt(v[0]*v[0]+v[1]*v[1]);}
+function _vnorm(v){var l=_vlen(v)||1;return [v[0]/l,v[1]/l];}
+function _fit(pts,W,H,pad){
+  var xs=pts.map(function(p){return p[0];}),ys=pts.map(function(p){return p[1];});
+  var mnx=Math.min.apply(null,xs),mxx=Math.max.apply(null,xs),mny=Math.min.apply(null,ys),mxy=Math.max.apply(null,ys);
+  var w=Math.max(mxx-mnx,0.001),h=Math.max(mxy-mny,0.001);
+  var s=Math.min((W-2*pad)/w,(H-2*pad)/h),cx=(mnx+mxx)/2,cy=(mny+mxy)/2;
+  return function(p){return [W/2+(p[0]-cx)*s, H/2-(p[1]-cy)*s];};
+}
+function _txt(x,y,str,size,bold,anchor){
+  return '<text x="'+fmt(x,1)+'" y="'+fmt(y,1)+'" font-size="'+(size||13)+'" fill="'+FIG_INK+'" text-anchor="'+(anchor||"middle")+'" dominant-baseline="central"'+(bold?' font-weight="bold"':"")+'>'+str+'</text>';
+}
+function triLayout(a,b,c){var Cx=(b*b+c*c-a*a)/(2*c);return [[0,0],[c,0],[Cx,Math.sqrt(Math.max(b*b-Cx*Cx,0.0001))]];}
+function triDraw(P,o){
+  var G=[(P[0][0]+P[1][0]+P[2][0])/3,(P[0][1]+P[1][1]+P[2][1])/3],out="";
+  out+='<polygon class="tri" points="'+P.map(function(p){return fmt(p[0],1)+","+fmt(p[1],1);}).join(" ")+'" fill="none" stroke="'+FIG_INK+'" stroke-width="2"/>';
+  var seg=[[1,2],[2,0],[0,1]];
+  for(var i=0;i<3;i++){
+    var M=[(P[seg[i][0]][0]+P[seg[i][1]][0])/2,(P[seg[i][0]][1]+P[seg[i][1]][1])/2];
+    var off=_vnorm(_vsub(M,G));
+    if(o.side&&o.side[i])out+=_txt(M[0]+off[0]*15,M[1]+off[1]*15,o.side[i],12,false);
+    var V=P[i],out2=_vnorm(_vsub(V,G));
+    var bis=_vnorm([_vnorm(_vsub(P[(i+1)%3],V))[0]+_vnorm(_vsub(P[(i+2)%3],V))[0],_vnorm(_vsub(P[(i+1)%3],V))[1]+_vnorm(_vsub(P[(i+2)%3],V))[1]]);
+    out+=_txt(V[0]+out2[0]*16,V[1]+out2[1]*16,o.L[i],14,true);
+    if(o.ang&&o.ang[i])out+=_txt(V[0]+bis[0]*25,V[1]+bis[1]*25,o.ang[i],12,false);
+  }
+  return out;
+}
+function triSVG(a,b,c,o){
+  o=o||{};o.L=o.L||["A","B","C"];
+  var pts=triLayout(a,b,c),W=330,H=215;
+  var T=_fit(pts,W,H,42),P=pts.map(T);
+  var body=triDraw(P,o);
+  if(o.ext!==undefined&&o.ext!==null){ /* exterior angle at vertex o.ext: extend the side from the previous vertex through it */
+    var i=o.ext,to=P[i],from=P[(i+2)%3],other=P[(i+1)%3];
+    var dir=_vnorm(_vsub(to,from)),E=[to[0]+dir[0]*44,to[1]+dir[1]*44];
+    body+='<line x1="'+fmt(to[0],1)+'" y1="'+fmt(to[1],1)+'" x2="'+fmt(E[0],1)+'" y2="'+fmt(E[1],1)+'" stroke="'+FIG_INK+'" stroke-width="1.6" stroke-dasharray="5 4"/>';
+    var bis2=_vnorm([dir[0]+_vnorm(_vsub(other,to))[0],dir[1]+_vnorm(_vsub(other,to))[1]]);
+    body+=_txt(to[0]+bis2[0]*27,to[1]+bis2[1]*27,o.extLabel||"?",12,false);
+  }
+  return '<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Triangle diagram">'+body+'</svg>';
+}
+function angSides(A,B,C){return [20*Math.sin(A*Math.PI/180),20*Math.sin(B*Math.PI/180),20*Math.sin(C*Math.PI/180)];}
+function triAngSVG(A,B,C,o){var s=angSides(A,B,C);return triSVG(s[0],s[1],s[2],o);}
+function twoTriSVG(AB,BC,angB,AC,CD,AD,angDAC,angD){
+  var A=[0,0],C=[AC,0];
+  var Bx=(AB*AB-BC*BC+AC*AC)/(2*AC),By=Math.sqrt(Math.max(AB*AB-Bx*Bx,0.0001)),B=[Bx,By];
+  var Dx=(AD*AD-CD*CD+AC*AC)/(2*AC),Dy=-Math.sqrt(Math.max(AD*AD-Dx*Dx,0.0001)),D=[Dx,Dy];
+  var W=340,H=230,T=_fit([A,B,C,D],W,H,44);
+  var PA=T(A),PB=T(B),PC=T(C),PD=T(D),pts=[PA,PB,PC,PD];
+  var out='<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two triangles sharing a diagonal">';
+  out+='<polygon class="tri" points="'+[PA,PB,PC].map(function(p){return fmt(p[0],1)+","+fmt(p[1],1);}).join(" ")+'" fill="none" stroke="'+FIG_INK+'" stroke-width="2"/>';
+  out+='<polygon class="tri2" points="'+[PA,PC,PD].map(function(p){return fmt(p[0],1)+","+fmt(p[1],1);}).join(" ")+'" fill="none" stroke="'+FIG_INK+'" stroke-width="2"/>';
+  function mid(p,q){return [(p[0]+q[0])/2,(p[1]+q[1])/2];}
+  function lab(p,str,dx,dy){return _txt(p[0]+(dx||0),p[1]+(dy||0),str,12,false);}
+  var mAB=mid(PA,PB),mBC=mid(PB,PC),mCD=mid(PC,PD);
+  out+=lab(mAB,AB+" m",-16,-6)+lab(mBC,BC+" m",16,-4)+lab(mCD,"?",16,8);
+  out+=_txt(PB[0],PB[1]+18,angB+"°",12,false);
+  out+=_txt(PA[0]+20,PA[1]+16,angDAC+"°",12,false);
+  out+=_txt(PD[0],PD[1]-14,angD+"°",12,false);
+  out+=_txt(PA[0]-13,PA[1]+4,"A",14,true)+_txt(PB[0],PB[1]-16,"B",14,true)+_txt(PC[0]+13,PC[1]+4,"C",14,true)+_txt(PD[0],PD[1]+16,"D",14,true);
+  return out+'</svg>';
+}
+function transversalSVG(givenPos,givenText,askPos,askText){
+  var W=330,H=215,T=[118,64],B=[212,150];
+  var dir=_vnorm(_vsub(B,T)); /* the transversal truly passes through both intersections */
+  var R=[1,0],L=[-1,0],D=dir,U=[-dir[0],-dir[1]];
+  function bisOf(r1,r2){return _vnorm([r1[0]+r2[0],r1[1]+r2[1]]);}
+  var pos={
+    TR:{v:T,bis:bisOf(R,D)},TL:{v:T,bis:bisOf(L,D)},
+    BR:{v:B,bis:bisOf(R,U)},BL:{v:B,bis:bisOf(L,U)}
+  };
+  function wedge(p){
+    var v=p.v,b=p.bis;
+    var p1=[v[0]+b[0]*30-b[1]*13,v[1]+b[1]*30+b[0]*13],p2=[v[0]+b[0]*30+b[1]*13,v[1]+b[1]*30-b[0]*13];
+    return '<polygon class="wedge" points="'+fmt(v[0],1)+","+fmt(v[1],1)+" "+fmt(p1[0],1)+","+fmt(p1[1],1)+" "+fmt(p2[0],1)+","+fmt(p2[1],1)+'" fill="'+FIG_SHADE+'"/>';
+  }
+  var out='<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Parallel lines cut by a transversal">';
+  out+=wedge(pos[givenPos])+wedge(pos[askPos]);
+  out+='<line x1="18" y1="'+T[1]+'" x2="312" y2="'+T[1]+'" stroke="'+FIG_INK+'" stroke-width="2"/>';
+  out+='<line x1="18" y1="'+B[1]+'" x2="312" y2="'+B[1]+'" stroke="'+FIG_INK+'" stroke-width="2"/>';
+  out+='<line class="transv" x1="'+fmt(T[0]-dir[0]*55,1)+'" y1="'+fmt(T[1]-dir[1]*55,1)+'" x2="'+fmt(B[0]+dir[0]*55,1)+'" y2="'+fmt(B[1]+dir[1]*55,1)+'" stroke="'+FIG_INK+'" stroke-width="2"/>';
+  out+='<path d="M 158 '+(T[1]-6)+' l 7 6 l -7 6" fill="none" stroke="'+FIG_INK+'" stroke-width="1.6"/>';
+  out+='<path d="M 158 '+(B[1]-6)+' l 7 6 l -7 6" fill="none" stroke="'+FIG_INK+'" stroke-width="1.6"/>';
+  var g=pos[givenPos],a2=pos[askPos];
+  out+=_txt(g.v[0]+g.bis[0]*46,g.v[1]+g.bis[1]*46,givenText,12.5,false);
+  out+=_txt(a2.v[0]+a2.bis[0]*46,a2.v[1]+a2.bis[1]*46,askText,12.5,false);
+  return out+'</svg>';
+}
+function polySVG(n,highlight){
+  var W=210,H=210,cx=105,cy=105,R=76,pts=[];
+  for(var i=0;i<n;i++){var t=-Math.PI/2+i*2*Math.PI/n;pts.push([cx+R*Math.cos(t),cy+R*Math.sin(t)]);}
+  var out='<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Polygon with '+n+' sides">';
+  out+='<polygon class="poly" points="'+pts.map(function(p){return fmt(p[0],1)+","+fmt(p[1],1);}).join(" ")+'" fill="none" stroke="'+FIG_INK+'" stroke-width="2"/>';
+  pts.forEach(function(p){out+='<circle cx="'+fmt(p[0],1)+'" cy="'+fmt(p[1],1)+'" r="2.4" fill="'+FIG_INK+'"/>';});
+  if(highlight){
+    var V=pts[0],bis=_vnorm(_vsub([cx,cy],V));
+    out+='<polygon points="'+fmt(V[0],1)+","+fmt(V[1],1)+" "+fmt(V[0]+bis[0]*34-(bis[1])*11,1)+","+fmt(V[1]+bis[1]*34+(bis[0])*11,1)+" "+fmt(V[0]+bis[0]*34+(bis[1])*11,1)+","+fmt(V[1]+bis[1]*34-(bis[0])*11,1)+'" fill="'+FIG_SHADE+'"/>';
+    out+=_txt(V[0]+bis[0]*44,V[1]+bis[1]*44,"?",13,false);
+  }
+  return out+'</svg>';
+}
+function normSVG(o){
+  var mu=o.mu,sd=o.sd,W=350,H=178,base=140,pad=18;
+  var sdMax=o.curve2?Math.max(sd,o.curve2.sd):sd;
+  var lo=mu-3.4*sdMax,hi=mu+3.4*sdMax;
+  function X(v){return pad+(v-lo)/(hi-lo)*(W-2*pad);}
+  function pdf(x,s){var z=(x-mu)/s;return Math.exp(-z*z/2)/(s*2.5066283);}
+  var peak=pdf(mu,Math.min(sd,o.curve2?o.curve2.sd:sd));
+  function Y(p){return base-p/peak*(base-26);}
+  function curvePath(s){
+    var d="",i,x;for(i=0;i<=72;i++){x=lo+(hi-lo)*i/72;d+=(i?"L":"M")+fmt(X(x),1)+" "+fmt(Y(pdf(x,s)),1);}
+    return d;
+  }
+  var out='<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Normal distribution curve">';
+  if(o.lo!==undefined&&o.hi!==undefined){
+    var slo=Math.max(o.lo,lo),shi=Math.min(o.hi,hi),d="M"+fmt(X(slo),1)+" "+base,i,x;
+    for(i=0;i<=40;i++){x=slo+(shi-slo)*i/40;d+="L"+fmt(X(x),1)+" "+fmt(Y(pdf(x,sd)),1);}
+    d+="L"+fmt(X(shi),1)+" "+base+"Z";
+    out+='<path class="nshade" d="'+d+'" fill="'+FIG_SHADE+'"/>';
+  }
+  out+='<path class="ncurve" d="'+curvePath(sd)+'" fill="none" stroke="'+FIG_INK+'" stroke-width="2"/>';
+  if(o.curve2){
+    out+='<path class="ncurve2" d="'+curvePath(o.curve2.sd)+'" fill="none" stroke="'+FIG_ALT+'" stroke-width="2"/>';
+    out+='<line x1="'+pad+'" y1="14" x2="'+(pad+16)+'" y2="14" stroke="'+FIG_INK+'" stroke-width="2"/><line x1="'+pad+'" y1="32" x2="'+(pad+16)+'" y2="32" stroke="'+FIG_ALT+'" stroke-width="2"/>';
+    out+='<text x="'+(pad+22)+'" y="18" font-size="12" fill="'+FIG_INK+'" text-anchor="start">'+(o.curve2.tagA||"")+'</text>';
+    out+='<text x="'+(pad+22)+'" y="36" font-size="12" fill="'+FIG_ALT+'" text-anchor="start">'+(o.curve2.tagB||"")+'</text>';
+  }
+  out+='<line x1="'+pad+'" y1="'+base+'" x2="'+(W-pad)+'" y2="'+base+'" stroke="'+FIG_INK+'" stroke-width="1.4"/>';
+  for(var k=-2;k<=2;k++){
+    var v=mu+k*sd,tx=X(v);
+    out+='<line x1="'+fmt(tx,1)+'" y1="'+base+'" x2="'+fmt(tx,1)+'" y2="'+(base+5)+'" stroke="'+FIG_INK+'" stroke-width="1.2"/>';
+    out+=_txt(tx,base+18,fmt(v),11,false);
+  }
+  if(o.cuts)o.cuts.forEach(function(ct){
+    var tx=X(ct.v);
+    out+='<line x1="'+fmt(tx,1)+'" y1="30" x2="'+fmt(tx,1)+'" y2="'+base+'" stroke="'+FIG_ACC+'" stroke-width="1.6"/>';
+    out+=_txt(tx,20,ct.label,12,false);
+  });
+  return out+'</svg>';
+}
+
 
 /* ============ curriculum map (codes verified against the Math 2201 Curriculum Guide) ============ */
 var UNITS={
@@ -526,22 +677,28 @@ E("u5-isnormal",5,["8.12"],2,"var",varset([
 ]));
 E("u5-compare-normal",5,["8.13"],2,"gen",function(){
   var m=ri(10,20),s1=ri(1,3),s2=s1+ri(2,4);
-  return mcq("Two bakeries' morning prep times are normally distributed with the same mean, "+m+" minutes. Bakery A has a standard deviation of "+s1+" minutes; Bakery B, "+s2+" minutes. Which statement is correct?",
+  var q = mcq("Two bakeries' morning prep times are normally distributed with the same mean, "+m+" minutes. Bakery A has a standard deviation of "+s1+" minutes; Bakery B, "+s2+" minutes. Which statement is correct?",
     "Bakery B's times are more spread out, and its curve is wider and flatter",
     ["Bakery A's times are more spread out, because a small standard deviation means more variation","Both bakeries are equally consistent, because their means are equal","Bakery B must have the higher mean, because its standard deviation is larger"],
     "The standard deviation is the spread. "+s2+" > "+s1+", so Bakery B varies more, and its normal curve spreads wider and flatter to keep the same area.",{m:m,s1:s1,s2:s2});
+  q.figure = normSVG({mu:m, sd:s1, curve2:{sd:s2, tagA:"A: \u03C3 = "+s1, tagB:"B: \u03C3 = "+s2}});
+  return q;
 });
 E("u5-empirical",5,["8.14"],2,"gen",function(){
   var ctx=pick([{w:"mass of loaves of bread",u:"g"},{w:"lifespan of a brand of battery",u:"hours"},{w:"finishing times in a fun run",u:"minutes"},{w:"length of fish of one species",u:"cm"}]);
   var mu=ri(20,60)*10,sd=pick([5,10,15,20]);var k=pick([1,2]);var pct=k===1?68:95;
-  return numq("The "+ctx.w+" is normally distributed with mean "+mu+" "+ctx.u+" and standard deviation "+sd+" "+ctx.u+". About what percent of the values lie between "+(mu-k*sd)+" and "+(mu+k*sd)+" "+ctx.u+"? (Just the number.)",
+  var q = numq("The "+ctx.w+" is normally distributed with mean "+mu+" "+ctx.u+" and standard deviation "+sd+" "+ctx.u+". About what percent of the values lie between "+(mu-k*sd)+" and "+(mu+k*sd)+" "+ctx.u+"? (Just the number.)",
     pct,0.01,"That interval is the mean \u00B1 "+k+" standard deviation"+(k>1?"s":"")+". By the empirical rule, about <b>"+pct+"%</b> of a normal distribution lies within "+k+" standard deviation"+(k>1?"s":"")+" of the mean.",{mu:mu,sd:sd,k:k});
+  q.figure = normSVG({mu:mu, sd:sd, lo:mu-k*sd, hi:mu+k*sd});
+  return q;
 });
 E("u5-normal-count",5,["8.14"],2,"gen",function(){
   var N=pick([400,800,1000,2000]);var mu=ri(30,60),sd=pick([4,5,6,8,10]);
   var side=Math.random()<0.5;var ans=side?0.16*N:0.025*N;var thr=side?mu+sd:mu+2*sd;
-  return numq("Heights of seedlings are normally distributed with mean "+mu+" cm and standard deviation "+sd+" cm. Out of "+N+" seedlings, about how many are taller than "+thr+" cm?",
+  var q = numq("Heights of seedlings are normally distributed with mean "+mu+" cm and standard deviation "+sd+" cm. Out of "+N+" seedlings, about how many are taller than "+thr+" cm?",
     Math.round(ans),N*0.01+1,"Above the mean + "+(side?1:2)+" standard deviation"+(side?"":"s")+" lies about "+(side?"16%":"2.5%")+" of a normal distribution (half of the "+(side?"32%":"5%")+" outside \u00B1"+(side?1:2)+"\u03C3). "+(side?"0.16":"0.025")+" \u00D7 "+N+" = <b>"+Math.round(ans)+"</b>.",{N:N,mu:mu,sd:sd});
+  q.figure = normSVG({mu:mu, sd:sd, lo:thr, hi:mu+3.4*sd, cuts:[{v:thr, label:""+thr}]});
+  return q;
 });
 /* --- z-scores (8.15) --- */
 E("u5-z-calc",5,["8.15"],1,"gen",function(){
@@ -570,8 +727,10 @@ E("u5-z-prob",5,["8.15"],2,"gen",function(){
   var a=pick(mags)*(Math.random()<0.5?-1:1);
   var right=Math.random()<0.4;var cdf=zTab(a);var ans=right?Math.round((1-cdf)*10000)/10000:cdf;
   var lead=pick(["Using the standard normal table, find","For the standard normal distribution, find"]);
-  return numq(lead+" P(z "+(right?">":"<")+" "+fmt(a)+"). Give your answer as a decimal to four places (for example, 0.1234).",
+  var q = numq(lead+" P(z "+(right?">":"<")+" "+fmt(a)+"). Give your answer as a decimal to four places (for example, 0.1234).",
     ans,0.0011,"The table gives the area to the left: P(z < "+fmt(a)+") = "+fmtF(cdf,4)+(right?". The right tail is 1 \u2212 "+fmtF(cdf,4)+" = <b>"+fmtF(ans,4)+"</b>":"."),{a:a,right:right});
+  q.figure = normSVG({mu:0, sd:1, lo:(right? a : -3.4), hi:(right? 3.4 : a), cuts:[{v:a, label:"z = "+fmt(a)}]});
+  return q;
 });
 E("u5-z-applied",5,["8.15"],3,"gen",function(){
   var FAMS=[
@@ -723,10 +882,10 @@ E("u1-law-choice",1,["7.1","7.2"],1,"var",varset([
     ["The sine law, because three sides give three ratios","The tangent ratio, using the two longest sides","No law is needed \u2014 the largest angle is always 90\u00B0"],
     "cos A = (b\u00B2 + c\u00B2 \u2212 a\u00B2) \u00F7 (2bc) uses exactly the three sides. The largest angle sits opposite the longest side.",{});}
 ,
-function(){return mcq("In triangle ABC, a diagram marks side a = 9 cm (opposite angle A), side b = 7 cm, and angle A = 35\u00B0. Which set-up finds angle B?",
+function(){var q = mcq("In triangle ABC, a diagram marks side a = 9 cm (opposite angle A), side b = 7 cm, and angle A = 35\u00B0. Which set-up finds angle B?",
     "sin B / 7 = sin 35\u00B0 / 9 \u2014 each angle is paired with the side opposite it",
     ["sin B / 9 = sin 35\u00B0 / 7 \u2014 the marked sides stay with their marked angles","b\u00B2 = a\u00B2 + c\u00B2 \u2212 2ac cos B \u2014 the cosine law, because two sides are known","tan B = 7 / 9 \u2014 opposite over adjacent"],
-    "The sine law pairs each side with the sine of its OPPOSITE angle: a / sin A = b / sin B, so 9 / sin 35\u00B0 = 7 / sin B. The first trap swaps the pairing; the cosine law would need the side between the two known sides' angle, which is not what is marked.",{});},
+    "The sine law pairs each side with the sine of its OPPOSITE angle: a / sin A = b / sin B, so 9 / sin 35\u00B0 = 7 / sin B. The first trap swaps the pairing; the cosine law would need the side between the two known sides' angle, which is not what is marked.",{});q.figure=(function(){var Bv=Math.asin(7*Math.sin(35*Math.PI/180)/9)*180/Math.PI;return triSVG(9, 7, 9*Math.sin((180-35-Bv)*Math.PI/180)/Math.sin(35*Math.PI/180), {L:["A","B","C"], ang:["35°","?",null], side:["9 cm","7 cm",null]});})();return q;},
   function(){return mcq("You know two sides of a triangle and an angle opposite one of them, and you need another angle. Which law starts the solution, and what must you watch for?",
     "The sine law \u2014 and the angle it gives might not be the only possibility: an angle and its supplement both have the same sine, so the diagram has to rule one out",
     ["The cosine law \u2014 it is the only law that works with two known sides","The sine law \u2014 and its answer is always the one correct angle","The angle-sum rule \u2014 the third angle comes first, then either law finishes it"],
@@ -735,8 +894,10 @@ function(){return mcq("In triangle ABC, a diagram marks side a = 9 cm (opposite 
 E("u1-sine-side",1,["7.2"],2,"gen",function(){
   var A=pick([35,40,50,55,65]),B=pick([45,60,70,80]);var a=ri(8,20);
   var b=a*Math.sin(B*Math.PI/180)/Math.sin(A*Math.PI/180);
-  return numq("In \u25B3ABC, \u2220A = "+A+"\u00B0, \u2220B = "+B+"\u00B0, and side a = "+a+" cm (opposite \u2220A). Find side b, to one decimal place, in cm.",
+  var q = numq("In \u25B3ABC, \u2220A = "+A+"\u00B0, \u2220B = "+B+"\u00B0, and side a = "+a+" cm (opposite \u2220A). Find side b, to one decimal place, in cm.",
     Math.round(b*10)/10,0.06,"Sine law: b \u00F7 sin "+B+"\u00B0 = a \u00F7 sin "+A+"\u00B0 = "+a+" \u00F7 "+fmt(Math.sin(A*Math.PI/180),4)+". So b = "+fmt(b,4)+" \u2248 <b>"+fmt(b,1)+" cm</b>.",{A:A,B:B,a:a});
+  q.figure = triSVG(a, b, a*Math.sin((180-A-B)*Math.PI/180)/Math.sin(A*Math.PI/180), {L:["A","B","C"], ang:[A+"°",B+"°",null], side:[a+" cm","?",null]});
+  return q;
 });
 E("u1-sine-angle",1,["7.2"],2,"gen",function(){
   var tri=pick([{n:"DEF",u:"m"},{n:"ABC",u:"cm"},{n:"PQR",u:"km"}]);
@@ -747,31 +908,39 @@ E("u1-sine-angle",1,["7.2"],2,"gen",function(){
   var b=Math.round(bTrue*10)/10;
   var Brev=Math.round(Math.asin(b*Math.sin(A*Math.PI/180)/a)*180/Math.PI);
   var L1=tri.n.charAt(0),L2=tri.n.charAt(1),l1=L1.toLowerCase(),l2=L2.toLowerCase();
-  return numq("In \u25B3"+tri.n+", \u2220"+L1+" = "+A+"\u00B0, side "+l1+" = "+a+" "+tri.u+" (opposite \u2220"+L1+"), and side "+l2+" = "+fmt(b,1)+" "+tri.u+". Find \u2220"+L2+", to the nearest degree.",
+  var q = numq("In \u25B3"+tri.n+", \u2220"+L1+" = "+A+"\u00B0, side "+l1+" = "+a+" "+tri.u+" (opposite \u2220"+L1+"), and side "+l2+" = "+fmt(b,1)+" "+tri.u+". Find \u2220"+L2+", to the nearest degree.",
     Brev,1.1,"Sine law: sin "+L2+" = "+l2+" \u00D7 sin "+L1+" \u00F7 "+l1+" = "+fmt(b,1)+" \u00D7 sin "+A+"\u00B0 \u00F7 "+a+" \u2248 "+fmt(b*Math.sin(A*Math.PI/180)/a,4)+". So \u2220"+L2+" = sin\u207B\u00B9("+fmt(b*Math.sin(A*Math.PI/180)/a,4)+") \u2248 <b>"+Brev+"\u00B0</b> (the triangle is acute).",{A:A,a:a,b:b,Brev:Brev});
+  q.figure = triSVG(a, b, (function(){var Bx=Math.asin(Math.min(1,b*Math.sin(A*Math.PI/180)/a))*180/Math.PI;return a*Math.sin((180-A-Bx)*Math.PI/180)/Math.sin(A*Math.PI/180);})(), {L:[L1,L2,tri.n.charAt(2)], ang:[A+"°","?",null], side:[a+" "+tri.u, fmt(b,1)+" "+tri.u, null]});
+  return q;
 });
 E("u1-cosine-side",1,["7.2"],2,"gen",function(){
   var C=pick([50,60,70,80]),a=ri(6,14),b=ri(6,14);
   var c=Math.sqrt(a*a+b*b-2*a*b*Math.cos(C*Math.PI/180));
-  return numq("In \u25B3PQR, sides p = "+a+" km and q = "+b+" km meet at \u2220R = "+C+"\u00B0 between them. Find the side opposite \u2220R, to one decimal place, in km.",
+  var q = numq("In \u25B3PQR, sides p = "+a+" km and q = "+b+" km meet at \u2220R = "+C+"\u00B0 between them. Find the side opposite \u2220R, to one decimal place, in km.",
     Math.round(c*10)/10,0.06,"Cosine law: r\u00B2 = p\u00B2 + q\u00B2 \u2212 2pq cos R = "+(a*a)+" + "+(b*b)+" \u2212 2("+a+")("+b+")cos "+C+"\u00B0 \u2248 "+fmt(c*c,2)+". So r \u2248 <b>"+fmt(c,1)+" km</b>.",{a:a,b:b,C:C});
+  q.figure = triSVG(a, b, c, {L:["P","Q","R"], ang:[null,null,C+"°"], side:[a+" km",b+" km","?"]});
+  return q;
 });
 E("u1-cosine-angle",1,["7.2"],2,"gen",function(){
   var Atar=pick([45,55,65,75]);var b=ri(6,12),c=ri(6,12);
   var aTrue=Math.sqrt(b*b+c*c-2*b*c*Math.cos(Atar*Math.PI/180));
   var a=Math.round(aTrue*10)/10;
   var cosA=(b*b+c*c-a*a)/(2*b*c);var Arev=Math.round(Math.acos(cosA)*180/Math.PI);
-  return numq("A triangle has sides "+fmt(a,1)+", "+b+" and "+c+". Find the angle opposite the side of length "+fmt(a,1)+", to the nearest degree.",
+  var q = numq("A triangle has sides "+fmt(a,1)+", "+b+" and "+c+". Find the angle opposite the side of length "+fmt(a,1)+", to the nearest degree.",
     Arev,1.1,"Cosine law rearranged: cos A = (b\u00B2 + c\u00B2 \u2212 a\u00B2) \u00F7 (2bc) = ("+(b*b)+" + "+(c*c)+" \u2212 "+fmt(a*a,2)+") \u00F7 "+(2*b*c)+" \u2248 "+fmt(cosA,4)+". So A \u2248 <b>"+Arev+"\u00B0</b>.",{b:b,c:c,Arev:Arev,a:a});
+  q.figure = triSVG(a, b, c, {L:["A","B","C"], ang:["?",null,null], side:[fmt(a,1),""+b,""+c]});
+  return q;
 });
 E("u1-two-triangles",1,["7.3"],3,"gen",function(){
   var AB=pick([11,12,13]),BC=pick([8,9,10]),angB=pick([60,70,80]);
   var AC=Math.sqrt(AB*AB+BC*BC-2*AB*BC*Math.cos(angB*Math.PI/180));
   var angDAC=pick([50,55]),angD=pick([60,65]);var angACD=180-angDAC-angD;
   var CD=AC*Math.sin(angDAC*Math.PI/180)/Math.sin(angD*Math.PI/180);
-  return numq("A surveyor maps two fields that share the diagonal AC. In \u25B3ABC, AB = "+AB+" m, BC = "+BC+" m and \u2220B = "+angB+"\u00B0. In the second field, \u25B3ACD, \u2220DAC = "+angDAC+"\u00B0 and \u2220D = "+angD+"\u00B0. Find the length of CD, to one decimal place, in m.",
+  var q = numq("A surveyor maps two fields that share the diagonal AC. In \u25B3ABC, AB = "+AB+" m, BC = "+BC+" m and \u2220B = "+angB+"\u00B0. In the second field, \u25B3ACD, \u2220DAC = "+angDAC+"\u00B0 and \u2220D = "+angD+"\u00B0. Find the length of CD, to one decimal place, in m.",
     Math.round(CD*10)/10,0.16,
     "Step 1 \u2014 the shared side, from \u25B3ABC (cosine law): AC\u00B2 = "+(AB*AB)+" + "+(BC*BC)+" \u2212 2("+AB+")("+BC+")cos "+angB+"\u00B0, so AC \u2248 "+fmt(AC,2)+" m. Step 2 \u2014 use AC in \u25B3ACD: its third angle is 180 \u2212 "+angDAC+" \u2212 "+angD+" = "+angACD+"\u00B0, and the sine law gives CD \u00F7 sin "+angDAC+"\u00B0 = AC \u00F7 sin "+angD+"\u00B0, so CD \u2248 "+fmt(AC,2)+" \u00D7 sin "+angDAC+"\u00B0 \u00F7 sin "+angD+"\u00B0 \u2248 <b>"+fmt(CD,1)+" m</b>. The first triangle exists to produce the side the second triangle needs.",{AB:AB,BC:BC,angB:angB,AC:AC,angDAC:angDAC,angD:angD});
+  q.figure = twoTriSVG(AB, BC, angB, AC, CD, AC*Math.sin(angACD*Math.PI/180)/Math.sin(angD*Math.PI/180), angDAC, angD);
+  return q;
 });
 </script>
 
@@ -1139,20 +1308,26 @@ E("u7-proof-error",7,["2.8"],3,"var",varset([
 E("u8-triangle-sum",8,["5.3"],1,"gen",function(){
   var a=ri(35,75),b=ri(35,75);while(a+b>160){b=ri(30,60);}
   var c=180-a-b;
-  return numq("Two angles of a triangle measure "+a+"\u00B0 and "+b+"\u00B0. What is the measure of the third angle, in degrees?",
+  var q = numq("Two angles of a triangle measure "+a+"\u00B0 and "+b+"\u00B0. What is the measure of the third angle, in degrees?",
     c,0.011,"The interior angles of a triangle sum to 180\u00B0: 180 \u2212 "+a+" \u2212 "+b+" = <b>"+c+"\u00B0</b>.",{a:a,b:b});
+  q.figure = triAngSVG(a, b, 180-a-b, {ang:[a+"°",b+"°","?"]});
+  return q;
 });
 E("u8-co-interior",8,["5.8"],2,"gen",function(){
   var a=ri(55,160);var b=180-a;
   var frame=pick([
     "Two parallel lines are cut by a transversal. A co-interior angle measures "+a+"\u00B0. What is the measure of the co-interior angle on the same side of the transversal, in degrees?",
     "Two parallel rails are cut by a straight crossing path. On the same side of the path, one co-interior angle measures "+a+"\u00B0. What is the measure of the other co-interior angle on that side, in degrees?"]);
-  return numq(frame,b,0.011,"Co-interior angles between parallel lines are supplementary: 180 \u2212 "+a+" = <b>"+b+"\u00B0</b>.",{a:a});
+  var q = numq(frame,b,0.011,"Co-interior angles between parallel lines are supplementary: 180 \u2212 "+a+" = <b>"+b+"\u00B0</b>.",{a:a});
+  q.figure = transversalSVG("TR", a+"°", "BR", "?");
+  return q;
 });
 E("u8-alternate-algebra",8,["5.8"],2,"gen",function(){
   var x=ri(8,20);var a=3,b=ri(1,15);var val=a*x+b;
-  return numq("Two parallel lines are cut by a transversal. Alternate interior angles measure ("+a+"x + "+b+")\u00B0 and "+val+"\u00B0. Find x.",
+  var q = numq("Two parallel lines are cut by a transversal. Alternate interior angles measure ("+a+"x + "+b+")\u00B0 and "+val+"\u00B0. Find x.",
     x,0.011,"Alternate interior angles between parallel lines are equal: "+a+"x + "+b+" = "+val+" \u2192 "+a+"x = "+(val-b)+" \u2192 x = <b>"+x+"</b>.",{x:x});
+  q.figure = transversalSVG("TR", "("+a+"x + "+b+")°", "BL", val+"°");
+  return q;
 });
 E("u8-polygon-sum",8,["5.2"],1,"gen",function(){
   var n=ri(3,30);var s=(n-2)*180;
@@ -1160,8 +1335,10 @@ E("u8-polygon-sum",8,["5.2"],1,"gen",function(){
     "What is the sum of the interior angles of a polygon with "+n+" sides, in degrees?",
     "A polygon has "+n+" sides. What is the sum of its interior angles, in degrees?",
     "How many degrees do the interior angles of a "+n+"-sided polygon add up to?"]);
-  return numq(frame,
+  var q = numq(frame,
     s,0.011,"Sum = ("+n+" \u2212 2) \u00D7 180\u00B0 = "+(n-2)+" \u00D7 180\u00B0 = <b>"+s+"\u00B0</b>.",{n:n});
+  q.figure = polySVG(n, false);
+  return q;
 });
 E("u8-regular-angle",8,["5.1"],1,"gen",function(){
   var n=ri(3,30);var sum=(n-2)*180;var each=sum/n;
@@ -1170,13 +1347,17 @@ E("u8-regular-angle",8,["5.1"],1,"gen",function(){
     "Find the measure of one interior angle of a regular "+n+"-gon, in degrees. (A decimal is fine.)",
     "A regular polygon has "+n+" sides. What is the measure of each of its interior angles, in degrees? (A decimal is fine.)"]);
   if(names[n]&&Math.random()<0.5)frame="What is the measure of each interior angle of a "+names[n]+" (a regular "+n+"-gon), in degrees? (A decimal is fine.)";
-  return numq(frame,
+  var q = numq(frame,
     each,0.011,"Sum of interior angles = ("+n+" \u2212 2) \u00D7 180\u00B0 = "+sum+"\u00B0. All "+n+" angles are equal: "+sum+" \u00F7 "+n+" = <b>"+fmt(each)+"\u00B0</b>.",{n:n});
+  q.figure = polySVG(n, true);
+  return q;
 });
 E("u8-exterior",8,["5.11"],2,"gen",function(){
   var a=ri(30,70),b=ri(30,70);var ext=a+b;
-  return numq("In a triangle, the two non-adjacent interior angles measure "+a+"\u00B0 and "+b+"\u00B0. What is the measure of the exterior angle at the third vertex, in degrees?",
+  var q = numq("In a triangle, the two non-adjacent interior angles measure "+a+"\u00B0 and "+b+"\u00B0. What is the measure of the exterior angle at the third vertex, in degrees?",
     ext,0.011,"The exterior angle equals the sum of the two remote interior angles: "+a+" + "+b+" = <b>"+ext+"\u00B0</b>. It is also 180\u00B0 minus the adjacent interior angle \u2014 the two facts agree.",{a:a,b:b});
+  q.figure = triAngSVG(a, b, 180-a-b, {ang:[a+"°",b+"°",null], ext:2, extLabel:"?"});
+  return q;
 });
 E("u8-congruent",8,["5.6"],1,"var",varset([
   function(){return mcq("Which piece of information is NOT enough, on its own, to prove two triangles congruent?",
@@ -1469,24 +1650,24 @@ E("u8-angle-sum-rule",8,["5.5"],1,"var",varset([
     "(n \u2212 2) \u00D7 180\u00B0",
     ["n \u00D7 180\u00B0","(n \u2212 1) \u00D7 180\u00B0","(n + 2) \u00D7 180\u00B0"],
     "Each added side adds 180\u00B0, but the count starts at 180\u00B0 for 3 sides: the multiplier is always 2 less than the number of sides, (n \u2212 2). Check: pentagon, (5 \u2212 2) \u00D7 180\u00B0 = 540\u00B0.",{});},
-  function(){return mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 7 sides?",
+  function(){var q = mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 7 sides?",
     "900\u00B0",["1260\u00B0","1080\u00B0","1620\u00B0"],
-    "(7 \u2212 2) \u00D7 180\u00B0 = 5 \u00D7 180\u00B0 = 900\u00B0.",{});},
-  function(){return mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 9 sides?",
+    "(7 \u2212 2) \u00D7 180\u00B0 = 5 \u00D7 180\u00B0 = 900\u00B0.",{});q.figure=polySVG(7, false);return q;},
+  function(){var q = mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 9 sides?",
     "1260\u00B0",["1620\u00B0","1440\u00B0","1980\u00B0"],
-    "(9 \u2212 2) \u00D7 180\u00B0 = 7 \u00D7 180\u00B0 = 1260\u00B0.",{});},
-  function(){return mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 11 sides?",
+    "(9 \u2212 2) \u00D7 180\u00B0 = 7 \u00D7 180\u00B0 = 1260\u00B0.",{});q.figure=polySVG(9, false);return q;},
+  function(){var q = mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 11 sides?",
     "1620\u00B0",["1980\u00B0","1800\u00B0","2340\u00B0"],
-    "(11 \u2212 2) \u00D7 180\u00B0 = 9 \u00D7 180\u00B0 = 1620\u00B0.",{});},
-  function(){return mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 12 sides?",
+    "(11 \u2212 2) \u00D7 180\u00B0 = 9 \u00D7 180\u00B0 = 1620\u00B0.",{});q.figure=polySVG(11, false);return q;},
+  function(){var q = mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 12 sides?",
     "1800\u00B0",["2160\u00B0","1980\u00B0","2520\u00B0"],
-    "(12 \u2212 2) \u00D7 180\u00B0 = 10 \u00D7 180\u00B0 = 1800\u00B0.",{});},
-  function(){return mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 15 sides?",
+    "(12 \u2212 2) \u00D7 180\u00B0 = 10 \u00D7 180\u00B0 = 1800\u00B0.",{});q.figure=polySVG(12, false);return q;},
+  function(){var q = mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 15 sides?",
     "2340\u00B0",["2700\u00B0","2520\u00B0","3060\u00B0"],
-    "(15 \u2212 2) \u00D7 180\u00B0 = 13 \u00D7 180\u00B0 = 2340\u00B0.",{});},
-  function(){return mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 20 sides?",
+    "(15 \u2212 2) \u00D7 180\u00B0 = 13 \u00D7 180\u00B0 = 2340\u00B0.",{});q.figure=polySVG(15, false);return q;},
+  function(){var q = mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 20 sides?",
     "3240\u00B0",["3600\u00B0","3420\u00B0","3960\u00B0"],
-    "(20 \u2212 2) \u00D7 180\u00B0 = 18 \u00D7 180\u00B0 = 3240\u00B0.",{});}
+    "(20 \u2212 2) \u00D7 180\u00B0 = 18 \u00D7 180\u00B0 = 3240\u00B0.",{});q.figure=polySVG(20, false);return q;}
 ]));
 </script>
 
@@ -1622,6 +1803,7 @@ function startOnline(){
   var html='<div class="card"><h2>Online practice</h2>'+(res.thin?'<p class="thinNote">Heads up: the question bank is still thin for this selection, so this set repeats practice on the same question shape (with new numbers) because there are not yet enough different questions to fill it.</p>':"")+'<p class="scoreline" id="score"></p>';
   current.forEach(function(q,i){
     html+='<div class="q" id="q'+i+'"><div class="qhead"><b>Question '+(i+1)+'</b> '+tags(q)+'</div><div class="prompt">'+q.prompt+'</div>';
+    if(q.figure)html+='<div class="fig">'+q.figure+'</div>';
     if(q.type==="mc"){
       html+='<div class="opts">'+q.options.map(function(o,j){return '<label><input type="radio" name="opt'+i+'" value="'+j+'"> <span>'+o+'</span></label>';}).join("")+'</div>';
     }else{
@@ -1651,6 +1833,7 @@ function reportText(q,reason){
   lines.push("Entry: "+e.id+" | Unit "+e.unit+" ("+UNITS[e.unit]+") | Indicators: "+e.indicators.join(", ")+" | Level "+e.level);
   lines.push("Problem type: "+reason);
   lines.push("Question: "+plainText(q.prompt));
+  if(q.figure)lines.push("Diagram: this question is shown with a diagram in the app; its labels match the values in the question.");
   if(q.type==="mc"){lines.push("Options:");q.options.forEach(function(o,j){lines.push("  - "+plainText(o)+(j===q.correct?"  [marked as the correct answer]":""));});}
   else if(q.type==="num"){lines.push("Stated answer: "+q.answer);}
   else{lines.push("Accepted answer(s): "+q.answers.join(" / "));}
@@ -1691,6 +1874,7 @@ function startSheet(){
   res.items.forEach(function(q,i){
     var h=q._entry.level===3?170:(q.type==="mc"?120:150);
     html+='<div class="pq"><p><b>'+(i+1)+'.</b> <span style="font-size:.8rem;color:#555;">(Unit '+q._entry.unit+' \u00B7 '+q._entry.indicators.join(", ")+' \u00B7 Level '+q._entry.level+')</span></p><div class="prompt">'+q.prompt+'</div>';
+    if(q.figure)html+='<div class="fig">'+q.figure+'</div>';
     if(q.type==="mc"){html+='<div class="opts">'+q.options.map(function(o){return '<label style="display:block;margin:4px 0;">\u25CB '+o+'</label>';}).join("")+'</div>';}
     html+='<div class="ws" style="height:'+h+'px"></div></div>';
   });
