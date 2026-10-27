@@ -74,7 +74,11 @@
     .pq{page-break-inside:avoid;margin-bottom:14px;}
     .solp{page-break-inside:avoid;}
   }
+  .katex{font-size:1.07em;}
 </style>
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<script src="katex/contrib/auto-render.min.js"></script>
 </head>
 <body>
 <div class="wrap" id="app">
@@ -1068,65 +1072,69 @@ E("u3-context-area",3,["4.3"],3,"gen",function(){
 });
 /* ============ Unit 4: Radicals ============ */
 function radStr(a,b){return (a===1?"":a)+"\u221A"+b;}
+function radT(a,b){return "\\("+(a===1?"":a)+"\\sqrt{"+b+"}\\)";}
+function sqrtT(x){return "\\(\\sqrt{"+x+"}\\)";}
+function rad3T(a,b){return "\\("+(a===1?"":a)+"\\sqrt[3]{"+b+"}\\)";}
+function cbrtT(x){return "\\(\\sqrt[3]{"+x+"}\\)";}
 E("u4-mixed-to-entire",4,["1.1"],1,"gen",function(){
   var a=ri(2,9),b=pick([2,3,5,6,7,10,11,13,14,15]);var inside=a*a*b;
-  var frame=pick(["Express "+radStr(a,b)+" as an entire radical.","Which entire radical is equal to "+radStr(a,b)+"?"]);
-  return mcq(frame,"\u221A"+inside,["\u221A"+(a*b),"\u221A"+(a*a+b),"\u221A"+(a*a*b*b)],
-    "Bring the outside number in by squaring it: "+a+"\u00B2 \u00D7 "+b+" = "+(a*a)+" \u00D7 "+b+" = "+inside+", so "+radStr(a,b)+" = \u221A"+inside+".",{a:a,b:b});
+  var frame=pick(["Express "+radT(a,b)+" as an entire radical.","Which entire radical is equal to "+radT(a,b)+"?"]);
+  return mcq(frame,sqrtT(inside),[sqrtT(a*b),sqrtT(a*a+b),sqrtT(a*a*b*b)],
+    "Bring the outside number in by squaring it: \\("+a+"^2 \\times "+b+" = "+(a*a)+" \\times "+b+" = "+inside+"\\), so "+radT(a,b)+" = "+sqrtT(inside)+".",{a:a,b:b});
 });
 E("u4-entire-to-mixed",4,["1.2"],1,"gen",function(){
   var a=ri(2,12),b=pick([2,3,5,6,7,10,11,13,14,15]);var n=a*a*b;
-  var frame=pick(["Express \u221A"+n+" as a mixed radical in simplest form.","Write \u221A"+n+" as a mixed radical in simplest form."]);
-  return mcq(frame,radStr(a,b),[radStr(a+1,b),radStr(a,b+1),"\u221A"+(n-1)],
-    "Find the largest perfect square dividing "+n+": "+n+" = "+(a*a)+" \u00D7 "+b+". So \u221A"+n+" = "+a+"\u221A"+b+" = "+radStr(a,b)+".",{a:a,b:b,n:n});
+  var frame=pick(["Express "+sqrtT(n)+" as a mixed radical in simplest form.","Write "+sqrtT(n)+" as a mixed radical in simplest form."]);
+  return mcq(frame,radT(a,b),[radT(a+1,b),radT(a,b+1),sqrtT(n-1)],
+    "Find the largest perfect square dividing "+n+": \\("+n+" = "+(a*a)+" \\times "+b+"\\). So "+sqrtT(n)+" = "+radT(a,b)+".",{a:a,b:b,n:n});
 });
 E("u4-simplify-add",4,["1.6"],2,"gen",function(){
   var b=pick([2,3,5,6,7,10,11,13]);var a1=pick([2,3,4,5]);var a2=pick([2,3,4,5,6].filter(function(x){return x!==a1;}));
   var n1=a1*a1*b,n2=a2*a2*b;var tot=a1+a2;
-  return mcq("Simplify: \u221A"+n1+" + \u221A"+n2+".",
-    radStr(tot,b),[radStr(tot+1,b),radStr(tot,b+1),"\u221A"+(n1+n2)],
-    "\u221A"+n1+" = "+radStr(a1,b)+" and \u221A"+n2+" = "+radStr(a2,b)+". Like radicals add: ("+a1+" + "+a2+")\u221A"+b+" = "+radStr(tot,b)+". (You cannot just add the numbers under the roots.)",{b:b,a1:a1,a2:a2});
+  return mcq("Simplify: "+sqrtT(n1)+" + "+sqrtT(n2)+".",
+    radT(tot,b),[radT(tot+1,b),radT(tot,b+1),sqrtT(n1+n2)],
+    sqrtT(n1)+" = "+radT(a1,b)+" and "+sqrtT(n2)+" = "+radT(a2,b)+". Like radicals add: \\("+a1+" + "+a2+" = "+tot+"\\), so the sum is "+radT(tot,b)+". (You cannot just add the numbers under the roots.)",{b:b,a1:a1,a2:a2});
 });
 E("u4-multiply",4,["1.6"],2,"gen",function(){
   var k=pick([2,3,5,6,7,10,11,13,14,15]);var i=ri(1,3),j=ri(1,3);var x=k*i*i,y=k*j*j;
-  return numq("The product \u221A"+x+" \u00D7 \u221A"+y+" is a whole number. What is it?",
-    k*i*j,0.011,"\u221A"+x+" \u00D7 \u221A"+y+" = \u221A("+x+" \u00D7 "+y+") = \u221A"+(x*y)+". Notice "+x+" = "+k+" \u00D7 "+(i*i)+" and "+y+" = "+k+" \u00D7 "+(j*j)+", so the product is "+k+" \u00D7 "+i+" \u00D7 "+j+" = <b>"+(k*i*j)+"</b>.",{p:[x,y]});
+  return numq("The product "+sqrtT(x)+" \u00D7 "+sqrtT(y)+" is a whole number. What is it?",
+    k*i*j,0.011,"\\(\\sqrt{"+x+"} \\times \\sqrt{"+y+"} = \\sqrt{"+x+" \\times "+y+"} = \\sqrt{"+(x*y)+"}\\). Notice "+x+" = "+k+" \u00D7 "+(i*i)+" and "+y+" = "+k+" \u00D7 "+(j*j)+", so the product is "+k+" \u00D7 "+i+" \u00D7 "+j+" = <b>"+(k*i*j)+"</b>.",{p:[x,y]});
 });
 E("u4-rationalize",4,["1.7"],2,"gen",function(){
   var d=pick([2,3,5,6,7,10,11,13,14,15]);var c=d*ri(1,5);
-  var frame=pick(["Rationalize the denominator: "+c+" \u00F7 \u221A"+d+".","Write "+c+" \u00F7 \u221A"+d+" with a rational denominator."]);
-  return mcq(frame,(c/d)+"\u221A"+d,["\u221A"+(c*d),c+"\u221A"+d+"\u00F7"+d,(c/d)+"\u221A"+(d*d)],
-    "Multiply top and bottom by \u221A"+d+": "+c+"\u221A"+d+" \u00F7 "+d+" = "+(c/d)+"\u221A"+d+". The denominator is now the rational number "+d+".",{c:c,d:d});
+  var frame=pick(["Rationalize the denominator: \\(\\frac{"+c+"}{\\sqrt{"+d+"}}\\).","Write \\(\\frac{"+c+"}{\\sqrt{"+d+"}}\\) with a rational denominator."]);
+  return mcq(frame,radT(c/d,d),[sqrtT(c*d),"\\(\\frac{"+c+"\\sqrt{"+d+"}}{"+d+"}\\)","\\("+(c/d)+"\\sqrt{"+(d*d)+"}\\)"],
+    "Multiply top and bottom by "+sqrtT(d)+": \\(\\frac{"+c+"}{\\sqrt{"+d+"}} = \\frac{"+c+"\\sqrt{"+d+"}}{"+d+"} = "+(c/d)+"\\sqrt{"+d+"}\\). The denominator is now the rational number "+d+".",{c:c,d:d});
 });
 E("u4-restrictions",4,["1.5"],1,"gen",function(){
   var a=ri(-6,15);var flipped=Math.random()<0.5;
-  var rad=flipped?"("+a+" \u2212 x)":"(x "+(a>=0?"\u2212 "+a:"+ "+(-a))+")";
-  var frame=pick(["For which values of x is the expression \u221A"+rad+" defined?","State the restriction on x so that \u221A"+rad+" is a real number."]);
+  var rad=flipped?"("+a+" - x)":"(x "+(a>=0?"- "+a:"+ "+(-a))+")";
+  var frame=pick(["For which values of x is the expression \\(\\sqrt{"+rad+"}\\) defined?","State the restriction on x so that \\(\\sqrt{"+rad+"}\\) is a real number."]);
   return mcq(frame,
     flipped?"x \u2264 "+a:"x \u2265 "+a,[flipped?"x \u2265 "+a:"x \u2264 "+a,"x > 0","All real numbers"],
-    "The radicand cannot be negative: "+(flipped?a+" \u2212 x \u2265 0 gives x \u2264 "+a:"x "+(a>=0?"\u2212 "+a:"+ "+(-a))+" \u2265 0 gives x \u2265 "+a)+".",{a:a,flipped:flipped});
+    "The radicand cannot be negative: "+(flipped?"\\("+a+" - x \\ge 0\\) gives \\(x \\le "+a+"\\)":"\\(x "+(a>=0?"- "+a:"+ "+(-a))+" \\ge 0\\) gives \\(x \\ge "+a+"\\)")+".",{a:a,flipped:flipped});
 });
 E("u4-radical-equation",4,["1.9"],2,"gen",function(){
   var b=ri(3,7),a=ri(1,15);var x=b*b-a;
-  return numq("Solve \u221A(x + "+a+") = "+b+". Give the value of x.",
-    x,0.011,"Square both sides: x + "+a+" = "+(b*b)+", so x = "+(b*b)+" \u2212 "+a+" = <b>"+x+"</b>. Check: \u221A("+x+" + "+a+") = \u221A"+(b*b)+" = "+b+" \u2713.",{a:a,b:b});
+  return numq("Solve \\(\\sqrt{x + "+a+"} = "+b+"\\). Give the value of x.",
+    x,0.011,"Square both sides: \\(x + "+a+" = "+(b*b)+"\\), so \\(x = "+(b*b)+" - "+a+" = "+x+"\\). Check: \\(\\sqrt{"+x+" + "+a+"} = \\sqrt{"+(b*b)+"} = "+b+"\\) \u2713.",{a:a,b:b});
 });
 E("u4-extraneous",4,["1.11"],3,"gen",function(){
   var b=pick([1,2,3,4]);var r=2*b+ri(1,6);var e=2*b+1-r;var a=b*b-r*e;
   var radicand="x + "+a;
   var frame=pick([
-    "Solving \u221A("+radicand+") = x \u2212 "+b+" by squaring both sides gives two candidates: x = "+r+" and x = "+e+". Which one is extraneous, and why?",
-    "A student solves \u221A("+radicand+") = x \u2212 "+b+" by squaring and gets two candidates: x = "+r+" and x = "+e+". Which candidate is extraneous, and why?",
-    "Squaring both sides of \u221A("+radicand+") = x \u2212 "+b+" produces the candidates x = "+r+" and x = "+e+". Which one is extraneous, and why?"]);
+    "Solving \\(\\sqrt{"+radicand+"} = x - "+b+"\\) by squaring both sides gives two candidates: x = "+r+" and x = "+e+". Which one is extraneous, and why?",
+    "A student solves \\(\\sqrt{"+radicand+"} = x - "+b+"\\) by squaring and gets two candidates: x = "+r+" and x = "+e+". Which candidate is extraneous, and why?",
+    "Squaring both sides of \\(\\sqrt{"+radicand+"} = x - "+b+"\\) produces the candidates x = "+r+" and x = "+e+". Which one is extraneous, and why?"]);
   return mcq(frame,
     "x = "+e+" is extraneous \u2014 substituting it makes the right side negative, but a square root is never negative",
     ["x = "+r+" is extraneous \u2014 it is the larger answer","Neither \u2014 squaring never creates false roots","Both are extraneous, so the equation has no solution"],
-    "Check x = "+e+": \u221A("+e+" + "+a+") = \u221A"+(e+a)+" = "+Math.sqrt(e+a)+", but x \u2212 "+b+" = "+(e-b)+" < 0. A principal square root cannot equal a negative number, so x = "+e+" crept in when we squared. x = "+r+" checks: \u221A"+(r+a)+" = "+Math.sqrt(r+a)+" = "+(r-b)+" \u2713.",{b:b,r:r,e:e,a:a});
+    "Check \\(x = "+e+"\\): \\(\\sqrt{"+e+" + "+a+"} = \\sqrt{"+(e+a)+"} = "+Math.sqrt(e+a)+"\\), but \\(x - "+b+" = "+(e-b)+" < 0\\). A principal square root cannot equal a negative number, so \\(x = "+e+"\\) crept in when we squared. \\(x = "+r+"\\) checks: \\(\\sqrt{"+(r+a)+"} = "+Math.sqrt(r+a)+" = "+(r-b)+"\\) \u2713.",{b:b,r:r,e:e,a:a});
 });
 E("u4-order",4,["1.4"],2,"gen",function(){
   var base=ri(5,10),g1=ri(2,4),g2=ri(2,4),g3=ri(2,5);
   var ins=[base,base+g1,base+g1+g2,base+g1+g2+g3];
-  function render(n){var c=Math.floor(Math.sqrt(n));if(c*c===n)return ""+c;var r=n;var co=1;for(var d=2;d*d<=r;d++){while(r%(d*d)===0){r/=(d*d);co*=d;}}return (co>1?co:"")+"\u221A"+r;}
+  function render(n){var c=Math.floor(Math.sqrt(n));if(c*c===n)return ""+c;var r=n;var co=1;for(var d=2;d*d<=r;d++){while(r%(d*d)===0){r/=(d*d);co*=d;}}return "\\("+(co>1?co:"")+"\\sqrt{"+r+"}\\)";}
   var items=ins.map(function(n){return {s:render(n),v:Math.sqrt(n)};});
   var sorted=items.slice().sort(function(x,y){return x.v-y.v;});
   var asc=sorted.map(function(o){return o.s;}).join(", ");
@@ -1941,65 +1949,63 @@ E("u3-exact-roots",3,["4.9"],2,"gen",function(){
 E("u4-variable-mixed",4,["1.3"],2,"gen",function(){
   var s=ri(2,5),r=pick([2,3,5,6,7]),n=pick([1,2,3]);
   var coef=s*s*r,p=2*n+1;
-  var sup={"1":"","2":"\u00B2","3":"\u00B3","4":"\u2074","5":"\u2075","7":"\u2077"};
-  function xp(e){return "x"+sup[e];}
-  var xn=(n===1?"x":xp(n));
-  return mcq("Simplify: \u221A("+coef+xp(p)+").",
-    s+xn+"\u221A"+r+"x",
-    [(s+1)+xn+"\u221A"+r+"x", s+xp(n+1)+"\u221A"+r+"x", s+xn+"\u221A"+coef+"x"],
-    coef+" = "+(s*s)+" \u00D7 "+r+" and "+xp(p)+" = ("+xn+")\u00B2 \u00D7 x, so the square factors come out: \u221A("+coef+xp(p)+") = "+s+xn+"\u221A"+r+"x. One x stays inside because the exponent "+p+" is odd.",
+  var xnT=(n===1?"x":"x^{"+n+"}");
+  return mcq("Simplify: \\(\\sqrt{"+coef+"x^{"+p+"}}\\).",
+    "\\("+s+xnT+"\\sqrt{"+r+"x}\\)",
+    ["\\("+(s+1)+xnT+"\\sqrt{"+r+"x}\\)", "\\("+s+"x^{"+(n+1)+"}\\sqrt{"+r+"x}\\)", "\\("+s+xnT+"\\sqrt{"+coef+"x}\\)"],
+    "\\("+coef+" = "+(s*s)+" \\times "+r+"\\) and \\(x^{"+p+"} = (x^{"+n+"})^2 x\\), so the square factors come out: \\(\\sqrt{"+coef+"x^{"+p+"}} = "+s+xnT+"\\sqrt{"+r+"x}\\). One x stays inside because the exponent "+p+" is odd.",
     {s:s,r:r,n:n});
 });
 E("u4-multiply-mixed",4,["1.6"],2,"gen",function(){
   var pairs=[[2,3],[2,5],[2,6],[2,7],[2,10],[3,5],[3,6],[3,7],[3,10],[5,6],[5,7],[5,10],[6,7],[6,10],[7,10]];
   var pr=pick(pairs),b=pr[0],d=pr[1],a=ri(2,4),c=ri(2,4);
   var bd=b*d,t=1,rr=bd,f;for(f=2;f*f<=rr;f++){while(rr%(f*f)===0){rr/=(f*f);t*=f;}}
-  var key=radStr(a*c*t,rr);
-  var d2=(t>1)?radStr(a*c,rr):radStr(a*c*t,d);
-  var d3=radStr(a*c*t,b+d);
-  return mcq("Simplify: ("+radStr(a,b)+")("+radStr(c,d)+").",
+  var key=radT(a*c*t,rr);
+  var d2=(t>1)?radT(a*c,rr):radT(a*c*t,d);
+  var d3=radT(a*c*t,b+d);
+  return mcq("Simplify: ("+radT(a,b)+")("+radT(c,d)+").",
     key,
-    [radStr(a*c*t,b),d2,d3],
-    "Multiply the outside numbers together and the inside numbers together: "+a+" \u00D7 "+c+" = "+(a*c)+" and \u221A"+b+" \u00D7 \u221A"+d+" = \u221A"+bd+". Then simplify \u221A"+bd+" = "+(t>1?(t+"\u221A"+rr):("\u221A"+rr))+", so the product is "+(a*c)+" \u00D7 "+(t>1?(t+"\u221A"+rr):("\u221A"+rr))+" = <b>"+key+"</b>.",
+    [radT(a*c*t,b),d2,d3],
+    "Multiply the outside numbers together and the inside numbers together: \\("+a+" \\times "+c+" = "+(a*c)+"\\) and \\(\\sqrt{"+b+"} \\times \\sqrt{"+d+"} = \\sqrt{"+bd+"}\\). Then simplify \\(\\sqrt{"+bd+"} = "+(t>1?(t+"\\sqrt{"+rr+"}"):("\\sqrt{"+rr+"}"))+"\\), so the product is "+key+".",
     {a:a,b:b,c:c,d:d});
 });
 E("u4-equation-restriction",4,["1.8"],1,"gen",function(){
   var p=pick([1,2,3,4]),m=ri(-6,8),r=ri(2,9),tries=0;
   while(m===0&&tries<20){m=ri(-6,8);tries++;}
   var q=-p*m;
-  var inside=(p===1?"x":(""+p+"x"))+(q>0?" + "+q:" \u2212 "+(-q));
-  return mcq("State the restriction on x in the radical equation \u221A("+inside+") = "+r+".",
+  var inside=(p===1?"x":(""+p+"x"))+(q>0?" + "+q:" - "+(-q));
+  return mcq("State the restriction on x in the radical equation \\(\\sqrt{"+inside+"} = "+r+"\\).",
     "x \u2265 "+m,
     ["x \u2264 "+m,"x \u2265 "+(-m),"All real numbers"],
-    "The radicand cannot be negative: "+inside+" \u2265 0 gives "+(p===1?"x":(""+p+"x"))+" \u2265 "+(-q)+", so x \u2265 "+m+". This restriction must hold before the equation can have any solution at all.",
+    "The radicand cannot be negative: \\("+inside+" \\ge 0\\) gives \\("+(p===1?"x":(""+p+"x"))+" \\ge "+(-q)+"\\), so \\(x \\ge "+m+"\\). This restriction must hold before the equation can have any solution at all.",
     {p:p,m:m,r:r});
 });
 E("u4-verify-root",4,["1.10"],2,"gen",function(){
   var s=ri(3,9),a=ri(3,20),b=ri(2,6);
   var X=s*s-a;
   if(Math.random()<0.5){
-    return numq("A student solving \u221A(x + "+a+") = x \u2212 "+b+" claims that x = "+X+" is a root. Substitute x = "+X+": what is the value of the LEFT side, \u221A(x + "+a+")?",
+    return numq("A student solving \\(\\sqrt{x + "+a+"} = x - "+b+"\\) claims that \\(x = "+X+"\\) is a root. Substitute \\(x = "+X+"\\): what is the value of the LEFT side, \\(\\sqrt{x + "+a+"}\\)?",
       s,0.011,
-      "\u221A("+X+" + "+a+") = \u221A"+(s*s)+" = <b>"+s+"</b>. (For comparison, the right side at x = "+X+" is "+X+" \u2212 "+b+" = "+(X-b)+". Both sides must give the same value for x = "+X+" to actually be a root.)",
+      "\\(\\sqrt{"+X+" + "+a+"} = \\sqrt{"+(s*s)+"}\\) = <b>"+s+"</b>. (For comparison, the right side at \\(x = "+X+"\\) is \\("+X+" - "+b+" = "+(X-b)+"\\). Both sides must give the same value for \\(x = "+X+"\\) to actually be a root.)",
       {mode:1,X:X,a:a,b:b});
   }
-  return numq("A student solving \u221A(x + "+a+") = x \u2212 "+b+" claims that x = "+X+" is a root. Substitute x = "+X+": what is the value of the RIGHT side, x \u2212 "+b+"?",
+  return numq("A student solving \\(\\sqrt{x + "+a+"} = x - "+b+"\\) claims that \\(x = "+X+"\\) is a root. Substitute \\(x = "+X+"\\): what is the value of the RIGHT side, \\(x - "+b+"\\)?",
     X-b,0.011,
-    X+" \u2212 "+b+" = <b>"+(X-b)+"</b>. (For comparison, the left side at x = "+X+" is \u221A("+X+" + "+a+") = "+s+". Both sides must give the same value for x = "+X+" to actually be a root.)",
+    "\\("+X+" - "+b+"\\) = <b>"+(X-b)+"</b>. (For comparison, the left side at \\(x = "+X+"\\) is \\(\\sqrt{"+X+" + "+a+"} = "+s+"\\). Both sides must give the same value for \\(x = "+X+"\\) to actually be a root.)",
     {mode:2,X:X,a:a,b:b});
 });
 E("u4-model-equation",4,["1.12"],3,"gen",function(){
   if(Math.random()<0.5){
     var d=ri(3,60),sp=5*Math.sqrt(d);
-    return numq("Police estimate a car's speed from a skid mark using s = \u221A(25d), where s is the speed in km/h and d is the length of the skid mark in metres. A skid mark at a collision scene measures "+d+" m. Estimate the car's speed, to one decimal place, in km/h.",
+    return numq("Police estimate a car's speed from a skid mark using \\(s = \\sqrt{25d}\\), where s is the speed in km/h and d is the length of the skid mark in metres. A skid mark at a collision scene measures "+d+" m. Estimate the car's speed, to one decimal place, in km/h.",
       fmt(sp,1),0.06,
-      "Substitute d = "+d+": s = \u221A(25 \u00D7 "+d+") = \u221A"+(25*d)+" \u2248 <b>"+fmt(sp,1)+" km/h</b>.",
+      "Substitute \\(d = "+d+"\\): \\(s = \\sqrt{25 \\times "+d+"} = \\sqrt{"+(25*d)+"} \\approx "+fmt(sp,1)+"\\). So the speed is about <b>"+fmt(sp,1)+" km/h</b>.",
       {mode:1,d:d});
   }
   var T=pick([2,3,4,5,6]),L=T*T/4;
-  return numq("The period of a simple pendulum is modelled by T = 2\u221AL, where T is the period in seconds and L is the length in metres. How long is a pendulum whose period is "+T+" s, in m?",
+  return numq("The period of a simple pendulum is modelled by \\(T = 2\\sqrt{L}\\), where T is the period in seconds and L is the length in metres. How long is a pendulum whose period is "+T+" s, in m?",
     L,0.011,
-    T+" = 2\u221AL, so \u221AL = "+T+" \u00F7 2 = "+fmt(T/2,2)+". Squaring both sides gives L = <b>"+fmt(L,2)+" m</b>.",
+    "\\("+T+" = 2\\sqrt{L}\\), so \\(\\sqrt{L} = "+T+" \\div 2 = "+fmt(T/2,2)+"\\). Squaring both sides gives \\(L\\) = <b>"+fmt(L,2)+" m</b>.",
     {mode:2,T:T});
 });
 
@@ -2010,22 +2016,21 @@ E("u4-model-equation",4,["1.12"],3,"gen",function(){
 
 /* --- Unit 4: Radicals --- */
 E("u4-cube-mixed",4,["1.2"],1,"gen",function(){
-  function crS(a,b){return (a===1?"":a)+"\u221B"+b;}
   var a=ri(2,5),b=pick([2,3,5,6,7,10,11,13,14,15,21,22,26,30]);
   var neg=Math.random()<0.25;
   var mag=a*a*a*b;
-  return mcq("Express \u221B"+(neg?"\u2212":"")+mag+" as a mixed radical in simplest form.",
-    crS(neg?-a:a,b),
-    [crS(neg?-(a+1):a+1,b),crS(neg?-a:a,b+1),crS(neg?-a:a,a*b)],
-    "Find the largest perfect cube dividing "+mag+": "+mag+" = "+(a*a*a)+" \u00D7 "+b+". Cube roots group factors in threes, so \u221B"+(neg?"\u2212":"")+mag+" = "+crS(neg?-a:a,b)+"."+(neg?" (A cube root of a negative number is negative.)":""),
+  return mcq("Express "+cbrtT((neg?"-":"")+mag)+" as a mixed radical in simplest form.",
+    rad3T(neg?-a:a,b),
+    [rad3T(neg?-(a+1):a+1,b),rad3T(neg?-a:a,b+1),rad3T(neg?-a:a,a*b)],
+    "Find the largest perfect cube dividing "+mag+": "+mag+" = "+(a*a*a)+" \u00D7 "+b+". Cube roots group factors in threes, so "+cbrtT((neg?"-":"")+mag)+" = "+rad3T(neg?-a:a,b)+"."+(neg?" (A cube root of a negative number is negative.)":""),
     {a:a,b:b,neg:neg});
 });
 E("u4-cube-equation",4,["1.9"],2,"gen",function(){
   var r=ri(-4,5),p=pick([1,2,3]),x0=ri(-12,20);
   var q=r*r*r-p*x0;
-  var inside=(p===1?"x":p+"x")+(q>0?" + "+q:(q<0?" \u2212 "+(-q):""));
-  var sol="Cube both sides: "+inside+" = "+r+"\u00B3 = "+(r*r*r)+". So "+(p===1?"x":p+"x")+" = "+(r*r*r)+(q>0?" \u2212 "+q:(q<0?" + "+(-q):""))+" = "+(p*x0)+"."+(p===1?"":" Divide by "+p+":")+" x = <b>"+x0+"</b>. (Cube roots accept negative inputs, so there is no restriction to check.)";
-  return numq("Solve: \u221B("+inside+") = "+r+". Give the value of x.",
+  var inside=(p===1?"x":p+"x")+(q>0?" + "+q:(q<0?" - "+(-q):""));
+  var sol="Cube both sides: \\("+inside+" = {"+r+"}^{3} = "+(r*r*r)+"\\). So \\("+(p===1?"x":p+"x")+" = "+(r*r*r)+(q>0?" - "+q:(q<0?" + "+(-q):""))+" = "+(p*x0)+"\\)."+(p===1?"":" Divide by "+p+":")+" \\(x\\) = <b>"+x0+"</b>. (Cube roots accept negative inputs, so there is no restriction to check.)";
+  return numq("Solve: \\(\\sqrt[3]{"+inside+"} = "+r+"\\). Give the value of x.",
     x0,0.011,sol,{r:r,p:p,x0:x0,q:q});
 });
 E("u4-combine-multi",4,["1.6"],2,"gen",function(){
@@ -2036,17 +2041,17 @@ E("u4-combine-multi",4,["1.6"],2,"gen",function(){
     SG=[1,Math.random()<0.5?-1:1,Math.random()<0.5?-1:1];
     tot=D[0]*M[0]+SG[1]*D[1]*M[1]+SG[2]*D[2]*M[2];tries++;
   }while(tot<1&&tries<60);
-  function term(i){return (D[i]===1?"":D[i])+"\u221A"+(M[i]*M[i]*b);}
-  var key=radStr(tot,b);
+  function term(i){return radT(D[i],M[i]*M[i]*b);}
+  var key=radT(tot,b);
   var slip1=D[0]*M[0]-SG[1]*D[1]*M[1]+SG[2]*D[2]*M[2];
   var d2v=D[0]*M[0]+SG[1]*D[1]*M[1];
   var cand=[slip1,d2v,tot+1,tot+2,tot+3,tot+5],ds=[];
   for(var ci=0;ci<cand.length&&ds.length<2;ci++){var cv=cand[ci];if(cv>=1&&cv!==tot&&ds.indexOf(cv)<0)ds.push(cv);}
-  var d1=radStr(ds[0],b),d2=radStr(ds[1],b);
-  var d3="\u221A"+(M[0]*M[0]*b+M[1]*M[1]*b+M[2]*M[2]*b);
+  var d1=radT(ds[0],b),d2=radT(ds[1],b);
+  var d3=sqrtT(M[0]*M[0]*b+M[1]*M[1]*b+M[2]*M[2]*b);
   return mcq("Simplify: "+term(0)+" "+(SG[1]>0?"+ ":"\u2212 ")+term(1)+" "+(SG[2]>0?"+ ":"\u2212 ")+term(2)+".",
     key,[d1,d2,d3],
-    "Simplify each term first: "+term(0)+" = "+radStr(D[0]*M[0],b)+", "+term(1)+" = "+radStr(D[1]*M[1],b)+", and "+term(2)+" = "+radStr(D[2]*M[2],b)+". They are like radicals, so combine the coefficients: "+(D[0]*M[0])+" "+(SG[1]>0?"+ ":"\u2212 ")+(D[1]*M[1])+" "+(SG[2]>0?"+ ":"\u2212 ")+(D[2]*M[2])+" = "+tot+", giving <b>"+key+"</b>.",
+    "Simplify each term first: "+term(0)+" = "+radT(D[0]*M[0],b)+", "+term(1)+" = "+radT(D[1]*M[1],b)+", and "+term(2)+" = "+radT(D[2]*M[2],b)+". They are like radicals, so combine the coefficients: "+(D[0]*M[0])+" "+(SG[1]>0?"+ ":"\u2212 ")+(D[1]*M[1])+" "+(SG[2]>0?"+ ":"\u2212 ")+(D[2]*M[2])+" = "+tot+", giving <b>"+key+"</b>.",
     {b:b,D:D,M:M,SG:SG});
 });
 E("u4-binomial-square",4,["1.6"],2,"gen",function(){
@@ -2054,33 +2059,34 @@ E("u4-binomial-square",4,["1.6"],2,"gen",function(){
   var mn=m*n,t=1,r=mn,f;for(f=2;f*f<=r;f++){while(r%(f*f)===0){r/=(f*f);t*=f;}}
   var plus=Math.random()<0.5;
   var sgn=plus?"+":"\u2212",osgn=plus?"\u2212":"+";
-  var key=(m+n)+" "+sgn+" "+(2*t)+"\u221A"+r;
-  return mcq("Expand and simplify: (\u221A"+m+" "+sgn+" \u221A"+n+")\u00B2.",
+  var sgnT=plus?"+":"-",osgnT=plus?"-":"+";
+  var key="\\("+(m+n)+" "+sgnT+" "+(2*t)+"\\sqrt{"+r+"}\\)";
+  return mcq("Expand and simplify: \\((\\sqrt{"+m+"} "+sgnT+" \\sqrt{"+n+"})^2\\).",
     key,
-    [(m+n)+" "+osgn+" "+(2*t)+"\u221A"+r,(m+n)+" "+sgn+" \u221A"+mn,(m+n)+" "+sgn+" "+t+"\u221A"+r],
-    "(a "+sgn+" b)\u00B2 = a\u00B2 "+sgn+" 2ab + b\u00B2. Here a\u00B2 = "+m+" and b\u00B2 = "+n+", and the middle term is 2\u221A"+m+" \u00D7 \u221A"+n+" = 2\u221A"+mn+" = "+(2*t)+"\u221A"+r+". So the expansion is "+m+" "+sgn+" "+(2*t)+"\u221A"+r+" + "+n+" = <b>"+key+"</b>.",
+    ["\\("+(m+n)+" "+osgnT+" "+(2*t)+"\\sqrt{"+r+"}\\)","\\("+(m+n)+" "+sgnT+" \\sqrt{"+mn+"}\\)","\\("+(m+n)+" "+sgnT+" "+t+"\\sqrt{"+r+"}\\)"],
+    "\\((a "+sgnT+" b)^2 = a^2 "+sgnT+" 2ab + b^2\\). Here \\(a^2 = "+m+"\\) and \\(b^2 = "+n+"\\), and the middle term is \\(2\\sqrt{"+m+"} \\times \\sqrt{"+n+"} = 2\\sqrt{"+mn+"} = "+(2*t)+"\\sqrt{"+r+"}\\). Adding the parts: \\("+m+" + "+n+" = "+(m+n)+"\\), so the expansion is "+key+".",
     {m:m,n:n,plus:plus});
 });
 E("u4-triangle-perimeter",4,["1.6"],2,"gen",function(){
   var b=pick([2,3,5,6,7,10,11,13]);
   var s1=ri(1,4),s2=ri(1,4),s3=ri(1,4),sum=s1+s2+s3;
   var n1=s1*s1*b,n2=s2*s2*b,n3=s3*s3*b;
-  return mcq("A triangle has sides of \u221A"+n1+" cm, \u221A"+n2+" cm and \u221A"+n3+" cm. What is its perimeter, in simplest radical form?",
-    radStr(sum,b),
-    [radStr(s1+s2,b),"\u221A"+(n1+n2+n3),radStr(sum+1,b)],
-    "Simplify each side: \u221A"+n1+" = "+radStr(s1,b)+", \u221A"+n2+" = "+radStr(s2,b)+", \u221A"+n3+" = "+radStr(s3,b)+". Add the like radicals: "+s1+" + "+s2+" + "+s3+" = "+sum+", so the perimeter is <b>"+radStr(sum,b)+" cm</b>. (Do not add the numbers under one root.)",
+  return mcq("A triangle has sides of "+sqrtT(n1)+" cm, "+sqrtT(n2)+" cm and "+sqrtT(n3)+" cm. What is its perimeter, in simplest radical form?",
+    radT(sum,b),
+    [radT(s1+s2,b),sqrtT(n1+n2+n3),radT(sum+1,b)],
+    "Simplify each side: "+sqrtT(n1)+" = "+radT(s1,b)+", "+sqrtT(n2)+" = "+radT(s2,b)+", "+sqrtT(n3)+" = "+radT(s3,b)+". Add the like radicals: \\("+s1+" + "+s2+" + "+s3+" = "+sum+"\\), so the perimeter is <b>"+radT(sum,b)+" cm</b>. (Do not add the numbers under one root.)",
     {b:b,s:[s1,s2,s3]});
 });
 E("u4-width-radical",4,["1.6"],2,"gen",function(){
   var a=ri(2,5),b=pick([2,3,5,6,7]),c=ri(2,5),d=pick([2,3,5,6,7]);
   var bd=b*d,t=1,r0=bd,f;for(f=2;f*f<=r0;f++){while(r0%(f*f)===0){r0/=(f*f);t*=f;}}
-  var keyW=radStr(a,b);
+  var keyW=radT(a,b);
   var candW=[[a,b*d],[a*c,b],[a*t,r0],[a,d],[a+1,b],[c,b],[a*c,b*d]],dsW=[];
-  for(var ci=0;ci<candW.length&&dsW.length<3;ci++){var stW=radStr(candW[ci][0],candW[ci][1]);if(stW!==keyW&&dsW.indexOf(stW)<0)dsW.push(stW);}
-  return mcq("A rectangle has area "+(a*c)+"\u221A"+bd+" cm\u00B2 and length "+radStr(c,d)+" cm. What is its width, in simplest radical form?",
+  for(var ci=0;ci<candW.length&&dsW.length<3;ci++){var stW=radT(candW[ci][0],candW[ci][1]);if(stW!==keyW&&dsW.indexOf(stW)<0)dsW.push(stW);}
+  return mcq("A rectangle has area \\("+(a*c)+"\\sqrt{"+bd+"}\\) cm\u00B2 and length "+radT(c,d)+" cm. What is its width, in simplest radical form?",
     keyW,
     dsW,
-    "Width = area \u00F7 length = "+(a*c)+"\u221A"+bd+" \u00F7 "+radStr(c,d)+". Divide the coefficients: "+(a*c)+" \u00F7 "+c+" = "+a+". Divide the radicals: \u221A"+bd+" \u00F7 \u221A"+d+" = \u221A"+b+". So the width is <b>"+radStr(a,b)+" cm</b>.",
+    "Width = area \u00F7 length = \\("+(a*c)+"\\sqrt{"+bd+"} \\div "+c+"\\sqrt{"+d+"}\\). Divide the coefficients: \\("+(a*c)+" \\div "+c+" = "+a+"\\). Divide the radicals: \\(\\sqrt{"+bd+"} \\div \\sqrt{"+d+"} = \\sqrt{"+b+"}\\). So the width is <b>"+radT(a,b)+" cm</b>.",
     {a:a,b:b,c:c,d:d});
 });
 
@@ -2575,32 +2581,32 @@ E("u4-evaluate-mixed",4,["1.2"],1,"gen",function(){
   var a=ri(3,15),b=ri(2,9),c=ri(2,12),tries=0;
   while(c>=a+b&&tries<40){c=ri(2,12);tries++;}
   var ans=a+b-c;
-  return numq("Evaluate: √"+(a*a)+" + ∛"+(b*b*b)+" − √"+(c*c)+".",
+  return numq("Evaluate: \\(\\sqrt{"+(a*a)+"} + \\sqrt[3]{"+(b*b*b)+"} - \\sqrt{"+(c*c)+"}\\).",
     ans,0.011,
-    "√"+(a*a)+" = "+a+" because "+a+"² = "+(a*a)+"; ∛"+(b*b*b)+" = "+b+" because "+b+"³ = "+(b*b*b)+"; √"+(c*c)+" = "+c+". So the value is "+a+" + "+b+" − "+c+" = <b>"+ans+"</b>.",
+    "\\(\\sqrt{"+(a*a)+"} = "+a+"\\) because \\("+a+"^2 = "+(a*a)+"\\); \\(\\sqrt[3]{"+(b*b*b)+"} = "+b+"\\) because \\("+b+"^3 = "+(b*b*b)+"\\); \\(\\sqrt{"+(c*c)+"} = "+c+"\\). So the value is \\("+a+" + "+b+" - "+c+"\\) = <b>"+ans+"</b>.",
     {a:a,b:b,c:c,ans:ans});
 });
 E("u4-divide-radicals",4,["1.6"],2,"gen",function(){
   var m=pick([2,3,5,6,7,10,11,13,14,15]),k=ri(2,6),d0=ri(2,9);
   var A=d0*k*k*m,B=d0;
-  var key=radStr(k,m);
-  var cand=[radStr(k+1,m),radStr(k,m+1),"√"+(k*k*m),radStr(k*k,m),radStr(k,m+2)],ds=[];
+  var key=radT(k,m);
+  var cand=[radT(k+1,m),radT(k,m+1),sqrtT(k*k*m),radT(k*k,m),radT(k,m+2)],ds=[];
   for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
-  return mcq("Simplify: √"+A+" ÷ √"+B+". Give the answer in simplest radical form.",
+  return mcq("Simplify: \\(\\frac{\\sqrt{"+A+"}}{\\sqrt{"+B+"}}\\). Give the answer in simplest radical form.",
     key,ds,
-    "Combine under one root: √("+A+" ÷ "+B+") = √"+(k*k*m)+". Then simplify: √"+(k*k*m)+" = "+k+"√"+m+" because "+(k*k)+" is a perfect square factor. In simplest form: <b>"+key+"</b>.",
+    "Combine under one root: \\(\\frac{\\sqrt{"+A+"}}{\\sqrt{"+B+"}} = \\sqrt{\\frac{"+A+"}{"+B+"}} = \\sqrt{"+(k*k*m)+"}\\). Then simplify: \\(\\sqrt{"+(k*k*m)+"} = "+k+"\\sqrt{"+m+"}\\) because "+(k*k)+" is a perfect square factor. In simplest form: <b>"+key+"</b>.",
     {A:A,B:B,k:k,m:m,d0:d0});
 });
 E("u4-rationalize-coefficient",4,["1.7"],2,"gen",function(){
   function gcd(x,y){while(y){var u=y;y=x%y;x=u;}return x;}
   var c,m,N,tries=0;
   do{c=ri(2,5);m=pick([2,3,5,6,7,10,11,13]);N=ri(2,11);tries++;}while(gcd(N,c*m)!==1&&tries<80);
-  var key=N+"√"+m+" / "+(c*m);
-  var cand=[N+"√"+m+" / "+c,(N*m)+"√"+m+" / "+(c*m),N+" / "+(c*m),N+"√"+m+" / "+(c+m)],ds=[];
+  var key="\\(\\frac{"+N+"\\sqrt{"+m+"}}{"+(c*m)+"}\\)";
+  var cand=["\\(\\frac{"+N+"\\sqrt{"+m+"}}{"+c+"}\\)","\\(\\frac{"+(N*m)+"\\sqrt{"+m+"}}{"+(c*m)+"}\\)","\\(\\frac{"+N+"}{"+(c*m)+"}\\)","\\(\\frac{"+N+"\\sqrt{"+m+"}}{"+(c+m)+"}\\)"],ds=[];
   for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
-  return mcq("Rationalize the denominator and simplify: "+N+" / ("+c+"√"+m+").",
+  return mcq("Rationalize the denominator and simplify: \\(\\frac{"+N+"}{"+c+"\\sqrt{"+m+"}}\\).",
     key,ds,
-    "Multiply the numerator and denominator by √"+m+": the denominator becomes "+c+" × √"+m+" × √"+m+" = "+c+" × "+m+" = "+(c*m)+", and the numerator becomes "+N+"√"+m+". Since "+N+" and "+(c*m)+" share no common factor, the simplest form is <b>"+key+"</b>.",
+    "Multiply the numerator and denominator by \\(\\sqrt{"+m+"}\\): the denominator becomes \\("+c+" \\times \\sqrt{"+m+"} \\times \\sqrt{"+m+"} = "+c+" \\times "+m+" = "+(c*m)+"\\), and the numerator becomes \\("+N+"\\sqrt{"+m+"}\\). Since "+N+" and "+(c*m)+" share no common factor, the simplest form is <b>"+key+"</b>.",
     {N:N,c:c,m:m});
 });
 E("u4-conjugate-area",4,["1.6"],3,"gen",function(){
@@ -2608,9 +2614,9 @@ E("u4-conjugate-area",4,["1.6"],3,"gen",function(){
   for(i=2;i<a*a;i++){var rt=Math.sqrt(i);if(rt!==Math.floor(rt))sq.push(i);}
   var b=pick(sq),area=a*a-b;
   var ctx=pick(["rectangular garden","rectangular rug","rectangular solar panel","rectangular patio"]);
-  return numq("A "+ctx+" measures ("+a+" + √"+b+") m by ("+a+" − √"+b+") m. What is its area, in m²?",
+  return numq("A "+ctx+" measures \\(("+a+" + \\sqrt{"+b+"})\\) m by \\(("+a+" - \\sqrt{"+b+"})\\) m. What is its area, in m²?",
     area,0.011,
-    "Area = ("+a+" + √"+b+")("+a+" − √"+b+"), a difference of squares: "+a+"² − (√"+b+")² = "+(a*a)+" − "+b+" = <b>"+area+" m²</b>. The radical terms cancel, which is why conjugate pairs give a whole-number area.",
+    "Area = \\(("+a+" + \\sqrt{"+b+"})("+a+" - \\sqrt{"+b+"})\\), a difference of squares: \\("+a+"^2 - (\\sqrt{"+b+"})^2 = "+(a*a)+" - "+b+" = "+area+"\\), so the area is <b>"+area+" m²</b>. The radical terms cancel, which is why conjugate pairs give a whole-number area.",
     {a:a,b:b,area:area});
 });
 
@@ -2783,11 +2789,11 @@ E("u3-root-difference",3,["4.6"],3,"gen",function(){
 /* --- Unit 4: Radicals --- */
 E("u4-entire-cube",4,["1.1"],1,"gen",function(){
   var a=ri(2,6),b=pick([2,3,4,5,6,7,9,10,11,13,14,15,18,20]);
-  var key="∛"+(a*a*a*b);
-  return mcq("Express "+a+"∛"+b+" as an entire radical.",
+  var key=cbrtT(a*a*a*b);
+  return mcq("Express "+rad3T(a,b)+" as an entire radical.",
     key,
-    ["∛"+(a*b),"∛"+(a*a*b),"∛"+((a+1)*(a+1)*(a+1)*b)],
-    "The coefficient must be cubed to move under a cube root: "+a+" = ∛"+(a*a*a)+". So "+a+"∛"+b+" = ∛("+((a*a*a))+" × "+b+") = <b>"+key+"</b>. (Squaring the coefficient would be right for a square root, not a cube root.)",
+    [cbrtT(a*b),cbrtT(a*a*b),cbrtT((a+1)*(a+1)*(a+1)*b)],
+    "The coefficient must be cubed to move under a cube root: \\("+a+" = \\sqrt[3]{"+(a*a*a)+"}\\). So "+rad3T(a,b)+" = \\(\\sqrt[3]{"+(a*a*a)+" \\times "+b+"}\\) = "+key+". (Squaring the coefficient would be right for a square root, not a cube root.)",
     {a:a,b:b});
 });
 E("u4-product-simplify",4,["1.6"],2,"gen",function(){
@@ -2795,40 +2801,40 @@ E("u4-product-simplify",4,["1.6"],2,"gen",function(){
   var A=a*a*m,B=mode===0?b*b:b*b*m;
   var key,ds;
   if(mode===0){
-    key=radStr(a*b,m);
-    var cand=[radStr(a+b,m),"√"+(A*B),radStr(a*b,m+1),radStr(a*b+1,m)];ds=[];
+    key=radT(a*b,m);
+    var cand=[radT(a+b,m),sqrtT(A*B),radT(a*b,m+1),radT(a*b+1,m)];ds=[];
     for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
   }else{
     key=String(a*b*m);
-    var cand2=[String(a*b),String((a+b)*m),String(a*b*m+m),radStr(a*b,m)];ds=[];
+    var cand2=[String(a*b),String((a+b)*m),String(a*b*m+m),radT(a*b,m)];ds=[];
     for(var i2=0;i2<cand2.length&&ds.length<3;i2++){if(cand2[i2]!==key&&ds.indexOf(cand2[i2])<0)ds.push(cand2[i2]);}
   }
-  return mcq("Simplify: √"+A+" × √"+B+". Give the answer in simplest form.",
+  return mcq("Simplify: \\(\\sqrt{"+A+"} \\times \\sqrt{"+B+"}\\). Give the answer in simplest form.",
     key,ds,
-    "Simplify each radical first: √"+A+" = "+radStr(a,m)+" and √"+B+" = "+(mode===0?b:radStr(b,m))+". Multiplying: "+(mode===0?a+" × "+b+" = "+(a*b)+", giving <b>"+key+"</b>.":a+" × "+b+" × ("+m+") because √"+m+" × √"+m+" = "+m+", giving <b>"+key+"</b>."),
+    "Simplify each radical first: "+sqrtT(A)+" = "+radT(a,m)+" and "+sqrtT(B)+" = "+(mode===0?b:radT(b,m))+". Multiplying: "+(mode===0?"\\("+a+" \\times "+b+" = "+(a*b)+"\\), giving <b>"+key+"</b>.":"\\("+a+" \\times "+b+" \\times "+m+"\\) because \\(\\sqrt{"+m+"} \\times \\sqrt{"+m+"} = "+m+"\\), giving <b>"+key+"</b>."),
     {a:a,b:b,m:m,mode:mode,A:A,B:B});
 });
 E("u4-add-unlike",4,["1.6"],2,"gen",function(){
   var m=pick([2,3,5,6,7,10,11,13]),a=ri(1,6),b=ri(1,6),tries=0;
   while(b===a&&tries<40){b=ri(1,6);tries++;}
-  var A=a*a*m,B=b*b*m,key=radStr(a+b,m);
-  var cand=["√"+(A+B),radStr(a*b,m),radStr(a+b+1,m),radStr(Math.abs(a-b),m)],ds=[];
+  var A=a*a*m,B=b*b*m,key=radT(a+b,m);
+  var cand=[sqrtT(A+B),radT(a*b,m),radT(a+b+1,m),radT(Math.abs(a-b),m)],ds=[];
   for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
-  return mcq("Simplify: √"+A+" + √"+B+". Give the answer in simplest radical form.",
+  return mcq("Simplify: \\(\\sqrt{"+A+"} + \\sqrt{"+B+"}\\). Give the answer in simplest radical form.",
     key,ds,
-    "Simplify each term first: √"+A+" = "+radStr(a,m)+" and √"+B+" = "+radStr(b,m)+". They are like radicals, so add the coefficients: "+a+" + "+b+" = "+(a+b)+", giving <b>"+key+"</b>. (The numbers under the roots are never added together.)",
+    "Simplify each term first: "+sqrtT(A)+" = "+radT(a,m)+" and "+sqrtT(B)+" = "+radT(b,m)+". They are like radicals, so add the coefficients: \\("+a+" + "+b+" = "+(a+b)+"\\), giving <b>"+key+"</b>. (The numbers under the roots are never added together.)",
     {a:a,b:b,m:m,A:A,B:B});
 });
 E("u4-diagonal-radical",4,["1.6"],3,"gen",function(){
   var s=ri(2,6),m=pick([2,3,5,6,7,10]);
   var r0=2*m,t=1,f;for(f=2;f*f<=r0;f++){while(r0%(f*f)===0){r0/=(f*f);t*=f;}}
-  var key=r0===1?String(s*t):radStr(s*t,r0);
-  var cand=[radStr(s,m),radStr(2*s,m),"√"+(2*s*s*m),r0===1?String(2*s*t):radStr(s*t+1,r0)],ds=[];
+  var key=r0===1?String(s*t):radT(s*t,r0);
+  var cand=[radT(s,m),radT(2*s,m),sqrtT(2*s*s*m),r0===1?String(2*s*t):radT(s*t+1,r0)],ds=[];
   for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
   var ctx=pick(["square tile","square panel","square garden plot","square poster"]);
-  return mcq("A "+ctx+" has side length "+radStr(s,m)+" m. What is the length of its diagonal, in simplest radical form?",
+  return mcq("A "+ctx+" has side length "+radT(s,m)+" m. What is the length of its diagonal, in simplest radical form?",
     key,ds,
-    "By Pythagoras, the diagonal is √2 times the side: "+radStr(s,m)+" × √2 = "+s+"√"+(2*m)+". Simplifying √"+(2*m)+" = "+(r0===1?t:radStr(t,r0))+" gives the diagonal as <b>"+key+" m</b>.",
+    "By Pythagoras, the diagonal is \\(\\sqrt{2}\\) times the side: \\("+s+"\\sqrt{"+m+"} \\times \\sqrt{2} = "+s+"\\sqrt{"+(2*m)+"}\\). Simplifying \\(\\sqrt{"+(2*m)+"} = "+(r0===1?(""+t):(t===1?"\\sqrt{"+r0+"}":t+"\\sqrt{"+r0+"}"))+"\\) gives the diagonal as <b>"+key+" m</b>.",
     {s:s,m:m,t:t,r0:r0});
 });
 
@@ -3005,34 +3011,34 @@ E("u4-compare-radicals",4,["1.4"],2,"gen",function(){
     a=ri(1,6);b=pick([2,3,5,6,7,10,11,13]);c=ri(1,6);d=pick([2,3,5,6,7,10,11,13]);
     x2=a*a*b;y2=c*c*d;tries++;
   }while((x2===y2||(a===c&&b===d))&&tries<60);
-  var X=radStr(a,b),Y=radStr(c,d),xBig=x2>y2;
+  var X=radT(a,b),Y=radT(c,d),xBig=x2>y2;
   return mcq("Which statement about "+X+" and "+Y+" is true?",
     (xBig?X:Y)+" is the larger value",
     [(xBig?Y:X)+" is the larger value","They are equal","They cannot be compared without a calculator"],
-    "Write both as entire radicals: "+X+" = √"+x2+" and "+Y+" = √"+y2+". Since "+Math.max(x2,y2)+" > "+Math.min(x2,y2)+", the larger value is <b>"+(xBig?X:Y)+"</b>.",
+    "Write both as entire radicals: "+X+" = "+sqrtT(x2)+" and "+Y+" = "+sqrtT(y2)+". Since "+Math.max(x2,y2)+" > "+Math.min(x2,y2)+", the larger value is <b>"+(xBig?X:Y)+"</b>.",
     {a:a,b:b,c:c,d:d,x2:x2,y2:y2});
 });
 E("u4-difference-simplify",4,["1.6"],2,"gen",function(){
   var m=pick([2,3,5,6,7,10,11,13]),a=ri(3,7),b=ri(1,a-1);
-  var A=a*a*m,B=b*b*m,key=radStr(a-b,m);
-  var cand=["√"+(A-B),radStr(a+b,m),radStr(a,m)],ds=[];
+  var A=a*a*m,B=b*b*m,key=radT(a-b,m);
+  var cand=[sqrtT(A-B),radT(a+b,m),radT(a,m)],ds=[];
   for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
-  return mcq("Simplify: √"+A+" − √"+B+". Give the answer in simplest radical form.",
+  return mcq("Simplify: \\(\\sqrt{"+A+"} - \\sqrt{"+B+"}\\). Give the answer in simplest radical form.",
     key,ds,
-    "Simplify each term first: √"+A+" = "+radStr(a,m)+" and √"+B+" = "+radStr(b,m)+". They are like radicals, so subtract the coefficients: "+a+" − "+b+" = "+(a-b)+", giving <b>"+key+"</b>.",
+    "Simplify each term first: "+sqrtT(A)+" = "+radT(a,m)+" and "+sqrtT(B)+" = "+radT(b,m)+". They are like radicals, so subtract the coefficients: \\("+a+" - "+b+" = "+(a-b)+"\\), giving <b>"+key+"</b>.",
     {a:a,b:b,m:m,A:A,B:B});
 });
 E("u4-reciprocal-sum",4,["1.7"],3,"gen",function(){
   function gcd(x,y){while(y){var u=y;y=x%y;x=u;}return x;}
   var a=pick([2,3,5,6,7,10,11,13,14,15,17,19,21,22,23,26]),k=ri(2,6),B=a*k*k;
   var g=gcd(k+1,k*a),num=(k+1)/g,den=(k*a)/g;
-  function fr(nm,dn){return (nm===1?"√"+a:nm+"√"+a)+" / "+dn;}
+  function fr(nm,dn){return "\\(\\frac{"+(nm===1?"\\sqrt{"+a+"}":nm+"\\sqrt{"+a+"}")+"}{"+dn+"}\\)";}
   var key=fr(num,den);
-  var cand=[fr(k+1,k*a),(k+1)+"√"+a+" / "+a,"√"+a+" / "+k,fr(k,k*a)],ds=[];
+  var cand=[fr(k+1,k*a),"\\(\\frac{"+(k+1)+"\\sqrt{"+a+"}}{"+a+"}\\)","\\(\\frac{\\sqrt{"+a+"}}{"+k+"}\\)",fr(k,k*a)],ds=[];
   for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
-  return mcq("Simplify, rationalizing the denominator: 1/√"+a+" + 1/√"+B+".",
+  return mcq("Simplify, rationalizing the denominator: \\(\\frac{1}{\\sqrt{"+a+"}} + \\frac{1}{\\sqrt{"+B+"}}\\).",
     key,ds,
-    "First, √"+B+" = "+k+"√"+a+". Write the sum over a common denominator: 1/√"+a+" + 1/("+k+"√"+a+") = ("+k+" + 1) / ("+k+"√"+a+") = "+(k+1)+" / ("+k+"√"+a+"). Rationalizing (multiply top and bottom by √"+a+") gives "+(k+1)+"√"+a+" / "+(k*a)+(g>1?", which reduces by "+g:"")+" — the simplest form is <b>"+key+"</b>.",
+    "First, \\(\\sqrt{"+B+"} = "+k+"\\sqrt{"+a+"}\\). Write the sum over a common denominator: \\(\\frac{1}{\\sqrt{"+a+"}} + \\frac{1}{"+k+"\\sqrt{"+a+"}} = \\frac{"+(k+1)+"}{"+k+"\\sqrt{"+a+"}}\\). Rationalizing (multiply top and bottom by \\(\\sqrt{"+a+"}\\)) gives \\(\\frac{"+(k+1)+"\\sqrt{"+a+"}}{"+(k*a)+"}\\)"+(g>1?", which reduces by "+g:"")+" — the simplest form is <b>"+key+"</b>.",
     {a:a,k:k,B:B,g:g,num:num,den:den});
 });
 
@@ -3201,6 +3207,40 @@ function drawSet(units,inds,n,mix,orderMode,cap){
 }
 /* ============ UI ============ */
 var $=function(id){return document.getElementById(id);};
+/* Typeset TeX segments \( ... \) in generated content with KaTeX (self-hosted
+   under katex/). Existing plain-Unicode strings pass through untouched. If
+   KaTeX failed to load, strip the delimiters so the TeX source still reads
+   as plain text instead of showing raw delimiters. */
+function typesetMath(el){
+  if(!el)return;
+  if(window.renderMathInElement){
+    try{renderMathInElement(el,{delimiters:[{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}],throwOnError:false});}catch(e){}
+  }else if(el.querySelectorAll){
+    var walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+    var nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+    nodes.forEach(function(n){if(n.nodeValue.indexOf("\\(")>=0||n.nodeValue.indexOf("\\[")>=0)n.nodeValue=n.nodeValue.replace(/\\\(|\\\)|\\\[|\\\]/g,"");});
+  }
+}
+/* Plain-text version of a TeX string, for copying sheets into Docs/Word
+   where the KaTeX stylesheet does not travel. */
+function cleanTex(t){
+  var prev;
+  do{prev=t;
+    t=t.replace(/\\sqrt\[3\]\{([^{}]*)\}/g,"∛$1");
+    t=t.replace(/\\sqrt\[(\d+)\]\{([^{}]*)\}/g,"root$1($2)");
+    t=t.replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g,"($1)/($2)");
+    t=t.replace(/\\sqrt\{([^{}]*)\}/g,"√$1");
+  }while(t!==prev);
+  return t.replace(/\\([a-zA-Z]+)/g,"$1").replace(/[{}]/g,"");
+}
+function detexClone(node){
+  var c=node.cloneNode(true);
+  Array.prototype.forEach.call(c.querySelectorAll(".katex"),function(k){
+    var a=k.querySelector("annotation");
+    k.replaceWith(document.createTextNode(a?cleanTex(a.textContent):""));
+  });
+  return c;
+}
 var state={units:[5],inds:[],midCap:false};
 /* Report-a-problem: a Google Form on the maintainer's personal account receives the
    reports, and a nightly job reads them back, fixes what is verifiably fixable, and
@@ -3271,7 +3311,7 @@ function startOnline(){
       +'<div class="repstat" id="repstat'+i+'"></div></div></div>';
   });
   html+='<p><button type="button" id="againBtn">New set of questions</button></p></div>';
-  box.innerHTML=html;updateScore();
+  box.innerHTML=html;updateScore();typesetMath(box);
   Array.prototype.forEach.call(box.querySelectorAll("[data-check]"),function(b){b.addEventListener("click",function(){checkQ(+b.getAttribute("data-check"));});});
   Array.prototype.forEach.call(box.querySelectorAll("[data-sol]"),function(b){b.addEventListener("click",function(){$("sol"+b.getAttribute("data-sol")).classList.toggle("show");});});
   Array.prototype.forEach.call(box.querySelectorAll("[data-rep]"),function(b){b.addEventListener("click",function(){$("rep"+b.getAttribute("data-rep")).classList.toggle("show");});});
@@ -3345,9 +3385,10 @@ function startSheet(){
   $("session").innerHTML='<div class="card"><p>Your practice sheet is ready ('+res.items.length+' questions, with the answer key on its own pages at the end). It is shown below, exactly as it will print.</p>'
     +(res.thin?'<p class="thinNote">Heads up: the question bank is still thin for this selection, so this sheet repeats practice on the same question shape (with new numbers) because there are not yet enough different questions to fill it.</p>':"")
     +'<div class="row"><button type="button" id="editBtn">Edit the sheet</button><button type="button" id="copyBtn" class="sec">Copy for Google Docs / Word</button><button type="button" id="printBtn" class="sec">Print / save the sheet</button></div>'
-    +'<p class="hint" id="editHint" hidden>Editing is on: click any text in the sheet below and type to change it, or delete a question you do not want. What you see is what prints. The math is regular text, so numbers and symbols can be changed directly.</p>'
+    +'<p class="hint" id="editHint" hidden>Editing is on: click any text in the sheet below and type to change it, or delete a question you do not want. What you see is what prints. Most math is regular text and can be changed directly; typeset expressions (the Unit 4 radicals) are rendered, so if you need different numbers in one of those, regenerate the sheet instead.</p>'
     +'<p class="hint" id="copyStatus" role="status"></p>'
     +'<div class="sheetPrev" id="sheetPrev">'+html+'</div></div>';
+  typesetMath($("sheetPrev"));typesetMath($("printArea"));
   $("editBtn").addEventListener("click",function(){
     var prev=$("sheetPrev"),on=prev.getAttribute("contenteditable")==="true";
     if(on){prev.removeAttribute("contenteditable");prev.classList.remove("editing");$("editBtn").textContent="Edit the sheet";$("editHint").hidden=true;}
@@ -3362,7 +3403,8 @@ function copySheet(){
   function fallback(){try{var r=document.createRange();r.selectNodeContents(node);var sel=window.getSelection();sel.removeAllRanges();sel.addRange(r);var ok=document.execCommand("copy");sel.removeAllRanges();done(ok);}catch(e){done(false);}}
   if(navigator.clipboard&&window.ClipboardItem){
     try{
-      var item=new ClipboardItem({"text/html":new Blob([node.innerHTML],{type:"text/html"}),"text/plain":new Blob([node.innerText||""],{type:"text/plain"})});
+      var clean=detexClone(node);
+      var item=new ClipboardItem({"text/html":new Blob([clean.innerHTML],{type:"text/html"}),"text/plain":new Blob([clean.innerText||clean.textContent||""],{type:"text/plain"})});
       navigator.clipboard.write([item]).then(function(){done(true);},function(){fallback();});
     }catch(e){fallback();}
   } else fallback();
