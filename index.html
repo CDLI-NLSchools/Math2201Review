@@ -2459,6 +2459,205 @@ E("u7-counterexample-claims",7,["2.4"],2,"var",varset([
     {});}
 ]));
 
+/* ============ Tranche 6 (Oct 27): finish-line pass, tranche 1 of 3 ============
+   Units 2, 3, 4, 8 +4 each (bank 161 -> 177). Templates reworked from the
+   inventoried-but-unbuilt stock (batch5 / QE RHS / HHM families, mapped by
+   topic); every item re-created with new numbers and contexts, nothing
+   copied verbatim. Fixes level mix: adds a Level 3 for Units 2, 4 and 8
+   (Unit 8's first Level 3 entry). */
+
+/* --- Unit 2: Quadratic Functions --- */
+E("u2-y-intercept",2,["4.4"],1,"gen",function(){
+  var a,b,c,ds,tries=0;
+  do{
+    a=ri(1,6)*(Math.random()<0.4?-1:1);b=ri(-9,9);c=ri(-12,12);tries++;
+    var cand=[b,a,a+b+c,-c,b+c,c+2,c-2];ds=[];
+    for(var i=0;i<cand.length&&ds.length<3;i++){var v=String(cand[i]);if(cand[i]!==c&&ds.indexOf(v)<0)ds.push(v);}
+  }while((b===0||c===0||ds.length<3)&&tries<80);
+  return mcq("What is the y-intercept of the graph of y = "+quadStr(a,b,c)+"?",
+    String(c),ds,
+    "The y-intercept is the value of y when x = 0. Substituting x = 0 leaves only the constant term: y = <b>"+c+"</b>.",
+    {a:a,b:b,c:c});
+});
+E("u2-mirror-point",2,["4.13"],2,"gen",function(){
+  var h=ri(-6,8),d=ri(1,9),x1=h+(Math.random()<0.5?d:-d),x2=2*h-x1,y=ri(3,45);
+  return numq("A parabola has axis of symmetry x = "+h+". The point ("+x1+", "+y+") lies on the parabola. Another point on the parabola has the same y-value. What is its x-coordinate?",
+    x2,0.011,
+    "Points with the same y-value sit symmetrically about the axis x = "+h+". The given point is "+Math.abs(x1-h)+" units from the axis, so the mirror point is "+Math.abs(x1-h)+" units on the other side: x = "+h+" "+(x2>h?"+":"−")+" "+Math.abs(x2-h)+" = <b>"+x2+"</b>. (Check: the axis is the midpoint, ("+x1+" + "+x2+") ÷ 2 = "+h+".)",
+    {h:h,x1:x1,x2:x2,y:y});
+});
+E("u2-vertex-time",2,["4.2"],2,"gen",function(){
+  var k=ri(4,18),B=5*k,C=ri(1,25);
+  var ctx=pick(["ball thrown into the air","fountain jet","model rocket","firework shell"]);
+  return numq("The height of a "+ctx+" is h(t) = −5t² + "+B+"t + "+C+" metres, t seconds after it is launched. At what time does it reach its maximum height, in seconds?",
+    k/2,0.011,
+    "The maximum occurs at the vertex, where t = −B ÷ (2 × −5) = "+B+" ÷ 10 = <b>"+fmt(k/2,1)+" s</b>.",
+    {B:B,C:C,k:k,ans:k/2});
+});
+E("u2-fence-max",2,["4.2"],3,"gen",function(){
+  var k=ri(6,20),P=4*k,mode=ri(0,1),area=2*k*k;
+  var ctx=pick([["rectangular garden","a house wall"],["rectangular dog pen","a barn wall"],["rectangular patio","an existing fence"],["rectangular chicken run","a shed wall"]]);
+  var prompt="A "+ctx[0]+" is built against "+ctx[1]+", so fencing is needed on only three sides. A total of "+P+" m of fencing is available. ";
+  if(mode===0)prompt+="What is the greatest area that can be enclosed, in m²?";
+  else prompt+="How wide should it be (each side perpendicular to the wall) to enclose the greatest possible area, in metres?";
+  return numq(prompt,mode===0?area:k,0.011,
+    "Let the two sides perpendicular to the wall each be x m. The side parallel to the wall is "+P+" − 2x, so the area is A(x) = x("+P+" − 2x) = −2x² + "+P+"x. The vertex is at x = "+P+" ÷ 4 = "+k+" m, giving a parallel side of "+P+" − 2 × "+k+" = "+(2*k)+" m and a maximum area of "+k+" × "+(2*k)+" = <b>"+area+" m²</b>."+(mode===1?" The width at the maximum is <b>"+k+" m</b>.":""),
+    {P:P,k:k,mode:mode,area:area,width:k});
+});
+
+/* --- Unit 3: Quadratic Equations --- */
+E("u3-roots-sum-product",3,["4.6"],2,"gen",function(){
+  var pool=[-8,-7,-6,-5,-4,-3,-2,-1,1,2,3,4,5,6,7,8];
+  var r1=pick(pool),r2=pick(pool.filter(function(x){return x!==r1;}));
+  var B=-(r1+r2),C=r1*r2,mode=Math.random()<0.5?"sum":"product";
+  var key=mode==="sum"?r1+r2:r1*r2;
+  var cand=[B,-B,C,-C,key+1,key-1,key+2,key-2,r1-r2,r2-r1],ds=[];
+  for(var i=0;i<cand.length&&ds.length<3;i++){var v=String(cand[i]);if(cand[i]!==key&&ds.indexOf(v)<0)ds.push(v);}
+  return mcq("For the equation "+quadStr(1,B,C)+" = 0, what is the "+mode+" of the roots?",
+    String(key),ds,
+    "The equation factors as (x "+(r1>0?"− "+r1:"+ "+(-r1))+")(x "+(r2>0?"− "+r2:"+ "+(-r2))+") = 0, so the roots are "+r1+" and "+r2+". Their "+mode+" is "+(mode==="sum"?r1+" + "+r2:r1+" × "+r2)+" = <b>"+key+"</b>. (In general, for x² + bx + c the sum of the roots is −b and the product is c.)",
+    {r1:r1,r2:r2,B:B,C:C,mode:mode,key:key});
+});
+E("u3-factor-nonmonic",3,["4.8"],2,"gen",function(){
+  function lin(cf,tm){return (cf===1?"x":cf+"x")+(tm>0?" + "+tm:" − "+(-tm));}
+  function expand(t){return [t[0]*t[2], t[0]*t[3]+t[1]*t[2], t[1]*t[3]];}
+  var p,q,r,s,A,B,C,tries=0;
+  do{
+    p=ri(1,3);q=ri(1,3);r=pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6]);s=pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6]);
+    A=p*q;B=p*s+r*q;C=r*s;tries++;
+  }while(B===0&&tries<80); /* B = 0 is a difference of squares: the sign-flip distractors collapse there (it has its own entry in tranche 7) */
+  var key="("+lin(p,r)+")("+lin(q,s)+")";
+  var cands=[[p,-r,q,s],[p,r,q,-s],[p,-r,q,-s],[q,r,p,s],[q,-r,p,-s],[p,-s,q,-r]],ds=[];
+  for(var i=0;i<cands.length&&ds.length<3;i++){
+    var ex=expand(cands[i]);if(ex[0]===A&&ex[1]===B&&ex[2]===C)continue;
+    var st="("+lin(cands[i][0],cands[i][1])+")("+lin(cands[i][2],cands[i][3])+")";
+    if(st!==key&&ds.indexOf(st)<0)ds.push(st);
+  }
+  return mcq("Factor fully: "+quadStr(A,B,C)+".",
+    key,ds,
+    "Look for a factor pair whose cross-products add to "+B+": ("+lin(p,r)+")("+lin(q,s)+") expands to "+A+"x² + ("+(p*s)+" + "+(r*q)+")x + ("+C+") = "+quadStr(A,B,C)+". So the factored form is <b>"+key+"</b>.",
+    {p:p,r:r,q:q,s:s,A:A,B:B,C:C});
+});
+E("u3-standard-coeffs",3,["4.9"],1,"gen",function(){
+  var A=ri(2,6),B=ri(-9,9),K=ri(-12,12),tries=0;
+  while((B===0||K===0)&&tries<40){B=ri(-9,9);K=ri(-12,12);tries++;}
+  var key="a = "+A+", b = "+B+", c = "+(-K);
+  var cand=["a = "+A+", b = "+B+", c = "+K,"a = "+A+", b = "+(-B)+", c = "+(-K),"a = "+B+", b = "+A+", c = "+(-K),"a = 1, b = "+B+", c = "+(-K)],ds=[];
+  for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
+  return mcq("The equation "+quadStr(A,B,0)+" = "+K+" is to be solved with the quadratic formula. When it is written in standard form ax² + bx + c = 0, what are a, b and c?",
+    key,ds,
+    "Move every term to the left: "+quadStr(A,B,0)+" − ("+K+") = 0, that is, "+quadStr(A,B,-K)+" = 0. Reading off the coefficients: <b>"+key+"</b>. The constant changes sign when it crosses the equals sign.",
+    {A:A,B:B,K:K});
+});
+E("u3-two-numbers",3,["4.3"],3,"gen",function(){
+  var mode=pick([["consecutive integers",1],["consecutive even integers",2],["consecutive odd integers",2]]);
+  var n,step=mode[1];
+  if(mode[0].indexOf("even")>=0)n=2*ri(3,20);
+  else if(mode[0].indexOf("odd")>=0)n=2*ri(3,20)-1;
+  else n=ri(4,30);
+  var N=n*(n+step);
+  return numq("The product of two positive "+mode[0]+" is "+N+". What is the smaller of the two integers?",
+    n,0.011,
+    "Let the smaller integer be x; the next one is x + "+step+". Then x(x + "+step+") = "+N+", so x² + "+step+"x − "+N+" = 0, which factors as (x − "+n+")(x + "+(n+step)+") = 0. The positive root is x = <b>"+n+"</b> (the other root, −"+(n+step)+", is rejected because the integers are positive). The two integers are "+n+" and "+(n+step)+", and indeed "+n+" × "+(n+step)+" = "+N+".",
+    {n:n,step:step,N:N,mode:mode[0]});
+});
+
+/* --- Unit 4: Radicals --- */
+E("u4-evaluate-mixed",4,["1.2"],1,"gen",function(){
+  var a=ri(3,15),b=ri(2,9),c=ri(2,12),tries=0;
+  while(c>=a+b&&tries<40){c=ri(2,12);tries++;}
+  var ans=a+b-c;
+  return numq("Evaluate: √"+(a*a)+" + ∛"+(b*b*b)+" − √"+(c*c)+".",
+    ans,0.011,
+    "√"+(a*a)+" = "+a+" because "+a+"² = "+(a*a)+"; ∛"+(b*b*b)+" = "+b+" because "+b+"³ = "+(b*b*b)+"; √"+(c*c)+" = "+c+". So the value is "+a+" + "+b+" − "+c+" = <b>"+ans+"</b>.",
+    {a:a,b:b,c:c,ans:ans});
+});
+E("u4-divide-radicals",4,["1.6"],2,"gen",function(){
+  var m=pick([2,3,5,6,7,10,11,13,14,15]),k=ri(2,6),d0=ri(2,9);
+  var A=d0*k*k*m,B=d0;
+  var key=radStr(k,m);
+  var cand=[radStr(k+1,m),radStr(k,m+1),"√"+(k*k*m),radStr(k*k,m),radStr(k,m+2)],ds=[];
+  for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
+  return mcq("Simplify: √"+A+" ÷ √"+B+". Give the answer in simplest radical form.",
+    key,ds,
+    "Combine under one root: √("+A+" ÷ "+B+") = √"+(k*k*m)+". Then simplify: √"+(k*k*m)+" = "+k+"√"+m+" because "+(k*k)+" is a perfect square factor. In simplest form: <b>"+key+"</b>.",
+    {A:A,B:B,k:k,m:m,d0:d0});
+});
+E("u4-rationalize-coefficient",4,["1.7"],2,"gen",function(){
+  function gcd(x,y){while(y){var u=y;y=x%y;x=u;}return x;}
+  var c,m,N,tries=0;
+  do{c=ri(2,5);m=pick([2,3,5,6,7,10,11,13]);N=ri(2,11);tries++;}while(gcd(N,c*m)!==1&&tries<80);
+  var key=N+"√"+m+" / "+(c*m);
+  var cand=[N+"√"+m+" / "+c,(N*m)+"√"+m+" / "+(c*m),N+" / "+(c*m),N+"√"+m+" / "+(c+m)],ds=[];
+  for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
+  return mcq("Rationalize the denominator and simplify: "+N+" / ("+c+"√"+m+").",
+    key,ds,
+    "Multiply the numerator and denominator by √"+m+": the denominator becomes "+c+" × √"+m+" × √"+m+" = "+c+" × "+m+" = "+(c*m)+", and the numerator becomes "+N+"√"+m+". Since "+N+" and "+(c*m)+" share no common factor, the simplest form is <b>"+key+"</b>.",
+    {N:N,c:c,m:m});
+});
+E("u4-conjugate-area",4,["1.6"],3,"gen",function(){
+  var a=ri(4,12),sq=[],i;
+  for(i=2;i<a*a;i++){var rt=Math.sqrt(i);if(rt!==Math.floor(rt))sq.push(i);}
+  var b=pick(sq),area=a*a-b;
+  var ctx=pick(["rectangular garden","rectangular rug","rectangular solar panel","rectangular patio"]);
+  return numq("A "+ctx+" measures ("+a+" + √"+b+") m by ("+a+" − √"+b+") m. What is its area, in m²?",
+    area,0.011,
+    "Area = ("+a+" + √"+b+")("+a+" − √"+b+"), a difference of squares: "+a+"² − (√"+b+")² = "+(a*a)+" − "+b+" = <b>"+area+" m²</b>. The radical terms cancel, which is why conjugate pairs give a whole-number area.",
+    {a:a,b:b,area:area});
+});
+
+/* --- Unit 8: Properties of Angles and Triangles --- */
+E("u8-diagonals",8,["5.5"],1,"gen",function(){
+  var n=ri(5,30),mode=ri(0,1);
+  var ans=mode===0?n-3:n*(n-3)/2;
+  var ctx=pick(["convex polygon","garden outline drawn as a polygon","polygon-shaped sign","polygon-shaped tile design"]);
+  var prompt="A "+ctx+" has "+n+" sides. How many diagonals "+(mode===0?"can be drawn from one vertex":"does it have in total")+"?";
+  return numq(prompt,ans,0.011,
+    mode===0
+      ?"From one vertex, a diagonal cannot go to the vertex itself or to either of its two neighbours, so it can reach the other "+n+" − 3 vertices: <b>"+ans+"</b> diagonals."
+      :"Each of the "+n+" vertices connects to "+n+" − 3 others by a diagonal (not itself, not its two neighbours), and each diagonal is counted twice, once from each end: "+n+" × "+(n-3)+" ÷ 2 = <b>"+ans+"</b>.",
+    {n:n,mode:mode,ans:ans});
+});
+E("u8-isosceles-angles",8,["5.3"],2,"gen",function(){
+  var mode=ri(0,1),base,vertex,ans;
+  if(mode===0){base=ri(28,72);vertex=180-2*base;ans=vertex;}
+  else{vertex=2*ri(20,65);base=(180-vertex)/2;ans=base;}
+  var q=numq(mode===0
+      ?"In △ABC, AB = AC, so the base is BC. The base angles at B and C each measure "+base+"°. What is the measure of the vertex angle at A, in degrees?"
+      :"In △ABC, AB = AC, so the base is BC. The vertex angle at A measures "+vertex+"°. What is the measure of each base angle, in degrees?",
+    ans,0.011,
+    "The angles of a triangle add to 180°, and the base angles of an isosceles triangle are equal. "+(mode===0?"Vertex angle = 180° − "+base+"° − "+base+"° = <b>"+vertex+"°</b>.":"Each base angle = (180° − "+vertex+"°) ÷ 2 = <b>"+base+"°</b>."),
+    {mode:mode,base:base,vertex:vertex,ans:ans});
+  q.figure=triAngSVG(vertex,base,base,{ang:mode===0?["?",base+"°",base+"°"]:[vertex+"°","?","?"]});
+  return q;
+});
+E("u8-corresponding-algebra",8,["5.8"],2,"gen",function(){
+  function expr(cf,kn){return cf+"x"+(kn>0?" + "+kn:(kn<0?" − "+(-kn):""));}
+  var x0,a,c2,V,b,d,tries=0;
+  do{
+    x0=ri(4,15);a=ri(3,7);c2=ri(1,a-1);V=ri(65,135);
+    b=V-a*x0;d=V-c2*x0;tries++;
+  }while((b===0||d===0||b<-25||b>35||d<-25||d>35)&&tries<90);
+  var q=numq("Two parallel lines are cut by a transversal. Two corresponding angles measure ("+expr(a,b)+")° and ("+expr(c2,d)+")°. What is the measure of each of these angles, in degrees?",
+    V,0.011,
+    "Corresponding angles between parallel lines are equal: "+expr(a,b)+" = "+expr(c2,d)+". Solving gives x = "+x0+". Substituting back: "+a+" × "+x0+(b>0?" + "+b:" − "+(-b))+" = <b>"+V+"°</b> (the other expression gives the same value, as it must).",
+    {a:a,b:b,c:c2,d:d,x0:x0,V:V});
+  q.figure=transversalSVG("TR","("+expr(a,b)+")°","BR","?");
+  return q;
+});
+E("u8-exterior-algebra",8,["5.11"],3,"gen",function(){
+  function expr(cf,kn){return cf+"x"+(kn>0?" + "+kn:(kn<0?" − "+(-kn):""));}
+  var x0,A1,A2,E,p,q2,r,s,t,u,tries=0;
+  do{
+    x0=ri(3,12);A1=ri(32,78);A2=ri(32,78);E=A1+A2;
+    p=ri(2,6);q2=A1-p*x0;r=ri(2,6);s=A2-r*x0;t=ri(2,7);u=E-t*x0;tries++;
+  }while((q2===0||s===0||u===0||q2<-30||q2>40||s<-30||s>40||u<-30||u>40)&&tries<90);
+  return numq("In △ABC, the two remote interior angles for the exterior angle at C measure ("+expr(p,q2)+")° and ("+expr(r,s)+")°. The exterior angle at C measures ("+expr(t,u)+")°. What is the measure of the exterior angle at C, in degrees?",
+    E,0.011,
+    "An exterior angle equals the sum of the two remote interior angles: "+expr(t,u)+" = ("+expr(p,q2)+") + ("+expr(r,s)+") = "+expr(p+r,q2+s)+". Solving gives x = "+x0+". The exterior angle is then "+t+" × "+x0+(u>0?" + "+u:" − "+(-u))+" = <b>"+E+"°</b>. (Check with the remote angles: "+A1+"° + "+A2+"° = "+E+"°.)",
+    {p:p,q:q2,r:r,s:s,t:t,u:u,x0:x0,A1:A1,A2:A2,E:E});
+});
+
 /* ============ selection engine ============ */
 /* Mid-course scope (Table of Specifications, verified Oct 26, 2026): the mid-course
    exam samples Unit 4 only to Section 4.3, so the two Radical Equations entries
