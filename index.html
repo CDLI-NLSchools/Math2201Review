@@ -894,26 +894,26 @@ E("u1-law-choice",1,["7.1","7.2"],1,"var",varset([
   function(){return mcq("In triangle PQR you know two sides and the angle between them, and you need the third side. Which law do you use?",
     "The cosine law \u2014 it is built for the side-angle-side case",
     ["The sine law \u2014 it only needs the two sides","The sine law, after splitting the triangle in two","The Pythagorean theorem, because two sides are known"],
-    "With no angle-opposite-side pair, the sine law has nothing to anchor to. The cosine law, c\u00B2 = a\u00B2 + b\u00B2 \u2212 2ab cos C, handles SAS directly.",{});},
+    "With no angle-opposite-side pair, the sine law has nothing to anchor to. The cosine law, \\(c^2 = a^2 + b^2 - 2ab\\cos C\\), handles SAS directly.",{});},
   function(){return mcq("You know all three sides of an acute triangle and need its largest angle. Which law, and why?",
     "The cosine law, rearranged \u2014 it is the only one that uses three sides to give an angle",
-    ["The sine law, because three sides give three ratios","The tangent ratio, using the two longest sides","No law is needed \u2014 the largest angle is always 90\u00B0"],
-    "cos A = (b\u00B2 + c\u00B2 \u2212 a\u00B2) \u00F7 (2bc) uses exactly the three sides. The largest angle sits opposite the longest side.",{});}
+    ["The sine law, because three sides give three ratios","The tangent ratio, using the two longest sides","No law is needed — the largest angle is always \\(90^\\circ\\)"],
+    "\\(\\cos A = \\frac{b^2 + c^2 - a^2}{2bc}\\) uses exactly the three sides. The largest angle sits opposite the longest side.",{});}
 ,
-function(){var q = mcq("In triangle ABC, a diagram marks side a = 9 cm (opposite angle A), side b = 7 cm, and angle A = 35\u00B0. Which set-up finds angle B?",
-    "sin B / 7 = sin 35\u00B0 / 9 \u2014 each angle is paired with the side opposite it",
-    ["sin B / 9 = sin 35\u00B0 / 7 \u2014 the marked sides stay with their marked angles","b\u00B2 = a\u00B2 + c\u00B2 \u2212 2ac cos B \u2014 the cosine law, because two sides are known","tan B = 7 / 9 \u2014 opposite over adjacent"],
-    "The sine law pairs each side with the sine of its OPPOSITE angle: a / sin A = b / sin B, so 9 / sin 35\u00B0 = 7 / sin B. The first trap swaps the pairing; the cosine law would need the side between the two known sides' angle, which is not what is marked.",{});q.figure=(function(){var Bv=Math.asin(7*Math.sin(35*Math.PI/180)/9)*180/Math.PI;return triSVG(9, 7, 9*Math.sin((180-35-Bv)*Math.PI/180)/Math.sin(35*Math.PI/180), {L:["A","B","C"], ang:["35°","?",null], side:["9 cm","7 cm",null]});})();return q;},
+function(){var q = mcq("In triangle ABC, a diagram marks side \\(a = 9\\text{ cm}\\) (opposite angle \\(A\\)), side \\(b = 7\\text{ cm}\\), and angle \\(A = 35^\\circ\\). Which set-up finds angle B?",
+    "\\(\\frac{\\sin B}{7} = \\frac{\\sin 35^\\circ}{9}\\) — each angle is paired with the side opposite it",
+    ["\\(\\frac{\\sin B}{9} = \\frac{\\sin 35^\\circ}{7}\\) \u2014 the marked sides stay with their marked angles","\\(b^2 = a^2 + c^2 - 2ac\\cos B\\) — the cosine law, because two sides are known","\\(\\tan B = \\frac{7}{9}\\) — opposite over adjacent"],
+    "The sine law pairs each side with the sine of its OPPOSITE angle: \\(\\frac{a}{\\sin A} = \\frac{b}{\\sin B}\\), so \\(\\frac{9}{\\sin 35^\\circ} = \\frac{7}{\\sin B}\\). The first trap swaps the pairing; the cosine law would need the side between the two known sides' angle, which is not what is marked.",{});q.figure=(function(){var Bv=Math.asin(7*Math.sin(35*Math.PI/180)/9)*180/Math.PI;return triSVG(9, 7, 9*Math.sin((180-35-Bv)*Math.PI/180)/Math.sin(35*Math.PI/180), {L:["A","B","C"], ang:["35°","?",null], side:["9 cm","7 cm",null]});})();return q;},
   function(){return mcq("You know two sides of a triangle and an angle opposite one of them, and you need another angle. Which law starts the solution, and what must you watch for?",
     "The sine law \u2014 and the angle it gives might not be the only possibility: an angle and its supplement both have the same sine, so the diagram has to rule one out",
     ["The cosine law \u2014 it is the only law that works with two known sides","The sine law \u2014 and its answer is always the one correct angle","The angle-sum rule \u2014 the third angle comes first, then either law finishes it"],
-    "Side-side-angle is the ambiguous case for the sine law: sin \u03B8 = sin (180\u00B0 \u2212 \u03B8), so the calculation can offer two candidate angles and the shape of the triangle decides which one fits.",{});}
+    "Side-side-angle is the ambiguous case for the sine law: \\(\\sin\\theta = \\sin(180^\\circ - \\theta)\\), so the calculation can offer two candidate angles and the shape of the triangle decides which one fits.",{});}
 ]));
 E("u1-sine-side",1,["7.2"],2,"gen",function(){
   var A=pick([35,40,50,55,65]),B=pick([45,60,70,80]);var a=ri(8,20);
   var b=a*Math.sin(B*Math.PI/180)/Math.sin(A*Math.PI/180);
-  var q = numq("In \u25B3ABC, \u2220A = "+A+"\u00B0, \u2220B = "+B+"\u00B0, and side a = "+a+" cm (opposite \u2220A). Find side b, to one decimal place, in cm.",
-    Math.round(b*10)/10,0.06,"Sine law: b \u00F7 sin "+B+"\u00B0 = a \u00F7 sin "+A+"\u00B0 = "+a+" \u00F7 "+fmt(Math.sin(A*Math.PI/180),4)+". So b = "+fmt(b,4)+" \u2248 <b>"+fmt(b,1)+" cm</b>.",{A:A,B:B,a:a});
+  var q = numq("In \\(\\triangle ABC\\), \\(\\angle A = "+A+"^\\circ\\), \\(\\angle B = "+B+"^\\circ\\), and side \\(a = "+a+"\\text{ cm}\\) (opposite \\(\\angle A\\)). Find side \\(b\\), to one decimal place, in cm.",
+    Math.round(b*10)/10,0.06,"Sine law: \\(\\frac{b}{\\sin "+B+"^\\circ} = \\frac{a}{\\sin "+A+"^\\circ} = \\frac{"+a+"}{"+fmt(Math.sin(A*Math.PI/180),4)+"}\\). So \\(b = "+fmt(b,4)+" \\approx \\)<b>\\("+fmt(b,1)+"\\text{ cm}\\)</b>.",{A:A,B:B,a:a});
   q.figure = triSVG(a, b, a*Math.sin((180-A-B)*Math.PI/180)/Math.sin(A*Math.PI/180), {L:["A","B","C"], ang:[A+"°",B+"°",null], side:[a+" cm","?",null]});
   return q;
 });
@@ -926,16 +926,16 @@ E("u1-sine-angle",1,["7.2"],2,"gen",function(){
   var b=Math.round(bTrue*10)/10;
   var Brev=Math.round(Math.asin(b*Math.sin(A*Math.PI/180)/a)*180/Math.PI);
   var L1=tri.n.charAt(0),L2=tri.n.charAt(1),l1=L1.toLowerCase(),l2=L2.toLowerCase();
-  var q = numq("In \u25B3"+tri.n+", \u2220"+L1+" = "+A+"\u00B0, side "+l1+" = "+a+" "+tri.u+" (opposite \u2220"+L1+"), and side "+l2+" = "+fmt(b,1)+" "+tri.u+". Find \u2220"+L2+", to the nearest degree.",
-    Brev,1.1,"Sine law: sin "+L2+" = "+l2+" \u00D7 sin "+L1+" \u00F7 "+l1+" = "+fmt(b,1)+" \u00D7 sin "+A+"\u00B0 \u00F7 "+a+" \u2248 "+fmt(b*Math.sin(A*Math.PI/180)/a,4)+". So \u2220"+L2+" = sin\u207B\u00B9("+fmt(b*Math.sin(A*Math.PI/180)/a,4)+") \u2248 <b>"+Brev+"\u00B0</b> (the triangle is acute).",{A:A,a:a,b:b,Brev:Brev});
+  var q = numq("In \\(\\triangle "+tri.n+"\\), \\(\\angle "+L1+" = "+A+"^\\circ\\), side \\("+l1+" = "+a+"\\text{ "+tri.u+"}\\) (opposite \\(\\angle "+L1+"\\)), and side \\("+l2+" = "+fmt(b,1)+"\\text{ "+tri.u+"}\\). Find \\(\\angle "+L2+"\\), to the nearest degree.",
+    Brev,1.1,"Sine law: \\(\\sin "+L2+" = \\frac{"+l2+" \\sin "+L1+"}{"+l1+"} = \\frac{"+fmt(b,1)+" \\times \\sin "+A+"^\\circ}{"+a+"} \\approx "+fmt(b*Math.sin(A*Math.PI/180)/a,4)+"\\). So \\(\\angle "+L2+" = \\sin^{-1}("+fmt(b*Math.sin(A*Math.PI/180)/a,4)+") \\approx \\)<b>\\("+Brev+"^\\circ\\)</b> (the triangle is acute).",{A:A,a:a,b:b,Brev:Brev});
   q.figure = triSVG(a, b, (function(){var Bx=Math.asin(Math.min(1,b*Math.sin(A*Math.PI/180)/a))*180/Math.PI;return a*Math.sin((180-A-Bx)*Math.PI/180)/Math.sin(A*Math.PI/180);})(), {L:[L1,L2,tri.n.charAt(2)], ang:[A+"°","?",null], side:[a+" "+tri.u, fmt(b,1)+" "+tri.u, null]});
   return q;
 });
 E("u1-cosine-side",1,["7.2"],2,"gen",function(){
   var C=pick([50,60,70,80]),a=ri(6,14),b=ri(6,14);
   var c=Math.sqrt(a*a+b*b-2*a*b*Math.cos(C*Math.PI/180));
-  var q = numq("In \u25B3PQR, sides p = "+a+" km and q = "+b+" km meet at \u2220R = "+C+"\u00B0 between them. Find the side opposite \u2220R, to one decimal place, in km.",
-    Math.round(c*10)/10,0.06,"Cosine law: r\u00B2 = p\u00B2 + q\u00B2 \u2212 2pq cos R = "+(a*a)+" + "+(b*b)+" \u2212 2("+a+")("+b+")cos "+C+"\u00B0 \u2248 "+fmt(c*c,2)+". So r \u2248 <b>"+fmt(c,1)+" km</b>.",{a:a,b:b,C:C});
+  var q = numq("In \\(\\triangle PQR\\), sides \\(p = "+a+"\\text{ km}\\) and \\(q = "+b+"\\text{ km}\\) meet at \\(\\angle R = "+C+"^\\circ\\) between them. Find the side opposite \\(\\angle R\\), to one decimal place, in km.",
+    Math.round(c*10)/10,0.06,"Cosine law: \\(r^2 = p^2 + q^2 - 2pq\\cos R = "+(a*a)+" + "+(b*b)+" - 2("+a+")("+b+")\\cos "+C+"^\\circ \\approx "+fmt(c*c,2)+"\\). So \\(r \\approx \\)<b>\\("+fmt(c,1)+"\\text{ km}\\)</b>.",{a:a,b:b,C:C});
   q.figure = triSVG(a, b, c, {L:["P","Q","R"], ang:[null,null,C+"°"], side:[a+" km",b+" km","?"]});
   return q;
 });
@@ -944,8 +944,8 @@ E("u1-cosine-angle",1,["7.2"],2,"gen",function(){
   var aTrue=Math.sqrt(b*b+c*c-2*b*c*Math.cos(Atar*Math.PI/180));
   var a=Math.round(aTrue*10)/10;
   var cosA=(b*b+c*c-a*a)/(2*b*c);var Arev=Math.round(Math.acos(cosA)*180/Math.PI);
-  var q = numq("A triangle has sides "+fmt(a,1)+", "+b+" and "+c+". Find the angle opposite the side of length "+fmt(a,1)+", to the nearest degree.",
-    Arev,1.1,"Cosine law rearranged: cos A = (b\u00B2 + c\u00B2 \u2212 a\u00B2) \u00F7 (2bc) = ("+(b*b)+" + "+(c*c)+" \u2212 "+fmt(a*a,2)+") \u00F7 "+(2*b*c)+" \u2248 "+fmt(cosA,4)+". So A \u2248 <b>"+Arev+"\u00B0</b>.",{b:b,c:c,Arev:Arev,a:a});
+  var q = numq("A triangle has sides \\("+fmt(a,1)+", "+b+", "+c+"\\). Find the angle opposite the side of length \\("+fmt(a,1)+"\\), to the nearest degree.",
+    Arev,1.1,"Cosine law rearranged: \\(\\cos A = \\frac{b^2 + c^2 - a^2}{2bc} = \\frac{"+(b*b)+" + "+(c*c)+" - "+fmt(a*a,2)+"}{"+(2*b*c)+"} \\approx "+fmt(cosA,4)+"\\). So \\(A \\approx \\)<b>\\("+Arev+"^\\circ\\)</b>.",{b:b,c:c,Arev:Arev,a:a});
   q.figure = triSVG(a, b, c, {L:["A","B","C"], ang:["?",null,null], side:[fmt(a,1),""+b,""+c]});
   return q;
 });
@@ -954,9 +954,9 @@ E("u1-two-triangles",1,["7.3"],3,"gen",function(){
   var AC=Math.sqrt(AB*AB+BC*BC-2*AB*BC*Math.cos(angB*Math.PI/180));
   var angDAC=pick([50,55]),angD=pick([60,65]);var angACD=180-angDAC-angD;
   var CD=AC*Math.sin(angDAC*Math.PI/180)/Math.sin(angD*Math.PI/180);
-  var q = numq("A surveyor maps two fields that share the diagonal AC. In \u25B3ABC, AB = "+AB+" m, BC = "+BC+" m and \u2220B = "+angB+"\u00B0. In the second field, \u25B3ACD, \u2220DAC = "+angDAC+"\u00B0 and \u2220D = "+angD+"\u00B0. Find the length of CD, to one decimal place, in m.",
+  var q = numq("A surveyor maps two fields that share the diagonal \\(AC\\). In \\(\\triangle ABC\\), \\(AB = "+AB+"\\text{ m}\\), \\(BC = "+BC+"\\text{ m}\\) and \\(\\angle B = "+angB+"^\\circ\\). In the second field, \\(\\triangle ACD\\), \\(\\angle DAC = "+angDAC+"^\\circ\\) and \\(\\angle D = "+angD+"^\\circ\\). Find the length of \\(CD\\), to one decimal place, in m.",
     Math.round(CD*10)/10,0.16,
-    "Step 1 \u2014 the shared side, from \u25B3ABC (cosine law): AC\u00B2 = "+(AB*AB)+" + "+(BC*BC)+" \u2212 2("+AB+")("+BC+")cos "+angB+"\u00B0, so AC \u2248 "+fmt(AC,2)+" m. Step 2 \u2014 use AC in \u25B3ACD: its third angle is 180 \u2212 "+angDAC+" \u2212 "+angD+" = "+angACD+"\u00B0, and the sine law gives CD \u00F7 sin "+angDAC+"\u00B0 = AC \u00F7 sin "+angD+"\u00B0, so CD \u2248 "+fmt(AC,2)+" \u00D7 sin "+angDAC+"\u00B0 \u00F7 sin "+angD+"\u00B0 \u2248 <b>"+fmt(CD,1)+" m</b>. The first triangle exists to produce the side the second triangle needs.",{AB:AB,BC:BC,angB:angB,AC:AC,angDAC:angDAC,angD:angD});
+    "Step 1 — the shared side, from \\(\\triangle ABC\\) (cosine law): \\(AC^2 = "+(AB*AB)+" + "+(BC*BC)+" - 2("+AB+")("+BC+")\\cos "+angB+"^\\circ\\), so \\(AC \\approx "+fmt(AC,2)+"\\text{ m}\\). Step 2 — use \\(AC\\) in \\(\\triangle ACD\\): its third angle is \\(180^\\circ - "+angDAC+"^\\circ - "+angD+"^\\circ = "+angACD+"^\\circ\\), and the sine law gives \\(\\frac{CD}{\\sin "+angDAC+"^\\circ} = \\frac{AC}{\\sin "+angD+"^\\circ}\\), so \\(CD \\approx "+fmt(AC,2)+" \\times \\frac{\\sin "+angDAC+"^\\circ}{\\sin "+angD+"^\\circ} \\approx \\)<b>\\("+fmt(CD,1)+"\\text{ m}\\)</b>. The first triangle exists to produce the side the second triangle needs.",{AB:AB,BC:BC,angB:angB,AC:AC,angDAC:angDAC,angD:angD});
   q.figure = twoTriSVG(AB, BC, angB, AC, CD, AC*Math.sin(angACD*Math.PI/180)/Math.sin(angD*Math.PI/180), angDAC, angD);
   return q;
 });
@@ -1164,30 +1164,30 @@ E("u4-order",4,["1.4"],2,"gen",function(){
 E("u6-scale-factor",6,["6.9"],1,"gen",function(){
   var k=pick([8,9,10,12,15,18,20,24,25,30,40,50,60]);var model=pick([3,4,5,6,7,8,9,10,12,14]);var real=model*k;
   var frame=pick([
-    "On a model, a part measures "+model+" cm. On the real object it measures "+real+" cm. What is the scale factor (actual \u00F7 model)?",
-    "A scale drawing shows a length of "+model+" cm for an object that is really "+real+" cm long. What is the scale factor (actual \u00F7 model)?",
-    "A map feature measures "+model+" cm on the map and "+real+" cm on the ground. What is the scale factor (actual \u00F7 model)?"]);
+    "On a model, a part measures "+model+" cm. On the real object it measures "+real+" cm. What is the scale factor (actual \\(\\div\\) model)?",
+    "A scale drawing shows a length of "+model+" cm for an object that is really "+real+" cm long. What is the scale factor (actual \\(\\div\\) model)?",
+    "A map feature measures "+model+" cm on the map and "+real+" cm on the ground. What is the scale factor (actual \\(\\div\\) model)?"]);
   return numq(frame,
-    k,0.011,"Scale factor = "+real+" \u00F7 "+model+" = <b>"+k+"</b>. The scale is 1 : "+k+".",{k:k,model:model});
+    k,0.011,"Scale factor = \\("+real+" \\div "+model+" = \\)<b>\\("+k+"\\)</b>. The scale is \\(1 : "+k+"\\).",{k:k,model:model});
 });
 E("u6-unknown-dimension",6,["6.9"],2,"gen",function(){
   var k=pick([10,12,15,20,24,25,30,40,50,60,100]);var obj=pick([{w:"toy car",u:"cm"},{w:"model boat",u:"cm"},{w:"dollhouse room",u:"cm"},{w:"model train",u:"cm"},{w:"miniature lighthouse",u:"cm"},{w:"model airplane",u:"cm"}]);
   var modelDim=pick([3,4,5,6,7,8,9,10,12,14]);var real=modelDim*k;
-  return numq("A "+obj.w+" is built to a scale of 1 : "+k+". A part that is "+modelDim+" "+obj.u+" long on the model represents what length on the real object, in "+obj.u+"?",
-    real,0.011,"Multiply by the scale factor: "+modelDim+" \u00D7 "+k+" = <b>"+real+" "+obj.u+"</b>.",{k:k,modelDim:modelDim});
+  return numq("A "+obj.w+" is built to a scale of \\(1 : "+k+"\\). A part that is "+modelDim+" "+obj.u+" long on the model represents what length on the real object, in "+obj.u+"?",
+    real,0.011,"Multiply by the scale factor: \\("+modelDim+" \\times "+k+" = \\)<b>\\("+real+"\\text{ "+obj.u+"}\\)</b>.",{k:k,modelDim:modelDim});
 });
 E("u6-area-scale",6,["6.5","6.14"],2,"gen",function(){
   var k=pick([2,3,4,5,6,8,10]);var areaD=pick([3,4,5,6,7,8,9,10,12,14,15,16,18,20,24,25]);
   var obj=pick(["room","garden plot","mural","kitchen floor","rug design"]);
   var real=areaD*k*k;
-  return numq("A scale diagram uses scale factor "+k+" (diagram : actual = 1 : "+k+"). A "+obj+" has area "+areaD+" cm\u00B2 on the diagram. What is its actual area, in cm\u00B2?",
-    real,0.011,"Areas scale by the square of the scale factor: "+areaD+" \u00D7 "+k+"\u00B2 = "+areaD+" \u00D7 "+(k*k)+" = <b>"+real+" cm\u00B2</b>. (Lengths scale by "+k+"; areas by "+k+"\u00B2; volumes by "+k+"\u00B3.)",{k:k,areaD:areaD});
+  return numq("A scale diagram uses scale factor \\("+k+"\\) (diagram : actual = \\(1 : "+k+"\\)). A "+obj+" has area \\("+areaD+"\\text{ cm}^2\\) on the diagram. What is its actual area, in \\(\\text{cm}^2\\)?",
+    real,0.011,"Areas scale by the square of the scale factor: \\("+areaD+" \\times "+k+"^2 = "+areaD+" \\times "+(k*k)+" = \\)<b>\\("+real+"\\text{ cm}^2\\)</b>. (Lengths scale by \\("+k+"\\); areas by \\("+k+"^2\\); volumes by \\("+k+"^3\\).)",{k:k,areaD:areaD});
 });
 E("u6-volume-scale",6,["6.10","6.14"],2,"gen",function(){
   var k=pick([2,3,4,5,6,10]);var askVol=Math.random()<0.5;var base=pick([3,4,5,6,8,10,12,15,20,25]);var f=askVol?k*k*k:k*k;var ans=base*f;
   var obj=pick(["model car","aquarium","storage tank","dollhouse"]);
-  return numq("A "+obj+" is built at scale 1 : "+k+". The model\u2019s "+(askVol?"volume is "+base+" cm\u00B3":"surface area is "+base+" cm\u00B2")+". What is the corresponding measurement for the real object, in the same cubic/square units?",
-    ans,0.011,(askVol?"Volumes":"Surface areas")+" scale by "+(askVol?k+"\u00B3 = "+f:k+"\u00B2 = "+f)+": "+base+" \u00D7 "+f+" = <b>"+ans+"</b>.",{k:k,base:base,askVol:askVol});
+  return numq("A "+obj+" is built at scale \\(1 : "+k+"\\). The model’s "+(askVol?"volume is \\("+base+"\\text{ cm}^3\\)":"surface area is \\("+base+"\\text{ cm}^2\\)")+". What is the corresponding measurement for the real object, in the same cubic/square units?",
+    ans,0.011,(askVol?"Volumes":"Surface areas")+" scale by \\("+k+(askVol?"^3":"^2")+" = "+f+"\\): \\("+base+" \\times "+f+" = \\)<b>\\("+ans+"\\)</b>.",{k:k,base:base,askVol:askVol});
 });
 E("u6-unit-rate",6,["6.17"],1,"gen",function(){
   var ctxs=[
@@ -1200,7 +1200,7 @@ E("u6-unit-rate",6,["6.17"],1,"gen",function(){
   var ctx=pick(ctxs);var rate=pick([0.5,0.6,0.75,0.8,0.9,1,1.1,1.2,1.25,1.4,1.5,1.6,1.75,1.8,2,2.2,2.4,2.5,2.8,3,3.5,4]);
   var total=Math.round(rate*ctx.q*100)/100;
   return numq(ctx.pre+fmt(total)+", and the pack holds "+ctx.q+". What is the unit rate, in "+ctx.u+"? (Just the number.)",
-    rate,0.011,"Unit rate = total cost \u00F7 quantity = "+fmt(total)+" \u00F7 "+ctx.q+" = <b>$"+fmt(rate)+"</b>.",{rate:rate,total:total});
+    rate,0.011,"Unit rate = total cost \\(\\div\\) quantity \\(= "+fmt(total)+" \\div "+ctx.q+" = \\)<b>\\(\\$"+fmt(rate)+"\\)</b>.",{rate:rate,total:total});
 });
 E("u6-better-buy",6,["6.17"],2,"gen",function(){
   var prod=pick([{w:"juice boxes",u:"juice box"},{w:"granola bars",u:"granola bar"},{w:"pencils",u:"pencil"},{w:"batteries",u:"battery"},{w:"muffins",u:"muffin"},{w:"golf balls",u:"golf ball"}]);
@@ -1210,9 +1210,9 @@ E("u6-better-buy",6,["6.17"],2,"gen",function(){
   var A={q:swap?q2:q1,p:swap?p2:p1},B={q:swap?q1:q2,p:swap?p1:p2};
   var winner=A.p/A.q<B.p/B.q?"The first option":"The second option";
   return mcq("Option 1: "+A.q+" "+prod.w+" for $"+fmt(A.p)+". Option 2: "+B.q+" "+prod.w+" for $"+fmt(B.p)+". Which is the better buy?",
-    winner+" \u2014 its unit rate is $"+fmt(Math.min(A.p/A.q,B.p/B.q))+" per "+prod.u+", the lower of the two",
+    winner+" — its unit rate is \\(\\$"+fmt(Math.min(A.p/A.q,B.p/B.q))+"\\) per "+prod.u+", the lower of the two",
     [(winner==="The first option"?"The second option":"The first option")+" \u2014 a bigger package is always cheaper per item","They are the same value \u2014 the prices scale exactly","Whichever costs less overall, regardless of quantity"],
-    "Unit rates: Option 1: "+fmt(A.p)+" \u00F7 "+A.q+" = $"+fmt(A.p/A.q)+"; Option 2: "+fmt(B.p)+" \u00F7 "+B.q+" = $"+fmt(B.p/B.q)+". Compare unit rates, not sticker prices \u2014 "+winner.toLowerCase()+" wins.",{A:A,B:B});
+    "Unit rates: Option 1: \\("+fmt(A.p)+" \\div "+A.q+" = \\$"+fmt(A.p/A.q)+"\\); Option 2: \\("+fmt(B.p)+" \\div "+B.q+" = \\$"+fmt(B.p/B.q)+"\\). Compare unit rates, not sticker prices — "+winner.toLowerCase()+" wins.",{A:A,B:B});
 });
 E("u6-rate-solve",6,["6.1"],2,"gen",function(){
   var ctxs=[
@@ -1223,89 +1223,89 @@ E("u6-rate-solve",6,["6.1"],2,"gen",function(){
     function(R,T){return "A snowplow clears "+R+" km of road per hour. How many hours does it take to clear "+T+" km?";},
     function(R,T){return "A download runs at "+R+" MB per second. How many seconds does a "+T+" MB file take?";},
     function(R,T){return "A bottling machine fills "+R+" bottles per minute. How many minutes does it take to fill "+T+" bottles?";},
-    function(R,T){return "A painter covers "+R+" m\u00B2 of wall per hour. How many hours does a "+T+" m\u00B2 wall take?";}];
+    function(R,T){return "A painter covers \\("+R+"\\text{ m}^2\\) of wall per hour. How many hours does a \\("+T+"\\text{ m}^2\\) wall take?";}];
   var rate=pick([4,5,6,8,9,10,12,15,16,18,20,24]);var t=pick([2,3,4,5,6,7,8,9]);var total=rate*t;
   return numq(pick(ctxs)(rate,total),
-    t,0.011,"Amount = rate \u00D7 time, so time = amount \u00F7 rate = "+total+" \u00F7 "+rate+" = <b>"+t+"</b>. Isolating the variable first keeps the arithmetic in one step.",{t:t,total:total,rate:rate});
+    t,0.011,"Amount \\(= \\text{rate} \\times \\text{time}\\), so time \\(= \\text{amount} \\div \\text{rate} = "+total+" \\div "+rate+" = \\)<b>\\("+t+"\\)</b>. Isolating the variable first keeps the arithmetic in one step.",{t:t,total:total,rate:rate});
 });
 E("u6-slope-rate",6,["6.19"],2,"var",varset([
-  function(){return mcq("A graph shows distance from home (km) against time (h) for a drive. The line passes through (0, 0) and (2, 110). What does the slope of the line represent, and what is it?",
-    "The speed: 110 \u00F7 2 = 55 km/h \u2014 the slope of a distance\u2013time graph is the rate of travel",
-    ["The total distance: 110 km","The time taken: 2 h","The acceleration: 55 km/h\u00B2"],
-    "Slope = rise \u00F7 run = change in distance \u00F7 change in time, which is exactly a rate: 55 km/h.",{});},
-  function(){return mcq("On a graph of water volume (L) versus time (min), a filling tank's line rises 60 L over 4 min. What is the slope, and what does it mean?",
-    "15 L/min \u2014 the rate at which water is flowing into the tank",
-    ["60 L \u2014 the tank's capacity","4 min \u2014 the time to fill the tank","240 L/min \u2014 rise times run"],
-    "Slope = 60 \u00F7 4 = 15, and its units (L per min) name the rate directly.",{});},
-  function(){return mcq("A graph of distance travelled (km) against fuel used (L) for a delivery van is a straight line through (0, 0) and (25, 300). What does its slope represent, and what is it?",
-    "Fuel efficiency: 300 \u00F7 25 = 12 km per litre \u2014 the slope is distance per unit of fuel",
-    ["The fuel used on the trip: 25 L","The distance travelled: 300 km","12 L per km \u2014 slope is fuel divided by distance"],
-    "Slope = rise \u00F7 run = km \u00F7 L, a rate of travel per litre: 12 km/L.",{});}
+  function(){return mcq("A graph shows distance from home (km) against time (h) for a drive. The line passes through \\((0, 0)\\) and \\((2, 110)\\). What does the slope of the line represent, and what is it?",
+    "The speed: \\(110 \\div 2 = 55\\text{ km/h}\\) — the slope of a distance–time graph is the rate of travel",
+    ["The total distance: \\(110\\text{ km}\\)","The time taken: \\(2\\text{ h}\\)","The acceleration: \\(55\\text{ km/h}^2\\)"],
+    "Slope \\(= \\text{rise} \\div \\text{run} = \\) change in distance \\(\\div\\) change in time, which is exactly a rate: \\(55\\text{ km/h}\\).",{});},
+  function(){return mcq("On a graph of water volume (L) versus time (min), a filling tank's line rises \\(60\\text{ L}\\) over \\(4\\text{ min}\\). What is the slope, and what does it mean?",
+    "\\(15\\text{ L/min}\\) — the rate at which water is flowing into the tank",
+    ["\\(60\\text{ L}\\) — the tank's capacity","\\(4\\text{ min}\\) — the time to fill the tank","\\(240\\text{ L/min}\\) — rise times run"],
+    "Slope \\(= 60 \\div 4 = 15\\), and its units (L per min) name the rate directly.",{});},
+  function(){return mcq("A graph of distance travelled (km) against fuel used (L) for a delivery van is a straight line through \\((0, 0)\\) and \\((25, 300)\\). What does its slope represent, and what is it?",
+    "Fuel efficiency: \\(300 \\div 25 = 12\\text{ km per litre}\\) — the slope is distance per unit of fuel",
+    ["The fuel used on the trip: \\(25\\text{ L}\\)","The distance travelled: \\(300\\text{ km}\\)","\\(12\\text{ L per km}\\) — slope is fuel divided by distance"],
+    "Slope \\(= \\text{rise} \\div \\text{run} = \\text{km} \\div \\text{L}\\), a rate of travel per litre: \\(12\\text{ km/L}\\).",{});}
 ]));
 E("u6-poster-cost",6,["6.14","6.17"],3,"gen",function(){
   var kw=pick([1.5,2,2.5,3,3.5,4,5]);var W=10*kw,H=15*kw;var area=W*H;var rate=pick([0.02,0.03,0.04,0.05,0.06,0.08,0.1,0.12]);var cost=area*rate;
   var frame=pick([
-    "A photo 10 cm by 15 cm is enlarged so its width becomes "+fmt(W)+" cm (the height scales in proportion). A print shop charges $"+fmt(rate)+" per cm\u00B2 of print area. What does the enlarged print cost, in dollars? (Just the number.)",
-    "A print shop enlarges a 10 cm by 15 cm photo to a width of "+fmt(W)+" cm, keeping the proportions. Printing costs $"+fmt(rate)+" per cm\u00B2. What is the cost of the enlarged print, in dollars? (Just the number.)"]);
-  return numq(frame,Math.round(cost*100)/100,0.02,"Scale factor = "+fmt(W)+" \u00F7 10 = "+fmt(kw)+", so the height becomes 15 \u00D7 "+fmt(kw)+" = "+fmt(H)+" cm. Area = "+fmt(W)+" \u00D7 "+fmt(H)+" = "+fmt(area)+" cm\u00B2 (that is the original 150 cm\u00B2 times "+fmt(kw)+"\u00B2, as areas scale by k\u00B2). Cost = "+fmt(area)+" \u00D7 $"+fmt(rate)+" = <b>$"+fmt(cost)+"</b>.",{kw:kw,area:area,rate:rate});
+    "A photo 10 cm by 15 cm is enlarged so its width becomes "+fmt(W)+" cm (the height scales in proportion). A print shop charges $"+fmt(rate)+" per \\(\\text{cm}^2\\) of print area. What does the enlarged print cost, in dollars? (Just the number.)",
+    "A print shop enlarges a 10 cm by 15 cm photo to a width of "+fmt(W)+" cm, keeping the proportions. Printing costs $"+fmt(rate)+" per \\(\\text{cm}^2\\). What is the cost of the enlarged print, in dollars? (Just the number.)"]);
+  return numq(frame,Math.round(cost*100)/100,0.02,"Scale factor \\(= "+fmt(W)+" \\div 10 = "+fmt(kw)+"\\), so the height becomes \\(15 \\times "+fmt(kw)+" = "+fmt(H)+"\\text{ cm}\\). Area \\(= "+fmt(W)+" \\times "+fmt(H)+" = "+fmt(area)+"\\text{ cm}^2\\) (that is the original \\(150\\text{ cm}^2\\) times \\("+fmt(kw)+"^2\\), as areas scale by \\(k^2\\)). Cost \\(= "+fmt(area)+" \\times \\$"+fmt(rate)+" = \\)<b>\\(\\$"+fmt(cost)+"\\)</b>.",{kw:kw,area:area,rate:rate});
 });
 /* ============ Unit 7: Inductive and Deductive Reasoning ============ */
 E("u7-pattern-next",7,["2.1"],1,"gen",function(){
   var a=ri(2,6),b=ri(1,9);var terms=[1,2,3,4].map(function(n){return a*n+b;});
   var askN=pick([8,10,12]);var ans=a*askN+b;
-  return numq("A pattern begins "+terms.join(", ")+", \u2026 The rule is linear. What is term "+askN+" of the pattern?",
-    ans,0.011,"Each term grows by "+a+": term n is "+a+"n + "+b+". Term "+askN+" = "+a+"("+askN+") + "+b+" = <b>"+ans+"</b>. (Spotted by observing the pattern, then justifying with the rule \u2014 inductive reasoning at work.)",{a:a,b:b,askN:askN});
+  return numq("A pattern begins \\("+terms.join(", ")+", \\ldots\\) The rule is linear. What is term \\("+askN+"\\) of the pattern?",
+    ans,0.011,"Each term grows by \\("+a+"\\): term \\(n\\) is \\("+a+"n + "+b+"\\). Term \\("+askN+" = "+a+"("+askN+") + "+b+" = \\)<b>\\("+ans+"\\)</b>. (Spotted by observing the pattern, then justifying with the rule — inductive reasoning at work.)",{a:a,b:b,askN:askN});
 });
 E("u7-pattern-quad",7,["2.1"],2,"gen",function(){
   var c=pick([0,1,2,3,4,5,6,8,10]);var obj=pick(["tiles","matchsticks","beads"]);var terms=[1,2,3,4].map(function(n){return n*n+c;});var askN=pick([6,7,8,9,10,11,12,13,14,15]);var ans=askN*askN+c;
   return numq("A pattern of figures is built from "+obj+": figure 1 uses "+terms[0]+" "+obj+", figure 2 uses "+terms[1]+", figure 3 uses "+terms[2]+", figure 4 uses "+terms[3]+". How many "+obj+" does figure "+askN+" use?",
-    ans,0.011,"The counts are 1\u00B2"+(c?" + "+c:"")+", 2\u00B2"+(c?" + "+c:"")+", 3\u00B2"+(c?" + "+c:"")+", \u2026 so figure n uses n\u00B2"+(c?" + "+c:"")+" "+obj+". Figure "+askN+" uses "+askN+"\u00B2"+(c?" + "+c:"")+" = <b>"+ans+"</b>.",{c:c,askN:askN});
+    ans,0.011,"The counts are \\(1^2"+(c?" + "+c:"")+", 2^2"+(c?" + "+c:"")+", 3^2"+(c?" + "+c:"")+"\\), \\(\\ldots\\) so figure \\(n\\) uses \\(n^2"+(c?" + "+c:"")+"\\) "+obj+". Figure \\("+askN+"\\) uses \\("+askN+"^2"+(c?" + "+c:"")+" = \\)<b>\\("+ans+"\\)</b>.",{c:c,askN:askN});
 });
 E("u7-counterexample",7,["2.4"],2,"var",varset([
   function(){return mcq("Conjecture: \u2018All prime numbers are odd.\u2019 Which value is a counterexample?",
-    "2 \u2014 it is prime but not odd",
-    ["9 \u2014 it is odd but not prime","15 \u2014 it is odd and composite","1 \u2014 it is neither prime nor composite"],
-    "A counterexample must satisfy the conjecture's condition (prime) and break its claim (odd). Only 2 does both: it is prime, and it is even. One counterexample is enough to kill a conjecture.",{});},
-  function(){return mcq("Conjecture: \u2018Every number divisible by 3 is also divisible by 6.\u2019 Which value is a counterexample?",
-    "9 \u2014 divisible by 3, but 9 \u00F7 6 is not whole",
-    ["12 \u2014 divisible by both 3 and 6","18 \u2014 divisible by both 3 and 6","4 \u2014 not divisible by 3 or 6"],
-    "9 meets the condition (divisible by 3) but fails the claim (not divisible by 6). 12 and 18 support the conjecture; 4 never meets its condition.",{});},
+    "\\(2\\) — it is prime but not odd",
+    ["\\(9\\) — it is odd but not prime","\\(15\\) — it is odd and composite","\\(1\\) — it is neither prime nor composite"],
+    "A counterexample must satisfy the conjecture's condition (prime) and break its claim (odd). Only \\(2\\) does both: it is prime, and it is even. One counterexample is enough to kill a conjecture.",{});},
+  function(){return mcq("Conjecture: \u2018Every number divisible by \\(3\\) is also divisible by \\(6\\).\u2019 Which value is a counterexample?",
+    "\\(9\\) — divisible by \\(3\\), but \\(9 \\div 6\\) is not whole",
+    ["\\(12\\) — divisible by both \\(3\\) and \\(6\\)","\\(18\\) — divisible by both \\(3\\) and \\(6\\)","\\(4\\) — not divisible by \\(3\\) or \\(6\\)"],
+    "\\(9\\) meets the condition (divisible by \\(3\\)) but fails the claim (not divisible by \\(6\\)). \\(12\\) and \\(18\\) support the conjecture; \\(4\\) never meets its condition.",{});},
   function(){return mcq("Conjecture: \u2018The product of two odd numbers is always even.\u2019 Which calculation is a counterexample?",
-    "3 \u00D7 5 = 15 \u2014 two odd numbers with an odd product",
-    ["3 \u00D7 4 = 12 \u2014 but 4 is even, so the condition is not met","2 \u00D7 5 = 10 \u2014 but 2 is even, so the condition is not met","4 \u00D7 6 = 24 \u2014 both factors are even, so the condition is not met"],
-    "A counterexample must use two odd numbers (the condition) and break the claim (an even product). Only 3 \u00D7 5 = 15 does that. The others smuggle in an even factor, so they never test the conjecture.",{});}
+    "\\(3 \\times 5 = 15\\) — two odd numbers with an odd product",
+    ["\\(3 \\times 4 = 12\\) — but \\(4\\) is even, so the condition is not met","\\(2 \\times 5 = 10\\) — but \\(2\\) is even, so the condition is not met","\\(4 \\times 6 = 24\\) — both factors are even, so the condition is not met"],
+    "A counterexample must use two odd numbers (the condition) and break the claim (an even product). Only \\(3 \\times 5 = 15\\) does that. The others smuggle in an even factor, so they never test the conjecture.",{});}
 ,
 function(){return mcq("Conjecture: \u2018The square of a number is always greater than the number itself.\u2019 Which value is a counterexample?",
-    "\u00BD \u2014 its square is \u00BC, and \u00BC is less than \u00BD",
-    ["2 \u2014 its square is 4, which is greater than 2, so it agrees with the conjecture","3 \u2014 its square is 9, which is greater than 3, so it agrees with the conjecture","\u22121 \u2014 its square is 1, which is greater than \u22121, so it agrees with the conjecture"],
-    "A counterexample must break the claim. Squaring a number between 0 and 1 makes it SMALLER: \u00BD \u00D7 \u00BD = \u00BC, and \u00BC < \u00BD. The other values all agree with the conjecture, so they cannot refute it.",{});},
+    "\\(\\frac{1}{2}\\) — its square is \\(\\frac{1}{4}\\), and \\(\\frac{1}{4}\\) is less than \\(\\frac{1}{2}\\)",
+    ["\\(2\\) — its square is \\(4\\), which is greater than \\(2\\), so it agrees with the conjecture","\\(3\\) — its square is \\(9\\), which is greater than \\(3\\), so it agrees with the conjecture","\\(-1\\) — its square is \\(1\\), which is greater than \\(-1\\), so it agrees with the conjecture"],
+    "A counterexample must break the claim. Squaring a number between \\(0\\) and \\(1\\) makes it SMALLER: \\(\\frac{1}{2} \\times \\frac{1}{2} = \\frac{1}{4}\\), and \\(\\frac{1}{4} < \\frac{1}{2}\\). The other values all agree with the conjecture, so they cannot refute it.",{});},
   function(){return mcq("Conjecture: \u2018Dividing one natural number by another always gives a result smaller than the number you started with.\u2019 Which calculation is a counterexample?",
-    "6 \u00F7 1 = 6 \u2014 the result equals the starting number instead of being smaller",
-    ["6 \u00F7 2 = 3 \u2014 smaller than 6, so it agrees with the conjecture","6 \u00F7 3 = 2 \u2014 smaller than 6, so it agrees with the conjecture","6 \u00F7 6 = 1 \u2014 smaller than 6, so it agrees with the conjecture"],
-    "Dividing by 1 leaves a number unchanged, so the result is not smaller. One counterexample is enough to show the conjecture is false.",{});}
+    "\\(6 \\div 1 = 6\\) — the result equals the starting number instead of being smaller",
+    ["\\(6 \\div 2 = 3\\) — smaller than \\(6\\), so it agrees with the conjecture","\\(6 \\div 3 = 2\\) — smaller than \\(6\\), so it agrees with the conjecture","\\(6 \\div 6 = 1\\) — smaller than \\(6\\), so it agrees with the conjecture"],
+    "Dividing by \\(1\\) leaves a number unchanged, so the result is not smaller. One counterexample is enough to show the conjecture is false.",{});}
 ]));
 E("u7-inductive-false",7,["2.2"],1,"var",varset([
-  function(){return mcq("A student notices 3, 5 and 7 are all prime and concludes \u2018every odd number is prime\u2019. Why might this inductive conclusion be false?",
-    "Inductive reasoning generalizes from a few cases \u2014 an unchecked case (like 9 = 3 \u00D7 3) can break the pattern",
-    ["Because 3, 5 and 7 are not really prime","Because odd numbers cannot be studied by patterns","Because conclusions need at least ten examples to be allowed"],
-    "Induction spots a pattern in observed cases but never checks them all. The very next odd numbers include 9, which is composite \u2014 the conjecture fails.",{});},
+  function(){return mcq("A student notices \\(3\\), \\(5\\) and \\(7\\) are all prime and concludes \u2018every odd number is prime\u2019. Why might this inductive conclusion be false?",
+    "Inductive reasoning generalizes from a few cases — an unchecked case (like \\(9 = 3 \\times 3\\)) can break the pattern",
+    ["Because \\(3\\), \\(5\\) and \\(7\\) are not really prime","Because odd numbers cannot be studied by patterns","Because conclusions need at least ten examples to be allowed"],
+    "Induction spots a pattern in observed cases but never checks them all. The very next odd numbers include \\(9\\), which is composite — the conjecture fails.",{});},
   function(){return mcq("Which statement best compares inductive and deductive reasoning?",
     "Inductive reasoning moves from examples to a general conjecture that might be false; deductive reasoning starts from accepted facts and its conclusions must follow",
     ["Inductive reasoning is always wrong and deductive reasoning is always right","Deductive reasoning is based on examples; inductive reasoning is based on definitions","They are two names for the same process"],
     "Induction suggests; deduction proves. A conjecture from induction still needs a deductive proof \u2014 or one counterexample ends it.",{});},
-  function(){return mcq("A student lists the primes 3, 5, 7, 11 and 13, notices they are all odd, and concludes every prime number is odd. Which number is a counterexample?",
-    "2 \u2014 it is prime, and it is even",
-    ["9 \u2014 it is odd","1 \u2014 it is neither prime nor composite","15 \u2014 it is odd and composite"],
-    "A single counterexample destroys a universal claim. The student's list simply skipped 2, the one even prime \u2014 induction from a partial list is never a proof.",{});}
+  function(){return mcq("A student lists the primes \\(3, 5, 7, 11\\) and \\(13\\), notices they are all odd, and concludes every prime number is odd. Which number is a counterexample?",
+    "\\(2\\) — it is prime, and it is even",
+    ["\\(9\\) — it is odd","\\(1\\) — it is neither prime nor composite","\\(15\\) — it is odd and composite"],
+    "A single counterexample destroys a universal claim. The student's list simply skipped \\(2\\), the one even prime — induction from a partial list is never a proof.",{});}
 ,
 function(){return mcq("A fair coin has landed heads five times in a row. Marcus concludes it will land heads on every future toss. Why is this inductive conclusion unreliable?",
     "Five tosses are a tiny sample \u2014 each toss is independent, so tails can still come up; a short streak does not establish a rule",
     ["Because after five heads, tails is now due \u2014 the coin has to balance out","Because five heads in a row proves the coin must be rigged","Because inductive conclusions are always false"],
     "Induction from a handful of cases is fragile. Nothing about the first five tosses changes the coin, and a longer run would very likely include tails.",{});},
-  function(){return mcq("A bakery's Saturday sales doubled three weeks running: 40, 80, then 160 loaves. The owner concludes sales will keep doubling and orders ingredients for 1,280 loaves in week 6. What is the weakness in this inductive reasoning?",
+  function(){return mcq("A bakery's Saturday sales doubled three weeks running: \\(40\\), \\(80\\), then \\(160\\) loaves. The owner concludes sales will keep doubling and orders ingredients for \\(1{,}280\\) loaves in week \\(6\\). What is the weakness in this inductive reasoning?",
     "The pattern rests on only three weeks and ignores real limits \u2014 oven space, staff and the number of customers in town cap how much can actually be sold",
-    ["Doubling patterns never continue past three terms","The arithmetic is wrong \u2014 week 6 would be 1,024 loaves, not 1,280","Inductive reasoning can never be used to plan a business"],
-    "Three observations make a shaky rule, and this one also runs into the real world: demand and capacity do not double forever. Week 6 at 1,280 follows the pattern (40, 80, 160, 320, 640, 1,280) \u2014 the flaw is trusting the pattern, not the arithmetic.",{});}
+    ["Doubling patterns never continue past three terms","The arithmetic is wrong — week \\(6\\) would be \\(1{,}024\\) loaves, not \\(1{,}280\\)","Inductive reasoning can never be used to plan a business"],
+    "Three observations make a shaky rule, and this one also runs into the real world: demand and capacity do not double forever. Week \\(6\\) at \\(1{,}280\\) follows the pattern \\((40, 80, 160, 320, 640, 1{,}280)\\) — the flaw is trusting the pattern, not the arithmetic.",{});}
 ]));
 E("u7-valid-argument",7,["2.3"],2,"var",varset([
   function(){return mcq("Argument: \u2018All provincial parks charge an entry fee. Gros Morne is a provincial park. Therefore Gros Morne charges an entry fee.\u2019 (Take the premises as given.) Is the argument valid?",
@@ -1322,41 +1322,41 @@ E("u7-valid-argument",7,["2.3"],2,"var",varset([
     "The premise puts teachers inside the bigger group of key-holders. Membership in the bigger group cannot prove membership in the smaller one \u2014 the same backwards step as the rectangle argument.",{});}
 ]));
 E("u7-proof-error",7,["2.8"],3,"var",varset([
-  function(){return mcq("A famous fake proof starts with a = b, multiplies out to reach (a \u2212 b)(a + b) = b(a \u2212 b), then cancels (a \u2212 b) from both sides \u2014 and ends with 2 = 1. Where is the error?",
-    "Cancelling (a \u2212 b) divides both sides by a \u2212 b, which is 0 \u2014 division by zero is not allowed",
-    ["The error is in the first line: a can never equal b","The error is that (a + b) should be (a \u2212 b)","There is no error; the proof shows 2 = 1"],
-    "Since a = b, a \u2212 b = 0. Every later step is fine algebra \u2014 but that one cancellation divides by zero, and from a false step anything can \u2018follow\u2019.",{});},
+  function(){return mcq("A famous fake proof starts with \\(a = b\\), multiplies out to reach \\((a - b)(a + b) = b(a - b)\\), then cancels \\((a - b)\\) from both sides — and ends with \\(2 = 1\\). Where is the error?",
+    "Cancelling \\((a - b)\\) divides both sides by \\(a - b\\), which is \\(0\\) — division by zero is not allowed",
+    ["The error is in the first line: \\(a\\) can never equal \\(b\\)","The error is that \\((a + b)\\) should be \\((a - b)\\)","There is no error; the proof shows \\(2 = 1\\)"],
+    "Since \\(a = b\\), \\(a - b = 0\\). Every later step is fine algebra \u2014 but that one cancellation divides by zero, and from a false step anything can \u2018follow\u2019.",{});},
   function(){return mcq("A student \u2018proves\u2019 that every triangle is isosceles by drawing an angle bisector and a perpendicular bisector, then claiming two pairs of congruent triangles force the two sides equal. What kind of flaw should you look for first?",
     "The proof leans on the diagram \u2014 the intersection point was drawn inside the triangle, but in general it falls outside, changing the argument",
     ["Triangles can never be proved congruent","Angle bisectors do not exist in all triangles","The flaw is arithmetic in the side lengths"],
     "Deductive proofs must follow from stated facts, not from how one picture happens to look. A diagram-based assumption is the classic hidden flaw.",{});},
-  function(){return mcq("A student \u2018proves\u2019 that \u22121 = 1: \u2018Since (\u22121)\u00B2 = 1\u00B2, taking the square root of both sides gives \u22121 = 1.\u2019 What is the flaw?",
-    "Taking the square root loses the sign \u2014 x\u00B2 = y\u00B2 only implies x = \u00B1y, not x = y",
-    ["The arithmetic is wrong: (\u22121)\u00B2 is \u22121, not 1","You are never allowed to square both sides of an equation","There is no flaw \u2014 the proof is correct"],
-    "Squaring is not reversible on its own: both 1 and \u22121 square to 1. The step treats the square root as if it restored the original number exactly.",{});}
+  function(){return mcq("A student ‘proves’ that \\(-1 = 1\\): ‘Since \\((-1)^2 = 1^2\\), taking the square root of both sides gives \\(-1 = 1\\).’ What is the flaw?",
+    "Taking the square root loses the sign — \\(x^2 = y^2\\) only implies \\(x = \\pm y\\), not \\(x = y\\)",
+    ["The arithmetic is wrong: \\((-1)^2\\) is \\(-1\\), not \\(1\\)","You are never allowed to square both sides of an equation","There is no flaw \u2014 the proof is correct"],
+    "Squaring is not reversible on its own: both \\(1\\) and \\(-1\\) square to \\(1\\). The step treats the square root as if it restored the original number exactly.",{});}
 ]));
 /* ============ Unit 8: Properties of Angles and Triangles ============ */
 E("u8-triangle-sum",8,["5.3"],1,"gen",function(){
   var a=ri(35,75),b=ri(35,75);while(a+b>160){b=ri(30,60);}
   var c=180-a-b;
-  var q = numq("Two angles of a triangle measure "+a+"\u00B0 and "+b+"\u00B0. What is the measure of the third angle, in degrees?",
-    c,0.011,"The interior angles of a triangle sum to 180\u00B0: 180 \u2212 "+a+" \u2212 "+b+" = <b>"+c+"\u00B0</b>.",{a:a,b:b});
+  var q = numq("Two angles of a triangle measure \\("+a+"^\\circ\\) and \\("+b+"^\\circ\\). What is the measure of the third angle, in degrees?",
+    c,0.011,"The interior angles of a triangle sum to \\(180^\\circ\\): \\(180 - "+a+" - "+b+" = \\)<b>\\("+c+"^\\circ\\)</b>.",{a:a,b:b});
   q.figure = triAngSVG(a, b, 180-a-b, {ang:[a+"°",b+"°","?"]});
   return q;
 });
 E("u8-co-interior",8,["5.8"],2,"gen",function(){
   var a=ri(55,160);var b=180-a;
   var frame=pick([
-    "Two parallel lines are cut by a transversal. A co-interior angle measures "+a+"\u00B0. What is the measure of the co-interior angle on the same side of the transversal, in degrees?",
-    "Two parallel rails are cut by a straight crossing path. On the same side of the path, one co-interior angle measures "+a+"\u00B0. What is the measure of the other co-interior angle on that side, in degrees?"]);
-  var q = numq(frame,b,0.011,"Co-interior angles between parallel lines are supplementary: 180 \u2212 "+a+" = <b>"+b+"\u00B0</b>.",{a:a});
+    "Two parallel lines are cut by a transversal. A co-interior angle measures \\("+a+"^\\circ\\). What is the measure of the co-interior angle on the same side of the transversal, in degrees?",
+    "Two parallel rails are cut by a straight crossing path. On the same side of the path, one co-interior angle measures \\("+a+"^\\circ\\). What is the measure of the other co-interior angle on that side, in degrees?"]);
+  var q = numq(frame,b,0.011,"Co-interior angles between parallel lines are supplementary: \\(180 - "+a+" = \\)<b>\\("+b+"^\\circ\\)</b>.",{a:a});
   q.figure = transversalSVG("TR", a+"°", "BR", "?");
   return q;
 });
 E("u8-alternate-algebra",8,["5.8"],2,"gen",function(){
   var x=ri(8,20);var a=3,b=ri(1,15);var val=a*x+b;
-  var q = numq("Two parallel lines are cut by a transversal. Alternate interior angles measure ("+a+"x + "+b+")\u00B0 and "+val+"\u00B0. Find x.",
-    x,0.011,"Alternate interior angles between parallel lines are equal: "+a+"x + "+b+" = "+val+" \u2192 "+a+"x = "+(val-b)+" \u2192 x = <b>"+x+"</b>.",{x:x});
+  var q = numq("Two parallel lines are cut by a transversal. Alternate interior angles measure \\(("+a+"x + "+b+")^\\circ\\) and \\("+val+"^\\circ\\). Find \\(x\\).",
+    x,0.011,"Alternate interior angles between parallel lines are equal: \\("+a+"x + "+b+" = "+val+" \\rightarrow "+a+"x = "+(val-b)+" \\rightarrow x = \\)<b>\\("+x+"\\)</b>.",{x:x});
   q.figure = transversalSVG("TR", "("+a+"x + "+b+")°", "BL", val+"°");
   return q;
 });
@@ -1367,7 +1367,7 @@ E("u8-polygon-sum",8,["5.2"],1,"gen",function(){
     "A polygon has "+n+" sides. What is the sum of its interior angles, in degrees?",
     "How many degrees do the interior angles of a "+n+"-sided polygon add up to?"]);
   var q = numq(frame,
-    s,0.011,"Sum = ("+n+" \u2212 2) \u00D7 180\u00B0 = "+(n-2)+" \u00D7 180\u00B0 = <b>"+s+"\u00B0</b>.",{n:n});
+    s,0.011,"Sum \\(= ("+n+" - 2) \\times 180^\\circ = "+(n-2)+" \\times 180^\\circ = \\)<b>\\("+s+"^\\circ\\)</b>.",{n:n});
   q.figure = polySVG(n, false);
   return q;
 });
@@ -1379,14 +1379,14 @@ E("u8-regular-angle",8,["5.1"],1,"gen",function(){
     "A regular polygon has "+n+" sides. What is the measure of each of its interior angles, in degrees? (A decimal is fine.)"]);
   if(names[n]&&Math.random()<0.5)frame="What is the measure of each interior angle of a "+names[n]+" (a regular "+n+"-gon), in degrees? (A decimal is fine.)";
   var q = numq(frame,
-    each,0.011,"Sum of interior angles = ("+n+" \u2212 2) \u00D7 180\u00B0 = "+sum+"\u00B0. All "+n+" angles are equal: "+sum+" \u00F7 "+n+" = <b>"+fmt(each)+"\u00B0</b>.",{n:n});
+    each,0.011,"Sum of interior angles \\(= ("+n+" - 2) \\times 180^\\circ = "+sum+"^\\circ\\). All \\("+n+"\\) angles are equal: \\("+sum+" \\div "+n+" = \\)<b>\\("+fmt(each)+"^\\circ\\)</b>.",{n:n});
   q.figure = polySVG(n, true);
   return q;
 });
 E("u8-exterior",8,["5.11"],2,"gen",function(){
   var a=ri(30,70),b=ri(30,70);var ext=a+b;
-  var q = numq("In a triangle, the two non-adjacent interior angles measure "+a+"\u00B0 and "+b+"\u00B0. What is the measure of the exterior angle at the third vertex, in degrees?",
-    ext,0.011,"The exterior angle equals the sum of the two remote interior angles: "+a+" + "+b+" = <b>"+ext+"\u00B0</b>. It is also 180\u00B0 minus the adjacent interior angle \u2014 the two facts agree.",{a:a,b:b});
+  var q = numq("In a triangle, the two non-adjacent interior angles measure \\("+a+"^\\circ\\) and \\("+b+"^\\circ\\). What is the measure of the exterior angle at the third vertex, in degrees?",
+    ext,0.011,"The exterior angle equals the sum of the two remote interior angles: \\("+a+" + "+b+" = \\)<b>\\("+ext+"^\\circ\\)</b>. It is also \\(180^\\circ\\) minus the adjacent interior angle — the two facts agree.",{a:a,b:b});
   q.figure = triAngSVG(a, b, 180-a-b, {ang:[a+"°",b+"°",null], ext:2, extLabel:"?"});
   return q;
 });
@@ -1405,18 +1405,18 @@ E("u8-congruent",8,["5.6"],1,"var",varset([
     "The equal side sits between the two equal angles in each triangle, which is the angle-side-angle pattern.",{});}
 ]));
 E("u8-parallel-check",8,["5.9"],2,"var",varset([
-  function(){return mcq("A transversal cuts two lines. Corresponding angles measure 112\u00B0 and 112\u00B0. What can you conclude?",
+  function(){return mcq("A transversal cuts two lines. Corresponding angles measure \\(112^\\circ\\) and \\(112^\\circ\\). What can you conclude?",
     "The lines are parallel \u2014 equal corresponding angles is one of the tests for parallel lines",
-    ["The lines are not parallel, because the angles should add to 180\u00B0","Nothing \u2014 angle measures cannot tell us about parallel lines","The lines are perpendicular"],
+    ["The lines are not parallel, because the angles should add to \\(180^\\circ\\)","Nothing \u2014 angle measures cannot tell us about parallel lines","The lines are perpendicular"],
     "When a transversal makes corresponding angles equal, the lines are parallel. (Supplementary is the test for co-interior angles, a different pair.)",{});},
-  function(){return mcq("A transversal cuts two lines, and co-interior angles measure 105\u00B0 and 82\u00B0. Are the lines parallel?",
-    "No \u2014 co-interior angles between parallel lines must be supplementary, and 105 + 82 = 187 \u2260 180",
+  function(){return mcq("A transversal cuts two lines, and co-interior angles measure \\(105^\\circ\\) and \\(82^\\circ\\). Are the lines parallel?",
+    "No — co-interior angles between parallel lines must be supplementary, and \\(105 + 82 = 187 \\neq 180\\)",
     ["Yes \u2014 any two angles formed by a transversal prove the lines parallel","Yes \u2014 because both angles are obtuse and acute in balance","No \u2014 because co-interior angles must be equal"],
-    "For parallel lines, co-interior angles add to exactly 180\u00B0. 187\u00B0 misses, so the lines are not parallel.",{});},
-  function(){return mcq("A transversal cuts two lines, and a pair of alternate exterior angles both measure 74\u00B0. What can you conclude?",
+    "For parallel lines, co-interior angles add to exactly \\(180^\\circ\\). \\(187^\\circ\\) misses, so the lines are not parallel.",{});},
+  function(){return mcq("A transversal cuts two lines, and a pair of alternate exterior angles both measure \\(74^\\circ\\). What can you conclude?",
     "The lines are parallel \u2014 equal alternate exterior angles is one of the tests for parallel lines",
-    ["The lines are not parallel \u2014 alternate angles must add to 180\u00B0","Nothing \u2014 angles outside the lines give no information","The lines are perpendicular"],
-    "Equal corresponding angles, equal alternate angles, or supplementary co-interior angles each certify parallel lines. Here the alternate exterior pair matches at 74\u00B0.",{});}
+    ["The lines are not parallel — alternate angles must add to \\(180^\\circ\\)","Nothing \u2014 angles outside the lines give no information","The lines are perpendicular"],
+    "Equal corresponding angles, equal alternate angles, or supplementary co-interior angles each certify parallel lines. Here the alternate exterior pair matches at \\(74^\\circ\\).",{});}
 ]));
 E("u8-polygon-ratio",8,["5.2"],2,"gen",function(){
   var r=pick([1,2,3,4,5,7,8,9,11,14,15,17,19,23,29,35]);var ext=180/(r+1);var n=360/ext;var interior=r*ext;
@@ -1424,31 +1424,31 @@ E("u8-polygon-ratio",8,["5.2"],2,"gen",function(){
     "In a regular polygon, each interior angle is "+r+" times as large as each exterior angle. How many sides does the polygon have?",
     "Each interior angle of a regular polygon is "+r+" times each exterior angle. How many sides does the polygon have?",
     "A regular polygon's interior angle is "+r+" times its exterior angle. Find the number of sides.",
-    "For a regular polygon, the ratio of an interior angle to its exterior angle is "+r+" : 1. How many sides does it have?"]);
+    "For a regular polygon, the ratio of an interior angle to its exterior angle is \\("+r+" : 1\\). How many sides does it have?"]);
   return numq(frame,
-    n,0.011,"Interior + exterior = 180\u00B0. With interior = "+r+" \u00D7 exterior: ("+r+" + 1) \u00D7 exterior = 180\u00B0, so each exterior angle is "+fmt(ext)+"\u00B0 (and each interior angle is "+fmt(interior)+"\u00B0). The exterior angles make one full turn: 360 \u00F7 "+fmt(ext)+" = <b>"+fmt(n)+" sides</b>.",{r:r,ext:ext});
+    n,0.011,"\\(\\text{Interior} + \\text{exterior} = 180^\\circ\\). With interior \\(= "+r+" \\times \\text{exterior}\\): \\(("+r+" + 1) \\times \\text{exterior} = 180^\\circ\\), so each exterior angle is \\("+fmt(ext)+"^\\circ\\) (and each interior angle is \\("+fmt(interior)+"^\\circ\\)). The exterior angles make one full turn: \\(360 \\div "+fmt(ext)+" = \\)<b>\\("+fmt(n)+"\\text{ sides}\\)</b>.",{r:r,ext:ext});
 });
 E("u7-reasoning-type",7,["2.7"],2,"var",varset([
   function(){return mcq("Which option uses DEDUCTIVE reasoning to show that the sum of two odd numbers is always even?",
-    "Let the two numbers be 2a + 1 and 2b + 1. Their sum is 2a + 2b + 2 = 2(a + b + 1), which is a multiple of 2 \u2014 so the sum is even for every pair of odd numbers",
-    ["3 + 5 = 8, 7 + 9 = 16 and 11 + 13 = 24 \u2014 in each case the sum is even","Let the two numbers be 2a + 1 and 2b + 1. Their sum is 2ab + 2, which is even","A calculator checked 500 random pairs of odd numbers and every sum came out even"],
-    "Deductive reasoning starts from a general form \u2014 every odd number can be written as 2a + 1 \u2014 and the algebra settles the claim for all cases at once. Checking examples, even 500 of them, is inductive: it can suggest the claim but never prove it. And the option giving the sum as 2ab + 2 is algebra gone wrong \u2014 that is not what the sum is.",{});},
+    "Let the two numbers be \\(2a + 1\\) and \\(2b + 1\\). Their sum is \\(2a + 2b + 2 = 2(a + b + 1)\\), which is a multiple of \\(2\\) — so the sum is even for every pair of odd numbers",
+    ["\\(3 + 5 = 8\\), \\(7 + 9 = 16\\) and \\(11 + 13 = 24\\) — in each case the sum is even","Let the two numbers be \\(2a + 1\\) and \\(2b + 1\\). Their sum is \\(2ab + 2\\), which is even","A calculator checked \\(500\\) random pairs of odd numbers and every sum came out even"],
+    "Deductive reasoning starts from a general form \u2014 every odd number can be written as \\(2a + 1\\) — and the algebra settles the claim for all cases at once. Checking examples, even \\(500\\) of them, is inductive: it can suggest the claim but never prove it. And the option giving the sum as \\(2ab + 2\\) is algebra gone wrong \u2014 that is not what the sum is.",{});},
   function(){return mcq("Which option uses INDUCTIVE reasoning?",
-    "4 \u00D7 6 = 24, 2 \u00D7 8 = 16 and 10 \u00D7 12 = 120 \u2014 in every case tried, the product of two even numbers is even",
-    ["Let the numbers be 2a and 2b. Their product is 4ab = 2(2ab), a multiple of 2, so it is even","An even number is defined as a multiple of 2, and a product of multiples of 2 is a multiple of 2","Let one number be 2a + 1 and the other 2b + 1. Their product is 4ab + 2a + 2b + 1"],
+    "\\(4 \\times 6 = 24\\), \\(2 \\times 8 = 16\\) and \\(10 \\times 12 = 120\\) — in every case tried, the product of two even numbers is even",
+    ["Let the numbers be \\(2a\\) and \\(2b\\). Their product is \\(4ab = 2(2ab)\\), a multiple of \\(2\\), so it is even","An even number is defined as a multiple of \\(2\\), and a product of multiples of \\(2\\) is a multiple of \\(2\\)","Let one number be \\(2a + 1\\) and the other \\(2b + 1\\). Their product is \\(4ab + 2a + 2b + 1\\)"],
     "Inductive reasoning generalizes from specific cases that were actually tried. The other options argue from general forms or definitions \u2014 that is deduction (and the last one is even about odd numbers, not this claim).",{});},
   function(){return mcq("Sam writes: \u2018The bus was late on Monday and on Tuesday, so it will be late again tomorrow.\u2019 What kind of reasoning is this?",
     "Inductive \u2014 it predicts tomorrow from a few observed cases",
     ["Deductive \u2014 the conclusion has to follow","A counterexample \u2014 it disproves the bus schedule","A proof \u2014 two examples are enough to prove a pattern"],
     "Sam observed two cases and generalized to an unobserved one. That is induction: the conclusion is plausible, not guaranteed.",{});},
-  function(){return mcq("The angles in any triangle add to 180\u00B0. Priya uses that rule to work out the third angle of the triangle in her homework. What kind of reasoning is she using?",
+  function(){return mcq("The angles in any triangle add to \\(180^\\circ\\). Priya uses that rule to work out the third angle of the triangle in her homework. What kind of reasoning is she using?",
     "Deductive \u2014 she applies a general rule to a specific case",
     ["Inductive \u2014 she is looking for a pattern in triangles","A counterexample \u2014 she is testing whether the rule fails","Circular \u2014 she assumes the very thing she is proving"],
     "Deduction moves from the general to the specific: the rule covers every triangle, so it covers hers.",{});},
   function(){return mcq("Which option uses DEDUCTIVE reasoning to show that the sum of three even integers is always even?",
-    "Write the integers as 2a, 2b and 2c. Their sum is 2a + 2b + 2c = 2(a + b + c), a multiple of 2, so the sum is even",
-    ["2 + 4 + 6 = 12 and 4 + 8 + 10 = 22 \u2014 the sums are even","Write the integers as 2a, 2b and 2c. Their sum is 2a + 2b + 2c = 6abc, which is even","A spreadsheet tested 500 triples of even integers and every sum was even"],
-    "Only the option that factors the sum as 2(a + b + c) proves the claim for every triple at once. Examples and spreadsheet checks are inductive, and 6abc is not the sum of 2a, 2b and 2c.",{});}
+    "Write the integers as \\(2a\\), \\(2b\\) and \\(2c\\). Their sum is \\(2a + 2b + 2c = 2(a + b + c)\\), a multiple of \\(2\\), so the sum is even",
+    ["\\(2 + 4 + 6 = 12\\) and \\(4 + 8 + 10 = 22\\) — the sums are even","Write the integers as \\(2a\\), \\(2b\\) and \\(2c\\). Their sum is \\(2a + 2b + 2c = 6abc\\), which is even","A spreadsheet tested \\(500\\) triples of even integers and every sum was even"],
+    "Only the option that factors the sum as \\(2(a + b + c)\\) proves the claim for every triple at once. Examples and spreadsheet checks are inductive, and \\(6abc\\) is not the sum of \\(2a\\), \\(2b\\) and \\(2c\\).",{});}
 ]));
 E("u7-counterexample-gen",7,["2.4"],2,"gen",function(){
   var pairs=[[3,4],[3,5],[4,6],[5,6],[2,5],[6,8],[6,9],[4,10],[6,10],[6,15],[8,12],[9,12],[10,15],[5,7],[4,7]];
@@ -1458,11 +1458,11 @@ E("u7-counterexample-gen",7,["2.4"],2,"gen",function(){
   var valid=[];for(var t=1;t<=8;t++){if((A*t)%B!==0)valid.push(t);}
   var k=A*pick(valid);
   var mults=[1,2,3,4].sort(function(){return Math.random()-0.5;}).slice(0,3);
-  var wrongs=mults.map(function(m){return String(L*m);});
-  var claim=pick(["Every number divisible by "+A+" is also divisible by "+B,"A multiple of "+A+" is always a multiple of "+B]);
+  var wrongs=mults.map(function(m){return "\\("+(L*m)+"\\)";});
+  var claim=pick(["Every number divisible by \\("+A+"\\) is also divisible by \\("+B+"\\)","A multiple of \\("+A+"\\) is always a multiple of \\("+B+"\\)"]);
   return mcq("Conjecture: \u2018"+claim+".\u2019 Which value is a counterexample?",
-    String(k),wrongs,
-    k+" is divisible by "+A+" ("+A+" \u00D7 "+(k/A)+" = "+k+"), but "+k+" \u00F7 "+B+" is not a whole number, so it breaks the conjecture. Each other value is a multiple of "+B+" as well as "+A+", so those values agree with the conjecture instead of refuting it.",{A:A,B:B,k:k});
+    "\\("+k+"\\)",wrongs,
+    "\\("+k+"\\) is divisible by \\("+A+"\\) (\\("+A+" \\times "+(k/A)+" = "+k+"\\)), but \\("+k+" \\div "+B+"\\) is not a whole number, so it breaks the conjecture. Each other value is a multiple of \\("+B+"\\) as well as \\("+A+"\\), so those values agree with the conjecture instead of refuting it.",{A:A,B:B,k:k});
 });
 E("u7-sequence-gap",7,["2.1"],1,"gen",function(){
   var fam=ri(0,2),terms=[],ans=0,sig={};
@@ -1470,28 +1470,28 @@ E("u7-sequence-gap",7,["2.1"],1,"gen",function(){
   else if(fam===1){var x=ri(1,4),y=ri(1,6);terms=[x,y];for(var i2=2;i2<7;i2++)terms.push(terms[i2-1]+terms[i2-2]);var g2=pick([3,4,5]);ans=terms[g2];sig={fam:"fib",x:x,y:y,g:g2};}
   else{var s0=ri(2,9),d0=ri(1,4);terms=[s0];for(var i3=1;i3<6;i3++)terms.push(terms[i3-1]+d0+(i3-1));var g3=pick([3,4]);ans=terms[g3];sig={fam:"grow",s0:s0,d0:d0,g:g3};}
   var shown=terms.slice();shown[sig.g]="___";
-  var ruleTxt=fam===0?"Each term is the one before it multiplied by "+sig.r+".":fam===1?"Each term is the sum of the two terms before it.":"The gaps between terms grow by 1 each time: +"+sig.d0+", +"+(sig.d0+1)+", +"+(sig.d0+2)+", and so on.";
+  var ruleTxt=fam===0?"Each term is the one before it multiplied by \\("+sig.r+"\\).":fam===1?"Each term is the sum of the two terms before it.":"The gaps between terms grow by \\(1\\) each time: \\(+"+sig.d0+"\\), \\(+"+(sig.d0+1)+"\\), \\(+"+(sig.d0+2)+"\\), and so on.";
   var sigOut={fam:sig.fam,g:sig.g,terms:terms};if(sig.a0!==undefined){sigOut.a0=sig.a0;sigOut.r=sig.r;}if(sig.x!==undefined){sigOut.x=sig.x;sigOut.y=sig.y;}if(sig.s0!==undefined){sigOut.s0=sig.s0;sigOut.d0=sig.d0;}
-  return numq("Find the missing term in the pattern: "+shown.join(", "),ans,0.011,
-    ruleTxt+" The missing term is <b>"+ans+"</b>.",sigOut);
+  return numq("Find the missing term in the pattern: \\("+shown.join(", ").replace("___","\\)___\\(")+"\\)",ans,0.011,
+    ruleTxt+" The missing term is <b>\\("+ans+"\\)</b>.",sigOut);
 });
 E("u7-proof-steps",7,["2.8"],3,"var",varset([
-  function(){return mcq("A number trick says: pick a number, add 6, double it, subtract 4, divide by 2, then subtract your starting number. (It always ends at 4 \u2014 try starting with 5.) A student 'proves' the trick with this algebra:<br>Step 1: Start with n. Add 6: n + 6.<br>Step 2: Double it: 2n + 6.<br>Step 3: Subtract 4: 2n + 2.<br>Step 4: Divide by 2, then subtract n: (n + 1) \u2212 n = 1 \u2014 so the trick always ends at 1.<br>The conclusion is wrong. In which step does the FIRST error occur?",
-    "Step 2 \u2014 doubling n + 6 gives 2n + 12, not 2n + 6: both terms must double",
-    ["Step 1 \u2014 adding 6 to n should give 6n","Step 3 \u2014 subtracting 4 from 2n + 6 should give 2n + 10","Step 4 \u2014 the division must be carried out before the subtraction"],
-    "Every later step follows correctly from the line before it \u2014 the damage is done when 2(n + 6) is written as 2n + 6 instead of 2n + 12. With that fixed, the proof ends at (2n + 8) \u00F7 2 \u2212 n = 4, exactly as the trick promises.",{});},
-  function(){return mcq("A number trick says: pick a number, multiply it by 3, add 9, divide by 3, then subtract your starting number. (It always ends at 3 \u2014 try starting with 2.) A student 'proves' the trick like this:<br>Step 1: Start with n. Multiply by 3: 3n.<br>Step 2: Add 9: 3n + 9.<br>Step 3: Divide by 3: n + 9.<br>Step 4: Subtract n: 9 \u2014 so the trick always ends at 9.<br>The conclusion is wrong. In which step does the FIRST error occur?",
-    "Step 3 \u2014 dividing 3n + 9 by 3 gives n + 3, not n + 9: both terms must be divided",
-    ["Step 1 \u2014 multiplying n by 3 should give n3","Step 2 \u2014 adding 9 to 3n should give 12n","Step 4 \u2014 subtracting n from n + 9 should give 9n"],
-    "Only the 3n was divided; the +9 slipped through untouched. Fixed, the proof reads (3n + 9) \u00F7 3 \u2212 n = (n + 3) \u2212 n = 3.",{});},
-  function(){return mcq("A number trick says: pick a number, add 4, multiply by 2, subtract 6, then divide by 2. (It always ends one MORE than your starting number \u2014 try starting with 5 and you get 6.) A student 'proves' the trick like this:<br>Step 1: Start with n. Add 4: n + 4.<br>Step 2: Multiply by 2: 2n + 8.<br>Step 3: Subtract 6: 2n + 2.<br>Step 4: Divide by 2: 2n + 1 \u2014 so the trick always ends at one more than DOUBLE your number.<br>The conclusion is wrong. In which step does the FIRST error occur?",
-    "Step 4 \u2014 dividing 2n + 2 by 2 gives n + 1, not 2n + 1: both terms must be divided",
-    ["Step 1 \u2014 adding 4 to n should give 4n","Step 2 \u2014 multiplying n + 4 by 2 should give 2n + 4","Step 3 \u2014 subtracting 6 from 2n + 8 should give 2n + 14"],
-    "Steps 1 to 3 are correct. The last division halves only the constant in the student's line: (2n + 2) \u00F7 2 = n + 1, which is exactly what the trick promises \u2014 one more than the starting number.",{});},
-  function(){return mcq("A number trick says: pick a number, double it, add 10, divide by 2, then subtract 3. (It always ends 2 above your starting number \u2014 try starting with 4 and you get 6.) A student 'proves' the trick like this:<br>Step 1: Start with n.<br>Step 2: Double it, then add 10: 2(n + 10) = 2n + 20.<br>Step 3: Divide by 2: n + 10.<br>Step 4: Subtract 3: n + 7 \u2014 so the trick always ends 7 above the starting number.<br>The conclusion is wrong. In which step does the FIRST error occur?",
-    "Step 2 \u2014 'double it, then add 10' means 2n + 10; writing 2(n + 10) adds the 10 BEFORE doubling, which doubles the 10 as well",
-    ["Step 1 \u2014 the starting number should have been called x, not n","Step 3 \u2014 dividing 2n + 20 by 2 should give 2n + 10","Step 4 \u2014 subtracting 3 from n + 10 should give n + 13"],
-    "The trick doubles first and adds 10 second: 2n + 10. The brackets quietly reversed that order. Done correctly: (2n + 10) \u00F7 2 \u2212 3 = n + 2.",{});}
+  function(){return mcq("A number trick says: pick a number, add 6, double it, subtract 4, divide by 2, then subtract your starting number. (It always ends at \\(4\\) — try starting with \\(5\\).) A student 'proves' the trick with this algebra:<br>Step 1: Start with \\(n\\). Add \\(6\\): \\(n + 6\\).<br>Step 2: Double it: \\(2n + 6\\).<br>Step 3: Subtract \\(4\\): \\(2n + 2\\).<br>Step 4: Divide by \\(2\\), then subtract \\(n\\): \\((n + 1) - n = 1\\) — so the trick always ends at \\(1\\).<br>The conclusion is wrong. In which step does the FIRST error occur?",
+    "Step 2 — doubling \\(n + 6\\) gives \\(2n + 12\\), not \\(2n + 6\\): both terms must double",
+    ["Step 1 — adding \\(6\\) to \\(n\\) should give \\(6n\\)","Step 3 — subtracting \\(4\\) from \\(2n + 6\\) should give \\(2n + 10\\)","Step 4 \u2014 the division must be carried out before the subtraction"],
+    "Every later step follows correctly from the line before it \u2014 the damage is done when \\(2(n + 6)\\) is written as \\(2n + 6\\) instead of \\(2n + 12\\). With that fixed, the proof ends at \\((2n + 8) \\div 2 - n = 4\\), exactly as the trick promises.",{});},
+  function(){return mcq("A number trick says: pick a number, multiply it by 3, add 9, divide by 3, then subtract your starting number. (It always ends at \\(3\\) — try starting with \\(2\\).) A student 'proves' the trick like this:<br>Step 1: Start with \\(n\\). Multiply by \\(3\\): \\(3n\\).<br>Step 2: Add \\(9\\): \\(3n + 9\\).<br>Step 3: Divide by \\(3\\): \\(n + 9\\).<br>Step 4: Subtract \\(n\\): \\(9\\) — so the trick always ends at \\(9\\).<br>The conclusion is wrong. In which step does the FIRST error occur?",
+    "Step 3 — dividing \\(3n + 9\\) by \\(3\\) gives \\(n + 3\\), not \\(n + 9\\): both terms must be divided",
+    ["Step 1 — multiplying \\(n\\) by \\(3\\) should give \\(n3\\)","Step 2 — adding \\(9\\) to \\(3n\\) should give \\(12n\\)","Step 4 — subtracting \\(n\\) from \\(n + 9\\) should give \\(9n\\)"],
+    "Only the \\(3n\\) was divided; the \\(+9\\) slipped through untouched. Fixed, the proof reads \\((3n + 9) \\div 3 - n = (n + 3) - n = 3\\).",{});},
+  function(){return mcq("A number trick says: pick a number, add 4, multiply by 2, subtract 6, then divide by 2. (It always ends one MORE than your starting number — try starting with \\(5\\) and you get \\(6\\).) A student 'proves' the trick like this:<br>Step 1: Start with \\(n\\). Add \\(4\\): \\(n + 4\\).<br>Step 2: Multiply by \\(2\\): \\(2n + 8\\).<br>Step 3: Subtract \\(6\\): \\(2n + 2\\).<br>Step 4: Divide by \\(2\\): \\(2n + 1\\) — so the trick always ends at one more than DOUBLE your number.<br>The conclusion is wrong. In which step does the FIRST error occur?",
+    "Step 4 — dividing \\(2n + 2\\) by \\(2\\) gives \\(n + 1\\), not \\(2n + 1\\): both terms must be divided",
+    ["Step 1 — adding \\(4\\) to \\(n\\) should give \\(4n\\)","Step 2 — multiplying \\(n + 4\\) by \\(2\\) should give \\(2n + 4\\)","Step 3 — subtracting \\(6\\) from \\(2n + 8\\) should give \\(2n + 14\\)"],
+    "Steps \\(1\\) to \\(3\\) are correct. The last division halves only the constant in the student's line: \\((2n + 2) \\div 2 = n + 1\\), which is exactly what the trick promises \u2014 one more than the starting number.",{});},
+  function(){return mcq("A number trick says: pick a number, double it, add 10, divide by 2, then subtract 3. (It always ends \\(2\\) above your starting number — try starting with \\(4\\) and you get \\(6\\).) A student 'proves' the trick like this:<br>Step 1: Start with \\(n\\).<br>Step 2: Double it, then add \\(10\\): \\(2(n + 10) = 2n + 20\\).<br>Step 3: Divide by \\(2\\): \\(n + 10\\).<br>Step 4: Subtract \\(3\\): \\(n + 7\\) — so the trick always ends \\(7\\) above the starting number.<br>The conclusion is wrong. In which step does the FIRST error occur?",
+    "Step 2 — 'double it, then add \\(10\\)' means \\(2n + 10\\); writing \\(2(n + 10)\\) adds the \\(10\\) BEFORE doubling, which doubles the \\(10\\) as well",
+    ["Step 1 — the starting number should have been called \\(x\\), not \\(n\\)","Step 3 — dividing \\(2n + 20\\) by \\(2\\) should give \\(2n + 10\\)","Step 4 — subtracting \\(3\\) from \\(n + 10\\) should give \\(n + 13\\)"],
+    "The trick doubles first and adds \\(10\\) second: \\(2n + 10\\). The brackets quietly reversed that order. Done correctly: \\((2n + 10) \\div 2 - 3 = n + 2\\).",{});}
 ]));
 E("u5-ci-level-from-report",5,["8.21"],1,"gen",function(){
   var phrases=[[19,20],[9,10],[18,20],[99,100],[17,20],[4,5],[49,50],[47,50]];
@@ -1640,16 +1640,16 @@ E("u6-similar-dimension",6,["6.2"],1,"gen",function(){
     var w=dims[0],h=dims[1],k=pick([2,3,4]),W=w*k,H=h*k,askW=Math.random()<0.5;
     var ans=askW?W:H,known=askW?H:W;
     return numq("A rectangle "+w+" cm by "+h+" cm is enlarged to a similar rectangle. The "+(askW?"longer":"shorter")+" side of the large rectangle is "+known+" cm. What is the "+(askW?"shorter":"longer")+" side of the large rectangle, in cm?",
-      ans,0.011,"Similar shapes keep the same ratio. The scale factor is "+known+" \u00F7 "+(askW?h:w)+" = "+k+", so the other side is "+(askW?w:h)+" \u00D7 "+k+" = <b>"+ans+" cm</b>.",{mode:mode,w:w,h:h,k:k,askW:askW,ans:ans});
+      ans,0.011,"Similar shapes keep the same ratio. The scale factor is \\("+known+" \\div "+(askW?h:w)+" = "+k+"\\), so the other side is \\("+(askW?w:h)+" \\times "+k+" = \\)<b>\\("+ans+"\\text{ cm}\\)</b>.",{mode:mode,w:w,h:h,k:k,askW:askW,ans:ans});
   }
   var trip=pick([[3,4,5],[5,12,13],[6,8,10],[8,15,17]]);
   var m1=pick([1,2,3]),m2=pick([2,3,4,5]);if(m2===m1)m2=m2+1;
   var j=ri(0,2),l=ri(0,2);if(l===j)l=(j+1)%3;
   var small=trip.map(function(x){return x*m1;}),known=trip[j]*m2,ans=trip[l]*m2;
   function gg2(x,y){while(y){var t=x%y;x=y;y=t;}return x;}
-  var gd=gg2(m2,m1),fnum=m2/gd,fden=m1/gd,ftxt=fden===1?""+fnum:fnum+"/"+fden;
-  return numq("Two triangles are similar. The smaller has sides "+small.join(" cm, ")+" cm. The larger triangle's side corresponding to the "+trip[j]+" cm side measures "+known+" cm. What is the length, in cm, of the larger triangle's side corresponding to the "+trip[l]+" cm side?",
-    ans,0.011,"The scale factor from small to large is "+known+" \u00F7 "+(trip[j]*m1)+" = "+ftxt+". Apply it to the "+trip[l]+" cm side's counterpart: "+(trip[l]*m1)+" \u00D7 "+ftxt+" = <b>"+ans+" cm</b>.",{mode:mode,trip:trip,m1:m1,m2:m2,j:j,l:l,ans:ans});
+  var gd=gg2(m2,m1),fnum=m2/gd,fden=m1/gd,ftxt=fden===1?""+fnum:"\\frac{"+fnum+"}{"+fden+"}";
+  return numq("Two triangles are similar. The smaller has sides \\("+small.join("\\text{ cm}, ")+"\\text{ cm}\\). The larger triangle's side corresponding to the \\("+trip[j]+"\\text{ cm}\\) side measures \\("+known+"\\text{ cm}\\). What is the length, in cm, of the larger triangle's side corresponding to the \\("+trip[l]+"\\text{ cm}\\) side?",
+    ans,0.011,"The scale factor from small to large is \\("+known+" \\div "+(trip[j]*m1)+" = "+ftxt+"\\). Apply it to the \\("+trip[l]+"\\text{ cm}\\) side's counterpart: \\("+(trip[l]*m1)+" \\times "+ftxt+" = \\)<b>\\("+ans+"\\text{ cm}\\)</b>.",{mode:mode,trip:trip,m1:m1,m2:m2,j:j,l:l,ans:ans});
 });
 E("u6-compare-rates",6,["6.16"],2,"gen",function(){
   var ctx=pick([{n:"cyclist",vs:[14,16,18,20,22,24,26,28,30]},{n:"bus",vs:[50,55,60,65,70,75,80,85,90]},{n:"delivery van",vs:[40,45,50,55,60,70,80]},{n:"kayaker",vs:[6,7,8,9,10,11,12]}]);
@@ -1657,47 +1657,47 @@ E("u6-compare-rates",6,["6.16"],2,"gen",function(){
   var t1=ri(2,6),t2=ri(2,6),d1=v1*t1,d2=v2*t2;
   var ans=Math.abs(v1-v2);
   return numq("Two "+ctx.n+"s travel on the same route. The first covers "+d1+" km in "+t1+" hours; the second covers "+d2+" km in "+t2+" hours. How many km/h faster is the faster "+ctx.n+"? (Just the number.)",
-    ans,0.011,"Rates first: "+d1+" \u00F7 "+t1+" = "+v1+" km/h and "+d2+" \u00F7 "+t2+" = "+v2+" km/h. The difference is "+Math.max(v1,v2)+" \u2212 "+Math.min(v1,v2)+" = <b>"+ans+" km/h</b>.",{v1:v1,v2:v2,ans:ans});
+    ans,0.011,"Rates first: \\("+d1+" \\div "+t1+" = "+v1+"\\text{ km/h}\\) and \\("+d2+" \\div "+t2+" = "+v2+"\\text{ km/h}\\). The difference is \\("+Math.max(v1,v2)+" - "+Math.min(v1,v2)+" = \\)<b>\\("+ans+"\\text{ km/h}\\)</b>.",{v1:v1,v2:v2,ans:ans});
 });
 E("u6-rate-isolate",6,["6.23"],2,"gen",function(){
   var mode=ri(0,2);
   if(mode===0){
     var v=pick([25,40,50,60,75,80,90,100]),t=pick([1.5,2,2.5,3,4,5]),d=v*t;
     return numq("A truck drives at a steady "+v+" km/h and covers "+fmt(d)+" km. How many hours does the trip take? (Just the number.)",
-      t,0.011,"Isolate the time in d = vt: t = d / v = "+fmt(d)+" / "+v+" = <b>"+fmt(t)+" hours</b>.",{mode:mode,v:v,d:d,ans:t});
+      t,0.011,"Isolate the time in \\(d = vt\\): \\(t = \\frac{d}{v} = \\frac{"+fmt(d)+"}{"+v+"} = \\)<b>\\("+fmt(t)+"\\text{ hours}\\)</b>.",{mode:mode,v:v,d:d,ans:t});
   }
   if(mode===1){
     var r=pick([12,15,20,24,30,36,40]),t2=ri(3,9),A=r*t2;
     return numq("A printer produces "+A+" pages in "+t2+" minutes at a steady rate. What is its rate, in pages per minute? (Just the number.)",
-      r,0.011,"Rate = amount / time = "+A+" / "+t2+" = <b>"+r+" pages per minute</b>.",{mode:mode,A:A,t:t2,ans:r});
+      r,0.011,"Rate \\(= \\frac{\\text{amount}}{\\text{time}} = \\frac{"+A+"}{"+t2+"} = \\)<b>\\("+r+"\\text{ pages per minute}\\)</b>.",{mode:mode,A:A,t:t2,ans:r});
   }
   var r2=pick([15,20,25,40,60,80]),t3=ri(4,12),A2=r2*t3;
   return numq("A pump moves water at "+r2+" litres per minute. How many litres does it move in "+t3+" minutes? (Just the number.)",
-    A2,0.011,"Amount = rate \u00D7 time = "+r2+" \u00D7 "+t3+" = <b>"+A2+" litres</b>.",{mode:mode,r:r2,t:t3,ans:A2});
+    A2,0.011,"Amount \\(= \\text{rate} \\times \\text{time} = "+r2+" \\times "+t3+" = \\)<b>\\("+A2+"\\text{ litres}\\)</b>.",{mode:mode,r:r2,t:t3,ans:A2});
 });
 E("u8-angle-sum-rule",8,["5.5"],1,"var",varset([
-  function(){return mcq("The interior angles of a triangle sum to 180\u00B0, of a quadrilateral to 360\u00B0, and of a pentagon to 540\u00B0. Following this pattern, what is the sum of the interior angles of a polygon with n sides?",
-    "(n \u2212 2) \u00D7 180\u00B0",
-    ["n \u00D7 180\u00B0","(n \u2212 1) \u00D7 180\u00B0","(n + 2) \u00D7 180\u00B0"],
-    "Each added side adds 180\u00B0, but the count starts at 180\u00B0 for 3 sides: the multiplier is always 2 less than the number of sides, (n \u2212 2). Check: pentagon, (5 \u2212 2) \u00D7 180\u00B0 = 540\u00B0.",{});},
+  function(){return mcq("The interior angles of a triangle sum to \\(180^\\circ\\), of a quadrilateral to \\(360^\\circ\\), and of a pentagon to \\(540^\\circ\\). Following this pattern, what is the sum of the interior angles of a polygon with \\(n\\) sides?",
+    "\\((n - 2) \\times 180^\\circ\\)",
+    ["\\(n \\times 180^\\circ\\)","\\((n - 1) \\times 180^\\circ\\)","\\((n + 2) \\times 180^\\circ\\)"],
+    "Each added side adds \\(180^\\circ\\), but the count starts at \\(180^\\circ\\) for \\(3\\) sides: the multiplier is always \\(2\\) less than the number of sides, \\((n - 2)\\). Check: pentagon, \\((5 - 2) \\times 180^\\circ = 540^\\circ\\).",{});},
   function(){var q = mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 7 sides?",
-    "900\u00B0",["1260\u00B0","1080\u00B0","1620\u00B0"],
-    "(7 \u2212 2) \u00D7 180\u00B0 = 5 \u00D7 180\u00B0 = 900\u00B0.",{});q.figure=polySVG(7, false);return q;},
+    "\\(900^\\circ\\)",["\\(1260^\\circ\\)","\\(1080^\\circ\\)","\\(1620^\\circ\\)"],
+    "\\((7 - 2) \\times 180^\\circ = 5 \\times 180^\\circ = 900^\\circ\\).",{});q.figure=polySVG(7, false);return q;},
   function(){var q = mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 9 sides?",
-    "1260\u00B0",["1620\u00B0","1440\u00B0","1980\u00B0"],
-    "(9 \u2212 2) \u00D7 180\u00B0 = 7 \u00D7 180\u00B0 = 1260\u00B0.",{});q.figure=polySVG(9, false);return q;},
+    "\\(1260^\\circ\\)",["\\(1620^\\circ\\)","\\(1440^\\circ\\)","\\(1980^\\circ\\)"],
+    "\\((9 - 2) \\times 180^\\circ = 7 \\times 180^\\circ = 1260^\\circ\\).",{});q.figure=polySVG(9, false);return q;},
   function(){var q = mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 11 sides?",
-    "1620\u00B0",["1980\u00B0","1800\u00B0","2340\u00B0"],
-    "(11 \u2212 2) \u00D7 180\u00B0 = 9 \u00D7 180\u00B0 = 1620\u00B0.",{});q.figure=polySVG(11, false);return q;},
+    "\\(1620^\\circ\\)",["\\(1980^\\circ\\)","\\(1800^\\circ\\)","\\(2340^\\circ\\)"],
+    "\\((11 - 2) \\times 180^\\circ = 9 \\times 180^\\circ = 1620^\\circ\\).",{});q.figure=polySVG(11, false);return q;},
   function(){var q = mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 12 sides?",
-    "1800\u00B0",["2160\u00B0","1980\u00B0","2520\u00B0"],
-    "(12 \u2212 2) \u00D7 180\u00B0 = 10 \u00D7 180\u00B0 = 1800\u00B0.",{});q.figure=polySVG(12, false);return q;},
+    "\\(1800^\\circ\\)",["\\(2160^\\circ\\)","\\(1980^\\circ\\)","\\(2520^\\circ\\)"],
+    "\\((12 - 2) \\times 180^\\circ = 10 \\times 180^\\circ = 1800^\\circ\\).",{});q.figure=polySVG(12, false);return q;},
   function(){var q = mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 15 sides?",
-    "2340\u00B0",["2700\u00B0","2520\u00B0","3060\u00B0"],
-    "(15 \u2212 2) \u00D7 180\u00B0 = 13 \u00D7 180\u00B0 = 2340\u00B0.",{});q.figure=polySVG(15, false);return q;},
+    "\\(2340^\\circ\\)",["\\(2700^\\circ\\)","\\(2520^\\circ\\)","\\(3060^\\circ\\)"],
+    "\\((15 - 2) \\times 180^\\circ = 13 \\times 180^\\circ = 2340^\\circ\\).",{});q.figure=polySVG(15, false);return q;},
   function(){var q = mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 20 sides?",
-    "3240\u00B0",["3600\u00B0","3420\u00B0","3960\u00B0"],
-    "(20 \u2212 2) \u00D7 180\u00B0 = 18 \u00D7 180\u00B0 = 3240\u00B0.",{});q.figure=polySVG(20, false);return q;}
+    "\\(3240^\\circ\\)",["\\(3600^\\circ\\)","\\(3420^\\circ\\)","\\(3960^\\circ\\)"],
+    "\\((20 - 2) \\times 180^\\circ = 18 \\times 180^\\circ = 3240^\\circ\\).",{});q.figure=polySVG(20, false);return q;}
 ]));
 </script>
 
@@ -1717,9 +1717,9 @@ E("u1-sine-two-step",1,["7.2"],2,"gen",function(){
   do{A=ri(28,58);B=ri(24,58);C=180-A-B;tries++;}while((C<25||C>95)&&tries<40);
   var a=ri(8,30);
   var c=a*Math.sin(rd(C))/Math.sin(rd(A));
-  var q=numq("In \u25B3ABC, \u2220A = "+A+"\u00B0, \u2220B = "+B+"\u00B0, and the side opposite \u2220A is "+a+" cm. Find the length of the side opposite \u2220C, to one decimal place, in cm.",
+  var q=numq("In \\(\\triangle ABC\\), \\(\\angle A = "+A+"^\\circ\\), \\(\\angle B = "+B+"^\\circ\\), and the side opposite \\(\\angle A\\) is \\("+a+"\\text{ cm}\\). Find the length of the side opposite \\(\\angle C\\), to one decimal place, in cm.",
     fmt(c,1),0.06,
-    "First the third angle: \u2220C = 180\u00B0 \u2212 "+A+"\u00B0 \u2212 "+B+"\u00B0 = "+C+"\u00B0. Then the sine law: c \u00F7 sin("+C+"\u00B0) = "+a+" \u00F7 sin("+A+"\u00B0), so c = "+a+" \u00D7 sin("+C+"\u00B0) \u00F7 sin("+A+"\u00B0) = <b>"+fmt(c,1)+" cm</b>.",
+    "First the third angle: \\(\\angle C = 180^\\circ - "+A+"^\\circ - "+B+"^\\circ = "+C+"^\\circ\\). Then the sine law: \\(\\frac{c}{\\sin "+C+"^\\circ} = \\frac{"+a+"}{\\sin "+A+"^\\circ}\\), so \\(c = "+a+" \\times \\frac{\\sin "+C+"^\\circ}{\\sin "+A+"^\\circ} = \\)<b>\\("+fmt(c,1)+"\\text{ cm}\\)</b>.",
     {A:A,B:B,C:C,a:a});
   q.figure=triAngSVG(A,B,C,{ang:[A+"\u00B0",B+"\u00B0",C+"\u00B0"],side:[a+" cm",null,"?"]});
   return q;
@@ -1729,13 +1729,13 @@ E("u1-cosine-context",1,["7.2"],2,"gen",function(){
   var p=ri(8,38),w=ri(8,38),ang=ri(38,128);
   var d=Math.sqrt(p*p+w*w-2*p*w*Math.cos(rd(ang)));
   var ctx=pick([
-    "Two boats leave the same wharf at the same time. One travels "+p+" km and the other travels "+w+" km, with an angle of "+ang+"\u00B0 between their courses.",
-    "Two hikers leave a trailhead at the same time. One walks "+p+" km and the other walks "+w+" km, with an angle of "+ang+"\u00B0 between their paths.",
-    "Two straight roads leave an intersection. A gas station is "+p+" km along one road and a school is "+w+" km along the other, with an angle of "+ang+"\u00B0 between the roads. The distance between the gas station and the school is measured straight across."
+    "Two boats leave the same wharf at the same time. One travels "+p+" km and the other travels "+w+" km, with an angle of \\("+ang+"^\\circ\\) between their courses.",
+    "Two hikers leave a trailhead at the same time. One walks "+p+" km and the other walks "+w+" km, with an angle of \\("+ang+"^\\circ\\) between their paths.",
+    "Two straight roads leave an intersection. A gas station is "+p+" km along one road and a school is "+w+" km along the other, with an angle of \\("+ang+"^\\circ\\) between the roads. The distance between the gas station and the school is measured straight across."
   ]);
   var q=numq(ctx+" How far apart are the two endpoints, to one decimal place, in km?",
     fmt(d,1),0.06,
-    "The two distances and the distance apart form a triangle with an included angle of "+ang+"\u00B0, so the cosine law applies: d\u00B2 = "+p+"\u00B2 + "+w+"\u00B2 \u2212 2("+p+")("+w+") cos("+ang+"\u00B0) = "+fmt(p*p+w*w-2*p*w*Math.cos(rd(ang)),1)+", so d = <b>"+fmt(d,1)+" km</b>.",
+    "The two distances and the distance apart form a triangle with an included angle of \\("+ang+"^\\circ\\), so the cosine law applies: \\(d^2 = "+p+"^2 + "+w+"^2 - 2("+p+")("+w+")\\cos("+ang+"^\\circ) = "+fmt(p*p+w*w-2*p*w*Math.cos(rd(ang)),1)+"\\), so \\(d = \\)<b>\\("+fmt(d,1)+"\\text{ km}\\)</b>.",
     {p:p,w:w,ang:ang});
   q.figure=triSVG(d,p,w,{L:["A","B","C"],ang:[ang+"\u00B0",null,null],side:["?",w+" km",p+" km"]});
   return q;
@@ -1746,24 +1746,24 @@ E("u1-two-station-height",1,["7.3"],3,"gen",function(){
   var slant=dd*Math.sin(rd(al))/Math.sin(rd(be-al));
   var h=slant*Math.sin(rd(be));
   var thing=pick(["a tower","a lighthouse","a communications mast"]);
-  return numq("From a point on level ground, the angle of elevation to the top of "+thing+" is "+al+"\u00B0. Moving "+dd+" m closer to it, the angle of elevation is "+be+"\u00B0. Find its height, to one decimal place, in m.",
+  return numq("From a point on level ground, the angle of elevation to the top of "+thing+" is \\("+al+"^\\circ\\). Moving "+dd+" m closer to it, the angle of elevation is \\("+be+"^\\circ\\). Find its height, to one decimal place, in m.",
     fmt(h,1),0.06,
-    "The two ground points and the top form a triangle. Its angle at the farther point is "+al+"\u00B0, and its angle at the top is "+be+"\u00B0 \u2212 "+al+"\u00B0 = "+(be-al)+"\u00B0. By the sine law, the distance from the nearer point to the top is "+dd+" \u00D7 sin("+al+"\u00B0) \u00F7 sin("+(be-al)+"\u00B0) = "+fmt(slant,1)+" m. The height is then "+fmt(slant,1)+" \u00D7 sin("+be+"\u00B0) = <b>"+fmt(h,1)+" m</b>.",
+    "The two ground points and the top form a triangle. Its angle at the farther point is \\("+al+"^\\circ\\), and its angle at the top is \\("+be+"^\\circ - "+al+"^\\circ = "+(be-al)+"^\\circ\\). By the sine law, the distance from the nearer point to the top is \\("+dd+" \\times \\frac{\\sin "+al+"^\\circ}{\\sin "+(be-al)+"^\\circ} = "+fmt(slant,1)+"\\text{ m}\\). The height is then \\("+fmt(slant,1)+" \\times \\sin "+be+"^\\circ = \\)<b>\\("+fmt(h,1)+"\\text{ m}\\)</b>.",
     {al:al,be:be,dd:dd});
 });
 E("u1-law-choice-context",1,["7.1","7.2"],1,"var",varset([
-  function(){return mcq("A triangle has sides of 9 cm and 14 cm with the angle of 58\u00B0 between them. Which law gives the third side directly?",
+  function(){return mcq("A triangle has sides of \\(9\\text{ cm}\\) and \\(14\\text{ cm}\\) with the angle of \\(58^\\circ\\) between them. Which law gives the third side directly?",
     "Cosine law",["Sine law","Either law gives it in one step","Neither law can be used"],
     "The known angle sits between the two known sides (SAS), so the cosine law gives the third side in one step. The sine law needs a known side-angle pair, which this triangle does not give yet." );},
-  function(){return mcq("A triangle has angles of 47\u00B0 and 71\u00B0 and a side of 12 m opposite the 47\u00B0 angle. Which law gives another side directly?",
+  function(){return mcq("A triangle has angles of \\(47^\\circ\\) and \\(71^\\circ\\) and a side of \\(12\\text{ m}\\) opposite the \\(47^\\circ\\) angle. Which law gives another side directly?",
     "Sine law",["Cosine law","Either law gives it in one step","Neither law can be used"],
-    "There is a known side-angle pair (12 m opposite 47\u00B0), so the sine law sets up a proportion for any other side. The cosine law would need two sides around a known angle." );},
-  function(){return mcq("The three sides of a triangle measure 7 km, 10 km and 13 km. Which law gives one of its angles directly?",
+    "There is a known side-angle pair (\\(12\\text{ m}\\) opposite \\(47^\\circ\\)), so the sine law sets up a proportion for any other side. The cosine law would need two sides around a known angle." );},
+  function(){return mcq("The three sides of a triangle measure \\(7\\text{ km}\\), \\(10\\text{ km}\\) and \\(13\\text{ km}\\). Which law gives one of its angles directly?",
     "Cosine law",["Sine law","Either law gives it in one step","Neither law can be used"],
     "With all three sides known (SSS) and no angle given, the cosine law rearranges to give an angle. The sine law cannot start without a known angle." );},
-  function(){return mcq("In \u25B3PQR, \u2220P = 39\u00B0, \u2220Q = 84\u00B0, and the side opposite \u2220Q is 15 m. Which law gives the side opposite \u2220P directly?",
+  function(){return mcq("In \\(\\triangle PQR\\), \\(\\angle P = 39^\\circ\\), \\(\\angle Q = 84^\\circ\\), and the side opposite \\(\\angle Q\\) is \\(15\\text{ m}\\). Which law gives the side opposite \\(\\angle P\\) directly?",
     "Sine law",["Cosine law","Either law gives it in one step","Neither law can be used"],
-    "The side of 15 m is opposite the known angle of 84\u00B0, a known side-angle pair, so the sine law gives the side opposite 39\u00B0 in one proportion.");}
+    "The side of \\(15\\text{ m}\\) is opposite the known angle of \\(84^\\circ\\), a known side-angle pair, so the sine law gives the side opposite \\(39^\\circ\\) in one proportion.");}
 ]));
 
 /* --- Unit 2: Quadratic Functions --- */
@@ -2150,86 +2150,86 @@ E("u8-congruence-deduce",8,["5.6"],2,"gen",function(){
   var sets=[["A","B","C"],["P","Q","R"],["X","Y","Z"],["D","E","F"],["M","N","S"],["J","K","L"]];
   var s1=pick(sets),s2=pick(sets.filter(function(x){return x!==s1;}));
   var name1=s1.join(""),name2=s2.join("");
-  var corr=s1[0]+"\u2194"+s2[0]+", "+s1[1]+"\u2194"+s2[1]+", "+s1[2]+"\u2194"+s2[2];
+  var corr="\\("+s1[0]+" \\leftrightarrow "+s2[0]+", "+s1[1]+" \\leftrightarrow "+s2[1]+", "+s1[2]+" \\leftrightarrow "+s2[2]+"\\)";
   var i=ri(0,2);
   if(Math.random()<0.5){
-    var key="\u2220"+s1[i]+" = \u2220"+s2[i];
-    return mcq("Given \u25B3"+name1+" \u2245 \u25B3"+name2+", which equality must be true?",
+    var key="\\(\\angle "+s1[i]+" = \\angle "+s2[i]+"\\)";
+    return mcq("Given \\(\\triangle "+name1+" \\cong \\triangle "+name2+"\\), which equality must be true?",
       key,
-      ["\u2220"+s1[i]+" = \u2220"+s2[(i+1)%3],"\u2220"+s1[i]+" = \u2220"+s2[(i+2)%3],"\u2220"+s1[(i+1)%3]+" = \u2220"+s2[i]],
-      "In a congruence statement the vertices match in order: "+corr+". So \u2220"+s1[i]+" corresponds to \u2220"+s2[i]+", and corresponding angles of congruent triangles are equal.",
+      ["\\(\\angle "+s1[i]+" = \\angle "+s2[(i+1)%3]+"\\)","\\(\\angle "+s1[i]+" = \\angle "+s2[(i+2)%3]+"\\)","\\(\\angle "+s1[(i+1)%3]+" = \\angle "+s2[i]+"\\)"],
+      "In a congruence statement the vertices match in order: "+corr+". So \\(\\angle "+s1[i]+"\\) corresponds to \\(\\angle "+s2[i]+"\\), and corresponding angles of congruent triangles are equal.",
       {mode:"angle",s1:s1,s2:s2,i:i});
   }
   var sides=[[0,1],[1,2],[0,2]],sd=pick(sides),u=sd[0],v=sd[1],w=3-u-v;
-  var keyS=s1[u]+s1[v]+" = "+s2[u]+s2[v];
-  return mcq("Given \u25B3"+name1+" \u2245 \u25B3"+name2+", which equality must be true?",
+  var keyS="\\("+s1[u]+s1[v]+" = "+s2[u]+s2[v]+"\\)";
+  return mcq("Given \\(\\triangle "+name1+" \\cong \\triangle "+name2+"\\), which equality must be true?",
     keyS,
-    [s1[u]+s1[v]+" = "+s2[u]+s2[w],s1[u]+s1[v]+" = "+s2[v]+s2[w],s1[u]+s1[w]+" = "+s2[u]+s2[v]],
-    "In a congruence statement the vertices match in order: "+corr+". Side "+s1[u]+s1[v]+" joins the first-named corresponding vertices, so it matches side "+s2[u]+s2[v]+", and corresponding sides of congruent triangles are equal.",
+    ["\\("+s1[u]+s1[v]+" = "+s2[u]+s2[w]+"\\)","\\("+s1[u]+s1[v]+" = "+s2[v]+s2[w]+"\\)","\\("+s1[u]+s1[w]+" = "+s2[u]+s2[v]+"\\)"],
+    "In a congruence statement the vertices match in order: "+corr+". Side \\("+s1[u]+s1[v]+"\\) joins the first-named corresponding vertices, so it matches side \\("+s2[u]+s2[v]+"\\), and corresponding sides of congruent triangles are equal.",
     {mode:"side",s1:s1,s2:s2,u:u,v:v});
 });
 E("u8-multi-angle",8,["5.8"],2,"var",varset([
-  function(){return mcq("Two parallel lines are cut by a transversal. \u2220x is vertically opposite a 110\u00B0 angle. \u2220y is a corresponding angle to \u2220x. \u2220z forms a co-interior pair with \u2220y. What are the three measures?",
-    "\u2220x = 110\u00B0, \u2220y = 110\u00B0, \u2220z = 70\u00B0",
-    ["\u2220x = 110\u00B0, \u2220y = 70\u00B0, \u2220z = 110\u00B0","\u2220x = 70\u00B0, \u2220y = 110\u00B0, \u2220z = 70\u00B0","\u2220x = 110\u00B0, \u2220y = 110\u00B0, \u2220z = 110\u00B0"],
-    "Vertically opposite angles are equal, so \u2220x = 110\u00B0. Corresponding angles are equal, so \u2220y = 110\u00B0. Co-interior angles are supplementary: \u2220z = 180\u00B0 \u2212 110\u00B0 = 70\u00B0.",
+  function(){return mcq("Two parallel lines are cut by a transversal. \\(\\angle x\\) is vertically opposite a \\(110^\\circ\\) angle. \\(\\angle y\\) is a corresponding angle to \\(\\angle x\\). \\(\\angle z\\) forms a co-interior pair with \\(\\angle y\\). What are the three measures?",
+    "\\(\\angle x = 110^\\circ, \\angle y = 110^\\circ, \\angle z = 70^\\circ\\)",
+    ["\\(\\angle x = 110^\\circ, \\angle y = 70^\\circ, \\angle z = 110^\\circ\\)","\\(\\angle x = 70^\\circ, \\angle y = 110^\\circ, \\angle z = 70^\\circ\\)","\\(\\angle x = 110^\\circ, \\angle y = 110^\\circ, \\angle z = 110^\\circ\\)"],
+    "Vertically opposite angles are equal, so \\(\\angle x = 110^\\circ\\). Corresponding angles are equal, so \\(\\angle y = 110^\\circ\\). Co-interior angles are supplementary: \\(\\angle z = 180^\\circ - 110^\\circ = 70^\\circ\\).",
     {});},
-  function(){return mcq("Two parallel lines are cut by a transversal. \u2220x is a corresponding angle to a 65\u00B0 angle. \u2220y sits beside \u2220x on a straight line. \u2220z is vertically opposite \u2220y. What are the three measures?",
-    "\u2220x = 65\u00B0, \u2220y = 115\u00B0, \u2220z = 115\u00B0",
-    ["\u2220x = 65\u00B0, \u2220y = 65\u00B0, \u2220z = 115\u00B0","\u2220x = 115\u00B0, \u2220y = 65\u00B0, \u2220z = 115\u00B0","\u2220x = 65\u00B0, \u2220y = 115\u00B0, \u2220z = 65\u00B0"],
-    "Corresponding angles are equal, so \u2220x = 65\u00B0. Angles on a straight line add to 180\u00B0, so \u2220y = 115\u00B0. Vertically opposite angles are equal, so \u2220z = 115\u00B0.",
+  function(){return mcq("Two parallel lines are cut by a transversal. \\(\\angle x\\) is a corresponding angle to a \\(65^\\circ\\) angle. \\(\\angle y\\) sits beside \\(\\angle x\\) on a straight line. \\(\\angle z\\) is vertically opposite \\(\\angle y\\). What are the three measures?",
+    "\\(\\angle x = 65^\\circ, \\angle y = 115^\\circ, \\angle z = 115^\\circ\\)",
+    ["\\(\\angle x = 65^\\circ, \\angle y = 65^\\circ, \\angle z = 115^\\circ\\)","\\(\\angle x = 115^\\circ, \\angle y = 65^\\circ, \\angle z = 115^\\circ\\)","\\(\\angle x = 65^\\circ, \\angle y = 115^\\circ, \\angle z = 65^\\circ\\)"],
+    "Corresponding angles are equal, so \\(\\angle x = 65^\\circ\\). Angles on a straight line add to \\(180^\\circ\\), so \\(\\angle y = 115^\\circ\\). Vertically opposite angles are equal, so \\(\\angle z = 115^\\circ\\).",
     {});},
-  function(){return mcq("In \u25B3ABC, \u2220A = 48\u00B0 and \u2220B = 67\u00B0. \u2220D is the exterior angle at C, formed by extending side BC. What are \u2220C and \u2220D?",
-    "\u2220C = 65\u00B0, \u2220D = 115\u00B0",
-    ["\u2220C = 65\u00B0, \u2220D = 65\u00B0","\u2220C = 115\u00B0, \u2220D = 65\u00B0","\u2220C = 67\u00B0, \u2220D = 113\u00B0"],
-    "The interior angles add to 180\u00B0: \u2220C = 180\u00B0 \u2212 48\u00B0 \u2212 67\u00B0 = 65\u00B0. The exterior angle sits on a straight line with \u2220C: \u2220D = 180\u00B0 \u2212 65\u00B0 = 115\u00B0 (which also equals \u2220A + \u2220B).",
+  function(){return mcq("In \\(\\triangle ABC\\), \\(\\angle A = 48^\\circ\\) and \\(\\angle B = 67^\\circ\\). \\(\\angle D\\) is the exterior angle at \\(C\\), formed by extending side \\(BC\\). What are \\(\\angle C\\) and \\(\\angle D\\)?",
+    "\\(\\angle C = 65^\\circ, \\angle D = 115^\\circ\\)",
+    ["\\(\\angle C = 65^\\circ, \\angle D = 65^\\circ\\)","\\(\\angle C = 115^\\circ, \\angle D = 65^\\circ\\)","\\(\\angle C = 67^\\circ, \\angle D = 113^\\circ\\)"],
+    "The interior angles add to \\(180^\\circ\\): \\(\\angle C = 180^\\circ - 48^\\circ - 67^\\circ = 65^\\circ\\). The exterior angle sits on a straight line with \\(\\angle C\\): \\(\\angle D = 180^\\circ - 65^\\circ = 115^\\circ\\) (which also equals \\(\\angle A + \\angle B\\)).",
     {});},
-  function(){return mcq("Two parallel lines are cut by a transversal. \u2220p and a 72\u00B0 angle are alternate interior angles. \u2220q forms a co-interior pair with \u2220p. \u2220r is vertically opposite \u2220q. What are the three measures?",
-    "\u2220p = 72\u00B0, \u2220q = 108\u00B0, \u2220r = 108\u00B0",
-    ["\u2220p = 72\u00B0, \u2220q = 72\u00B0, \u2220r = 108\u00B0","\u2220p = 108\u00B0, \u2220q = 72\u00B0, \u2220r = 72\u00B0","\u2220p = 72\u00B0, \u2220q = 108\u00B0, \u2220r = 72\u00B0"],
-    "Alternate interior angles are equal, so \u2220p = 72\u00B0. Co-interior angles are supplementary: \u2220q = 180\u00B0 \u2212 72\u00B0 = 108\u00B0. Vertically opposite angles are equal, so \u2220r = 108\u00B0.",
+  function(){return mcq("Two parallel lines are cut by a transversal. \\(\\angle p\\) and a \\(72^\\circ\\) angle are alternate interior angles. \\(\\angle q\\) forms a co-interior pair with \\(\\angle p\\). \\(\\angle r\\) is vertically opposite \\(\\angle q\\). What are the three measures?",
+    "\\(\\angle p = 72^\\circ, \\angle q = 108^\\circ, \\angle r = 108^\\circ\\)",
+    ["\\(\\angle p = 72^\\circ, \\angle q = 72^\\circ, \\angle r = 108^\\circ\\)","\\(\\angle p = 108^\\circ, \\angle q = 72^\\circ, \\angle r = 72^\\circ\\)","\\(\\angle p = 72^\\circ, \\angle q = 108^\\circ, \\angle r = 72^\\circ\\)"],
+    "Alternate interior angles are equal, so \\(\\angle p = 72^\\circ\\). Co-interior angles are supplementary: \\(\\angle q = 180^\\circ - 72^\\circ = 108^\\circ\\). Vertically opposite angles are equal, so \\(\\angle r = 108^\\circ\\).",
     {});}
 ]));
 E("u8-triangle-algebra",8,["5.8"],2,"gen",function(){
   var combos=[[1,2,3],[1,2,6],[2,3,4],[1,3,5],[2,3,7],[3,4,5],[1,4,7],[2,5,8],[3,5,7],[4,5,9],[5,7,8],[1,1,4],[1,2,7],[1,3,6],[2,2,6],[3,3,4],[1,4,5],[2,4,9],[4,4,7],[1,5,9],[3,6,9],[4,6,8],[5,5,8],[2,7,11],[4,7,9],[6,6,8],[1,9,20],[5,10,15],[10,12,14],[9,13,14],[15,20,25],[20,25,45]];
   var cb=pick(combos),a=cb[0],b=cb[1],c=cb[2];
   var x=180/(a+b+c),vi=ri(0,2),coef=cb[vi];
-  return numq("The three angles of a triangle measure "+a+"x\u00B0, "+b+"x\u00B0 and "+c+"x\u00B0. What is the measure of the "+coef+"x\u00B0 angle, in degrees?",
+  return numq("The three angles of a triangle measure \\(("+a+"x)^\\circ\\), \\(("+b+"x)^\\circ\\) and \\(("+c+"x)^\\circ\\). What is the measure of the \\(("+coef+"x)^\\circ\\) angle, in degrees?",
     coef*x,0.011,
-    "The angles add to 180\u00B0: ("+a+" + "+b+" + "+c+")x = 180, so "+(a+b+c)+"x = 180 and x = "+x+". The angle asked for is "+coef+"x = "+coef+" \u00D7 "+x+" = <b>"+(coef*x)+"\u00B0</b>.",
+    "The angles add to \\(180^\\circ\\): \\(("+a+" + "+b+" + "+c+")x = 180\\), so \\("+(a+b+c)+"x = 180\\) and \\(x = "+x+"\\). The angle asked for is \\("+coef+"x = "+coef+" \\times "+x+" = \\)<b>\\("+(coef*x)+"^\\circ\\)</b>.",
     {cb:cb,vi:vi});
 });
 E("u8-polygon-inverse",8,["5.5"],1,"gen",function(){
   var mode=ri(0,2);
   if(mode===0){
     var n=ri(5,40),S=(n-2)*180;
-    return numq("The interior angles of a convex polygon add up to "+S+"\u00B0. How many sides does the polygon have?",
-      n,0.011,"The sum is (n \u2212 2) \u00D7 180\u00B0. So n \u2212 2 = "+S+" \u00F7 180 = "+(n-2)+", which gives n = <b>"+n+"</b>.",{mode:0,n:n});
+    return numq("The interior angles of a convex polygon add up to \\("+S+"^\\circ\\). How many sides does the polygon have?",
+      n,0.011,"The sum is \\((n - 2) \\times 180^\\circ\\). So \\(n - 2 = "+S+" \\div 180 = "+(n-2)+"\\), which gives \\(n = \\)<b>\\("+n+"\\)</b>.",{mode:0,n:n});
   }
   if(mode===1){
     var pair=pick([[5,108],[6,120],[8,135],[9,140],[10,144],[12,150],[15,156],[18,160],[20,162],[24,165]]),n1=pair[0];
-    return numq("Each interior angle of a regular polygon measures "+pair[1]+"\u00B0. How many sides does the polygon have?",
-      n1,0.011,"For a regular polygon each interior angle is (n \u2212 2) \u00D7 180\u00B0 \u00F7 n. Trying n = "+n1+": ("+n1+" \u2212 2) \u00D7 180 \u00F7 "+n1+" = "+pair[1]+"\u00B0. So n = <b>"+n1+"</b>. (Equivalently, each exterior angle is 180\u00B0 \u2212 "+pair[1]+"\u00B0 = "+(180-pair[1])+"\u00B0, and 360 \u00F7 "+(180-pair[1])+" = "+n1+".)",{mode:1,n:n1});
+    return numq("Each interior angle of a regular polygon measures \\("+pair[1]+"^\\circ\\). How many sides does the polygon have?",
+      n1,0.011,"For a regular polygon each interior angle is \\((n - 2) \\times 180^\\circ \\div n\\). Trying \\(n = "+n1+"\\): \\(("+n1+" - 2) \\times 180 \\div "+n1+" = "+pair[1]+"^\\circ\\). So \\(n = \\)<b>\\("+n1+"\\)</b>. (Equivalently, each exterior angle is \\(180^\\circ - "+pair[1]+"^\\circ = "+(180-pair[1])+"^\\circ\\), and \\(360 \\div "+(180-pair[1])+" = "+n1+"\\).)",{mode:1,n:n1});
   }
   var pr=pick([[4,90],[5,72],[6,60],[8,45],[9,40],[10,36],[12,30],[15,24],[18,20],[20,18],[24,15],[30,12],[36,10],[40,9],[45,8],[60,6],[72,5],[90,4],[120,3],[180,2]]),n2=pr[0];
-  return numq("Each exterior angle of a regular polygon measures "+pr[1]+"\u00B0. How many sides does the polygon have?",
-    n2,0.011,"The exterior angles of any convex polygon add to 360\u00B0. For a regular polygon they are all equal, so n = 360 \u00F7 "+pr[1]+" = <b>"+n2+"</b>.",{mode:2,n:n2});
+  return numq("Each exterior angle of a regular polygon measures \\("+pr[1]+"^\\circ\\). How many sides does the polygon have?",
+    n2,0.011,"The exterior angles of any convex polygon add to \\(360^\\circ\\). For a regular polygon they are all equal, so \\(n = 360 \\div "+pr[1]+" = \\)<b>\\("+n2+"\\)</b>.",{mode:2,n:n2});
 });
 E("u8-proof-reason",8,["5.4"],2,"var",varset([
-  function(){return mcq("Lines PQ and RS are parallel, cut by a transversal. \u2220a is at the top right of the first intersection, and \u2220b is at the top right of the second intersection. A student writes: \u201C\u2220a = \u2220b because they are alternate interior angles.\u201D What is wrong with the reason?",
+  function(){return mcq("Lines \\(PQ\\) and \\(RS\\) are parallel, cut by a transversal. \\(\\angle a\\) is at the top right of the first intersection, and \\(\\angle b\\) is at the top right of the second intersection. A student writes: “\\(\\angle a = \\angle b\\) because they are alternate interior angles.” What is wrong with the reason?",
     "The angles are corresponding angles, not alternate interior angles",
     ["Nothing \u2014 the reason is correct","The angles are co-interior angles, not alternate interior angles","The angles are vertically opposite angles, not alternate interior angles"],
-    "\u2220a and \u2220b sit in the same relative position (top right) at each intersection, which makes them corresponding angles. Alternate interior angles sit between the two lines, on opposite sides of the transversal. The equality is right; the named reason is wrong.",
+    "\\(\\angle a\\) and \\(\\angle b\\) sit in the same relative position (top right) at each intersection, which makes them corresponding angles. Alternate interior angles sit between the two lines, on opposite sides of the transversal. The equality is right; the named reason is wrong.",
     {});},
-  function(){return mcq("Given AB \u2225 CD and AE = DE, with E on the segment joining the two lines, a proof shows \u25B3ABE \u2245 \u25B3DCE. One step states \u2220BAE = \u2220CDE. Which reason justifies that step?",
-    "Alternate interior angles, because AB \u2225 CD",
-    ["Vertically opposite angles","Corresponding angles, because AB \u2225 CD","Co-interior angles, because AB \u2225 CD"],
-    "\u2220BAE and \u2220CDE lie between the parallel lines, on opposite sides of the transversal AD (the line through A, E and D), so they are alternate interior angles, which are equal when the lines are parallel. (Co-interior angles would be supplementary, not equal.)",
+  function(){return mcq("Given \\(AB \\parallel CD\\) and \\(AE = DE\\), with \\(E\\) on the segment joining the two lines, a proof shows \\(\\triangle ABE \\cong \\triangle DCE\\). One step states \\(\\angle BAE = \\angle CDE\\). Which reason justifies that step?",
+    "Alternate interior angles, because \\(AB \\parallel CD\\)",
+    ["Vertically opposite angles","Corresponding angles, because \\(AB \\parallel CD\\)","Co-interior angles, because \\(AB \\parallel CD\\)"],
+    "\\(\\angle BAE\\) and \\(\\angle CDE\\) lie between the parallel lines, on opposite sides of the transversal \\(AD\\) (the line through A, E and D), so they are alternate interior angles, which are equal when the lines are parallel. (Co-interior angles would be supplementary, not equal.)",
     {});},
-  function(){return mcq("In the same proof (AB \u2225 CD, AE = DE, prove \u25B3ABE \u2245 \u25B3DCE), another step states \u2220AEB = \u2220CED. Which reason justifies that step?",
+  function(){return mcq("In the same proof (\\(AB \\parallel CD\\), \\(AE = DE\\), prove \\(\\triangle ABE \\cong \\triangle DCE\\)), another step states \\(\\angle AEB = \\angle CED\\). Which reason justifies that step?",
     "Vertically opposite angles",
-    ["Alternate interior angles, because AB \u2225 CD","Given information","The SSS congruence postulate"],
-    "\u2220AEB and \u2220CED are formed by the same two intersecting lines at point E, directly across from each other \u2014 vertically opposite angles, which are always equal. No parallel lines are needed for this step.",
+    ["Alternate interior angles, because \\(AB \\parallel CD\\)","Given information","The SSS congruence postulate"],
+    "\\(\\angle AEB\\) and \\(\\angle CED\\) are formed by the same two intersecting lines at point \\(E\\), directly across from each other \u2014 vertically opposite angles, which are always equal. No parallel lines are needed for this step.",
     {});}
 ]));
 
@@ -2242,25 +2242,25 @@ E("u8-proof-reason",8,["5.4"],2,"var",varset([
 
 /* --- Unit 1: Acute Triangle Trigonometry (Payne Ch 3) --- */
 E("u1-law-formula",1,["7.1","7.2"],1,"var",varset([
-  function(){return mcq("In \u25B3ABC, the sine law states a / sin A = b / sin B = c / sin C. According to the sine law, side a equals\u2026",
-    "(c \u00D7 sin A) \u00F7 sin C",
-    ["(c \u00D7 sin C) \u00F7 sin A","sin A \u00F7 (c \u00D7 sin C)","(c \u00D7 sin B) \u00F7 sin C"],
-    "From a / sin A = c / sin C, multiply both sides by sin A: a = c sin A / sin C. Each side pairs with the sine of its OPPOSITE angle.",
+  function(){return mcq("In \\(\\triangle ABC\\), the sine law states \\(\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}\\). According to the sine law, side \\(a\\) equals…",
+    "\\(\\frac{c \\sin A}{\\sin C}\\)",
+    ["\\(\\frac{c \\sin C}{\\sin A}\\)","\\(\\frac{\\sin A}{c \\sin C}\\)","\\(\\frac{c \\sin B}{\\sin C}\\)"],
+    "From \\(\\frac{a}{\\sin A} = \\frac{c}{\\sin C}\\), multiply both sides by \\(\\sin A\\): \\(a = \\frac{c \\sin A}{\\sin C}\\). Each side pairs with the sine of its OPPOSITE angle.",
     {});},
-  function(){return mcq("According to the cosine law, c\u00B2 equals\u2026",
-    "a\u00B2 + b\u00B2 \u2212 2ab cos C",
-    ["a\u00B2 + b\u00B2 + 2ab cos C","a\u00B2 + b\u00B2 \u2212 2ab cos A","a\u00B2 \u2212 b\u00B2 \u2212 2ab cos C"],
-    "The cosine law for side c uses the angle BETWEEN sides a and b, which is C: c\u00B2 = a\u00B2 + b\u00B2 \u2212 2ab cos C. The sign before the cosine term is minus.",
+  function(){return mcq("According to the cosine law, \\(c^2\\) equals…",
+    "\\(a^2 + b^2 - 2ab\\cos C\\)",
+    ["\\(a^2 + b^2 + 2ab\\cos C\\)","\\(a^2 + b^2 - 2ab\\cos A\\)","\\(a^2 - b^2 - 2ab\\cos C\\)"],
+    "The cosine law for side \\(c\\) uses the angle BETWEEN sides \\(a\\) and \\(b\\), which is \\(C\\): \\(c^2 = a^2 + b^2 - 2ab\\cos C\\). The sign before the cosine term is minus.",
     {});},
-  function(){return mcq("All three sides of a triangle are known. To find angle C first, cos C equals\u2026",
-    "(a\u00B2 + b\u00B2 \u2212 c\u00B2) \u00F7 (2ab)",
-    ["(c\u00B2 \u2212 a\u00B2 \u2212 b\u00B2) \u00F7 (2ab)","(a\u00B2 + c\u00B2 \u2212 b\u00B2) \u00F7 (2ac)","(a\u00B2 + b\u00B2 \u2212 c\u00B2) \u00F7 (ab)"],
-    "Rearrange c\u00B2 = a\u00B2 + b\u00B2 \u2212 2ab cos C: move terms to get 2ab cos C = a\u00B2 + b\u00B2 \u2212 c\u00B2, then divide by 2ab. (The second option is the rearrangement for angle B, not C.)",
+  function(){return mcq("All three sides of a triangle are known. To find angle \\(C\\) first, \\(\\cos C\\) equals…",
+    "\\(\\frac{a^2 + b^2 - c^2}{2ab}\\)",
+    ["\\(\\frac{c^2 - a^2 - b^2}{2ab}\\)","\\(\\frac{a^2 + c^2 - b^2}{2ac}\\)","\\(\\frac{a^2 + b^2 - c^2}{ab}\\)"],
+    "Rearrange \\(c^2 = a^2 + b^2 - 2ab\\cos C\\): move terms to get \\(2ab\\cos C = a^2 + b^2 - c^2\\), then divide by \\(2ab\\). (The second option is the rearrangement for angle \\(B\\), not \\(C\\)).",
     {});},
-  function(){return mcq("In \u25B3ABC, the sine law states a / sin A = b / sin B = c / sin C. According to the sine law, side b equals\u2026",
-    "(a \u00D7 sin B) \u00F7 sin A",
-    ["(a \u00D7 sin A) \u00F7 sin B","sin B \u00F7 (a \u00D7 sin A)","(a \u00D7 sin C) \u00F7 sin B"],
-    "From b / sin B = a / sin A, multiply both sides by sin B: b = a sin B / sin A. Side b pairs with angle B, and the known pair is a with A.",
+  function(){return mcq("In \\(\\triangle ABC\\), the sine law states \\(\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C}\\). According to the sine law, side \\(b\\) equals…",
+    "\\(\\frac{a \\sin B}{\\sin A}\\)",
+    ["\\(\\frac{a \\sin A}{\\sin B}\\)","\\(\\frac{\\sin B}{a \\sin A}\\)","\\(\\frac{a \\sin C}{\\sin B}\\)"],
+    "From \\(\\frac{b}{\\sin B} = \\frac{a}{\\sin A}\\), multiply both sides by \\(\\sin B\\): \\(b = \\frac{a \\sin B}{\\sin A}\\). Side \\(b\\) pairs with angle \\(B\\), and the known pair is \\(a\\) with \\(A\\).",
     {});}
 ]));
 E("u1-smallest-angle",1,["7.2"],3,"gen",function(){
@@ -2270,9 +2270,9 @@ E("u1-smallest-angle",1,["7.2"],3,"gen",function(){
     s=ri(5,14);m=s+ri(1,8);l=m+ri(0,8);tries++;
   }while((s+m<=l||l>30)&&tries<60);
   var A=Math.acos((m*m+l*l-s*s)/(2*m*l))*180/Math.PI;
-  var q=numq("A triangle has sides of "+s+" cm, "+m+" cm and "+l+" cm. Find the measure of the SMALLEST angle, to the nearest degree.",
+  var q=numq("A triangle has sides of \\("+s+"\\text{ cm}\\), \\("+m+"\\text{ cm}\\) and \\("+l+"\\text{ cm}\\). Find the measure of the SMALLEST angle, to the nearest degree.",
     Math.round(A),0.51,
-    "The smallest angle is opposite the shortest side ("+s+" cm). By the cosine law: cos A = ("+m+"\u00B2 + "+l+"\u00B2 \u2212 "+s+"\u00B2) \u00F7 (2 \u00D7 "+m+" \u00D7 "+l+") = "+fmt((m*m+l*l-s*s)/(2*m*l),3)+", so A = <b>"+Math.round(A)+"\u00B0</b>. (Finding the angle opposite the longest side instead would give the LARGEST angle.)",
+    "The smallest angle is opposite the shortest side (\\("+s+"\\text{ cm}\\)). By the cosine law: \\(\\cos A = \\frac{"+m+"^2 + "+l+"^2 - "+s+"^2}{2 \\times "+m+" \\times "+l+"} = "+fmt((m*m+l*l-s*s)/(2*m*l),3)+"\\), so \\(A = \\)<b>\\("+Math.round(A)+"^\\circ\\)</b>. (Finding the angle opposite the longest side instead would give the LARGEST angle.)",
     {s:s,m:m,l:l});
   q.figure=triSVG(s,m,l,{L:["A","B","C"],ang:["?",null,null],side:[s+" cm",m+" cm",l+" cm"]});
   return q;
@@ -2287,7 +2287,7 @@ E("u1-angle-between-paths",1,["7.2"],3,"gen",function(){
   var ang=Math.acos((d1*d1+d2*d2-D*D)/(2*d1*d2))*180/Math.PI;
   return numq("Two "+ctx[0]+"s leave the same "+ctx[1]+" at the same time. One travels at "+v1+" km/h and the other at "+v2+" km/h, each in a straight line. After "+t+" h they are "+D+" km apart. Find the angle between their paths, to the nearest degree.",
     Math.round(ang),0.51,
-    "In "+t+" h the "+ctx[0]+"s travel "+v1+" \u00D7 "+t+" = "+d1+" km and "+v2+" \u00D7 "+t+" = "+d2+" km, so the triangle has sides "+d1+" km, "+d2+" km and "+D+" km. The angle between the paths is at the "+ctx[1]+", opposite the "+D+" km side: cos \u03B8 = ("+d1+"\u00B2 + "+d2+"\u00B2 \u2212 "+D+"\u00B2) \u00F7 (2 \u00D7 "+d1+" \u00D7 "+d2+"), giving \u03B8 = <b>"+Math.round(ang)+"\u00B0</b>.",
+    "In \\("+t+"\\text{ h}\\) the "+ctx[0]+"s travel \\("+v1+" \\times "+t+" = "+d1+"\\text{ km}\\) and \\("+v2+" \\times "+t+" = "+d2+"\\text{ km}\\), so the triangle has sides \\("+d1+"\\text{ km}\\), \\("+d2+"\\text{ km}\\) and \\("+D+"\\text{ km}\\). The angle between the paths is at the "+ctx[1]+", opposite the \\("+D+"\\text{ km}\\) side: \\(\\cos\\theta = \\frac{"+d1+"^2 + "+d2+"^2 - "+D+"^2}{2 \\times "+d1+" \\times "+d2+"}\\), giving \\(\\theta = \\)<b>\\("+Math.round(ang)+"^\\circ\\)</b>.",
     {d1:d1,d2:d2,D:D});
 });
 E("u1-guy-wire",1,["7.3"],3,"gen",function(){
@@ -2301,9 +2301,9 @@ E("u1-guy-wire",1,["7.3"],3,"gen",function(){
   var h=wL*Math.sin(rd(al));
   var askWire=Math.random()<0.5;
   var longest=Math.max(wL,wR);
-  var q=numq("A radio tower stands vertically between two ground anchors "+fmt(D,1)+" m apart. From the anchor on the left, the angle of elevation to the top of the tower is "+al+"\u00B0; from the anchor on the right, it is "+be+"\u00B0. Find "+(askWire?"the length of the LONGER support wire":"the height of the tower")+", to one decimal place, in m.",
+  var q=numq("A radio tower stands vertically between two ground anchors "+fmt(D,1)+" m apart. From the anchor on the left, the angle of elevation to the top of the tower is \\("+al+"^\\circ\\); from the anchor on the right, it is \\("+be+"^\\circ\\). Find "+(askWire?"the length of the LONGER support wire":"the height of the tower")+", to one decimal place, in m.",
     fmt(askWire?longest:h,1),0.06,
-    "The two anchors and the tower top form a triangle with base "+fmt(D,1)+" m and base angles "+al+"\u00B0 and "+be+"\u00B0, so the angle at the top is 180\u00B0 \u2212 "+al+"\u00B0 \u2212 "+be+"\u00B0 = "+(180-al-be)+"\u00B0. By the sine law, the wire from the left anchor (opposite the "+be+"\u00B0 angle) is "+fmt(D,1)+" \u00D7 sin("+be+"\u00B0) \u00F7 sin("+(al+be)+"\u00B0) = "+fmt(wL,1)+" m, and the wire from the right anchor is "+fmt(wR,1)+" m. The height is "+fmt(wL,1)+" \u00D7 sin("+al+"\u00B0) = "+fmt(h,1)+" m."+(askWire?" The longer wire is the one opposite the larger base angle: <b>"+fmt(longest,1)+" m</b>.":" So the height is <b>"+fmt(h,1)+" m</b>."),
+    "The two anchors and the tower top form a triangle with base \\("+fmt(D,1)+"\\text{ m}\\) and base angles \\("+al+"^\\circ\\) and \\("+be+"^\\circ\\), so the angle at the top is \\(180^\\circ - "+al+"^\\circ - "+be+"^\\circ = "+(180-al-be)+"^\\circ\\). By the sine law, the wire from the left anchor (opposite the \\("+be+"^\\circ\\) angle) is \\("+fmt(D,1)+" \\times \\frac{\\sin "+be+"^\\circ}{\\sin "+(al+be)+"^\\circ} = "+fmt(wL,1)+"\\text{ m}\\), and the wire from the right anchor is \\("+fmt(wR,1)+"\\text{ m}\\). The height is \\("+fmt(wL,1)+" \\times \\sin "+al+"^\\circ = "+fmt(h,1)+"\\text{ m}\\)."+(askWire?" The longer wire is the one opposite the larger base angle: <b>\\("+fmt(longest,1)+"\\text{ m}\\)</b>.":" So the height is <b>\\("+fmt(h,1)+"\\text{ m}\\)</b>."),
     {D:D,al:al,be:be,askWire:askWire});
   q.figure=triSVG(wR,D,wL,{L:["P","T","Q"],ang:[al+"\u00B0",null,be+"\u00B0"],side:[null,fmt(D,1)+" m",null]});
   return q;
@@ -2325,7 +2325,7 @@ E("u6-pack-cost",6,["6.17"],3,"gen",function(){
   var total=packs*price;
   return numq(ctx.item.charAt(0).toUpperCase()+ctx.item.slice(1)+" are sold only in packs of "+ctx.pack+", at $"+fmt(price,2)+" per pack. A manager needs at least "+need+" to "+ctx.use+". What is the total cost, in dollars?",
     fmt(total,2),0.011,
-    "Packs needed: "+need+" \u00F7 "+ctx.pack+" = "+fmt(need/ctx.pack,2)+", and part-packs cannot be bought, so round UP to "+packs+" packs. Total cost: "+packs+" \u00D7 $"+fmt(price,2)+" = <b>$"+fmt(total,2)+"</b>.",
+    "Packs needed: \\("+need+" \\div "+ctx.pack+" = "+fmt(need/ctx.pack,2)+"\\), and part-packs cannot be bought, so round UP to \\("+packs+"\\) packs. Total cost: \\("+packs+" \\times \\$"+fmt(price,2)+" = \\)<b>\\(\\$"+fmt(total,2)+"\\)</b>.",
     {pack:ctx.pack,price:price,need:need});
 });
 E("u6-rate-difference",6,["6.16"],2,"gen",function(){
@@ -2341,21 +2341,21 @@ E("u6-rate-difference",6,["6.16"],2,"gen",function(){
   var T1=r1*p1,T2=r2*p2;
   var winA=r1>r2,win=winA?F.a:F.b,lose=winA?F.b:F.a;
   return mcq(F.a+" completed "+T1+" "+F.thing+" in "+p1+" "+F.per+"s. "+F.b+" completed "+T2+" "+F.thing+" in "+p2+" "+F.per+"s. Who has the higher rate, and by how many "+F.unit+" per "+F.per+"?",
-    win+", by "+diff+" per "+F.per,
-    [lose+", by "+diff+" per "+F.per,win+", by "+(diff+5)+" per "+F.per,lose+", by "+(diff+5)+" per "+F.per],
-    F.a+"'s rate: "+T1+" \u00F7 "+p1+" = "+r1+" "+F.unit+" per "+F.per+". "+F.b+"'s rate: "+T2+" \u00F7 "+p2+" = "+r2+" "+F.unit+" per "+F.per+". The higher rate is "+win+"'s, by "+Math.max(r1,r2)+" \u2212 "+Math.min(r1,r2)+" = <b>"+diff+" per "+F.per+"</b>.",
+    win+", by \\("+diff+"\\) per "+F.per,
+    [lose+", by \\("+diff+"\\) per "+F.per,win+", by \\("+(diff+5)+"\\) per "+F.per,lose+", by \\("+(diff+5)+"\\) per "+F.per],
+    F.a+"'s rate: \\("+T1+" \\div "+p1+" = "+r1+"\\text{ "+F.unit+" per "+F.per+"}\\). "+F.b+"'s rate: \\("+T2+" \\div "+p2+" = "+r2+"\\text{ "+F.unit+" per "+F.per+"}\\). The higher rate is "+win+"'s, by \\("+Math.max(r1,r2)+" - "+Math.min(r1,r2)+" = \\)<b>\\("+diff+"\\text{ per "+F.per+"}\\)</b>.",
     {r1:r1,r2:r2});
 });
 E("u6-poster-dimensions",6,["6.14"],2,"gen",function(){
   function trimNum(x){var s=fmt(x,2);if(s.indexOf(".")>=0)s=s.replace(/0+$/,"").replace(/\.$/,"");return s;}
   var w=ri(6,20),h=ri(6,20),k=pick([1.5,2,2.5,3,3.5,4,5]);
   var oldA=w*h,newA=k*k*oldA;
-  var key=trimNum(w*k)+" cm by "+trimNum(h*k)+" cm";
+  var key="\\("+trimNum(w*k)+"\\text{ cm by }"+trimNum(h*k)+"\\text{ cm}\\)";
   var cand=[[w*k*k,h*k*k],[h*k,w*k],[w*(k+1),h*(k+1)],[w*k,h],[w,h*k],[w*2*k,h*2*k]],ds=[];
-  for(var i=0;i<cand.length&&ds.length<3;i++){var st=trimNum(cand[i][0])+" cm by "+trimNum(cand[i][1])+" cm";if(st!==key&&ds.indexOf(st)<0)ds.push(st);}
-  return mcq("A rectangular crest measuring "+w+" cm by "+h+" cm is enlarged to make a poster with an area of "+trimNum(newA)+" cm\u00B2. What are the dimensions of the poster?",
+  for(var i=0;i<cand.length&&ds.length<3;i++){var st="\\("+trimNum(cand[i][0])+"\\text{ cm by }"+trimNum(cand[i][1])+"\\text{ cm}\\)";if(st!==key&&ds.indexOf(st)<0)ds.push(st);}
+  return mcq("A rectangular crest measuring "+w+" cm by "+h+" cm is enlarged to make a poster with an area of \\("+trimNum(newA)+"\\text{ cm}^2\\). What are the dimensions of the poster?",
     key,ds,
-    "The original area is "+w+" \u00D7 "+h+" = "+oldA+" cm\u00B2. The area scale factor is "+trimNum(newA)+" \u00F7 "+oldA+" = "+trimNum(k*k)+", so the LINEAR scale factor is \u221A"+trimNum(k*k)+" = "+trimNum(k)+". Multiply each dimension by "+trimNum(k)+": "+w+" \u00D7 "+trimNum(k)+" = "+trimNum(w*k)+" cm and "+h+" \u00D7 "+trimNum(k)+" = "+trimNum(h*k)+" cm. The poster is <b>"+key+"</b>.",
+    "The original area is \\("+w+" \\times "+h+" = "+oldA+"\\text{ cm}^2\\). The area scale factor is \\("+trimNum(newA)+" \\div "+oldA+" = "+trimNum(k*k)+"\\), so the LINEAR scale factor is \\(\\sqrt{"+trimNum(k*k)+"} = "+trimNum(k)+"\\). Multiply each dimension by \\("+trimNum(k)+"\\): \\("+w+" \\times "+trimNum(k)+" = "+trimNum(w*k)+"\\text{ cm}\\) and \\("+h+" \\times "+trimNum(k)+" = "+trimNum(h*k)+"\\text{ cm}\\). The poster is <b>"+key+"</b>.",
     {w:w,h:h,k:k});
 });
 E("u6-tile-cost",6,["6.14","6.17"],3,"gen",function(){
@@ -2373,7 +2373,7 @@ E("u6-tile-cost",6,["6.14","6.17"],3,"gen",function(){
   var total=count*price;
   return numq("A floor plan for a "+F.room+" has a scale of "+F.scaleTxt+". On the plan the room measures "+W+" units by "+H+" units. It will be covered with square tiles measuring "+F.tileTxt+", costing $"+fmt(price,2)+" each. What is the total cost of the tiles, in dollars?",
     fmt(total,2),0.011,
-    "Real dimensions: "+W+" \u00D7 "+F.scale+" = "+realW+" "+F.unit+" by "+H+" \u00D7 "+F.scale+" = "+realH+" "+F.unit+". Tiles along each side: "+realW+" \u00F7 "+F.tile+" = "+across+" and "+realH+" \u00F7 "+F.tile+" = "+along+", so "+across+" \u00D7 "+along+" = "+count+" tiles. Total cost: "+count+" \u00D7 $"+fmt(price,2)+" = <b>$"+fmt(total,2)+"</b>.",
+    "Real dimensions: \\("+W+" \\times "+F.scale+" = "+realW+"\\text{ "+F.unit+"}\\) by \\("+H+" \\times "+F.scale+" = "+realH+"\\text{ "+F.unit+"}\\). Tiles along each side: \\("+realW+" \\div "+F.tile+" = "+across+"\\) and \\("+realH+" \\div "+F.tile+" = "+along+"\\), so \\("+across+" \\times "+along+" = "+count+"\\) tiles. Total cost: \\("+count+" \\times \\$"+fmt(price,2)+" = \\)<b>\\(\\$"+fmt(total,2)+"\\)</b>.",
     {W:W,H:H,count:count,price:price});
 });
 
@@ -2434,47 +2434,47 @@ E("u7-everyday-counterexample",7,["2.4"],1,"var",varset([
     {});}
 ]));
 E("u7-pattern-equation",7,["2.1"],2,"var",varset([
-  function(){return mcq("Look at the pattern: 37 \u00D7 3 = 111, 37 \u00D7 6 = 222, 37 \u00D7 9 = 333, 37 \u00D7 12 = 444. What is the next equation in the pattern?",
-    "37 \u00D7 15 = 555",
-    ["37 \u00D7 13 = 481","37 \u00D7 15 = 505","37 \u00D7 18 = 666"],
-    "The multipliers grow by 3 (3, 6, 9, 12, \u2026) and the products are 111, 222, 333, 444, \u2026. Next multiplier: 15, and 37 \u00D7 15 = 555, continuing the repeated-digit pattern.",
+  function(){return mcq("Look at the pattern: \\(37 \\times 3 = 111\\), \\(37 \\times 6 = 222\\), \\(37 \\times 9 = 333\\), \\(37 \\times 12 = 444\\). What is the next equation in the pattern?",
+    "\\(37 \\times 15 = 555\\)",
+    ["\\(37 \\times 13 = 481\\)","\\(37 \\times 15 = 505\\)","\\(37 \\times 18 = 666\\)"],
+    "The multipliers grow by \\(3\\) (\\(3, 6, 9, 12, \\ldots\\)) and the products are \\(111, 222, 333, 444, \\ldots\\). Next multiplier: \\(15\\), and \\(37 \\times 15 = 555\\), continuing the repeated-digit pattern.",
     {});},
-  function(){return mcq("Look at the pattern: 11\u00B2 = 121, 111\u00B2 = 12321, 1111\u00B2 = 1234321. What is the next equation in the pattern?",
-    "11111\u00B2 = 123454321",
-    ["11111\u00B2 = 12344321","1111\u00B2 = 123454321","11111\u00B2 = 12345654321"],
-    "Each base gains another digit 1, and the square counts up to the number of 1s and back down: five 1s give 123454321 (up to 5 and back). The last option counts to 6, which belongs to the following step, 111111\u00B2.",
+  function(){return mcq("Look at the pattern: \\(11^2 = 121\\), \\(111^2 = 12321\\), \\(1111^2 = 1234321\\). What is the next equation in the pattern?",
+    "\\(11111^2 = 123454321\\)",
+    ["\\(11111^2 = 12344321\\)","\\(1111^2 = 123454321\\)","\\(11111^2 = 12345654321\\)"],
+    "Each base gains another digit \\(1\\), and the square counts up to the number of \\(1\\)s and back down: five \\(1\\)s give \\(123454321\\) (up to \\(5\\) and back). The last option counts to \\(6\\), which belongs to the following step, \\(111111^2\\).",
     {});},
-  function(){return mcq("Look at the pattern: 12345679 \u00D7 9 = 111,111,111; 12345679 \u00D7 18 = 222,222,222; 12345679 \u00D7 27 = 333,333,333. What is the next equation in the pattern?",
-    "12345679 \u00D7 36 = 444,444,444",
-    ["12345679 \u00D7 36 = 44,444,444","12345679 \u00D7 45 = 444,444,444","12345679 \u00D7 36 = 454,545,454"],
-    "The multipliers are multiples of 9 (9, 18, 27, \u2026) and each product repeats the digit matching the multiple: 36 = 4 \u00D7 9, so the product is nine 4s: 444,444,444.",
+  function(){return mcq("Look at the pattern: \\(12345679 \\times 9 = 111{,}111{,}111\\); \\(12345679 \\times 18 = 222{,}222{,}222\\); \\(12345679 \\times 27 = 333{,}333{,}333\\). What is the next equation in the pattern?",
+    "\\(12345679 \\times 36 = 444{,}444{,}444\\)",
+    ["\\(12345679 \\times 36 = 44{,}444{,}444\\)","\\(12345679 \\times 45 = 444{,}444{,}444\\)","\\(12345679 \\times 36 = 454{,}545{,}454\\)"],
+    "The multipliers are multiples of \\(9\\) (\\(9, 18, 27, \\ldots\\)) and each product repeats the digit matching the multiple: \\(36 = 4 \\times 9\\), so the product is nine \\(4\\)s: \\(444{,}444{,}444\\).",
     {});}
 ]));
 E("u7-counterexample-claims",7,["2.4"],2,"var",varset([
-  function(){return mcq("Conjecture: \u201CIf a number is divisible by 4, then it is divisible by 8.\u201D Which number is a counterexample?",
-    "12",
-    ["16","24","40"],
-    "12 is divisible by 4 (12 \u00F7 4 = 3) but not by 8, so it breaks the claim. The other options are all divisible by 8, so they agree with the claim instead of disproving it.",
+  function(){return mcq("Conjecture: \u201CIf a number is divisible by \\(4\\), then it is divisible by \\(8\\).\u201D Which number is a counterexample?",
+    "\\(12\\)",
+    ["\\(16\\)","\\(24\\)","\\(40\\)"],
+    "\\(12\\) is divisible by \\(4\\) (\\(12 \\div 4 = 3\\)) but not by \\(8\\), so it breaks the claim. The other options are all divisible by \\(8\\), so they agree with the claim instead of disproving it.",
     {});},
   function(){return mcq("Conjecture: \u201CThe sum of any two prime numbers is even.\u201D Which calculation is a counterexample?",
-    "2 + 3 = 5",
-    ["3 + 5 = 8","5 + 7 = 12","7 + 11 = 18"],
-    "2 and 3 are both prime, but their sum, 5, is odd \u2014 one counterexample disproves the claim. (2 is the only even prime, which is why it is the one that breaks this.) The other pairs all give even sums.",
+    "\\(2 + 3 = 5\\)",
+    ["\\(3 + 5 = 8\\)","\\(5 + 7 = 12\\)","\\(7 + 11 = 18\\)"],
+    "\\(2\\) and \\(3\\) are both prime, but their sum, \\(5\\), is odd — one counterexample disproves the claim. (\\(2\\) is the only even prime, which is why it is the one that breaks this.) The other pairs all give even sums.",
     {});},
-  function(){return mcq("Conjecture: \u201CEvery multiple of 5 ends in the digit 5.\u201D Which number is a counterexample?",
-    "20",
-    ["15","25","12"],
-    "20 is a multiple of 5 but ends in 0, breaking the claim. 15 and 25 end in 5 so they agree; 12 is not a multiple of 5 at all, so it cannot test the claim.",
+  function(){return mcq("Conjecture: \u201CEvery multiple of \\(5\\) ends in the digit \\(5\\).\u201D Which number is a counterexample?",
+    "\\(20\\)",
+    ["\\(15\\)","\\(25\\)","\\(12\\)"],
+    "\\(20\\) is a multiple of \\(5\\) but ends in \\(0\\), breaking the claim. \\(15\\) and \\(25\\) end in \\(5\\) so they agree; \\(12\\) is not a multiple of \\(5\\) at all, so it cannot test the claim.",
     {});},
-  function(){return mcq("Conjecture: \u201CIf x\u00B2 = 16, then x = 4.\u201D Which value is a counterexample?",
-    "x = \u22124",
-    ["x = 4","x = 16","x = \u221216"],
-    "(\u22124)\u00B2 = 16, so x = \u22124 meets the condition x\u00B2 = 16 but breaks the conclusion x = 4. The values 16 and \u221216 do not satisfy x\u00B2 = 16 in the first place.",
+  function(){return mcq("Conjecture: \u201CIf \\(x^2 = 16\\), then \\(x = 4\\).\u201D Which value is a counterexample?",
+    "\\(x = -4\\)",
+    ["\\(x = 4\\)","\\(x = 16\\)","\\(x = -16\\)"],
+    "\\((-4)^2 = 16\\), so \\(x = -4\\) meets the condition \\(x^2 = 16\\) but breaks the conclusion \\(x = 4\\). The values \\(16\\) and \\(-16\\) do not satisfy \\(x^2 = 16\\) in the first place.",
     {});},
   function(){return mcq("Conjecture: \u201CThe product of two numbers is always greater than each of the two numbers.\u201D Which calculation is a counterexample?",
-    "6 \u00D7 \u00BD = 3",
-    ["3 \u00D7 4 = 12","1.5 \u00D7 2 = 3","10 \u00D7 1.1 = 11"],
-    "6 \u00D7 \u00BD = 3, and 3 is NOT greater than 6, so the claim fails \u2014 multiplying by a fraction between 0 and 1 shrinks the number. In each other calculation the product is greater than both factors.",
+    "\\(6 \\times \\frac{1}{2} = 3\\)",
+    ["\\(3 \\times 4 = 12\\)","\\(1.5 \\times 2 = 3\\)","\\(10 \\times 1.1 = 11\\)"],
+    "\\(6 \\times \\frac{1}{2} = 3\\), and \\(3\\) is NOT greater than \\(6\\), so the claim fails — multiplying by a fraction between \\(0\\) and \\(1\\) shrinks the number. In each other calculation the product is greater than both factors.",
     {});}
 ]));
 
@@ -2633,8 +2633,8 @@ E("u8-diagonals",8,["5.5"],1,"gen",function(){
   var prompt="A "+ctx+" has "+n+" sides. How many diagonals "+(mode===0?"can be drawn from one vertex":"does it have in total")+"?";
   return numq(prompt,ans,0.011,
     mode===0
-      ?"From one vertex, a diagonal cannot go to the vertex itself or to either of its two neighbours, so it can reach the other "+n+" − 3 vertices: <b>"+ans+"</b> diagonals."
-      :"Each of the "+n+" vertices connects to "+n+" − 3 others by a diagonal (not itself, not its two neighbours), and each diagonal is counted twice, once from each end: "+n+" × "+(n-3)+" ÷ 2 = <b>"+ans+"</b>.",
+      ?"From one vertex, a diagonal cannot go to the vertex itself or to either of its two neighbours, so it can reach the other \\("+n+" - 3\\) vertices: <b>\\("+ans+"\\)</b> diagonals."
+      :"Each of the \\("+n+"\\) vertices connects to \\("+n+" - 3\\) others by a diagonal (not itself, not its two neighbours), and each diagonal is counted twice, once from each end: \\("+n+" \\times "+(n-3)+" \\div 2 = \\)<b>\\("+ans+"\\)</b>.",
     {n:n,mode:mode,ans:ans});
 });
 E("u8-isosceles-angles",8,["5.3"],2,"gen",function(){
@@ -2642,38 +2642,40 @@ E("u8-isosceles-angles",8,["5.3"],2,"gen",function(){
   if(mode===0){base=ri(28,72);vertex=180-2*base;ans=vertex;}
   else{vertex=2*ri(20,65);base=(180-vertex)/2;ans=base;}
   var q=numq(mode===0
-      ?"In △ABC, AB = AC, so the base is BC. The base angles at B and C each measure "+base+"°. What is the measure of the vertex angle at A, in degrees?"
-      :"In △ABC, AB = AC, so the base is BC. The vertex angle at A measures "+vertex+"°. What is the measure of each base angle, in degrees?",
+      ?"In \\(\\triangle ABC\\), \\(AB = AC\\), so the base is \\(BC\\). The base angles at \\(B\\) and \\(C\\) each measure \\("+base+"^\\circ\\). What is the measure of the vertex angle at \\(A\\), in degrees?"
+      :"In \\(\\triangle ABC\\), \\(AB = AC\\), so the base is \\(BC\\). The vertex angle at \\(A\\) measures \\("+vertex+"^\\circ\\). What is the measure of each base angle, in degrees?",
     ans,0.011,
-    "The angles of a triangle add to 180°, and the base angles of an isosceles triangle are equal. "+(mode===0?"Vertex angle = 180° − "+base+"° − "+base+"° = <b>"+vertex+"°</b>.":"Each base angle = (180° − "+vertex+"°) ÷ 2 = <b>"+base+"°</b>."),
+    "The angles of a triangle add to \\(180^\\circ\\), and the base angles of an isosceles triangle are equal. "+(mode===0?"Vertex angle \\(= 180^\\circ - "+base+"^\\circ - "+base+"^\\circ = \\)<b>\\("+vertex+"^\\circ\\)</b>.":"Each base angle \\(= (180^\\circ - "+vertex+"^\\circ) \\div 2 = \\)<b>\\("+base+"^\\circ\\)</b>."),
     {mode:mode,base:base,vertex:vertex,ans:ans});
   q.figure=triAngSVG(vertex,base,base,{ang:mode===0?["?",base+"°",base+"°"]:[vertex+"°","?","?"]});
   return q;
 });
 E("u8-corresponding-algebra",8,["5.8"],2,"gen",function(){
   function expr(cf,kn){return cf+"x"+(kn>0?" + "+kn:(kn<0?" − "+(-kn):""));}
+  function exprT(cf,kn){return expr(cf,kn).replace(/\u2212/g,"-");}
   var x0,a,c2,V,b,d,tries=0;
   do{
     x0=ri(4,15);a=ri(3,7);c2=ri(1,a-1);V=ri(65,135);
     b=V-a*x0;d=V-c2*x0;tries++;
   }while((b===0||d===0||b<-25||b>35||d<-25||d>35)&&tries<90);
-  var q=numq("Two parallel lines are cut by a transversal. Two corresponding angles measure ("+expr(a,b)+")° and ("+expr(c2,d)+")°. What is the measure of each of these angles, in degrees?",
+  var q=numq("Two parallel lines are cut by a transversal. Two corresponding angles measure \\(("+exprT(a,b)+")^\\circ\\) and \\(("+exprT(c2,d)+")^\\circ\\). What is the measure of each of these angles, in degrees?",
     V,0.011,
-    "Corresponding angles between parallel lines are equal: "+expr(a,b)+" = "+expr(c2,d)+". Solving gives x = "+x0+". Substituting back: "+a+" × "+x0+(b>0?" + "+b:" − "+(-b))+" = <b>"+V+"°</b> (the other expression gives the same value, as it must).",
+    "Corresponding angles between parallel lines are equal: \\("+exprT(a,b)+" = "+exprT(c2,d)+"\\). Solving gives \\(x = "+x0+"\\). Substituting back: \\("+a+" \\times "+x0+(b>0?" + "+b:" - "+(-b))+" = \\)<b>\\("+V+"^\\circ\\)</b> (the other expression gives the same value, as it must).",
     {a:a,b:b,c:c2,d:d,x0:x0,V:V});
   q.figure=transversalSVG("TR","("+expr(a,b)+")°","BR","?");
   return q;
 });
 E("u8-exterior-algebra",8,["5.11"],3,"gen",function(){
   function expr(cf,kn){return cf+"x"+(kn>0?" + "+kn:(kn<0?" − "+(-kn):""));}
+  function exprT(cf,kn){return expr(cf,kn).replace(/\u2212/g,"-");}
   var x0,A1,A2,E,p,q2,r,s,t,u,tries=0;
   do{
     x0=ri(3,12);A1=ri(32,78);A2=ri(32,78);E=A1+A2;
     p=ri(2,6);q2=A1-p*x0;r=ri(2,6);s=A2-r*x0;t=ri(2,7);u=E-t*x0;tries++;
   }while((q2===0||s===0||u===0||q2<-30||q2>40||s<-30||s>40||u<-30||u>40)&&tries<90);
-  return numq("In △ABC, the two remote interior angles for the exterior angle at C measure ("+expr(p,q2)+")° and ("+expr(r,s)+")°. The exterior angle at C measures ("+expr(t,u)+")°. What is the measure of the exterior angle at C, in degrees?",
+  return numq("In \\(\\triangle ABC\\), the two remote interior angles for the exterior angle at \\(C\\) measure \\(("+exprT(p,q2)+")^\\circ\\) and \\(("+exprT(r,s)+")^\\circ\\). The exterior angle at \\(C\\) measures \\(("+exprT(t,u)+")^\\circ\\). What is the measure of the exterior angle at \\(C\\), in degrees?",
     E,0.011,
-    "An exterior angle equals the sum of the two remote interior angles: "+expr(t,u)+" = ("+expr(p,q2)+") + ("+expr(r,s)+") = "+expr(p+r,q2+s)+". Solving gives x = "+x0+". The exterior angle is then "+t+" × "+x0+(u>0?" + "+u:" − "+(-u))+" = <b>"+E+"°</b>. (Check with the remote angles: "+A1+"° + "+A2+"° = "+E+"°.)",
+    "An exterior angle equals the sum of the two remote interior angles: \\("+exprT(t,u)+" = ("+exprT(p,q2)+") + ("+exprT(r,s)+") = "+exprT(p+r,q2+s)+"\\). Solving gives \\(x = "+x0+"\\). The exterior angle is then \\("+t+" \\times "+x0+(u>0?" + "+u:" - "+(-u))+" = \\)<b>\\("+E+"^\\circ\\)</b>. (Check with the remote angles: \\("+A1+"^\\circ + "+A2+"^\\circ = "+E+"^\\circ\\).)",
     {p:p,q:q2,r:r,s:s,t:t,u:u,x0:x0,A1:A1,A2:A2,E:E});
 });
 
@@ -2843,15 +2845,16 @@ E("u4-diagonal-radical",4,["1.6"],3,"gen",function(){
 /* --- Unit 8: Properties of Angles and Triangles --- */
 E("u8-cointerior-algebra",8,["5.8"],2,"gen",function(){
   function expr(cf,kn){return cf+"x"+(kn>0?" + "+kn:(kn<0?" − "+(-kn):""));}
+  function exprT(cf,kn){return expr(cf,kn).replace(/\u2212/g,"-");}
   var x0,a,b,c2,d,V1,V2,tries=0;
   do{
     x0=ri(4,14);V1=ri(70,120);V2=180-V1;
     a=ri(2,6);b=V1-a*x0;c2=ri(2,6);d=V2-c2*x0;tries++;
   }while((b===0||d===0||b<-25||b>35||d<-25||d>35)&&tries<90);
   var mode=ri(0,1),ans=mode===0?V1:V2;
-  var q=numq("Two parallel lines are cut by a transversal. Two co-interior angles measure ("+expr(a,b)+")° and ("+expr(c2,d)+")°. What is the measure of the "+(mode===0?"first":"second")+" of these angles, in degrees?",
+  var q=numq("Two parallel lines are cut by a transversal. Two co-interior angles measure \\(("+exprT(a,b)+")^\\circ\\) and \\(("+exprT(c2,d)+")^\\circ\\). What is the measure of the "+(mode===0?"first":"second")+" of these angles, in degrees?",
     ans,0.011,
-    "Co-interior angles between parallel lines are supplementary: ("+expr(a,b)+") + ("+expr(c2,d)+") = 180. Solving gives x = "+x0+". The first angle is "+a+" × "+x0+(b>0?" + "+b:" − "+(-b))+" = "+V1+"° and the second is "+V2+"°, so the angle asked for is <b>"+ans+"°</b>.",
+    "Co-interior angles between parallel lines are supplementary: \\(("+exprT(a,b)+") + ("+exprT(c2,d)+") = 180\\). Solving gives \\(x = "+x0+"\\). The first angle is \\("+a+" \\times "+x0+(b>0?" + "+b:" - "+(-b))+" = "+V1+"^\\circ\\) and the second is \\("+V2+"^\\circ\\), so the angle asked for is <b>\\("+ans+"^\\circ\\)</b>.",
     {a:a,b:b,c:c2,d:d,x0:x0,V1:V1,V2:V2,mode:mode,ans:ans});
   q.figure=transversalSVG("TR","("+expr(a,b)+")°","BR","?");
   return q;
@@ -2862,31 +2865,31 @@ E("u8-congruence-perimeter",8,["5.6"],3,"gen",function(){
   var a=ri(2,5),x0=ri(3,12),b,safe=0;
   do{b=s-a*x0;safe++;if(b===0||b<-15||b>25){x0=ri(3,12);}}while((b===0||b<-15||b>25)&&safe<60);
   var P=s+s2+s3,mode=ri(0,1),ans=mode===0?x0:P;
-  return numq("△ABC ≅ △DEF, with the vertices in corresponding order. AB = "+s+" cm, BC = "+s2+" cm and CA = "+s3+" cm. Side DE measures ("+a+"x "+(b>0?"+ "+b:"− "+(-b))+") cm. "+(mode===0?"What is the value of x?":"What is the perimeter of △DEF, in cm?"),
+  return numq("\\(\\triangle ABC \\cong \\triangle DEF\\), with the vertices in corresponding order. \\(AB = "+s+"\\text{ cm}\\), \\(BC = "+s2+"\\text{ cm}\\) and \\(CA = "+s3+"\\text{ cm}\\). Side \\(DE\\) measures \\(("+a+"x "+(b>0?"+ "+b:"- "+(-b))+")\\text{ cm}\\). "+(mode===0?"What is the value of \\(x\\)?":"What is the perimeter of \\(\\triangle DEF\\), in cm?"),
     ans,0.011,
-    "Corresponding vertices match in order, so side DE corresponds to side AB: "+a+"x "+(b>0?"+ "+b:"− "+(-b))+" = "+s+", giving x = "+x0+". Congruent triangles have the same perimeter: "+s+" + "+s2+" + "+s3+" = "+P+" cm."+(mode===0?" So x = <b>"+x0+"</b>.":" So the perimeter of △DEF is <b>"+P+" cm</b>."),
+    "Corresponding vertices match in order, so side \\(DE\\) corresponds to side \\(AB\\): \\("+a+"x "+(b>0?"+ "+b:"- "+(-b))+" = "+s+"\\), giving \\(x = "+x0+"\\). Congruent triangles have the same perimeter: \\("+s+" + "+s2+" + "+s3+" = "+P+"\\text{ cm}\\)."+(mode===0?" So \\(x = \\)<b>\\("+x0+"\\)</b>.":" So the perimeter of \\(\\triangle DEF\\) is <b>\\("+P+"\\text{ cm}\\)</b>."),
     {s:s,s2:s2,s3:s3,a:a,b:b,x0:x0,P:P,mode:mode,ans:ans});
 });
 E("u8-angle-chase",8,["5.8"],3,"var",varset([
-  function(){return mcq("Two parallel lines are cut by a transversal. ∠x forms a co-interior pair with a 64° angle. ∠y is vertically opposite ∠x. ∠z is a corresponding angle to ∠y. What is the measure of ∠z?",
-    "116°",
-    ["64°","128°","90°"],
-    "Co-interior angles are supplementary: ∠x = 180° − 64° = 116°. Vertically opposite angles are equal: ∠y = 116°. Corresponding angles are equal: ∠z = 116°.",
+  function(){return mcq("Two parallel lines are cut by a transversal. \\(\\angle x\\) forms a co-interior pair with a \\(64^\\circ\\) angle. \\(\\angle y\\) is vertically opposite \\(\\angle x\\). \\(\\angle z\\) is a corresponding angle to \\(\\angle y\\). What is the measure of \\(\\angle z\\)?",
+    "\\(116^\\circ\\)",
+    ["\\(64^\\circ\\)","\\(128^\\circ\\)","\\(90^\\circ\\)"],
+    "Co-interior angles are supplementary: \\(\\angle x = 180^\\circ - 64^\\circ = 116^\\circ\\). Vertically opposite angles are equal: \\(\\angle y = 116^\\circ\\). Corresponding angles are equal: \\(\\angle z = 116^\\circ\\).",
     {});},
-  function(){return mcq("In △ABC, ∠A = 52° and ∠B = 68°. ∠e is the exterior angle at C. ∠f forms a co-interior pair with ∠e where a transversal cuts two parallel lines. ∠g is vertically opposite ∠f. What is the measure of ∠g?",
-    "60°",
-    ["120°","68°","180°"],
-    "The exterior angle equals the sum of the remote interiors: ∠e = 52° + 68° = 120°. Co-interior angles are supplementary: ∠f = 180° − 120° = 60°. Vertically opposite angles are equal: ∠g = 60°.",
+  function(){return mcq("In \\(\\triangle ABC\\), \\(\\angle A = 52^\\circ\\) and \\(\\angle B = 68^\\circ\\). \\(\\angle e\\) is the exterior angle at \\(C\\). \\(\\angle f\\) forms a co-interior pair with \\(\\angle e\\) where a transversal cuts two parallel lines. \\(\\angle g\\) is vertically opposite \\(\\angle f\\). What is the measure of \\(\\angle g\\)?",
+    "\\(60^\\circ\\)",
+    ["\\(120^\\circ\\)","\\(68^\\circ\\)","\\(180^\\circ\\)"],
+    "The exterior angle equals the sum of the remote interiors: \\(\\angle e = 52^\\circ + 68^\\circ = 120^\\circ\\). Co-interior angles are supplementary: \\(\\angle f = 180^\\circ - 120^\\circ = 60^\\circ\\). Vertically opposite angles are equal: \\(\\angle g = 60^\\circ\\).",
     {});},
-  function(){return mcq("In an isosceles triangle the vertex angle measures 38°. ∠b is one of the base angles. ∠h is the exterior angle at that same base vertex. A second diagram shows ∠j as an alternate interior angle equal to ∠h (the lines are parallel). What is the measure of ∠j?",
-    "109°",
-    ["71°","38°","142°"],
-    "Base angle: ∠b = (180° − 38°) ÷ 2 = 71°. Exterior angle on a straight line: ∠h = 180° − 71° = 109°. Alternate interior angles between parallel lines are equal: ∠j = 109°.",
+  function(){return mcq("In an isosceles triangle the vertex angle measures \\(38^\\circ\\). \\(\\angle b\\) is one of the base angles. \\(\\angle h\\) is the exterior angle at that same base vertex. A second diagram shows \\(\\angle j\\) as an alternate interior angle equal to \\(\\angle h\\) (the lines are parallel). What is the measure of \\(\\angle j\\)?",
+    "\\(109^\\circ\\)",
+    ["\\(71^\\circ\\)","\\(38^\\circ\\)","\\(142^\\circ\\)"],
+    "Base angle: \\(\\angle b = (180^\\circ - 38^\\circ) \\div 2 = 71^\\circ\\). Exterior angle on a straight line: \\(\\angle h = 180^\\circ - 71^\\circ = 109^\\circ\\). Alternate interior angles between parallel lines are equal: \\(\\angle j = 109^\\circ\\).",
     {});},
-  function(){return mcq("Each interior angle of a regular pentagon measures 108°. In a triangle drawn beside the pentagon, one angle is supplementary to 108° and a second angle measures 47°. What is the measure of the triangle's third angle?",
-    "61°",
-    ["72°","108°","119°"],
-    "The supplementary angle is 180° − 108° = 72°. The triangle's angles add to 180°: 180° − 72° − 47° = 61°.",
+  function(){return mcq("Each interior angle of a regular pentagon measures \\(108^\\circ\\). In a triangle drawn beside the pentagon, one angle is supplementary to \\(108^\\circ\\) and a second angle measures \\(47^\\circ\\). What is the measure of the triangle's third angle?",
+    "\\(61^\\circ\\)",
+    ["\\(72^\\circ\\)","\\(108^\\circ\\)","\\(119^\\circ\\)"],
+    "The supplementary angle is \\(180^\\circ - 108^\\circ = 72^\\circ\\). The triangle's angles add to \\(180^\\circ\\): \\(180^\\circ - 72^\\circ - 47^\\circ = 61^\\circ\\).",
     {});}
 ]));
 
@@ -2899,25 +2902,25 @@ E("u8-angle-chase",8,["5.8"],3,"var",varset([
 
 /* --- Unit 1: Acute Triangle Trigonometry --- */
 E("u1-ambiguous-count",1,["7.2"],3,"var",varset([
-  function(){return mcq("In △ABC, ∠A = 40°, side b = 10 cm and side a = 5 cm (a is opposite ∠A). How many different triangles fit this information?",
+  function(){return mcq("In \\(\\triangle ABC\\), \\(\\angle A = 40^\\circ\\), side \\(b = 10\\text{ cm}\\) and side \\(a = 5\\text{ cm}\\) (\\(a\\) is opposite \\(\\angle A\\)). How many different triangles fit this information?",
     "No triangle is possible",
     ["Exactly one triangle (a right triangle)","Exactly one triangle","Two different triangles"],
-    "Compare a with the height h = b sin A = 10 × sin 40° ≈ 6.43 cm. Since a = 5 cm is SHORTER than 6.43 cm, side a cannot reach the base line at all — no triangle closes.",
+    "Compare \\(a\\) with the height \\(h = b\\sin A = 10 \\times \\sin 40^\\circ \\approx 6.43\\text{ cm}\\). Since \\(a = 5\\text{ cm}\\) is SHORTER than \\(6.43\\text{ cm}\\), side \\(a\\) cannot reach the base line at all — no triangle closes.",
     {});},
-  function(){return mcq("In △ABC, ∠A = 30°, side b = 10 cm and side a = 5 cm (a is opposite ∠A). How many different triangles fit this information?",
+  function(){return mcq("In \\(\\triangle ABC\\), \\(\\angle A = 30^\\circ\\), side \\(b = 10\\text{ cm}\\) and side \\(a = 5\\text{ cm}\\) (\\(a\\) is opposite \\(\\angle A\\)). How many different triangles fit this information?",
     "Exactly one triangle (a right triangle)",
     ["No triangle is possible","Exactly one triangle","Two different triangles"],
-    "The height is h = b sin A = 10 × sin 30° = 5 cm. Side a equals h exactly, so side a just reaches the base at a right angle — exactly one triangle, and it is right-angled.",
+    "The height is \\(h = b\\sin A = 10 \\times \\sin 30^\\circ = 5\\text{ cm}\\). Side \\(a\\) equals \\(h\\) exactly, so side \\(a\\) just reaches the base at a right angle — exactly one triangle, and it is right-angled.",
     {});},
-  function(){return mcq("In △ABC, ∠A = 40°, side b = 10 cm and side a = 8 cm (a is opposite ∠A). How many different triangles fit this information?",
+  function(){return mcq("In \\(\\triangle ABC\\), \\(\\angle A = 40^\\circ\\), side \\(b = 10\\text{ cm}\\) and side \\(a = 8\\text{ cm}\\) (\\(a\\) is opposite \\(\\angle A\\)). How many different triangles fit this information?",
     "Two different triangles",
     ["No triangle is possible","Exactly one triangle (a right triangle)","Exactly one triangle"],
-    "The height is h = 10 × sin 40° ≈ 6.43 cm. Side a = 8 cm is longer than h but shorter than b = 10 cm, so it can swing to two different positions on the base — the ambiguous case gives two different triangles.",
+    "The height is \\(h = 10 \\times \\sin 40^\\circ \\approx 6.43\\text{ cm}\\). Side \\(a = 8\\text{ cm}\\) is longer than \\(h\\) but shorter than \\(b = 10\\text{ cm}\\), so it can swing to two different positions on the base — the ambiguous case gives two different triangles.",
     {});},
-  function(){return mcq("In △ABC, ∠A = 50°, side b = 9 cm and side a = 11 cm (a is opposite ∠A). How many different triangles fit this information?",
+  function(){return mcq("In \\(\\triangle ABC\\), \\(\\angle A = 50^\\circ\\), side \\(b = 9\\text{ cm}\\) and side \\(a = 11\\text{ cm}\\) (\\(a\\) is opposite \\(\\angle A\\)). How many different triangles fit this information?",
     "Exactly one triangle",
     ["No triangle is possible","Exactly one triangle (a right triangle)","Two different triangles"],
-    "Side a = 11 cm is longer than side b = 9 cm, so it can only land in one position past the foot of the height — exactly one triangle. (Two triangles need h < a < b.)",
+    "Side \\(a = 11\\text{ cm}\\) is longer than side \\(b = 9\\text{ cm}\\), so it can only land in one position past the foot of the height — exactly one triangle. (Two triangles need \\(h < a < b\\).)",
     {});}
 ]));
 E("u1-median-length",1,["7.3"],3,"gen",function(){
@@ -2926,9 +2929,9 @@ E("u1-median-length",1,["7.3"],3,"gen",function(){
   var a2=p*p+q*q-2*p*q*Math.cos(rd(A)),a=Math.sqrt(a2);
   var m=0.5*Math.sqrt(p*p+q*q+2*p*q*Math.cos(rd(A)));
   var ctx=pick(["triangular lot","triangular field","triangular garden plot"]);
-  var qq=numq("A "+ctx+" has two sides of "+p+" m and "+q+" m meeting at a corner with an angle of "+A+"° between them. A path runs from that corner to the midpoint of the opposite side. How long is the path, to one decimal place, in metres?",
+  var qq=numq("A "+ctx+" has two sides of "+p+" m and "+q+" m meeting at a corner with an angle of \\("+A+"^\\circ\\) between them. A path runs from that corner to the midpoint of the opposite side. How long is the path, to one decimal place, in metres?",
     fmt(m,1),0.06,
-    "First find the opposite side with the cosine law: a² = "+p+"² + "+q+"² − 2 × "+p+" × "+q+" × cos "+A+"° = "+fmt(a2,1)+", so a ≈ "+fmt(a,1)+" m. Then the median to that side (Apollonius's rule, from applying the cosine law in the two half-triangles) is m = ½√("+p+"² + "+q+"² + 2 × "+p+" × "+q+" × cos "+A+"°) = ½√"+fmt(p*p+q*q+2*p*q*Math.cos(rd(A)),1)+" ≈ <b>"+fmt(m,1)+" m</b>.",
+    "First find the opposite side with the cosine law: \\(a^2 = "+p+"^2 + "+q+"^2 - 2 \\times "+p+" \\times "+q+" \\times \\cos "+A+"^\\circ = "+fmt(a2,1)+"\\), so \\(a \\approx "+fmt(a,1)+"\\text{ m}\\). Then the median to that side (Apollonius's rule, from applying the cosine law in the two half-triangles) is \\(m = \\frac{1}{2}\\sqrt{"+p+"^2 + "+q+"^2 + 2 \\times "+p+" \\times "+q+" \\times \\cos "+A+"^\\circ} = \\frac{1}{2}\\sqrt{"+fmt(p*p+q*q+2*p*q*Math.cos(rd(A)),1)+"} \\approx \\)<b>\\("+fmt(m,1)+"\\text{ m}\\)</b>.",
     {p:p,q:q,A:A,m:m});
   qq.figure=triSVG(a,q,p,{L:["A","B","C"],ang:[A+"°",null,null],side:[fmt(a,1)+" m",q+" m",p+" m"]});
   return qq;
@@ -3053,12 +3056,12 @@ E("u6-map-distance",6,["6.9"],2,"gen",function(){
     ans=dcm;
   }
   return numq(mode===0
-      ?"On a map with scale 1 : "+N+", the distance between two towns measures "+dcm+" cm. What is the actual distance between the towns, in kilometres?"
-      :"On a map with scale 1 : "+N+", two towns are actually "+km+" km apart. How far apart are they on the map, in centimetres?",
+      ?"On a map with scale \\(1 : "+N+"\\), the distance between two towns measures "+dcm+" cm. What is the actual distance between the towns, in kilometres?"
+      :"On a map with scale \\(1 : "+N+"\\), two towns are actually "+km+" km apart. How far apart are they on the map, in centimetres?",
     ans,0.011,
     mode===0
-      ?"Each map centimetre represents "+N+" cm = "+fmt(N/100000,2)+" km on the ground. Actual distance: "+dcm+" × "+fmt(N/100000,2)+" = <b>"+fmt(km,2)+" km</b>."
-      :"Each map centimetre represents "+fmt(N/100000,2)+" km, so the map distance is "+km+" ÷ "+fmt(N/100000,2)+" = <b>"+dcm+" cm</b>.",
+      ?"Each map centimetre represents \\("+N+"\\text{ cm} = "+fmt(N/100000,2)+"\\text{ km}\\) on the ground. Actual distance: \\("+dcm+" \\times "+fmt(N/100000,2)+" = \\)<b>\\("+fmt(km,2)+"\\text{ km}\\)</b>."
+      :"Each map centimetre represents \\("+fmt(N/100000,2)+"\\text{ km}\\), so the map distance is \\("+km+" \\div "+fmt(N/100000,2)+" = \\)<b>\\("+dcm+"\\text{ cm}\\)</b>.",
     {N:N,dcm:dcm,km:km,mode:mode,ans:ans});
 });
 
@@ -3108,9 +3111,9 @@ E("u7-figure-pattern",7,["2.1"],2,"gen",function(){
   var p=ri(1,4),q=ri(0,5),N=ri(6,15);
   function cnt(n){return n*n+p*n+q;}
   var ctx=pick(["dots","stars","tiles"]);
-  return numq("A pattern of "+ctx+" grows like this: Figure 1 has "+cnt(1)+", Figure 2 has "+cnt(2)+", and Figure 3 has "+cnt(3)+". The count for Figure n is n² + "+p+"n"+(q>0?" + "+q:"")+". How many "+ctx+" are in Figure "+N+"?",
+  return numq("A pattern of "+ctx+" grows like this: Figure 1 has "+cnt(1)+", Figure 2 has "+cnt(2)+", and Figure 3 has "+cnt(3)+". The count for Figure \\(n\\) is \\(n^2 + "+p+"n"+(q>0?" + "+q:"")+"\\). How many "+ctx+" are in Figure \\("+N+"\\)?",
     cnt(N),0.011,
-    "Substitute n = "+N+": "+N+"² + "+p+" × "+N+(q>0?" + "+q:"")+" = "+(N*N)+" + "+(p*N)+(q>0?" + "+q:"")+" = <b>"+cnt(N)+"</b>. (The formula checks against the given figures: for n = 1, 2, 3 it gives "+cnt(1)+", "+cnt(2)+", "+cnt(3)+", as stated.)",
+    "Substitute \\(n = "+N+"\\): \\("+N+"^2 + "+p+" \\times "+N+(q>0?" + "+q:"")+" = "+(N*N)+" + "+(p*N)+(q>0?" + "+q:"")+" = \\)<b>\\("+cnt(N)+"\\)</b>. (The formula checks against the given figures: for \\(n = 1, 2, 3\\) it gives \\("+cnt(1)+", "+cnt(2)+", "+cnt(3)+"\\), as stated.)",
     {p:p,q:q,N:N,ans:cnt(N)});
 });
 
@@ -3241,7 +3244,7 @@ function detexClone(node){
   });
   return c;
 }
-var state={units:[5],inds:[],midCap:false};
+var state={units:[],inds:[],midCap:false};
 /* Report-a-problem: a Google Form on the maintainer's personal account receives the
    reports, and a nightly job reads them back, fixes what is verifiably fixable, and
    flags the rest. The entry IDs are the form's pre-filled-link IDs. If url is ever
@@ -3293,7 +3296,7 @@ function startOnline(){
   var s=settings();var res=drawSet(s.units,s.inds,s.count,s.mix,s.order,s.midCap);
   current=res.items;checkedCount=0;correctCount=0;
   var box=$("session");
-  if(!current.length){box.innerHTML='<div class="card"><p>No questions match that selection yet.</p></div>';return;}
+  if(!current.length){box.innerHTML='<div class="card"><p>'+(s.units.length?"No questions match that selection yet.":"Choose at least one unit above \u2014 or use the Mid-course review or Final review button \u2014 then start again.")+'</p></div>';return;}
   var html='<div class="card"><h2>Online practice</h2>'+(res.thin?'<p class="thinNote">Heads up: the question bank is still thin for this selection, so this set repeats practice on the same question shape (with new numbers) because there are not yet enough different questions to fill it.</p>':"")+'<p class="scoreline" id="score"></p>';
   current.forEach(function(q,i){
     html+='<div class="q" id="q'+i+'"><div class="qhead"><b>Question '+(i+1)+'</b> '+tags(q)+'</div><div class="prompt">'+q.prompt+'</div>';
@@ -3361,7 +3364,7 @@ function checkQ(i){
 }
 function startSheet(){
   var s=settings();var res=drawSet(s.units,s.inds,s.count,s.mix,s.order,s.midCap);
-  if(!res.items.length){$("session").innerHTML='<div class="card"><p>No questions match that selection yet.</p></div>';return;}
+  if(!res.items.length){$("session").innerHTML='<div class="card"><p>'+(s.units.length?"No questions match that selection yet.":"Choose at least one unit above \u2014 or use the Mid-course review or Final review button \u2014 then start again.")+'</p></div>';return;}
   var unitNames=s.units.map(function(u){return "Unit "+u;}).join(", ");
   var html='<div class="nameline"><div>Name:<span></span></div><div>Date:<span></span></div></div>';
   var wsf=(typeof s.ws==="number"&&!isNaN(s.ws))?s.ws:1;
