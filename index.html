@@ -1696,7 +1696,7 @@ E("u1-sine-two-step",1,["7.2"],2,"gen",function(){
     fmt(c,1),0.06,
     "First the third angle: \u2220C = 180\u00B0 \u2212 "+A+"\u00B0 \u2212 "+B+"\u00B0 = "+C+"\u00B0. Then the sine law: c \u00F7 sin("+C+"\u00B0) = "+a+" \u00F7 sin("+A+"\u00B0), so c = "+a+" \u00D7 sin("+C+"\u00B0) \u00F7 sin("+A+"\u00B0) = <b>"+fmt(c,1)+" cm</b>.",
     {A:A,B:B,C:C,a:a});
-  q.figure=triAngSVG({ang:[A+"\u00B0",B+"\u00B0",C+"\u00B0"],side:[a+" cm",null,"?"]});
+  q.figure=triAngSVG(A,B,C,{ang:[A+"\u00B0",B+"\u00B0",C+"\u00B0"],side:[a+" cm",null,"?"]});
   return q;
 });
 E("u1-cosine-context",1,["7.2"],2,"gen",function(){
@@ -2211,6 +2211,251 @@ E("u8-proof-reason",8,["5.4"],2,"var",varset([
     "Vertically opposite angles",
     ["Alternate interior angles, because AB \u2225 CD","Given information","The SSS congruence postulate"],
     "\u2220AEB and \u2220CED are formed by the same two intersecting lines at point E, directly across from each other \u2014 vertically opposite angles, which are always equal. No parallel lines are needed for this step.",
+    {});}
+]));
+
+/* ============ Tranche 5 (Oct 26): Payne first, then HHM ============
+   Templates reworked from Mr. Payne's chapter reviews (Ch 3 Trigonometry,
+   Ch 8a Proportional Reasoning) and Jason's HHM archive (Ch 1 reasoning
+   review + the inductive reasoning / counterexamples worksheet). New
+   numbers and contexts throughout; nothing copied verbatim. Targets the
+   thinnest units against the outline weights: U1, U6, U7. */
+
+/* --- Unit 1: Acute Triangle Trigonometry (Payne Ch 3) --- */
+E("u1-law-formula",1,["7.1","7.2"],1,"var",varset([
+  function(){return mcq("In \u25B3ABC, the sine law states a / sin A = b / sin B = c / sin C. According to the sine law, side a equals\u2026",
+    "(c \u00D7 sin A) \u00F7 sin C",
+    ["(c \u00D7 sin C) \u00F7 sin A","sin A \u00F7 (c \u00D7 sin C)","(c \u00D7 sin B) \u00F7 sin C"],
+    "From a / sin A = c / sin C, multiply both sides by sin A: a = c sin A / sin C. Each side pairs with the sine of its OPPOSITE angle.",
+    {});},
+  function(){return mcq("According to the cosine law, c\u00B2 equals\u2026",
+    "a\u00B2 + b\u00B2 \u2212 2ab cos C",
+    ["a\u00B2 + b\u00B2 + 2ab cos C","a\u00B2 + b\u00B2 \u2212 2ab cos A","a\u00B2 \u2212 b\u00B2 \u2212 2ab cos C"],
+    "The cosine law for side c uses the angle BETWEEN sides a and b, which is C: c\u00B2 = a\u00B2 + b\u00B2 \u2212 2ab cos C. The sign before the cosine term is minus.",
+    {});},
+  function(){return mcq("All three sides of a triangle are known. To find angle C first, cos C equals\u2026",
+    "(a\u00B2 + b\u00B2 \u2212 c\u00B2) \u00F7 (2ab)",
+    ["(c\u00B2 \u2212 a\u00B2 \u2212 b\u00B2) \u00F7 (2ab)","(a\u00B2 + c\u00B2 \u2212 b\u00B2) \u00F7 (2ac)","(a\u00B2 + b\u00B2 \u2212 c\u00B2) \u00F7 (ab)"],
+    "Rearrange c\u00B2 = a\u00B2 + b\u00B2 \u2212 2ab cos C: move terms to get 2ab cos C = a\u00B2 + b\u00B2 \u2212 c\u00B2, then divide by 2ab. (The second option is the rearrangement for angle B, not C.)",
+    {});},
+  function(){return mcq("In \u25B3ABC, the sine law states a / sin A = b / sin B = c / sin C. According to the sine law, side b equals\u2026",
+    "(a \u00D7 sin B) \u00F7 sin A",
+    ["(a \u00D7 sin A) \u00F7 sin B","sin B \u00F7 (a \u00D7 sin A)","(a \u00D7 sin C) \u00F7 sin B"],
+    "From b / sin B = a / sin A, multiply both sides by sin B: b = a sin B / sin A. Side b pairs with angle B, and the known pair is a with A.",
+    {});}
+]));
+E("u1-smallest-angle",1,["7.2"],3,"gen",function(){
+  function rd(d){return d*Math.PI/180;}
+  var s,m,l,tries=0;
+  do{
+    s=ri(5,14);m=s+ri(1,8);l=m+ri(0,8);tries++;
+  }while((s+m<=l||l>30)&&tries<60);
+  var A=Math.acos((m*m+l*l-s*s)/(2*m*l))*180/Math.PI;
+  var q=numq("A triangle has sides of "+s+" cm, "+m+" cm and "+l+" cm. Find the measure of the SMALLEST angle, to the nearest degree.",
+    Math.round(A),0.51,
+    "The smallest angle is opposite the shortest side ("+s+" cm). By the cosine law: cos A = ("+m+"\u00B2 + "+l+"\u00B2 \u2212 "+s+"\u00B2) \u00F7 (2 \u00D7 "+m+" \u00D7 "+l+") = "+fmt((m*m+l*l-s*s)/(2*m*l),3)+", so A = <b>"+Math.round(A)+"\u00B0</b>. (Finding the angle opposite the longest side instead would give the LARGEST angle.)",
+    {s:s,m:m,l:l});
+  q.figure=triSVG(s,m,l,{L:["A","B","C"],ang:["?",null,null],side:[s+" cm",m+" cm",l+" cm"]});
+  return q;
+});
+E("u1-angle-between-paths",1,["7.2"],3,"gen",function(){
+  function rd(d){return d*Math.PI/180;}
+  var ctx=pick([["airplane","airport"],["boat","dock"],["airplane","airport"]]);
+  var v1=pick([240,280,320,360,400,440,480,520]),v2=pick([240,280,320,360,400,440,480,520].filter(function(x){return x!==v1;}));
+  var t=pick([0.5,1,1.5]),d1=v1*t,d2=v2*t;
+  var th=ri(35,145);
+  var D=Math.round(Math.sqrt(d1*d1+d2*d2-2*d1*d2*Math.cos(rd(th))));
+  var ang=Math.acos((d1*d1+d2*d2-D*D)/(2*d1*d2))*180/Math.PI;
+  return numq("Two "+ctx[0]+"s leave the same "+ctx[1]+" at the same time. One travels at "+v1+" km/h and the other at "+v2+" km/h, each in a straight line. After "+t+" h they are "+D+" km apart. Find the angle between their paths, to the nearest degree.",
+    Math.round(ang),0.51,
+    "In "+t+" h the "+ctx[0]+"s travel "+v1+" \u00D7 "+t+" = "+d1+" km and "+v2+" \u00D7 "+t+" = "+d2+" km, so the triangle has sides "+d1+" km, "+d2+" km and "+D+" km. The angle between the paths is at the "+ctx[1]+", opposite the "+D+" km side: cos \u03B8 = ("+d1+"\u00B2 + "+d2+"\u00B2 \u2212 "+D+"\u00B2) \u00F7 (2 \u00D7 "+d1+" \u00D7 "+d2+"), giving \u03B8 = <b>"+Math.round(ang)+"\u00B0</b>.",
+    {d1:d1,d2:d2,D:D});
+});
+E("u1-guy-wire",1,["7.3"],3,"gen",function(){
+  function rd(d){return d*Math.PI/180;}
+  var al=ri(42,72),be=ri(42,76),tries=0;
+  while(Math.abs(al-be)<6&&tries<40){be=ri(42,76);tries++;}
+  var h0=ri(18,55);
+  var D=Math.round(h0*(1/Math.tan(rd(al))+1/Math.tan(rd(be)))*10)/10;
+  var ssum=Math.sin(rd(al+be));
+  var wL=D*Math.sin(rd(be))/ssum,wR=D*Math.sin(rd(al))/ssum;
+  var h=wL*Math.sin(rd(al));
+  var askWire=Math.random()<0.5;
+  var longest=Math.max(wL,wR);
+  var q=numq("A radio tower stands vertically between two ground anchors "+fmt(D,1)+" m apart. From the anchor on the left, the angle of elevation to the top of the tower is "+al+"\u00B0; from the anchor on the right, it is "+be+"\u00B0. Find "+(askWire?"the length of the LONGER support wire":"the height of the tower")+", to one decimal place, in m.",
+    fmt(askWire?longest:h,1),0.06,
+    "The two anchors and the tower top form a triangle with base "+fmt(D,1)+" m and base angles "+al+"\u00B0 and "+be+"\u00B0, so the angle at the top is 180\u00B0 \u2212 "+al+"\u00B0 \u2212 "+be+"\u00B0 = "+(180-al-be)+"\u00B0. By the sine law, the wire from the left anchor (opposite the "+be+"\u00B0 angle) is "+fmt(D,1)+" \u00D7 sin("+be+"\u00B0) \u00F7 sin("+(al+be)+"\u00B0) = "+fmt(wL,1)+" m, and the wire from the right anchor is "+fmt(wR,1)+" m. The height is "+fmt(wL,1)+" \u00D7 sin("+al+"\u00B0) = "+fmt(h,1)+" m."+(askWire?" The longer wire is the one opposite the larger base angle: <b>"+fmt(longest,1)+" m</b>.":" So the height is <b>"+fmt(h,1)+" m</b>."),
+    {D:D,al:al,be:be,askWire:askWire});
+  q.figure=triSVG(wR,D,wL,{L:["P","T","Q"],ang:[al+"\u00B0",null,be+"\u00B0"],side:[null,fmt(D,1)+" m",null]});
+  return q;
+});
+
+/* --- Unit 6: Proportional Reasoning (Payne Ch 8a) --- */
+E("u6-pack-cost",6,["6.17"],3,"gen",function(){
+  var ctx=pick([
+    {item:"bottles of cola",pack:6,use:"fill the store cooler"},
+    {item:"juice boxes",pack:8,use:"stock the school canteen"},
+    {item:"granola bars",pack:12,use:"pack the hiking kits"},
+    {item:"AA batteries",pack:4,use:"supply the science fair"},
+    {item:"yogurt cups",pack:10,use:"fill the cafeteria fridge"},
+    {item:"muffins",pack:6,use:"stock the bake sale table"}
+  ]);
+  var price=ri(2,12)+pick([0.25,0.49,0.5,0.75,0.79,0.89,0.99]);
+  var need=ri(60,240);
+  var packs=Math.ceil(need/ctx.pack);
+  var total=packs*price;
+  return numq(ctx.item.charAt(0).toUpperCase()+ctx.item.slice(1)+" are sold only in packs of "+ctx.pack+", at $"+fmt(price,2)+" per pack. A manager needs at least "+need+" to "+ctx.use+". What is the total cost, in dollars?",
+    fmt(total,2),0.011,
+    "Packs needed: "+need+" \u00F7 "+ctx.pack+" = "+fmt(need/ctx.pack,2)+", and part-packs cannot be bought, so round UP to "+packs+" packs. Total cost: "+packs+" \u00D7 $"+fmt(price,2)+" = <b>$"+fmt(total,2)+"</b>.",
+    {pack:ctx.pack,price:price,need:need});
+});
+E("u6-rate-difference",6,["6.16"],2,"gen",function(){
+  var frames=[
+    {a:"Maya",b:"Leo",thing:"text messages",per:"day",unit:"texts",periods:[5,7,10,14,20,28,31],rMin:80,rMax:220},
+    {a:"Priya",b:"Owen",thing:"pages read",per:"day",unit:"pages",periods:[4,5,6,7,10,14],rMin:25,rMax:90},
+    {a:"Sofia",b:"Liam",thing:"laps swum",per:"hour",unit:"laps",periods:[2,3,4,5,6,8],rMin:18,rMax:45}
+  ];
+  var F=pick(frames);
+  var r1=ri(F.rMin,F.rMax),diff=ri(8,40),r2=r1+(Math.random()<0.5?diff:-diff),tries=0;
+  while((r2<F.rMin||r2>F.rMax)&&tries<40){r2=r1+(Math.random()<0.5?diff:-diff);tries++;}
+  var p1=pick(F.periods),p2=pick(F.periods);
+  var T1=r1*p1,T2=r2*p2;
+  var winA=r1>r2,win=winA?F.a:F.b,lose=winA?F.b:F.a;
+  return mcq(F.a+" completed "+T1+" "+F.thing+" in "+p1+" "+F.per+"s. "+F.b+" completed "+T2+" "+F.thing+" in "+p2+" "+F.per+"s. Who has the higher rate, and by how many "+F.unit+" per "+F.per+"?",
+    win+", by "+diff+" per "+F.per,
+    [lose+", by "+diff+" per "+F.per,win+", by "+(diff+5)+" per "+F.per,lose+", by "+(diff+5)+" per "+F.per],
+    F.a+"'s rate: "+T1+" \u00F7 "+p1+" = "+r1+" "+F.unit+" per "+F.per+". "+F.b+"'s rate: "+T2+" \u00F7 "+p2+" = "+r2+" "+F.unit+" per "+F.per+". The higher rate is "+win+"'s, by "+Math.max(r1,r2)+" \u2212 "+Math.min(r1,r2)+" = <b>"+diff+" per "+F.per+"</b>.",
+    {r1:r1,r2:r2});
+});
+E("u6-poster-dimensions",6,["6.14"],2,"gen",function(){
+  function trimNum(x){var s=fmt(x,2);if(s.indexOf(".")>=0)s=s.replace(/0+$/,"").replace(/\.$/,"");return s;}
+  var w=ri(6,20),h=ri(6,20),k=pick([1.5,2,2.5,3,3.5,4,5]);
+  var oldA=w*h,newA=k*k*oldA;
+  var key=trimNum(w*k)+" cm by "+trimNum(h*k)+" cm";
+  var cand=[[w*k*k,h*k*k],[h*k,w*k],[w*(k+1),h*(k+1)],[w*k,h],[w,h*k],[w*2*k,h*2*k]],ds=[];
+  for(var i=0;i<cand.length&&ds.length<3;i++){var st=trimNum(cand[i][0])+" cm by "+trimNum(cand[i][1])+" cm";if(st!==key&&ds.indexOf(st)<0)ds.push(st);}
+  return mcq("A rectangular crest measuring "+w+" cm by "+h+" cm is enlarged to make a poster with an area of "+trimNum(newA)+" cm\u00B2. What are the dimensions of the poster?",
+    key,ds,
+    "The original area is "+w+" \u00D7 "+h+" = "+oldA+" cm\u00B2. The area scale factor is "+trimNum(newA)+" \u00F7 "+oldA+" = "+trimNum(k*k)+", so the LINEAR scale factor is \u221A"+trimNum(k*k)+" = "+trimNum(k)+". Multiply each dimension by "+trimNum(k)+": "+w+" \u00D7 "+trimNum(k)+" = "+trimNum(w*k)+" cm and "+h+" \u00D7 "+trimNum(k)+" = "+trimNum(h*k)+" cm. The poster is <b>"+key+"</b>.",
+    {w:w,h:h,k:k});
+});
+E("u6-tile-cost",6,["6.14","6.17"],3,"gen",function(){
+  var frames=[
+    {room:"bathroom floor",scale:12,scaleTxt:"1 unit = 12 inches",tile:6,tileTxt:"6 in. by 6 in.",unit:"in."},
+    {room:"kitchen floor",scale:12,scaleTxt:"1 unit = 12 inches",tile:12,tileTxt:"12 in. by 12 in.",unit:"in."},
+    {room:"patio",scale:30,scaleTxt:"1 unit = 30 cm",tile:15,tileTxt:"15 cm by 15 cm",unit:"cm"},
+    {room:"deck",scale:30,scaleTxt:"1 unit = 30 cm",tile:30,tileTxt:"30 cm by 30 cm",unit:"cm"}
+  ];
+  var F=pick(frames);
+  var W=pick([6,8,9,10,12,15]),H=pick([6,8,9,10,12]);
+  var realW=W*F.scale,realH=H*F.scale;
+  var across=realW/F.tile,along=realH/F.tile,count=across*along;
+  var price=pick([0.79,0.99,1.25,1.49,2.29]);
+  var total=count*price;
+  return numq("A floor plan for a "+F.room+" has a scale of "+F.scaleTxt+". On the plan the room measures "+W+" units by "+H+" units. It will be covered with square tiles measuring "+F.tileTxt+", costing $"+fmt(price,2)+" each. What is the total cost of the tiles, in dollars?",
+    fmt(total,2),0.011,
+    "Real dimensions: "+W+" \u00D7 "+F.scale+" = "+realW+" "+F.unit+" by "+H+" \u00D7 "+F.scale+" = "+realH+" "+F.unit+". Tiles along each side: "+realW+" \u00F7 "+F.tile+" = "+across+" and "+realH+" \u00F7 "+F.tile+" = "+along+", so "+across+" \u00D7 "+along+" = "+count+" tiles. Total cost: "+count+" \u00D7 $"+fmt(price,2)+" = <b>$"+fmt(total,2)+"</b>.",
+    {W:W,H:H,count:count,price:price});
+});
+
+/* --- Unit 7: Reasoning (HHM Ch 1 archive) --- */
+E("u7-race-order",7,["2.3"],2,"gen",function(){
+  var pools=[["Amara","Devon","Priya","Tom"],["Liam","Sofia","Noah","Emma"],["Kai","Ruth","Omar","Zoe"],["Maya","Eli","Nina","Sam"]];
+  var names=pick(pools).slice();
+  function perms(a){if(a.length<2)return [a.slice()];var out=[];for(var i=0;i<a.length;i++){var rest=a.slice(0,i).concat(a.slice(i+1));perms(rest).forEach(function(p){out.push([a[i]].concat(p));});}return out;}
+  var ALL=perms(names);
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  var order=null,clues=null,tries=0;
+  while(!clues&&tries<40){
+    tries++;
+    var ord=shuffle(names.slice());
+    var cand=[];
+    (function(){for(var i=0;i<3;i++){var x=ord[i],y=ord[i+1];cand.push({t:x+" finished immediately ahead of "+y+".",f:(function(x,y){return function(o){return o.indexOf(x)===o.indexOf(y)-1;};})(x,y)});}})();
+    [[0,2],[0,3],[1,3]].forEach(function(pr){var x=ord[pr[0]],y=ord[pr[1]];cand.push({t:x+" finished ahead of "+y+".",f:(function(x,y){return function(o){return o.indexOf(x)<o.indexOf(y);};})(x,y)});});
+    [[1,0,3],[2,0,3],[1,0,2],[2,1,3]].forEach(function(tr){var x=ord[tr[0]],y=ord[tr[1]],z=ord[tr[2]];cand.push({t:x+" finished between "+y+" and "+z+".",f:(function(x,y,z){return function(o){var ix=o.indexOf(x);return (o.indexOf(y)<ix&&ix<o.indexOf(z))||(o.indexOf(z)<ix&&ix<o.indexOf(y));};})(x,y,z)});});
+    (function(x){cand.push({t:x+" did not finish first.",f:function(o){return o[0]!==x;}});})(ord[1]);
+    (function(x){cand.push({t:x+" did not finish last.",f:function(o){return o[3]!==x;}});})(ord[2]);
+    for(var a1=0;a1<cand.length&&!clues;a1++)for(var b1=a1+1;b1<cand.length&&!clues;b1++)for(var c1=b1+1;c1<cand.length&&!clues;c1++){
+      var set=[cand[a1],cand[b1],cand[c1]];
+      var n=ALL.filter(function(o){return set.every(function(c){return c.f(o);});}).length;
+      if(n===1){order=ord;clues=set;}
+    }
+    if(!clues&&tries===40){
+      order=ord;
+      clues=[0,1,2].map(function(i){var x=ord[i],y=ord[i+1];return {t:x+" finished immediately ahead of "+y+".",f:(function(x,y){return function(o){return o.indexOf(x)===o.indexOf(y)-1;};})(x,y)};});
+    }
+  }
+  var askPos=ri(0,3),ordinals=["first","second","third","fourth"];
+  var others=names.filter(function(n){return n!==order[askPos];});
+  return mcq("Four runners \u2014 "+names.join(", ")+" \u2014 finished a race in some order. Clues: (1) "+clues[0].t+" (2) "+clues[1].t+" (3) "+clues[2].t+" Who finished "+ordinals[askPos]+"?",
+    order[askPos],others,
+    "Testing the orders against all three clues, only one order fits: 1st "+order[0]+", 2nd "+order[1]+", 3rd "+order[2]+", 4th "+order[3]+". So "+ordinals[askPos]+" place went to <b>"+order[askPos]+"</b>.",
+    {order:order,askPos:askPos,solutions:1});
+});
+E("u7-everyday-counterexample",7,["2.4"],1,"var",varset([
+  function(){return mcq("Conjecture: \u201CAny piece of furniture with four legs is a chair.\u201D Which of the following is a counterexample?",
+    "A dining table (a piece of furniture with four legs)",
+    ["A chair with four legs","A three-legged stool","A bookshelf with no legs"],
+    "A counterexample must satisfy the condition (furniture with four legs) but break the conclusion (not a chair). A dining table does both. The stool and bookshelf never meet the four-leg condition, and the chair is just an example that agrees.",
+    {});},
+  function(){return mcq("Conjecture: \u201CIf the grass is wet, then it rained last night.\u201D Which of the following is a counterexample?",
+    "The grass is wet because the sprinkler ran this morning",
+    ["It rained last night and the grass is wet","The grass is dry and it did not rain last night","Rain is in the forecast for tonight"],
+    "A counterexample needs wet grass WITHOUT last night's rain. The sprinkler gives exactly that: the condition (wet grass) holds, but the conclusion (it rained) is false.",
+    {});},
+  function(){return mcq("Conjecture: \u201CIf something has a knob, then it is a door.\u201D Which of the following is a counterexample?",
+    "A stove, which has control knobs",
+    ["A door with a round knob","A window with no knob","A door with a lever handle instead of a knob"],
+    "The stove has knobs (condition met) but is not a door (conclusion broken) \u2014 a true counterexample. The lever-handled door never meets the \u201Chas a knob\u201D condition.",
+    {});},
+  function(){return mcq("Conjecture: \u201CAll students at the school play a sport.\u201D Which of the following is a counterexample?",
+    "One student at the school is in the chess club and plays no sport",
+    ["Many students at the school play hockey","One student at the school plays two sports","A teacher at the school plays no sport"],
+    "To disprove \u201Call students,\u201D one student who plays no sport is enough. The teacher is not a student, so that option does not touch the claim.",
+    {});}
+]));
+E("u7-pattern-equation",7,["2.1"],2,"var",varset([
+  function(){return mcq("Look at the pattern: 37 \u00D7 3 = 111, 37 \u00D7 6 = 222, 37 \u00D7 9 = 333, 37 \u00D7 12 = 444. What is the next equation in the pattern?",
+    "37 \u00D7 15 = 555",
+    ["37 \u00D7 13 = 481","37 \u00D7 15 = 505","37 \u00D7 18 = 666"],
+    "The multipliers grow by 3 (3, 6, 9, 12, \u2026) and the products are 111, 222, 333, 444, \u2026. Next multiplier: 15, and 37 \u00D7 15 = 555, continuing the repeated-digit pattern.",
+    {});},
+  function(){return mcq("Look at the pattern: 11\u00B2 = 121, 111\u00B2 = 12321, 1111\u00B2 = 1234321. What is the next equation in the pattern?",
+    "11111\u00B2 = 123454321",
+    ["11111\u00B2 = 12344321","1111\u00B2 = 123454321","11111\u00B2 = 12345654321"],
+    "Each base gains another digit 1, and the square counts up to the number of 1s and back down: five 1s give 123454321 (up to 5 and back). The last option counts to 6, which belongs to the following step, 111111\u00B2.",
+    {});},
+  function(){return mcq("Look at the pattern: 12345679 \u00D7 9 = 111,111,111; 12345679 \u00D7 18 = 222,222,222; 12345679 \u00D7 27 = 333,333,333. What is the next equation in the pattern?",
+    "12345679 \u00D7 36 = 444,444,444",
+    ["12345679 \u00D7 36 = 44,444,444","12345679 \u00D7 45 = 444,444,444","12345679 \u00D7 36 = 454,545,454"],
+    "The multipliers are multiples of 9 (9, 18, 27, \u2026) and each product repeats the digit matching the multiple: 36 = 4 \u00D7 9, so the product is nine 4s: 444,444,444.",
+    {});}
+]));
+E("u7-counterexample-claims",7,["2.4"],2,"var",varset([
+  function(){return mcq("Conjecture: \u201CIf a number is divisible by 4, then it is divisible by 8.\u201D Which number is a counterexample?",
+    "12",
+    ["16","24","40"],
+    "12 is divisible by 4 (12 \u00F7 4 = 3) but not by 8, so it breaks the claim. The other options are all divisible by 8, so they agree with the claim instead of disproving it.",
+    {});},
+  function(){return mcq("Conjecture: \u201CThe sum of any two prime numbers is even.\u201D Which calculation is a counterexample?",
+    "2 + 3 = 5",
+    ["3 + 5 = 8","5 + 7 = 12","7 + 11 = 18"],
+    "2 and 3 are both prime, but their sum, 5, is odd \u2014 one counterexample disproves the claim. (2 is the only even prime, which is why it is the one that breaks this.) The other pairs all give even sums.",
+    {});},
+  function(){return mcq("Conjecture: \u201CEvery multiple of 5 ends in the digit 5.\u201D Which number is a counterexample?",
+    "20",
+    ["15","25","12"],
+    "20 is a multiple of 5 but ends in 0, breaking the claim. 15 and 25 end in 5 so they agree; 12 is not a multiple of 5 at all, so it cannot test the claim.",
+    {});},
+  function(){return mcq("Conjecture: \u201CIf x\u00B2 = 16, then x = 4.\u201D Which value is a counterexample?",
+    "x = \u22124",
+    ["x = 4","x = 16","x = \u221216"],
+    "(\u22124)\u00B2 = 16, so x = \u22124 meets the condition x\u00B2 = 16 but breaks the conclusion x = 4. The values 16 and \u221216 do not satisfy x\u00B2 = 16 in the first place.",
+    {});},
+  function(){return mcq("Conjecture: \u201CThe product of two numbers is always greater than each of the two numbers.\u201D Which calculation is a counterexample?",
+    "6 \u00D7 \u00BD = 3",
+    ["3 \u00D7 4 = 12","1.5 \u00D7 2 = 3","10 \u00D7 1.1 = 11"],
+    "6 \u00D7 \u00BD = 3, and 3 is NOT greater than 6, so the claim fails \u2014 multiplying by a fraction between 0 and 1 shrinks the number. In each other calculation the product is greater than both factors.",
     {});}
 ]));
 
