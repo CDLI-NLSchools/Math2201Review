@@ -722,6 +722,15 @@ E("u1-law-choice",1,["7.1","7.2"],1,"var",varset([
     "The cosine law, rearranged \u2014 it is the only one that uses three sides to give an angle",
     ["The sine law, because three sides give three ratios","The tangent ratio, using the two longest sides","No law is needed \u2014 the largest angle is always 90\u00B0"],
     "cos A = (b\u00B2 + c\u00B2 \u2212 a\u00B2) \u00F7 (2bc) uses exactly the three sides. The largest angle sits opposite the longest side.",{});}
+,
+function(){return mcq("In triangle ABC, a diagram marks side a = 9 cm (opposite angle A), side b = 7 cm, and angle A = 35\u00B0. Which set-up finds angle B?",
+    "sin B / 7 = sin 35\u00B0 / 9 \u2014 each angle is paired with the side opposite it",
+    ["sin B / 9 = sin 35\u00B0 / 7 \u2014 the marked sides stay with their marked angles","b\u00B2 = a\u00B2 + c\u00B2 \u2212 2ac cos B \u2014 the cosine law, because two sides are known","tan B = 7 / 9 \u2014 opposite over adjacent"],
+    "The sine law pairs each side with the sine of its OPPOSITE angle: a / sin A = b / sin B, so 9 / sin 35\u00B0 = 7 / sin B. The first trap swaps the pairing; the cosine law would need the side between the two known sides' angle, which is not what is marked.",{});},
+  function(){return mcq("You know two sides of a triangle and an angle opposite one of them, and you need another angle. Which law starts the solution, and what must you watch for?",
+    "The sine law \u2014 and the angle it gives might not be the only possibility: an angle and its supplement both have the same sine, so the diagram has to rule one out",
+    ["The cosine law \u2014 it is the only law that works with two known sides","The sine law \u2014 and its answer is always the one correct angle","The angle-sum rule \u2014 the third angle comes first, then either law finishes it"],
+    "Side-side-angle is the ambiguous case for the sine law: sin \u03B8 = sin (180\u00B0 \u2212 \u03B8), so the calculation can offer two candidate angles and the shape of the triangle decides which one fits.",{});}
 ]));
 E("u1-sine-side",1,["7.2"],2,"gen",function(){
   var A=pick([35,40,50,55,65]),B=pick([45,60,70,80]);var a=ri(8,20);
@@ -1314,6 +1323,170 @@ E("u5-poll-position",5,["8.20","8.22"],3,"var",varset([
     "Yes \u2014 51% to 57% of 25,000 voters is 12,750 to 14,250 voters, which sits inside the range she quoted",
     ["No \u2014 the range is 13,500 voters, give or take 3 voters","No \u2014 a percentage from a sample can never be applied to a whole population","Yes \u2014 exactly 13,500 voters support the arena"],
     "Apply both ends of the interval to the population: 0.51 \u00D7 25,000 = 12,750 and 0.57 \u00D7 25,000 = 14,250. Her wider range safely contains the poll's range.",{});}
+]));
+E("u7-valid-chains",7,["2.3"],2,"var",varset([
+  function(){return mcq("Premises: Rex is a Chocolate Lab. All Chocolate Labs are brown. What can be deduced?",
+    "Rex is brown",
+    ["All brown dogs are Chocolate Labs","Rex must love swimming","Some Chocolate Labs are not brown"],
+    "Rex belongs to the group the second premise covers, so its property follows. The first trap reverses the premise (nothing says brown dogs are Labs), and the last one contradicts it.",{});},
+  function(){return mcq("Premises: All band members play an instrument. Everyone who plays an instrument can read music. Leo is in the band. What can be deduced?",
+    "Leo can read music",
+    ["Leo must be the best musician in the band","Everyone who can read music is in the band","Leo plays in an orchestra"],
+    "The chain runs Leo \u2192 band \u2192 instrument \u2192 reads music, one premise at a time. The second trap reverses the chain, and the others add facts no premise gives.",{});},
+  function(){return mcq("Premises: Everyone who attends spin class regularly gets fitter. Maya attends spin class regularly. Consider two conclusions: I. Maya gets fitter. II. Maya is the fittest person in the class. Which conclusions follow?",
+    "I only \u2014 the premises say she gets fitter, but they never compare her with anyone else",
+    ["II only \u2014 regular attendance is what matters most","Both I and II","Neither I nor II"],
+    "Conclusion I is the premise applied directly. Conclusion II is a superlative the premises cannot support \u2014 getting fitter does not mean fittest.",{});},
+  function(){return mcq("Premises: All squares are rectangles. Figure X is a rectangle. What can be deduced about Figure X?",
+    "Only that X is a rectangle \u2014 it may or may not be a square",
+    ["X must be a square","X cannot be a square","All four of X's sides must be equal"],
+    "Every square is a rectangle, but the premise does not run backwards: most rectangles are not squares. Nothing given decides whether X is one of the square ones.",{});},
+  function(){return mcq("Take these premises as given, even though one is false in real life: All fish can fly. A trout is a fish. Is the conclusion \u2018a trout can fly\u2019 validly deduced?",
+    "Yes \u2014 the conclusion follows from the premises, so the argument is valid; the problem is the false premise, not the logic",
+    ["No \u2014 a false premise automatically makes an argument invalid","No \u2014 trout live in water, so the conclusion cannot be reached","Yes \u2014 because some trout really can fly"],
+    "Validity is about the chain, not the facts. If the premises were true, the conclusion would have to be true \u2014 that is a valid argument built on a false premise.",{});}
+]));
+E("u5-ci-build",5,["8.21"],1,"gen",function(){
+  var p=ri(38,72),m=pick([2,2.5,3,3.5,4,4.5,5]);
+  var topic=pick(["a new arena","a later school start","the mayoral race","a cellphone ban in class","a new ferry sailing","a four-day school week"]);
+  var phrase=pick(["19 times out of 20","9 times out of 10","99 times out of 100"]);
+  var lo=p-m,hi=p+m;
+  function rng(x,y){return fmt(x)+"% to "+fmt(y)+"%";}
+  return mcq("A poll finds "+p+"% support for "+topic+", with a margin of error of \u00B1"+fmt(m)+" percentage points, accurate "+phrase+". What is the confidence interval for the true level of support?",
+    rng(lo,hi),[rng(p,hi),rng(lo,p),rng(p-2*m,p+2*m)],
+    "The interval runs the margin of error in BOTH directions from the result: "+p+"% \u2212 "+fmt(m)+" = "+fmt(lo)+"% and "+p+"% + "+fmt(m)+" = "+fmt(hi)+"%.",{p:p,m:m});
+});
+E("u5-ci-read-report",5,["8.21"],2,"var",varset([
+  function(){return mcq("A survey reports a confidence interval of 74.9% to 79.1%, accurate 9 times out of 10. What are the margin of error and the confidence level?",
+    "Margin of error 2.1 points; confidence level 90%",
+    ["Margin of error 4.2 points; confidence level 90%","Margin of error 2.1 points; confidence level 95%","Margin of error 77 points; confidence level 90%"],
+    "The interval is 4.2 points wide, so the margin of error is half of that: 2.1 points either side of the centre, 77%. And 9 times out of 10 is a 90% confidence level.",{});},
+  function(){return mcq("A fisheries report gives a 90% confidence interval for the mean weight of cod of 3.0 kg to 3.4 kg. What are the reported mean and the margin of error?",
+    "Mean 3.2 kg; margin of error \u00B10.2 kg",
+    ["Mean 3.0 kg; margin of error \u00B10.4 kg","Mean 3.4 kg; margin of error \u00B10.2 kg","Mean 3.2 kg; margin of error \u00B10.4 kg"],
+    "The mean is the midpoint: (3.0 + 3.4) / 2 = 3.2 kg. The margin of error is half the width: (3.4 \u2212 3.0) / 2 = 0.2 kg.",{});},
+  function(){return mcq("A survey reports a 90% confidence level, a margin of error of \u00B13 points, and a confidence interval of 57% to 63%. What percentage did the survey itself find?",
+    "60% \u2014 the interval is centred on the survey result",
+    ["57% \u2014 the bottom of the interval is the result","63% \u2014 the top of the interval is the result","90% \u2014 the confidence level is the result"],
+    "The interval is built as result \u00B1 margin: 60% \u2212 3 = 57% and 60% + 3 = 63%. The reported percentage is the centre, 60%.",{});},
+  function(){return mcq("A factory reports that 85% of its batteries pass a 100-hour test, accurate within \u00B12.5 percentage points, 19 times out of 20. What is the confidence interval for the true pass rate?",
+    "82.5% to 87.5%",
+    ["85% to 87.5%","82.5% to 85%","80% to 90%"],
+    "Apply the margin in both directions: 85 \u2212 2.5 = 82.5 and 85 + 2.5 = 87.5.",{});}
+]));
+E("u2-params-characteristics",2,["4.10"],1,"gen",function(){
+  var mode=ri(0,2),a=pick([-3,-2,-1,1,2,3]),b=ri(-8,8)||3,c=ri(-9,9)||4;
+  var eq="y = "+(a<0?"\u2212"+Math.abs(a):a)+"x\u00B2"+(b>0?" + "+b+"x":" \u2212 "+Math.abs(b)+"x")+(c>0?" + "+c:" \u2212 "+Math.abs(c));
+  if(mode===0){
+    var pool=[-c,b,-b,a,c+2,c-2,c+1,c-1,c+3,c-3,2*c],ds=[];
+    pool.forEach(function(d){if(d!==c&&ds.indexOf(d)<0)ds.push(d);});
+    var off=4;while(ds.length<3){var cand=c+off;if(cand!==c&&ds.indexOf(cand)<0)ds.push(cand);off=off>0?-off-1:-off+1;}
+    return mcq("For "+eq+", what is the y-intercept of the graph?",""+c,ds.slice(0,3).map(String),
+      "The y-intercept is the constant term, c = "+c+": it is where x = 0, so y = "+c+".",{mode:mode,a:a,b:b,c:c});
+  }
+  if(mode===1){
+    var up=a>0;
+    var good=up?"Opens upward; the vertex is a minimum":"Opens downward; the vertex is a maximum";
+    var all=["Opens upward; the vertex is a minimum","Opens upward; the vertex is a maximum","Opens downward; the vertex is a minimum","Opens downward; the vertex is a maximum"];
+    return mcq("For "+eq+", which statement describes the graph?",good,all.filter(function(x){return x!==good;}),
+      "The sign of a decides the opening: a = "+a+(up?" is positive, so the parabola opens upward and its vertex is the lowest point \u2014 a minimum.":" is negative, so the parabola opens downward and its vertex is the highest point \u2014 a maximum."),{mode:mode,a:a,b:b,c:c});
+  }
+  var k=pick([-4,-3,-2,-1,1,2,3,4]);b=2*a*k;
+  eq="y = "+(a<0?"\u2212"+Math.abs(a):a)+"x\u00B2"+(b>0?" + "+b+"x":" \u2212 "+Math.abs(b)+"x")+(c>0?" + "+c:" \u2212 "+Math.abs(c));
+  var ans=-k,pool2=[k,-2*k,b,-b,2*k],ds2=[];
+  pool2.forEach(function(d){if(d!==ans&&ds2.indexOf(d)<0)ds2.push(d);});
+  return mcq("For "+eq+", what is the axis of symmetry?","x = "+ans,ds2.slice(0,3).map(function(d){return "x = "+d;}),
+    "The axis of symmetry is x = \u2212b / (2a) = \u2212("+b+") / "+(2*a)+" = "+ans+".",{mode:mode,a:a,b:b,c:c,k:k});
+});
+E("u2-graph-description",2,["4.14"],2,"gen",function(){
+  var a=pick([1,-1,2,-2]),r1=pick([-5,-4,-3,-2,-1,1,2,3]),r2=pick([2,3,4,5,6]);
+  if(r1===r2)r2=r2+1;
+  var lo=Math.min(r1,r2),hi=Math.max(r1,r2);r1=lo;r2=hi;
+  if(r1+r2===0)r2+=2;
+  function fac(r){return r>0?"(x \u2212 "+r+")":"(x + "+Math.abs(r)+")";}
+  var eq="y = "+(a===1?"":a===-1?"\u2212":a)+fac(r1)+fac(r2);
+  var dir=a>0?"upward":"downward",dir2=a>0?"downward":"upward",yi=a*r1*r2;
+  function desc(d,x,y,z){return "Opens "+d+"; x-intercepts "+x+" and "+y+"; y-intercept "+z;}
+  var good=desc(dir,r1,r2,yi);
+  var wrongs=[desc(dir2,r1,r2,yi),desc(dir,-r2,-r1,yi),desc(dir,r1,r2,-yi)];
+  return mcq("Which description matches the graph of "+eq+"?",good,wrongs,
+    "The sign of the leading coefficient ("+a+") says the parabola opens "+dir+". It crosses the x-axis where each factor is zero: x = "+r1+" and x = "+r2+". Setting x = 0 gives the y-intercept: "+a+" \u00D7 ("+(-r1)+") \u00D7 ("+(-r2)+") = "+yi+".",{a:a,r1:r1,r2:r2,exp:good});
+});
+E("u3-equation-from-roots",3,["4.6"],2,"gen",function(){
+  var r1=pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5]),r2=pick([-5,-4,-3,-2,-1,1,2,3,4,5,6]);
+  if(r2===r1||r2===-r1)r2=r2>0?r2+2:r2-2;
+  var B=-(r1+r2),C=r1*r2;
+  function eqs(bb,cc){return "x\u00B2"+(bb>0?" + "+bb+"x":bb<0?" \u2212 "+Math.abs(bb)+"x":"")+(cc>0?" + "+cc:cc<0?" \u2212 "+Math.abs(cc):"")+" = 0";}
+  var good=eqs(B,C);
+  var wrongs=[eqs(-B,C),eqs(B,-C),eqs(-B,-C)].filter(function(x){return x!==good;});
+  return mcq("A quadratic equation in the form x\u00B2 + bx + c = 0 has roots "+r1+" and "+r2+". What is the equation?",good,wrongs,
+    "Work backwards: (x \u2212 ("+r1+"))(x \u2212 ("+r2+")) expands to x\u00B2 \u2212 ("+(r1+r2)+")x + ("+C+"), so b = "+B+" and c = "+C+". The coefficient b is the NEGATIVE of the sum of the roots, and c is their product.",{r1:r1,r2:r2,B:B,C:C,exp:good});
+});
+E("u6-similar-dimension",6,["6.2"],1,"gen",function(){
+  var mode=ri(0,1);
+  if(mode===0){
+    var dims=pick([[3,4],[4,6],[5,8],[6,9],[4,10],[8,12],[6,10],[10,14]]);
+    var w=dims[0],h=dims[1],k=pick([2,3,4]),W=w*k,H=h*k,askW=Math.random()<0.5;
+    var ans=askW?W:H,known=askW?H:W;
+    return numq("A rectangle "+w+" cm by "+h+" cm is enlarged to a similar rectangle. The "+(askW?"longer":"shorter")+" side of the large rectangle is "+known+" cm. What is the "+(askW?"shorter":"longer")+" side of the large rectangle, in cm?",
+      ans,0.011,"Similar shapes keep the same ratio. The scale factor is "+known+" \u00F7 "+(askW?h:w)+" = "+k+", so the other side is "+(askW?w:h)+" \u00D7 "+k+" = <b>"+ans+" cm</b>.",{mode:mode,w:w,h:h,k:k,askW:askW,ans:ans});
+  }
+  var trip=pick([[3,4,5],[5,12,13],[6,8,10],[8,15,17]]);
+  var m1=pick([1,2,3]),m2=pick([2,3,4,5]);if(m2===m1)m2=m2+1;
+  var j=ri(0,2),l=ri(0,2);if(l===j)l=(j+1)%3;
+  var small=trip.map(function(x){return x*m1;}),known=trip[j]*m2,ans=trip[l]*m2;
+  function gg2(x,y){while(y){var t=x%y;x=y;y=t;}return x;}
+  var gd=gg2(m2,m1),fnum=m2/gd,fden=m1/gd,ftxt=fden===1?""+fnum:fnum+"/"+fden;
+  return numq("Two triangles are similar. The smaller has sides "+small.join(" cm, ")+" cm. The larger triangle's side corresponding to the "+trip[j]+" cm side measures "+known+" cm. What is the length, in cm, of the larger triangle's side corresponding to the "+trip[l]+" cm side?",
+    ans,0.011,"The scale factor from small to large is "+known+" \u00F7 "+(trip[j]*m1)+" = "+ftxt+". Apply it to the "+trip[l]+" cm side's counterpart: "+(trip[l]*m1)+" \u00D7 "+ftxt+" = <b>"+ans+" cm</b>.",{mode:mode,trip:trip,m1:m1,m2:m2,j:j,l:l,ans:ans});
+});
+E("u6-compare-rates",6,["6.16"],2,"gen",function(){
+  var ctx=pick([{n:"cyclist",vs:[14,16,18,20,22,24,26,28,30]},{n:"bus",vs:[50,55,60,65,70,75,80,85,90]},{n:"delivery van",vs:[40,45,50,55,60,70,80]},{n:"kayaker",vs:[6,7,8,9,10,11,12]}]);
+  var v1=pick(ctx.vs),v2=pick(ctx.vs);if(v2===v1)v2=v1+pick([2,3,4]);
+  var t1=ri(2,6),t2=ri(2,6),d1=v1*t1,d2=v2*t2;
+  var ans=Math.abs(v1-v2);
+  return numq("Two "+ctx.n+"s travel on the same route. The first covers "+d1+" km in "+t1+" hours; the second covers "+d2+" km in "+t2+" hours. How many km/h faster is the faster "+ctx.n+"? (Just the number.)",
+    ans,0.011,"Rates first: "+d1+" \u00F7 "+t1+" = "+v1+" km/h and "+d2+" \u00F7 "+t2+" = "+v2+" km/h. The difference is "+Math.max(v1,v2)+" \u2212 "+Math.min(v1,v2)+" = <b>"+ans+" km/h</b>.",{v1:v1,v2:v2,ans:ans});
+});
+E("u6-rate-isolate",6,["6.23"],2,"gen",function(){
+  var mode=ri(0,2);
+  if(mode===0){
+    var v=pick([25,40,50,60,75,80,90,100]),t=pick([1.5,2,2.5,3,4,5]),d=v*t;
+    return numq("A truck drives at a steady "+v+" km/h and covers "+fmt(d)+" km. How many hours does the trip take? (Just the number.)",
+      t,0.011,"Isolate the time in d = vt: t = d / v = "+fmt(d)+" / "+v+" = <b>"+fmt(t)+" hours</b>.",{mode:mode,v:v,d:d,ans:t});
+  }
+  if(mode===1){
+    var r=pick([12,15,20,24,30,36,40]),t2=ri(3,9),A=r*t2;
+    return numq("A printer produces "+A+" pages in "+t2+" minutes at a steady rate. What is its rate, in pages per minute? (Just the number.)",
+      r,0.011,"Rate = amount / time = "+A+" / "+t2+" = <b>"+r+" pages per minute</b>.",{mode:mode,A:A,t:t2,ans:r});
+  }
+  var r2=pick([15,20,25,40,60,80]),t3=ri(4,12),A2=r2*t3;
+  return numq("A pump moves water at "+r2+" litres per minute. How many litres does it move in "+t3+" minutes? (Just the number.)",
+    A2,0.011,"Amount = rate \u00D7 time = "+r2+" \u00D7 "+t3+" = <b>"+A2+" litres</b>.",{mode:mode,r:r2,t:t3,ans:A2});
+});
+E("u8-angle-sum-rule",8,["5.5"],1,"var",varset([
+  function(){return mcq("The interior angles of a triangle sum to 180\u00B0, of a quadrilateral to 360\u00B0, and of a pentagon to 540\u00B0. Following this pattern, what is the sum of the interior angles of a polygon with n sides?",
+    "(n \u2212 2) \u00D7 180\u00B0",
+    ["n \u00D7 180\u00B0","(n \u2212 1) \u00D7 180\u00B0","(n + 2) \u00D7 180\u00B0"],
+    "Each added side adds 180\u00B0, but the count starts at 180\u00B0 for 3 sides: the multiplier is always 2 less than the number of sides, (n \u2212 2). Check: pentagon, (5 \u2212 2) \u00D7 180\u00B0 = 540\u00B0.",{});},
+  function(){return mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 7 sides?",
+    "900\u00B0",["1260\u00B0","1080\u00B0","1620\u00B0"],
+    "(7 \u2212 2) \u00D7 180\u00B0 = 5 \u00D7 180\u00B0 = 900\u00B0.",{});},
+  function(){return mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 9 sides?",
+    "1260\u00B0",["1620\u00B0","1440\u00B0","1980\u00B0"],
+    "(9 \u2212 2) \u00D7 180\u00B0 = 7 \u00D7 180\u00B0 = 1260\u00B0.",{});},
+  function(){return mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 11 sides?",
+    "1620\u00B0",["1980\u00B0","1800\u00B0","2340\u00B0"],
+    "(11 \u2212 2) \u00D7 180\u00B0 = 9 \u00D7 180\u00B0 = 1620\u00B0.",{});},
+  function(){return mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 12 sides?",
+    "1800\u00B0",["2160\u00B0","1980\u00B0","2520\u00B0"],
+    "(12 \u2212 2) \u00D7 180\u00B0 = 10 \u00D7 180\u00B0 = 1800\u00B0.",{});},
+  function(){return mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 15 sides?",
+    "2340\u00B0",["2700\u00B0","2520\u00B0","3060\u00B0"],
+    "(15 \u2212 2) \u00D7 180\u00B0 = 13 \u00D7 180\u00B0 = 2340\u00B0.",{});},
+  function(){return mcq("Using the rule for the sum of the interior angles, what is the sum for a polygon with 20 sides?",
+    "3240\u00B0",["3600\u00B0","3420\u00B0","3960\u00B0"],
+    "(20 \u2212 2) \u00D7 180\u00B0 = 18 \u00D7 180\u00B0 = 3240\u00B0.",{});}
 ]));
 </script>
 
