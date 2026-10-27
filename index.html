@@ -968,68 +968,72 @@ function quadB(a,b,c){var s=(a===1?"":a===-1?"-":""+a)+"x^2";if(b!==0)s+=(b>0?" 
 function quadT(a,b,c){return "\\("+quadB(a,b,c)+"\\)";}
 function fracT(n,d){return "\\(\\frac{"+n+"}{"+d+"}\\)";}
 function frB(n,d){function g2(x,y){x=Math.abs(x);y=Math.abs(y);while(y){var t=x%y;x=y;y=t;}return x||1;}var g=g2(n,d);n/=g;d/=g;if(d<0){n=-n;d=-d;}if(d===1)return ""+n;return (n<0?"-":"")+"\\frac{"+Math.abs(n)+"}{"+d+"}";}
+function vertB(a,h,k){var s=(a===1?"":a===-1?"-":""+a)+(h===0?"x^2":"(x "+(h>0?"- "+h:"+ "+(-h))+")^2");if(k>0)s+=" + "+k;else if(k<0)s+=" - "+(-k);return s;}
+function vertT(a,h,k){return "\\(y = "+vertB(a,h,k)+"\\)";}
+function factB(a,r1,r2){function f(r){return r===0?"x":(r>0?"(x - "+r+")":"(x + "+(-r)+")");}return (a===1?"":a===-1?"-":""+a)+f(r1)+f(r2);}
+function factT(a,r1,r2){return "\\(y = "+factB(a,r1,r2)+"\\)";}
 E("u2-vertex-x",2,["4.12"],1,"gen",function(){
   var a=pick([1,1,2,-1]),h=ri(-5,6)||2;var b=-2*a*h;var c=a*h*h+ri(-6,6);
-  return numq("What is the x-coordinate of the vertex of y = "+quadStr(a,b,c)+"?",
-    h,0.011,"Axis of symmetry: x = \u2212b \u00F7 (2a) = \u2212("+b+") \u00F7 "+(2*a)+" = <b>"+h+"</b>. The vertex sits on the axis of symmetry.",{a:a,b:b,c:c});
+  return numq("What is the x-coordinate of the vertex of \\(y = "+quadB(a,b,c)+"\\)?",
+    h,0.011,"Axis of symmetry: \\(x = \\frac{-b}{2a} = \\frac{-("+b+")}{"+(2*a)+"} = \\)<b>\\("+h+"\\)</b>. The vertex sits on the axis of symmetry.",{a:a,b:b,c:c});
 });
 E("u2-vertex-value",2,["4.11"],2,"gen",function(){
   var a=pick([1,2,-1]),h=ri(-4,5),k=ri(-8,12);var b=-2*a*h,c=a*h*h+k;
-  return numq("Find the "+(a>0?"minimum":"maximum")+" value of y = "+quadStr(a,b,c)+".",
-    k,0.011,"The vertex is at x = \u2212b \u00F7 (2a) = "+h+". Substituting: y = "+a+"("+h+")\u00B2 + ("+b+")("+h+") + ("+c+") = <b>"+k+"</b>. Since a "+(a>0?"> 0, the parabola opens up and this is a minimum.":"< 0, the parabola opens down and this is a maximum."),{a:a,h:h,k:k});
+  return numq("Find the "+(a>0?"minimum":"maximum")+" value of \\(y = "+quadB(a,b,c)+"\\)"+".",
+    k,0.011,"The vertex is at \\(x = \\frac{-b}{2a} = "+h+"\\). Substituting: \\(y = "+a+"("+h+")^2 + ("+b+")("+h+") + ("+c+") = \\)<b>\\("+k+"\\)</b>. Since \\(a "+(a>0?">":"<")+" 0\\), the parabola opens "+(a>0?"up and this is a minimum.":"down and this is a maximum."),{a:a,h:h,k:k});
 });
 E("u2-axis-from-intercepts",2,["4.13"],1,"gen",function(){
   var p=ri(-10,-1),q=ri(1,10);var mid=(p+q)/2;
   var frame=pick([
-    "A parabola has x-intercepts "+p+" and "+q+". What is the equation of its axis of symmetry? Give your answer as x = (a number).",
-    "The graph of a parabola crosses the x-axis at "+p+" and "+q+". What is the equation of its axis of symmetry? Give your answer as x = (a number)."]);
-  return numq(frame,mid,0.011,"The axis of symmetry passes midway between the intercepts: x = ("+p+" + "+q+") \u00F7 2 = <b>"+fmt(mid)+"</b>.",{p:p,q:q});
+    "A parabola has x-intercepts \\("+p+"\\) and \\("+q+"\\). What is the equation of its axis of symmetry? Give your answer as \\(x = \\) (a number).",
+    "The graph of a parabola crosses the x-axis at \\("+p+"\\) and \\("+q+"\\). What is the equation of its axis of symmetry? Give your answer as \\(x = \\) (a number)."]);
+  return numq(frame,mid,0.011,"The axis of symmetry passes midway between the intercepts: \\(x = \\frac{"+p+" + "+q+"}{2} = \\)<b>\\("+fmt(mid)+"\\)</b>.",{p:p,q:q});
 });
 E("u2-xintercepts",2,["4.4"],2,"gen",function(){
   var p=ri(-9,-1),q=ri(1,10);var b=-(p+q),c=p*q;
   var factored=Math.random()<0.5;
-  var prompt=factored? "A parabola has equation y = (x "+(p>0?"\u2212 "+p:"+ "+(-p))+")(x "+(q>0?"\u2212 "+q:"+ "+(-q))+"). What is the larger x-intercept?"
-                     : "Find the larger x-intercept of y = "+quadStr(1,b,c)+".";
-  return numq(prompt,q,0.011,"Factor: y = (x "+(p>0?"\u2212 "+p:"+ "+(-p))+")(x "+(q>0?"\u2212 "+q:"+ "+(-q))+"). The intercepts are x = "+p+" and x = "+q+"; the larger is <b>"+q+"</b>.",{p:p,q:q});
+  var prompt=factored? "A parabola has equation "+factT(1,p,q)+". What is the larger x-intercept?"
+                     : "Find the larger x-intercept of \\(y = "+quadB(1,b,c)+"\\)"+".";
+  return numq(prompt,q,0.011,"Factor: "+factT(1,p,q)+". The intercepts are \\(x = "+p+"\\) and \\(x = "+q+"\\); the larger is <b>\\("+q+"\\)</b>.",{p:p,q:q});
 });
 E("u2-factored-coeffs",2,["4.5"],2,"gen",function(){
   var p=ri(-7,-2),q=ri(2,7);var askB=Math.random()<0.5;
-  return numq("A quadratic function has zeros "+p+" and "+q+", so its equation can be written y = (x \u2212 ("+p+"))(x \u2212 ("+q+")). Expanded into the form y = x\u00B2 + bx + c, what is the value of "+(askB?"b":"c")+"?",
-    askB?-(p+q):p*q,0.011,"Expanding: (x \u2212 ("+p+"))(x \u2212 ("+q+")) = x\u00B2 \u2212 ("+(p+q)+")x + ("+(p*q)+"), so b = "+(-(p+q))+" and c = "+(p*q)+". The asked coefficient is <b>"+(askB?-(p+q):p*q)+"</b>.",{p:p,q:q,askB:askB});
+  return numq("A quadratic function has zeros \\("+p+"\\) and \\("+q+"\\), so its equation can be written \\(y = (x - ("+p+"))(x - ("+q+"))\\). Expanded into the form \\(y = x^2 + bx + c\\), what is the value of \\("+(askB?"b":"c")+"\\)?",
+    askB?-(p+q):p*q,0.011,"Expanding: \\((x - ("+p+"))(x - ("+q+")) = x^2 - ("+(p+q)+")x + ("+(p*q)+")\\), so \\(b = "+(-(p+q))+"\\) and \\(c = "+(p*q)+"\\). The asked coefficient is <b>\\("+(askB?-(p+q):p*q)+"\\)</b>.",{p:p,q:q,askB:askB});
 });
 E("u2-domain-range",2,["4.1"],2,"gen",function(){
   var a=pick([1,-1,2]),h=ri(-4,4),k=ri(-6,10);
-  var correct=a>0?"Domain: all real numbers; Range: y \u2265 "+k:"Domain: all real numbers; Range: y \u2264 "+k;
-  return mcq("A quadratic function has vertex ("+h+", "+k+") and opens "+(a>0?"upward":"downward")+". What are its domain and range?",correct,
-    [a>0?"Domain: all real numbers; Range: y \u2264 "+k:"Domain: all real numbers; Range: y \u2265 "+k,
-     "Domain: x \u2265 "+h+"; Range: all real numbers","Domain: x \u2265 "+h+"; Range: y "+(a>0?"\u2265":"\u2264")+" "+k],
-    "Every quadratic has domain all real numbers. The vertex is the turning point: opening "+(a>0?"up, the smallest y is the vertex's y-value "+k:"down, the largest y is "+k)+", so the range is y "+(a>0?"\u2265":"\u2264")+" "+k+".",{a:a,h:h,k:k});
+  var correct=a>0?"Domain: all real numbers; Range: \\(y \\geq "+k+"\\)":"Domain: all real numbers; Range: \\(y \\leq "+k+"\\)";
+  return mcq("A quadratic function has vertex \\(("+h+", "+k+")\\) and opens "+(a>0?"upward":"downward")+". What are its domain and range?",correct,
+    [a>0?"Domain: all real numbers; Range: \\(y \\leq "+k+"\\)":"Domain: all real numbers; Range: \\(y \\geq "+k+"\\)",
+     "Domain: \\(x \\geq "+h+"\\); Range: all real numbers","Domain: \\(x \\geq "+h+"\\); Range: \\(y "+(a>0?"\\geq":"\\leq")+" "+k+"\\)"],
+    "Every quadratic has domain all real numbers. The vertex is the turning point: opening "+(a>0?"up, the smallest \\(y\\) is the vertex's y-value \\("+k+"\\)":"down, the largest \\(y\\) is \\("+k+"\\)")+", so the range is \\(y "+(a>0?"\\geq":"\\leq")+" "+k+"\\)"+".",{a:a,h:h,k:k});
 });
 E("u2-vertex-form-params",2,["4.15"],1,"var",varset([
-  function(){return mcq("In y = (x \u2212 3)\u00B2 + 5, what is the vertex?",
-    "(3, 5) \u2014 the graph of y = x\u00B2 shifted right 3 and up 5",
-    ["(\u22123, 5) \u2014 shifted left 3 and up 5","(3, \u22125) \u2014 shifted right 3 and down 5","(5, 3) \u2014 the numbers swap places"],
-    "Vertex form y = a(x \u2212 h)\u00B2 + k has vertex (h, k). The minus sign in (x \u2212 3) means h = +3.",{});},
-  function(){return mcq("What does the value of a do in y = a(x \u2212 h)\u00B2 + k?",
-    "If |a| > 1 the parabola narrows; if a < 0 it opens downward",
+  function(){return mcq("In \\(y = (x - 3)^2 + 5\\), what is the vertex?",
+    "\\((3, 5)\\) — the graph of \\(y = x^2\\) shifted right \\(3\\) and up \\(5\\)",
+    ["\\((-3, 5)\\) — shifted left \\(3\\) and up \\(5\\)","\\((3, -5)\\) — shifted right \\(3\\) and down \\(5\\)","\\((5, 3)\\) — the numbers swap places"],
+    "Vertex form \\(y = a(x - h)^2 + k\\) has vertex \\((h, k)\\). The minus sign in \\((x - 3)\\) means \\(h = +3\\).",{});},
+  function(){return mcq("What does the value of \\(a\\) do in \\(y = a(x - h)^2 + k\\)?",
+    "If \\(|a| > 1\\) the parabola narrows; if \\(a < 0\\) it opens downward",
     ["It moves the vertex left or right","It moves the vertex up or down","It changes only the y-intercept"],
-    "h shifts sideways, k shifts vertically, and a controls opening direction and width \u2014 the \u2018stretch\u2019 of the parabola.",{});},
-  function(){return mcq("The graph of y = x\u00B2 is shifted left 4 and down 2. What is its equation?",
-    "y = (x + 4)\u00B2 \u2212 2",
-    ["y = (x \u2212 4)\u00B2 + 2","y = (x + 4)\u00B2 + 2","y = (x \u2212 4)\u00B2 \u2212 2"],
-    "Left 4 means h = \u22124, written (x \u2212 (\u22124)) = (x + 4); down 2 means k = \u22122.",{});}
+    "\\(h\\) shifts sideways, \\(k\\) shifts vertically, and \\(a\\) controls opening direction and width — the 'stretch' of the parabola.",{});},
+  function(){return mcq("The graph of \\(y = x^2\\) is shifted left \\(4\\) and down \\(2\\). What is its equation?",
+    "\\(y = (x + 4)^2 - 2\\)",
+    ["\\(y = (x - 4)^2 + 2\\)","\\(y = (x + 4)^2 + 2\\)","\\(y = (x - 4)^2 - 2\\)"],
+    "Left \\(4\\) means \\(h = -4\\), written \\((x - (-4)) = (x + 4)\\); down \\(2\\) means \\(k = -2\\).",{});}
 ]));
 E("u2-eq-from-vertex",2,["4.16"],2,"gen",function(){
   var h=ri(-4,4),k=ri(-5,5),a=pick([1,2,3,-1]);var dx=pick([1,2]);var px=h+dx,py=a*dx*dx+k;
-  return numq("A parabola has vertex ("+h+", "+k+") and passes through ("+px+", "+py+"). Using y = a(x \u2212 h)\u00B2 + k, find the value of a.",
-    a,0.011,"Substitute the point: "+py+" = a("+px+" \u2212 ("+h+"))\u00B2 + ("+k+") \u2192 "+py+" = "+(dx*dx)+"a + ("+k+") \u2192 a = ("+py+" \u2212 ("+k+")) \u00F7 "+(dx*dx)+" = <b>"+a+"</b>.",{h:h,k:k,a:a});
+  return numq("A parabola has vertex \\(("+h+", "+k+")\\) and passes through \\(("+px+", "+py+")\\). Using \\(y = a(x - h)^2 + k\\), find the value of \\(a\\).",
+    a,0.011,"Substitute the point: \\("+py+" = a("+px+" - ("+h+"))^2 + ("+k+") \\rightarrow "+py+" = "+(dx*dx)+"a + ("+k+") \\rightarrow a = \\frac{"+py+" - ("+k+")}{"+(dx*dx)+"} = \\)<b>\\("+a+"\\)</b>.",{h:h,k:k,a:a});
 });
 E("u2-max-context",2,["4.2"],3,"gen",function(){
   var v=pick([10,20,30,40,50,60,70]),h0=pick([0,2,5,8,10,12,15,20,25,30]);
   var thing=pick(["A ball is thrown upward","A firework shell is launched upward","A water jet from a fountain arcs upward"]);
   var tmax=v/10,hmax=-5*tmax*tmax+v*tmax+h0;
-  return numq(thing+". Its height after t seconds is h(t) = \u22125t\u00B2 + "+v+"t"+(h0?" + "+h0:"")+" metres. What is the maximum height it reaches, in metres?",
-    hmax,0.11,"The maximum is at the vertex: t = \u2212b \u00F7 (2a) = \u2212"+v+" \u00F7 (\u221210) = "+fmt(tmax,1)+" s. Then h("+fmt(tmax,1)+") = \u22125("+fmt(tmax*tmax,2)+") + "+v+"("+fmt(tmax,1)+") + "+h0+" = <b>"+fmt(hmax,1)+" m</b>.",{v:v,h0:h0});
+  return numq(thing+". Its height after \\(t\\) seconds is \\(h(t) = -5t^2 + "+v+"t"+(h0?" + "+h0:"")+"\\) metres. What is the maximum height it reaches, in metres?",
+    hmax,0.11,"The maximum is at the vertex: \\(t = \\frac{-b}{2a} = \\frac{-"+v+"}{-10} = "+fmt(tmax,1)+"\\) s. Then \\(h("+fmt(tmax,1)+") = -5("+fmt(tmax*tmax,2)+") + "+v+"("+fmt(tmax,1)+") + "+h0+" = \\)<b>\\("+fmt(hmax,1)+"\\text{ m}\\)</b>.",{v:v,h0:h0});
 });
 /* ============ Unit 3: Quadratic Equations ============ */
 E("u3-factor-solve",3,["4.8"],2,"gen",function(){
@@ -1583,41 +1587,40 @@ E("u5-ci-read-report",5,["8.21"],2,"var",varset([
 ]));
 E("u2-params-characteristics",2,["4.10"],1,"gen",function(){
   var mode=ri(0,2),a=pick([-3,-2,-1,1,2,3]),b=ri(-8,8)||3,c=ri(-9,9)||4;
-  var eq="y = "+(a<0?"\u2212"+Math.abs(a):a)+"x\u00B2"+(b>0?" + "+b+"x":" \u2212 "+Math.abs(b)+"x")+(c>0?" + "+c:" \u2212 "+Math.abs(c));
+  var eq="\\(y = "+(a<0?"-"+Math.abs(a):a)+"x^2"+(b>0?" + "+b+"x":" - "+Math.abs(b)+"x")+(c>0?" + "+c:" - "+Math.abs(c))+"\\)";
   if(mode===0){
     var pool=[-c,b,-b,a,c+2,c-2,c+1,c-1,c+3,c-3,2*c],ds=[];
     pool.forEach(function(d){if(d!==c&&ds.indexOf(d)<0)ds.push(d);});
     var off=4;while(ds.length<3){var cand=c+off;if(cand!==c&&ds.indexOf(cand)<0)ds.push(cand);off=off>0?-off-1:-off+1;}
-    return mcq("For "+eq+", what is the y-intercept of the graph?",""+c,ds.slice(0,3).map(String),
-      "The y-intercept is the constant term, c = "+c+": it is where x = 0, so y = "+c+".",{mode:mode,a:a,b:b,c:c});
+    return mcq("For "+eq+", what is the y-intercept of the graph?","\\("+c+"\\)",ds.slice(0,3).map(function(d){return "\\("+d+"\\)";}),
+      "The y-intercept is the constant term, \\(c = "+c+"\\): it is where \\(x = 0\\), so \\(y = "+c+"\\)"+".",{mode:mode,a:a,b:b,c:c});
   }
   if(mode===1){
     var up=a>0;
     var good=up?"Opens upward; the vertex is a minimum":"Opens downward; the vertex is a maximum";
     var all=["Opens upward; the vertex is a minimum","Opens upward; the vertex is a maximum","Opens downward; the vertex is a minimum","Opens downward; the vertex is a maximum"];
     return mcq("For "+eq+", which statement describes the graph?",good,all.filter(function(x){return x!==good;}),
-      "The sign of a decides the opening: a = "+a+(up?" is positive, so the parabola opens upward and its vertex is the lowest point \u2014 a minimum.":" is negative, so the parabola opens downward and its vertex is the highest point \u2014 a maximum."),{mode:mode,a:a,b:b,c:c});
+      "The sign of \\(a\\) decides the opening: \\(a = "+a+"\\)"+(up?" is positive, so the parabola opens upward and its vertex is the lowest point — a minimum.":" is negative, so the parabola opens downward and its vertex is the highest point — a maximum."),{mode:mode,a:a,b:b,c:c});
   }
   var k=pick([-4,-3,-2,-1,1,2,3,4]);b=2*a*k;
-  eq="y = "+(a<0?"\u2212"+Math.abs(a):a)+"x\u00B2"+(b>0?" + "+b+"x":" \u2212 "+Math.abs(b)+"x")+(c>0?" + "+c:" \u2212 "+Math.abs(c));
+  eq="\\(y = "+(a<0?"-"+Math.abs(a):a)+"x^2"+(b>0?" + "+b+"x":" - "+Math.abs(b)+"x")+(c>0?" + "+c:" - "+Math.abs(c))+"\\)";
   var ans=-k,pool2=[k,-2*k,b,-b,2*k],ds2=[];
   pool2.forEach(function(d){if(d!==ans&&ds2.indexOf(d)<0)ds2.push(d);});
-  return mcq("For "+eq+", what is the axis of symmetry?","x = "+ans,ds2.slice(0,3).map(function(d){return "x = "+d;}),
-    "The axis of symmetry is x = \u2212b / (2a) = \u2212("+b+") / "+(2*a)+" = "+ans+".",{mode:mode,a:a,b:b,c:c,k:k});
+  return mcq("For "+eq+", what is the axis of symmetry?","\\(x = "+ans+"\\)",ds2.slice(0,3).map(function(d){return "\\(x = "+d+"\\)";}),
+    "The axis of symmetry is \\(x = \\frac{-b}{2a} = \\frac{-("+b+")}{"+(2*a)+"} = "+ans+"\\)"+".",{mode:mode,a:a,b:b,c:c,k:k});
 });
 E("u2-graph-description",2,["4.14"],2,"gen",function(){
   var a=pick([1,-1,2,-2]),r1=pick([-5,-4,-3,-2,-1,1,2,3]),r2=pick([2,3,4,5,6]);
   if(r1===r2)r2=r2+1;
   var lo=Math.min(r1,r2),hi=Math.max(r1,r2);r1=lo;r2=hi;
   if(r1+r2===0)r2+=2;
-  function fac(r){return r>0?"(x \u2212 "+r+")":"(x + "+Math.abs(r)+")";}
-  var eq="y = "+(a===1?"":a===-1?"\u2212":a)+fac(r1)+fac(r2);
+  var eq=factT(a,r1,r2);
   var dir=a>0?"upward":"downward",dir2=a>0?"downward":"upward",yi=a*r1*r2;
-  function desc(d,x,y,z){return "Opens "+d+"; x-intercepts "+x+" and "+y+"; y-intercept "+z;}
+  function desc(d,x,y,z){return "Opens "+d+"; x-intercepts \\("+x+"\\) and \\("+y+"\\); y-intercept \\("+z+"\\)";}
   var good=desc(dir,r1,r2,yi);
   var wrongs=[desc(dir2,r1,r2,yi),desc(dir,-r2,-r1,yi),desc(dir,r1,r2,-yi)];
   return mcq("Which description matches the graph of "+eq+"?",good,wrongs,
-    "The sign of the leading coefficient ("+a+") says the parabola opens "+dir+". It crosses the x-axis where each factor is zero: x = "+r1+" and x = "+r2+". Setting x = 0 gives the y-intercept: "+a+" \u00D7 ("+(-r1)+") \u00D7 ("+(-r2)+") = "+yi+".",{a:a,r1:r1,r2:r2,exp:good});
+    "The sign of the leading coefficient (\\("+a+"\\)) says the parabola opens "+dir+". It crosses the x-axis where each factor is zero: \\(x = "+r1+"\\) and \\(x = "+r2+"\\). Setting \\(x = 0\\) gives the y-intercept: \\("+a+" \\times ("+(-r1)+") \\times ("+(-r2)+") = "+yi+"\\).",{a:a,r1:r1,r2:r2,exp:good});
 });
 E("u3-equation-from-roots",3,["4.6"],2,"gen",function(){
   var r1=pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5]),r2=pick([-5,-4,-3,-2,-1,1,2,3,4,5,6]);
@@ -1765,60 +1768,56 @@ E("u1-law-choice-context",1,["7.1","7.2"],1,"var",varset([
 /* --- Unit 2: Quadratic Functions --- */
 E("u2-which-quadratic",2,["4.10"],1,"var",varset([
   function(){return mcq("Which relation is quadratic?",
-    "y = (x + 2)(x \u2212 5)",["y = 3x \u2212 7","y = x\u00B3 \u2212 x","y = \u221A(x + 1)"],
-    "(x + 2)(x \u2212 5) expands to x\u00B2 \u2212 3x \u2212 10: an x\u00B2 term and nothing of higher degree. The others are linear, cubic and a radical relation." );},
+    "\\(y = (x + 2)(x - 5)\\)",["\\(y = 3x - 7\\)","\\(y = x^3 - x\\)","\\(y = \\sqrt{x + 1}\\)"],
+    "\\((x + 2)(x - 5)\\) expands to \\(x^2 - 3x - 10\\): an \\(x^2\\) term and nothing of higher degree. The others are linear, cubic and a radical relation." );},
   function(){return mcq("Which relation is quadratic?",
-    "y = (2x \u2212 1)(x + 3)",["y = 5 \u00F7 x","y = x(x\u00B2 + 1)","y = \u22124x + 1"],
-    "(2x \u2212 1)(x + 3) expands to 2x\u00B2 + 5x \u2212 3, which is quadratic. Note y = x(x\u00B2 + 1) expands to x\u00B3 + x, a cubic in disguise." );},
+    "\\(y = (2x - 1)(x + 3)\\)",["\\(y = \\frac{5}{x}\\)","\\(y = x(x^2 + 1)\\)","\\(y = -4x + 1\\)"],
+    "\\((2x - 1)(x + 3)\\) expands to \\(2x^2 + 5x - 3\\), which is quadratic. Note \\(y = x(x^2 + 1)\\) expands to \\(x^3 + x\\), a cubic in disguise." );},
   function(){return mcq("Which relation is quadratic?",
-    "y = (x + 4)\u00B2",["y = 3x","y = x\u00B3 + 2x","y = \u2212x + 9"],
-    "(x + 4)\u00B2 expands to x\u00B2 + 8x + 16, a quadratic. Squaring a binomial always produces an x\u00B2 term." );},
+    "\\(y = (x + 4)^2\\)",["\\(y = 3x\\)","\\(y = x^3 + 2x\\)","\\(y = -x + 9\\)"],
+    "\\((x + 4)^2\\) expands to \\(x^2 + 8x + 16\\), a quadratic. Squaring a binomial always produces an \\(x^2\\) term." );},
   function(){return mcq("Which relation is quadratic?",
-    "y = x\u00B2 \u2212 3x",["y = 7 \u2212 x","y = 2x\u00B3","y = \u221A x"],
-    "y = x\u00B2 \u2212 3x has degree 2. The others are linear (degree 1), cubic (degree 3) and a square-root relation.");}
+    "\\(y = x^2 - 3x\\)",["\\(y = 7 - x\\)","\\(y = 2x^3\\)","\\(y = \\sqrt{x}\\)"],
+    "\\(y = x^2 - 3x\\) has degree \\(2\\). The others are linear (degree \\(1\\)), cubic (degree \\(3\\)) and a square-root relation.");}
 ]));
 E("u2-axis-two-points",2,["4.13"],1,"gen",function(){
   var x1=ri(-9,3),gap=pick([2,4,6,8,10,12,14]),x2=x1+gap,y=ri(-6,12);
   var mid=(x1+x2)/2;
-  return numq("The points ("+x1+", "+y+") and ("+x2+", "+y+") lie on the same parabola. What is the equation of the axis of symmetry? Give the value of x.",
+  return numq("The points \\(("+x1+", "+y+")\\) and \\(("+x2+", "+y+")\\) lie on the same parabola. What is the equation of the axis of symmetry? Give the value of \\(x\\).",
     mid,0.011,
-    "The two points have the same y-coordinate, so they sit at the same height on the parabola, one on each side of the axis. The axis passes midway between them: x = ("+x1+" + "+x2+") \u00F7 2 = <b>"+fmt(mid,1)+"</b>.",
+    "The two points have the same y-coordinate, so they sit at the same height on the parabola, one on each side of the axis. The axis passes midway between them: \\(x = \\frac{"+x1+" + "+x2+"}{2} = \\)<b>\\("+fmt(mid,1)+"\\)</b>.",
     {x1:x1,x2:x2,y:y});
 });
 E("u2-standard-from-factored",2,["4.5"],2,"gen",function(){
   var a=pick([1,2,-2,3,-1]),r1,r2,tries=0;
   do{r1=ri(-6,6);r2=ri(-6,6);tries++;}while((r1===0||r2===0||r1===r2||r2===-r1)&&tries<40);
   var B=-a*(r1+r2),C=a*r1*r2;
-  function fs(r){return "(x "+(r>0?"\u2212 "+r:"+ "+(-r))+")";}
-  var pre=(a===1?"":(a<0?"\u2212"+Math.abs(a):""+a));
-  return mcq("Which function is the standard form of y = "+pre+fs(r1)+fs(r2)+"?",
-    "y = "+quadStr(a,B,C),
-    ["y = "+quadStr(a,-B,C),"y = "+quadStr(a,B,-C),"y = "+quadStr(a,-B,-C)],
-    "Expand the factors: "+fs(r1)+fs(r2)+" = x\u00B2 \u2212 ("+r1+" + "+r2+")x + ("+r1+")("+r2+") = x\u00B2 "+((-(r1+r2))>0?"+ ":"\u2212 ")+Math.abs(r1+r2)+"x "+(r1*r2>0?"+ ":"\u2212 ")+Math.abs(r1*r2)+". Multiplying through by "+a+" gives y = "+quadStr(a,B,C)+". Watch the signs: the middle coefficient is \u2212"+a+" \u00D7 ("+r1+" + "+r2+") = "+B+".",
+  function fsB(r){return "(x "+(r>0?"- "+r:"+ "+(-r))+")";}
+  return mcq("Which function is the standard form of "+factT(a,r1,r2)+"?",
+    "\\(y = "+quadB(a,B,C)+"\\)",
+    ["\\(y = "+quadB(a,-B,C)+"\\)","\\(y = "+quadB(a,B,-C)+"\\)","\\(y = "+quadB(a,-B,-C)+"\\)"],
+    "Expand the factors: \\("+fsB(r1)+fsB(r2)+" = x^2 - ("+r1+" + "+r2+")x + ("+r1+")("+r2+") = x^2 "+((-(r1+r2))>0?"+ ":"- ")+Math.abs(r1+r2)+"x "+(r1*r2>0?"+ ":"- ")+Math.abs(r1*r2)+"\\). Multiplying through by \\("+a+"\\) gives \\(y = "+quadB(a,B,C)+"\\). Watch the signs: the middle coefficient is \\(-"+a+" \\times ("+r1+" + "+r2+") = "+B+"\\).",
     {a:a,r1:r1,r2:r2});
 });
 E("u2-revenue-model",2,["4.2"],2,"gen",function(){
   var N=pick([240,300,360,400,450,500,600]),P=pick([8,10,12,15,20]),s=pick([10,15,20,25,30,40]);
   var frame=pick([
-    "A theatre sells "+N+" tickets per show at $"+P+" each. For every $1 increase in the ticket price, "+s+" fewer tickets are sold. Let x be the number of $1 increases. Which function gives the revenue R(x)?",
-    "A ferry carries "+N+" passengers per crossing at $"+P+" per passenger. For every $1 added to the fare, "+s+" fewer passengers ride. Let x be the number of $1 increases. Which function gives the revenue R(x)?",
-    "A market stall sells "+N+" jars of preserves a week at $"+P+" each. For every $1 increase in the price, "+s+" fewer jars are sold. Let x be the number of $1 increases. Which function gives the revenue R(x)?"
+    "A theatre sells "+N+" tickets per show at $"+P+" each. For every $1 increase in the ticket price, "+s+" fewer tickets are sold. Let \\(x\\) be the number of $1 increases. Which function gives the revenue \\(R(x)\\)?",
+    "A ferry carries "+N+" passengers per crossing at $"+P+" per passenger. For every $1 added to the fare, "+s+" fewer passengers ride. Let \\(x\\) be the number of $1 increases. Which function gives the revenue \\(R(x)\\)?",
+    "A market stall sells "+N+" jars of preserves a week at $"+P+" each. For every $1 increase in the price, "+s+" fewer jars are sold. Let \\(x\\) be the number of $1 increases. Which function gives the revenue \\(R(x)\\)?"
   ]);
   return mcq(frame,
-    "R(x) = ("+N+" \u2212 "+s+"x)("+P+" + x)",
-    ["R(x) = ("+N+" + "+s+"x)("+P+" + x)","R(x) = ("+N+" \u2212 "+s+"x)("+P+" \u2212 x)","R(x) = ("+N+" \u2212 "+s+")("+P+" + x)"],
-    "After x increases, the price is $"+P+" + x and the number sold is "+N+" \u2212 "+s+"x (it drops by "+s+" per increase, so the drop is "+s+"x in total). Revenue is price \u00D7 quantity: R(x) = ("+N+" \u2212 "+s+"x)("+P+" + x).",
+    "\\(R(x) = ("+N+" - "+s+"x)("+P+" + x)\\)",
+    ["\\(R(x) = ("+N+" + "+s+"x)("+P+" + x)\\)","\\(R(x) = ("+N+" - "+s+"x)("+P+" - x)\\)","\\(R(x) = ("+N+" - "+s+")("+P+" + x)\\)"],
+    "After \\(x\\) increases, the price is \\("+P+" + x\\) dollars and the number sold is \\("+N+" - "+s+"x\\) (it drops by "+s+" per increase, so the drop is \\("+s+"x\\) in total). Revenue is price \\(\\times\\) quantity: \\(R(x) = ("+N+" - "+s+"x)("+P+" + x)\\).",
     {N:N,P:P,s:s});
 });
 E("u2-count-intercepts",2,["4.15"],2,"gen",function(){
   var a=pick([1,2,-1,-2,3,-3]),h=ri(-6,6),k=ri(-9,9);
   var cnt=(k===0)?1:(((a>0&&k<0)||(a<0&&k>0))?2:0);
-  var aPart=(a===1?"":(a<0?"\u2212"+Math.abs(a):""+a));
-  var base=(h===0)?"x\u00B2":("(x "+(h>0?"\u2212 "+h:"+ "+(-h))+")\u00B2");
-  var vf="y = "+aPart+base+(k>0?" + "+k:(k<0?" \u2212 "+(-k):""));
-  return numq("How many x-intercepts does the graph of "+vf+" have?",
+  return numq("How many x-intercepts does the graph of "+vertT(a,h,k)+" have?",
     cnt,0.011,
-    "The vertex is ("+h+", "+k+") and the parabola opens "+(a>0?"upward":"downward")+". "+(k===0?"The vertex sits right on the x-axis, so the graph touches it at exactly one point: <b>1</b> x-intercept.":(cnt===2?"The vertex is on the opposite side of the x-axis from the direction the parabola opens away from, so the graph must cross the axis twice: <b>2</b> x-intercepts.":"The vertex is on the same side of the x-axis as the opening, so the graph never reaches the axis: <b>0</b> x-intercepts.")),
+    "The vertex is \\(("+h+", "+k+")\\) and the parabola opens "+(a>0?"upward":"downward")+". "+(k===0?"The vertex sits right on the x-axis, so the graph touches it at exactly one point: <b>\\(1\\)</b> x-intercept.":(cnt===2?"The vertex is on the opposite side of the x-axis from the direction the parabola opens away from, so the graph must cross the axis twice: <b>\\(2\\)</b> x-intercepts.":"The vertex is on the same side of the x-axis as the opening, so the graph never reaches the axis: <b>\\(0\\)</b> x-intercepts.")),
     {a:a,h:h,k:k});
 });
 E("u2-max-area",2,["4.2"],3,"gen",function(){
@@ -1829,10 +1828,10 @@ E("u2-max-area",2,["4.2"],3,"gen",function(){
     "A homeowner uses "+F+" m of fencing to build a rectangular dog pen against the side of a house. The house forms one full side of the pen, so fencing is needed on only three sides.",
     "A lifeguard uses "+F+" m of rope to mark off a rectangular swimming area along a straight beach. The beach forms one full side, so rope is needed on only three sides."
   ]);
-  var ask=(mode===0?" What is the maximum area that can be enclosed, in m\u00B2?":(mode===1?" What is the length of each side perpendicular to the wall or beach when the area is greatest, in m?":" What is the length of the side parallel to the wall or beach when the area is greatest, in m?"));
+  var ask=(mode===0?" What is the maximum area that can be enclosed, in \\(m^2\\)?":(mode===1?" What is the length of each side perpendicular to the wall or beach when the area is greatest, in m?":" What is the length of the side parallel to the wall or beach when the area is greatest, in m?"));
   return numq(c+ask,
     mode===0?maxA:(mode===1?w:F/2),0.011,
-    "Let w be the length of each side perpendicular to the wall. The side parallel to the wall is then "+F+" \u2212 2w, and the area is A = w("+F+" \u2212 2w). This quadratic opens downward; its vertex is at w = "+F+" \u00F7 4 = "+w+" m. The maximum area is "+w+" \u00D7 ("+F+" \u2212 2 \u00D7 "+w+") = "+w+" \u00D7 "+(F-2*w)+" = <b>"+maxA+" m\u00B2</b>, with the parallel side measuring "+(F-2*w)+" m.",
+    "Let \\(w\\) be the length of each side perpendicular to the wall. The side parallel to the wall is then \\("+F+" - 2w\\), and the area is \\(A = w("+F+" - 2w)\\). This quadratic opens downward; its vertex is at \\(w = \\frac{"+F+"}{4} = "+w+"\\) m. The maximum area is \\("+w+" \\times ("+F+" - 2 \\times "+w+") = "+w+" \\times "+(F-2*w)+" = \\)<b>\\("+maxA+"\\text{ m}^2\\)</b>, with the parallel side measuring "+(F-2*w)+" m.",
     {F:F,mode:mode});
 });
 
@@ -2493,34 +2492,34 @@ E("u2-y-intercept",2,["4.4"],1,"gen",function(){
     var cand=[b,a,a+b+c,-c,b+c,c+2,c-2];ds=[];
     for(var i=0;i<cand.length&&ds.length<3;i++){var v=String(cand[i]);if(cand[i]!==c&&ds.indexOf(v)<0)ds.push(v);}
   }while((b===0||c===0||ds.length<3)&&tries<80);
-  return mcq("What is the y-intercept of the graph of y = "+quadStr(a,b,c)+"?",
-    String(c),ds,
-    "The y-intercept is the value of y when x = 0. Substituting x = 0 leaves only the constant term: y = <b>"+c+"</b>.",
+  return mcq("What is the y-intercept of the graph of \\(y = "+quadB(a,b,c)+"\\)?",
+    "\\("+c+"\\)",ds.map(function(v){return "\\("+v+"\\)";}),
+    "The y-intercept is the value of \\(y\\) when \\(x = 0\\). Substituting \\(x = 0\\) leaves only the constant term: \\(y = \\)<b>\\("+c+"\\)</b>.",
     {a:a,b:b,c:c});
 });
 E("u2-mirror-point",2,["4.13"],2,"gen",function(){
   var h=ri(-6,8),d=ri(1,9),x1=h+(Math.random()<0.5?d:-d),x2=2*h-x1,y=ri(3,45);
-  return numq("A parabola has axis of symmetry x = "+h+". The point ("+x1+", "+y+") lies on the parabola. Another point on the parabola has the same y-value. What is its x-coordinate?",
+  return numq("A parabola has axis of symmetry \\(x = "+h+"\\). The point \\(("+x1+", "+y+")\\) lies on the parabola. Another point on the parabola has the same y-value. What is its x-coordinate?",
     x2,0.011,
-    "Points with the same y-value sit symmetrically about the axis x = "+h+". The given point is "+Math.abs(x1-h)+" units from the axis, so the mirror point is "+Math.abs(x1-h)+" units on the other side: x = "+h+" "+(x2>h?"+":"−")+" "+Math.abs(x2-h)+" = <b>"+x2+"</b>. (Check: the axis is the midpoint, ("+x1+" + "+x2+") ÷ 2 = "+h+".)",
+    "Points with the same y-value sit symmetrically about the axis \\(x = "+h+"\\). The given point is \\("+Math.abs(x1-h)+"\\) units from the axis, so the mirror point is \\("+Math.abs(x1-h)+"\\) units on the other side: \\(x = "+h+" "+(x2>h?"+":"-")+" "+Math.abs(x2-h)+" = \\)<b>\\("+x2+"\\)</b>. (Check: the axis is the midpoint, \\(\\frac{"+x1+" + "+x2+"}{2} = "+h+"\\).)",
     {h:h,x1:x1,x2:x2,y:y});
 });
 E("u2-vertex-time",2,["4.2"],2,"gen",function(){
   var k=ri(4,18),B=5*k,C=ri(1,25);
   var ctx=pick(["ball thrown into the air","fountain jet","model rocket","firework shell"]);
-  return numq("The height of a "+ctx+" is h(t) = −5t² + "+B+"t + "+C+" metres, t seconds after it is launched. At what time does it reach its maximum height, in seconds?",
+  return numq("The height of a "+ctx+" is \\(h(t) = -5t^2 + "+B+"t + "+C+"\\) metres, \\(t\\) seconds after it is launched. At what time does it reach its maximum height, in seconds?",
     k/2,0.011,
-    "The maximum occurs at the vertex, where t = −B ÷ (2 × −5) = "+B+" ÷ 10 = <b>"+fmt(k/2,1)+" s</b>.",
+    "The maximum occurs at the vertex, where \\(t = \\frac{-B}{2 \\times -5} = \\frac{"+B+"}{10} = \\)<b>\\("+fmt(k/2,1)+"\\text{ s}\\)</b>.",
     {B:B,C:C,k:k,ans:k/2});
 });
 E("u2-fence-max",2,["4.2"],3,"gen",function(){
   var k=ri(6,20),P=4*k,mode=ri(0,1),area=2*k*k;
   var ctx=pick([["rectangular garden","a house wall"],["rectangular dog pen","a barn wall"],["rectangular patio","an existing fence"],["rectangular chicken run","a shed wall"]]);
   var prompt="A "+ctx[0]+" is built against "+ctx[1]+", so fencing is needed on only three sides. A total of "+P+" m of fencing is available. ";
-  if(mode===0)prompt+="What is the greatest area that can be enclosed, in m²?";
+  if(mode===0)prompt+="What is the greatest area that can be enclosed, in \\(m^2\\)?";
   else prompt+="How wide should it be (each side perpendicular to the wall) to enclose the greatest possible area, in metres?";
   return numq(prompt,mode===0?area:k,0.011,
-    "Let the two sides perpendicular to the wall each be x m. The side parallel to the wall is "+P+" − 2x, so the area is A(x) = x("+P+" − 2x) = −2x² + "+P+"x. The vertex is at x = "+P+" ÷ 4 = "+k+" m, giving a parallel side of "+P+" − 2 × "+k+" = "+(2*k)+" m and a maximum area of "+k+" × "+(2*k)+" = <b>"+area+" m²</b>."+(mode===1?" The width at the maximum is <b>"+k+" m</b>.":""),
+    "Let the two sides perpendicular to the wall each be \\(x\\) m. The side parallel to the wall is \\("+P+" - 2x\\), so the area is \\(A(x) = x("+P+" - 2x) = -2x^2 + "+P+"x\\). The vertex is at \\(x = \\frac{"+P+"}{4} = "+k+"\\) m, giving a parallel side of \\("+P+" - 2 \\times "+k+" = "+(2*k)+"\\) m and a maximum area of \\("+k+" \\times "+(2*k)+" = \\)<b>\\("+area+"\\text{ m}^2\\)</b>."+(mode===1?" The width at the maximum is <b>\\("+k+"\\text{ m}\\)</b>.":""),
     {P:P,k:k,mode:mode,area:area,width:k});
 });
 
@@ -2687,23 +2686,21 @@ E("u2-concavity",2,["4.10"],1,"gen",function(){
   var a=0,tries=0;while(a===0&&tries<40){a=ri(-9,9);tries++;}
   var b=ri(-9,9),c=ri(-12,12),up=a>0;
   var key=up?"It opens upward, and its vertex is a minimum":"It opens downward, and its vertex is a maximum";
-  return mcq("Which statement describes the graph of y = "+quadStr(a,b,c)+"?",
+  return mcq("Which statement describes the graph of \\(y = "+quadB(a,b,c)+"\\)?",
     key,
     [up?"It opens upward, and its vertex is a maximum":"It opens downward, and its vertex is a minimum",
      up?"It opens downward, and its vertex is a maximum":"It opens upward, and its vertex is a minimum",
      up?"It opens downward, and its vertex is a minimum":"It opens upward, and its vertex is a maximum"],
-    "The sign of the x² coefficient decides the opening: a = "+a+" is "+(up?"positive, so the parabola opens upward and the vertex is the lowest point — a minimum":"negative, so the parabola opens downward and the vertex is the highest point — a maximum")+". The other terms shift the graph but do not change its opening.",
+    "The sign of the \\(x^2\\) coefficient decides the opening: \\(a = "+a+"\\) is "+(up?"positive, so the parabola opens upward and the vertex is the lowest point — a minimum":"negative, so the parabola opens downward and the vertex is the highest point — a maximum")+". The other terms shift the graph but do not change its opening.",
     {a:a,b:b,c:c,up:up});
 });
 E("u2-vertex-form-eval",2,["4.15"],2,"gen",function(){
   var a=0,tries=0;while(a===0&&tries<40){a=ri(-4,4);tries++;}
   var h=ri(-6,6),k=ri(-10,10),d=ri(1,5),sgn=Math.random()<0.5?1:-1;
   var x=h+sgn*d,ans=a*d*d+k;
-  var aTxt=a===1?"":(a===-1?"−":a);
-  var hTxt=h===0?"x":(h>0?"(x − "+h+")":"(x + "+(-h)+")");
-  return numq("A quadratic function is given by f(x) = "+aTxt+(h===0?"x²":hTxt+"²")+" "+(k>0?"+ "+k:(k<0?"− "+(-k):""))+". What is f("+x+")?",
+  return numq("A quadratic function is given by \\(f(x) = "+vertB(a,h,k)+"\\). What is \\(f("+x+")\\)?",
     ans,0.011,
-    "Substitute x = "+x+": the squared part is ("+x+" "+(h>0?"− "+h:(h<0?"+ "+(-h):""))+")² = ("+(sgn*d)+")² = "+(d*d)+". So f("+x+") = "+a+" × "+(d*d)+" "+(k>0?"+ "+k:(k<0?"− "+(-k):""))+" = <b>"+ans+"</b>. (The sign of "+(sgn*d)+" disappears when it is squared.)",
+    "Substitute \\(x = "+x+"\\): the squared part is \\(("+(h===0?x:x+" "+(h>0?"- "+h:"+ "+(-h)))+")^2 = ("+(sgn*d)+")^2 = "+(d*d)+"\\). So \\(f("+x+") = "+a+" \\times "+(d*d)+(k>0?" + "+k:(k<0?" - "+(-k):""))+" = \\)<b>\\("+ans+"\\)</b>. (The sign of \\("+(sgn*d)+"\\) disappears when it is squared.)",
     {a:a,h:h,k:k,d:d,ans:ans});
 });
 E("u2-factored-y-intercept",2,["4.4"],2,"gen",function(){
@@ -2711,18 +2708,17 @@ E("u2-factored-y-intercept",2,["4.4"],2,"gen",function(){
   var pool=[-6,-5,-4,-3,-2,-1,1,2,3,4,5,6];
   var r1=pick(pool),r2=pick(pool.filter(function(x){return x!==r1;}));
   var ans=a*r1*r2;
-  function fac(r){return r>0?"(x − "+r+")":"(x + "+(-r)+")";}
-  return numq("What is the y-intercept of the graph of f(x) = "+(a===1?"":(a===-1?"−":a))+fac(r1)+fac(r2)+"?",
+  return numq("What is the y-intercept of the graph of \\(f(x) = "+factB(a,r1,r2)+"\\)?",
     ans,0.011,
-    "The y-intercept occurs at x = 0: f(0) = "+a+" × ("+(0-r1)+") × ("+(0-r2)+") = "+a+" × "+(r1*r2)+" = <b>"+ans+"</b>. (The x-intercepts are "+r1+" and "+r2+"; the y-intercept is a times their product.)",
+    "The y-intercept occurs at \\(x = 0\\): \\(f(0) = "+a+" \\times ("+(0-r1)+") \\times ("+(0-r2)+") = "+a+" \\times "+(r1*r2)+" = \\)<b>\\("+ans+"\\)</b>. (The x-intercepts are \\("+r1+"\\) and \\("+r2+"\\); the y-intercept is \\(a\\) times their product.)",
     {a:a,r1:r1,r2:r2,ans:ans});
 });
 E("u2-max-height",2,["4.2"],3,"gen",function(){
   var k=ri(3,9),B=10*k,C=ri(2,30),max=C+5*k*k;
   var ctx=pick([["ball","kicked"],["stone","thrown"],["water jet","a fountain"],["flare","fired"]]);
-  return numq("A "+ctx[0]+" is "+ctx[1]+". Its height is h(t) = −5t² + "+B+"t + "+C+" metres, t seconds after it starts. What is the greatest height it reaches, in metres?",
+  return numq("A "+ctx[0]+" is "+ctx[1]+". Its height is \\(h(t) = -5t^2 + "+B+"t + "+C+"\\) metres, \\(t\\) seconds after it starts. What is the greatest height it reaches, in metres?",
     max,0.011,
-    "The vertex is at t = "+B+" ÷ 10 = "+k+" s. Substituting: h("+k+") = −5 × "+(k*k)+" + "+B+" × "+k+" + "+C+" = "+(-5*k*k)+" + "+(B*k)+" + "+C+" = <b>"+max+" m</b>.",
+    "The vertex is at \\(t = \\frac{"+B+"}{10} = "+k+"\\) s. Substituting: \\(h("+k+") = -5 \\times "+(k*k)+" + "+B+" \\times "+k+" + "+C+" = "+(-5*k*k)+" + "+(B*k)+" + "+C+" = \\)<b>\\("+max+"\\text{ m}\\)</b>.",
     {B:B,C:C,k:k,max:max});
 });
 
@@ -2941,31 +2937,29 @@ E("u1-median-length",1,["7.3"],3,"gen",function(){
 E("u2-evaluate-f",2,["4.1"],1,"gen",function(){
   var a=0,tries=0;while(a===0&&tries<40){a=ri(-4,4);tries++;}
   var b=ri(-9,9),c=ri(-12,12),d=ri(-5,5),ans=a*d*d+b*d+c;
-  return numq("For f(x) = "+quadStr(a,b,c)+", what is f("+d+")?",
+  return numq("For \\(f(x) = "+quadB(a,b,c)+"\\), what is \\(f("+d+")\\)?",
     ans,0.011,
-    "Substitute x = "+d+": f("+d+") = "+a+" × ("+d+")² + ("+b+") × ("+d+") + ("+c+") = "+(a*d*d)+" + "+(b*d)+" + "+c+" = <b>"+ans+"</b>.",
+    "Substitute \\(x = "+d+"\\): \\(f("+d+") = "+a+" \\times ("+d+")^2 + ("+b+") \\times ("+d+") + ("+c+") = "+(a*d*d)+" + "+(b*d)+" + "+c+" = \\)<b>\\("+ans+"\\)</b>.",
     {a:a,b:b,c:c,d:d,ans:ans});
 });
 E("u2-vertex-shift",2,["4.15"],2,"gen",function(){
   var a=0,h=0,k=0,tries=0;
   while((a===0||h===0||k===0)&&tries<60){a=ri(-5,5);h=ri(-7,7);k=ri(-9,9);tries++;}
-  var aTxt=a===1?"":(a===-1?"−":a);
-  var hTxt=h>0?"(x − "+h+")":"(x + "+(-h)+")";
   var open=a>0?"upward":"downward";
-  function vt(x,y){return "("+x+", "+y+")";}
+  function vt(x,y){return "\\(("+x+", "+y+")\\)";}
   var key=vt(h,k)+"; opens "+open;
-  return mcq("What is the vertex of y = "+aTxt+hTxt+"² "+(k>0?"+ "+k:"− "+(-k))+", and which way does the graph open?",
+  return mcq("What is the vertex of \\(y = "+vertB(a,h,k)+"\\), and which way does the graph open?",
     key,
     [vt(-h,k)+"; opens "+open,vt(h,-k)+"; opens "+open,vt(-h,-k)+"; opens "+open],
-    "In y = a(x − h)² + k the vertex is (h, k). Here the squared part is (x "+(h>0?"− "+h:"+ "+(-h))+"), so h = "+h+" (the sign flips from how it appears), and k = "+k+". Since a = "+a+" is "+(a>0?"positive":"negative")+", the graph opens "+open+". The vertex is <b>"+key+"</b>.",
+    "In \\(y = a(x - h)^2 + k\\) the vertex is \\((h, k)\\). Here the squared part is \\((x "+(h>0?"- "+h:"+ "+(-h))+")\\), so \\(h = "+h+"\\) (the sign flips from how it appears), and \\(k = "+k+"\\). Since \\(a = "+a+"\\) is "+(a>0?"positive":"negative")+", the graph opens "+open+". The vertex is <b>"+key+"</b>.",
     {a:a,h:h,k:k});
 });
 E("u2-factored-max-height",2,["4.2"],3,"gen",function(){
   var a=pick([2,3,4,5]),r1=ri(3,14),r2=ri(1,8);if(r2>=r1)r2=r1-1;
   var S=r1+r2,max=a*S*S/4,tstar=(r1-r2)/2;
-  return numq("A projectile's height is modelled by h(t) = −"+a+"(t − "+r1+")(t + "+r2+") metres, t seconds after launch. What is the greatest height it reaches? Give the exact value, in metres.",
+  return numq("A projectile's height is modelled by \\(h(t) = -"+a+"(t - "+r1+")(t + "+r2+")\\) metres, \\(t\\) seconds after launch. What is the greatest height it reaches? Give the exact value, in metres.",
     max,0.011,
-    "The height is zero at t = "+r1+" and (before launch) at t = −"+r2+"; the vertex sits midway between the roots, at t = ("+r1+" − "+r2+") ÷ 2 = "+fmt(tstar,1)+" s. Substituting: h("+fmt(tstar,1)+") = −"+a+" × ("+fmt(tstar-r1,1)+") × ("+fmt(tstar+r2,1)+") = <b>"+fmt(max,2)+" m</b>.",
+    "The height is zero at \\(t = "+r1+"\\) and (before launch) at \\(t = -"+r2+"\\); the vertex sits midway between the roots, at \\(t = \\frac{"+r1+" - "+r2+"}{2} = "+fmt(tstar,1)+"\\) s. Substituting: \\(h("+fmt(tstar,1)+") = -"+a+" \\times ("+fmt(tstar-r1,1)+") \\times ("+fmt(tstar+r2,1)+") = \\)<b>\\("+fmt(max,2)+"\\text{ m}\\)</b>.",
     {a:a,r1:r1,r2:r2,S:S,max:max});
 });
 
