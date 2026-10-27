@@ -2874,6 +2874,232 @@ E("u8-angle-chase",8,["5.8"],3,"var",varset([
     {});}
 ]));
 
+/* ============ Tranche 8 (Oct 27): finish-line pass, tranche 3 of 3 ============
+   Unit 1 +2, Unit 2 +3, Unit 3 +3, Unit 4 +3, Unit 6 +1, Unit 7 +2
+   (bank 192 -> 206, the finish line). Same reworked-template sources as
+   tranches 6-7, mapped by topic, nothing verbatim. Unit 5 stays deep and
+   untouched at 47; the other seven units land in outline proportion with
+   each other: U1 16, U2 28, U3 28, U4 31, U6 17, U7 17, U8 22. */
+
+/* --- Unit 1: Acute Triangle Trigonometry --- */
+E("u1-ambiguous-count",1,["7.2"],3,"var",varset([
+  function(){return mcq("In △ABC, ∠A = 40°, side b = 10 cm and side a = 5 cm (a is opposite ∠A). How many different triangles fit this information?",
+    "No triangle is possible",
+    ["Exactly one triangle (a right triangle)","Exactly one triangle","Two different triangles"],
+    "Compare a with the height h = b sin A = 10 × sin 40° ≈ 6.43 cm. Since a = 5 cm is SHORTER than 6.43 cm, side a cannot reach the base line at all — no triangle closes.",
+    {});},
+  function(){return mcq("In △ABC, ∠A = 30°, side b = 10 cm and side a = 5 cm (a is opposite ∠A). How many different triangles fit this information?",
+    "Exactly one triangle (a right triangle)",
+    ["No triangle is possible","Exactly one triangle","Two different triangles"],
+    "The height is h = b sin A = 10 × sin 30° = 5 cm. Side a equals h exactly, so side a just reaches the base at a right angle — exactly one triangle, and it is right-angled.",
+    {});},
+  function(){return mcq("In △ABC, ∠A = 40°, side b = 10 cm and side a = 8 cm (a is opposite ∠A). How many different triangles fit this information?",
+    "Two different triangles",
+    ["No triangle is possible","Exactly one triangle (a right triangle)","Exactly one triangle"],
+    "The height is h = 10 × sin 40° ≈ 6.43 cm. Side a = 8 cm is longer than h but shorter than b = 10 cm, so it can swing to two different positions on the base — the ambiguous case gives two different triangles.",
+    {});},
+  function(){return mcq("In △ABC, ∠A = 50°, side b = 9 cm and side a = 11 cm (a is opposite ∠A). How many different triangles fit this information?",
+    "Exactly one triangle",
+    ["No triangle is possible","Exactly one triangle (a right triangle)","Two different triangles"],
+    "Side a = 11 cm is longer than side b = 9 cm, so it can only land in one position past the foot of the height — exactly one triangle. (Two triangles need h < a < b.)",
+    {});}
+]));
+E("u1-median-length",1,["7.3"],3,"gen",function(){
+  function rd(d){return d*Math.PI/180;}
+  var p=ri(6,20),q=ri(6,20),A=ri(35,130);
+  var a2=p*p+q*q-2*p*q*Math.cos(rd(A)),a=Math.sqrt(a2);
+  var m=0.5*Math.sqrt(p*p+q*q+2*p*q*Math.cos(rd(A)));
+  var ctx=pick(["triangular lot","triangular field","triangular garden plot"]);
+  var qq=numq("A "+ctx+" has two sides of "+p+" m and "+q+" m meeting at a corner with an angle of "+A+"° between them. A path runs from that corner to the midpoint of the opposite side. How long is the path, to one decimal place, in metres?",
+    fmt(m,1),0.06,
+    "First find the opposite side with the cosine law: a² = "+p+"² + "+q+"² − 2 × "+p+" × "+q+" × cos "+A+"° = "+fmt(a2,1)+", so a ≈ "+fmt(a,1)+" m. Then the median to that side (Apollonius's rule, from applying the cosine law in the two half-triangles) is m = ½√("+p+"² + "+q+"² + 2 × "+p+" × "+q+" × cos "+A+"°) = ½√"+fmt(p*p+q*q+2*p*q*Math.cos(rd(A)),1)+" ≈ <b>"+fmt(m,1)+" m</b>.",
+    {p:p,q:q,A:A,m:m});
+  qq.figure=triSVG(a,q,p,{L:["A","B","C"],ang:[A+"°",null,null],side:[fmt(a,1)+" m",q+" m",p+" m"]});
+  return qq;
+});
+
+/* --- Unit 2: Quadratic Functions --- */
+E("u2-evaluate-f",2,["4.1"],1,"gen",function(){
+  var a=0,tries=0;while(a===0&&tries<40){a=ri(-4,4);tries++;}
+  var b=ri(-9,9),c=ri(-12,12),d=ri(-5,5),ans=a*d*d+b*d+c;
+  return numq("For f(x) = "+quadStr(a,b,c)+", what is f("+d+")?",
+    ans,0.011,
+    "Substitute x = "+d+": f("+d+") = "+a+" × ("+d+")² + ("+b+") × ("+d+") + ("+c+") = "+(a*d*d)+" + "+(b*d)+" + "+c+" = <b>"+ans+"</b>.",
+    {a:a,b:b,c:c,d:d,ans:ans});
+});
+E("u2-vertex-shift",2,["4.15"],2,"gen",function(){
+  var a=0,h=0,k=0,tries=0;
+  while((a===0||h===0||k===0)&&tries<60){a=ri(-5,5);h=ri(-7,7);k=ri(-9,9);tries++;}
+  var aTxt=a===1?"":(a===-1?"−":a);
+  var hTxt=h>0?"(x − "+h+")":"(x + "+(-h)+")";
+  var open=a>0?"upward":"downward";
+  function vt(x,y){return "("+x+", "+y+")";}
+  var key=vt(h,k)+"; opens "+open;
+  return mcq("What is the vertex of y = "+aTxt+hTxt+"² "+(k>0?"+ "+k:"− "+(-k))+", and which way does the graph open?",
+    key,
+    [vt(-h,k)+"; opens "+open,vt(h,-k)+"; opens "+open,vt(-h,-k)+"; opens "+open],
+    "In y = a(x − h)² + k the vertex is (h, k). Here the squared part is (x "+(h>0?"− "+h:"+ "+(-h))+"), so h = "+h+" (the sign flips from how it appears), and k = "+k+". Since a = "+a+" is "+(a>0?"positive":"negative")+", the graph opens "+open+". The vertex is <b>"+key+"</b>.",
+    {a:a,h:h,k:k});
+});
+E("u2-factored-max-height",2,["4.2"],3,"gen",function(){
+  var a=pick([2,3,4,5]),r1=ri(3,14),r2=ri(1,8);if(r2>=r1)r2=r1-1;
+  var S=r1+r2,max=a*S*S/4,tstar=(r1-r2)/2;
+  return numq("A projectile's height is modelled by h(t) = −"+a+"(t − "+r1+")(t + "+r2+") metres, t seconds after launch. What is the greatest height it reaches? Give the exact value, in metres.",
+    max,0.011,
+    "The height is zero at t = "+r1+" and (before launch) at t = −"+r2+"; the vertex sits midway between the roots, at t = ("+r1+" − "+r2+") ÷ 2 = "+fmt(tstar,1)+" s. Substituting: h("+fmt(tstar,1)+") = −"+a+" × ("+fmt(tstar-r1,1)+") × ("+fmt(tstar+r2,1)+") = <b>"+fmt(max,2)+" m</b>.",
+    {a:a,r1:r1,r2:r2,S:S,max:max});
+});
+
+/* --- Unit 3: Quadratic Equations --- */
+E("u3-formula-exact-roots",3,["4.9"],2,"gen",function(){
+  function gcd(x,y){x=Math.abs(x);y=Math.abs(y);while(y){var u=y;y=x%y;x=u;}return x||1;}
+  function fmtRoot(num,coef,rad,den){return "("+num+" ± "+(coef===1?"":coef)+"√"+rad+")"+(den===1?"":" / "+den);}
+  var a,b,c,D,t,Dp,g,tries=0;
+  do{
+    a=pick([1,2]);b=ri(-9,9);c=ri(-8,8);
+    D=b*b-4*a*c;t=1;Dp=D;
+    for(var f=2;f*f<=Dp;f++){while(Dp%(f*f)===0){Dp/=(f*f);t*=f;}}
+    tries++;
+  }while((b===0||D<=0||Dp<=1)&&tries<90);
+  /* require b != 0, D > 0 and D not a perfect square (Dp > 1 after extraction);
+     the fallback below satisfies all three (D = 37) if the loop ever exhausts */
+  if(b===0||D<=0||Dp<=1){a=1;b=-5;c=-3;D=b*b-4*a*c;t=1;Dp=D;for(var f2=2;f2*f2<=Dp;f2++){while(Dp%(f2*f2)===0){Dp/=(f2*f2);t*=f2;}}}
+  g=gcd(gcd(b,t),2*a);
+  var num=-b/g,coef=t/g,den=2*a/g;
+  var key=fmtRoot(num,coef,Dp,den);
+  var cand=[fmtRoot(b/g,coef,Dp,den),fmtRoot(num,1,D,2*a),fmtRoot(num,coef,Dp,a),fmtRoot(num,coef+1,Dp,den),fmtRoot(num+1,coef,Dp,den)],ds=[];
+  for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
+  return mcq("Solve "+quadStr(a,b,c)+" = 0. Which option gives the roots in simplest exact form?",
+    key,ds,
+    "x = (−b ± √(b² − 4ac)) / (2a) = ("+(-b)+" ± √"+D+") / "+(2*a)+". "+(t>1?"Since √"+D+" = "+t+"√"+Dp+", ":"Since √"+D+" does not simplify, ")+(g>1?"and the whole fraction divides by "+g+", ":"")+"the simplest exact form is <b>"+key+"</b>.",
+    {a:a,b:b,c:c,D:D,t:t,Dp:Dp,num:num,coef:coef,den:den});
+});
+E("u3-squares-area",3,["4.3"],3,"gen",function(){
+  var s=ri(3,14),m=ri(1,6),T=s*s+(s+m)*(s+m);
+  var ctx=pick([["two square garden plots","plot"],["two square patios","patio"],["two square quilts","quilt"]]);
+  return numq("A gardener has "+ctx[0]+". The side of the larger "+ctx[1]+" is "+m+" m longer than the side of the smaller one, and their areas add to "+T+" m². What is the side length of the smaller "+ctx[1]+", in metres?",
+    s,0.011,
+    "Let the smaller side be s; the larger is s + "+m+". Then s² + (s + "+m+")² = "+T+". A shortcut: (2s + "+m+")² = 2 × "+T+" − "+(m*m)+" = "+(2*T-m*m)+", so 2s + "+m+" = "+(2*s+m)+" and s = <b>"+s+" m</b>. (Check: "+s+"² + "+(s+m)+"² = "+(s*s)+" + "+((s+m)*(s+m))+" = "+T+".)",
+    {s:s,m:m,T:T});
+});
+E("u3-number-pair",3,["4.6"],2,"gen",function(){
+  var u=ri(-6,10),v=u+ri(1,9),S=u+v,P=u*v;
+  return numq("Two numbers add to "+S+" and multiply to "+P+". What is the larger of the two numbers?",
+    v,0.011,
+    "The numbers are the roots of x² − ("+S+")x + ("+P+") = 0, which factors as "+(u>=0?"(x − "+u+")":"(x + "+(-u)+")")+(v>=0?"(x − "+v+")":"(x + "+(-v)+")")+" = 0. The roots are "+u+" and "+v+", so the larger number is <b>"+v+"</b>. (Check: "+u+" + "+v+" = "+S+" and "+u+" × "+v+" = "+P+".)",
+    {u:u,v:v,S:S,P:P});
+});
+
+/* --- Unit 4: Radicals --- */
+E("u4-compare-radicals",4,["1.4"],2,"gen",function(){
+  var a,b,c,d,x2,y2,tries=0;
+  do{
+    a=ri(1,6);b=pick([2,3,5,6,7,10,11,13]);c=ri(1,6);d=pick([2,3,5,6,7,10,11,13]);
+    x2=a*a*b;y2=c*c*d;tries++;
+  }while((x2===y2||(a===c&&b===d))&&tries<60);
+  var X=radStr(a,b),Y=radStr(c,d),xBig=x2>y2;
+  return mcq("Which statement about "+X+" and "+Y+" is true?",
+    (xBig?X:Y)+" is the larger value",
+    [(xBig?Y:X)+" is the larger value","They are equal","They cannot be compared without a calculator"],
+    "Write both as entire radicals: "+X+" = √"+x2+" and "+Y+" = √"+y2+". Since "+Math.max(x2,y2)+" > "+Math.min(x2,y2)+", the larger value is <b>"+(xBig?X:Y)+"</b>.",
+    {a:a,b:b,c:c,d:d,x2:x2,y2:y2});
+});
+E("u4-difference-simplify",4,["1.6"],2,"gen",function(){
+  var m=pick([2,3,5,6,7,10,11,13]),a=ri(3,7),b=ri(1,a-1);
+  var A=a*a*m,B=b*b*m,key=radStr(a-b,m);
+  var cand=["√"+(A-B),radStr(a+b,m),radStr(a,m)],ds=[];
+  for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
+  return mcq("Simplify: √"+A+" − √"+B+". Give the answer in simplest radical form.",
+    key,ds,
+    "Simplify each term first: √"+A+" = "+radStr(a,m)+" and √"+B+" = "+radStr(b,m)+". They are like radicals, so subtract the coefficients: "+a+" − "+b+" = "+(a-b)+", giving <b>"+key+"</b>.",
+    {a:a,b:b,m:m,A:A,B:B});
+});
+E("u4-reciprocal-sum",4,["1.7"],3,"gen",function(){
+  function gcd(x,y){while(y){var u=y;y=x%y;x=u;}return x;}
+  var a=pick([2,3,5,6,7,10,11,13,14,15,17,19,21,22,23,26]),k=ri(2,6),B=a*k*k;
+  var g=gcd(k+1,k*a),num=(k+1)/g,den=(k*a)/g;
+  function fr(nm,dn){return (nm===1?"√"+a:nm+"√"+a)+" / "+dn;}
+  var key=fr(num,den);
+  var cand=[fr(k+1,k*a),(k+1)+"√"+a+" / "+a,"√"+a+" / "+k,fr(k,k*a)],ds=[];
+  for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
+  return mcq("Simplify, rationalizing the denominator: 1/√"+a+" + 1/√"+B+".",
+    key,ds,
+    "First, √"+B+" = "+k+"√"+a+". Write the sum over a common denominator: 1/√"+a+" + 1/("+k+"√"+a+") = ("+k+" + 1) / ("+k+"√"+a+") = "+(k+1)+" / ("+k+"√"+a+"). Rationalizing (multiply top and bottom by √"+a+") gives "+(k+1)+"√"+a+" / "+(k*a)+(g>1?", which reduces by "+g:"")+" — the simplest form is <b>"+key+"</b>.",
+    {a:a,k:k,B:B,g:g,num:num,den:den});
+});
+
+/* --- Unit 6: Proportional Reasoning --- */
+E("u6-map-distance",6,["6.9"],2,"gen",function(){
+  var N=pick([20000,25000,40000,50000,100000]),mode=ri(0,1);
+  var dcm,km,ans,tries=0;
+  if(mode===0){
+    dcm=ri(3,18);km=dcm*N/100000;ans=km;
+  }else{
+    do{km=pick([2,3,4,5,6,8,10,12]);dcm=km*100000/N;tries++;}while(dcm!==Math.floor(dcm)&&tries<60);
+    ans=dcm;
+  }
+  return numq(mode===0
+      ?"On a map with scale 1 : "+N+", the distance between two towns measures "+dcm+" cm. What is the actual distance between the towns, in kilometres?"
+      :"On a map with scale 1 : "+N+", two towns are actually "+km+" km apart. How far apart are they on the map, in centimetres?",
+    ans,0.011,
+    mode===0
+      ?"Each map centimetre represents "+N+" cm = "+fmt(N/100000,2)+" km on the ground. Actual distance: "+dcm+" × "+fmt(N/100000,2)+" = <b>"+fmt(km,2)+" km</b>."
+      :"Each map centimetre represents "+fmt(N/100000,2)+" km, so the map distance is "+km+" ÷ "+fmt(N/100000,2)+" = <b>"+dcm+" cm</b>.",
+    {N:N,dcm:dcm,km:km,mode:mode,ans:ans});
+});
+
+/* --- Unit 7: Reasoning --- */
+E("u7-deductive-chain",7,["2.3"],2,"gen",function(){
+  /* rows: [singular A, plural A, plural B, singular C, plural C, singular D, plural D]
+     with A in B, B in C, C in D */
+  var rows=[
+    ["daisy","daisies","flowers","plant","plants","living thing","living things"],
+    ["robin","robins","birds","animal","animals","living thing","living things"],
+    ["square","squares","rectangles","quadrilateral","quadrilaterals","polygon","polygons"],
+    ["salmon","salmon","fish","animal","animals","living thing","living things"],
+    ["violin","violins","string instruments","musical instrument","musical instruments","man-made object","man-made objects"],
+    ["poodle","poodles","dogs","mammal","mammals","animal","animals"],
+    ["oak tree","oak trees","trees","plant","plants","living thing","living things"],
+    ["emerald","emeralds","gems","mineral","minerals","natural substance","natural substances"],
+    ["maple tree","maple trees","trees","plant","plants","living thing","living things"],
+    ["eagle","eagles","birds","animal","animals","living thing","living things"],
+    ["hexagon","hexagons","polygons","shape","shapes","figure","figures"],
+    ["trumpet","trumpets","brass instruments","musical instrument","musical instruments","man-made object","man-made objects"],
+    ["wolf","wolves","canines","mammal","mammals","animal","animals"],
+    ["trout","trout","fish","animal","animals","living thing","living things"],
+    ["cube","cubes","prisms","solid","solids","figure","figures"],
+    ["cello","cellos","string instruments","musical instrument","musical instruments","man-made object","man-made objects"],
+    ["beagle","beagles","dogs","mammal","mammals","animal","animals"],
+    ["tulip","tulips","flowers","plant","plants","living thing","living things"],
+    ["sparrow","sparrows","birds","animal","animals","living thing","living things"],
+    ["trapezoid","trapezoids","quadrilaterals","polygon","polygons","figure","figures"]
+  ];
+  var R=pick(rows),mode=ri(0,2);
+  if(mode===2){
+    return mcq("All "+R[1]+" are "+R[2]+". All "+R[2]+" are "+R[4]+". All "+R[4]+" are "+R[6]+". One particular "+R[0]+" is being examined. Which conclusion MUST be true?",
+      "The "+R[0]+" is also a "+R[5],
+      ["The "+R[0]+" is not a "+R[5],"Every "+R[5]+" is a "+R[0],"Every member of "+R[4]+" is a "+R[0]],
+      "Follow the whole chain: all "+R[1]+" are "+R[2]+", all "+R[2]+" are "+R[4]+", and all "+R[4]+" are "+R[6]+" — so this "+R[0]+" must be a "+R[5]+". The other options reverse the chain, which deduction does not allow.",
+      {row:R,mode:mode});
+  }
+  var first="All "+R[1]+" are "+R[2]+". All "+R[2]+" are "+R[4]+".";
+  var second="All "+R[2]+" are "+R[4]+". All "+R[1]+" are "+R[2]+".";
+  return mcq((mode===0?first:second)+" One particular "+R[0]+" is being examined. Which conclusion MUST be true?",
+    "The "+R[0]+" is also a "+R[3],
+    ["The "+R[0]+" is not a "+R[3],"Every "+R[3]+" is a "+R[0],"Every member of "+R[2]+" is a "+R[0]],
+    "Deduction follows the chain: all "+R[1]+" are "+R[2]+", and all "+R[2]+" are "+R[4]+", so this "+R[0]+" must be a "+R[3]+". The other options reverse the chain, which deduction does not allow.",
+    {row:R,mode:mode});
+});
+E("u7-figure-pattern",7,["2.1"],2,"gen",function(){
+  var p=ri(1,4),q=ri(0,5),N=ri(6,15);
+  function cnt(n){return n*n+p*n+q;}
+  var ctx=pick(["dots","stars","tiles"]);
+  return numq("A pattern of "+ctx+" grows like this: Figure 1 has "+cnt(1)+", Figure 2 has "+cnt(2)+", and Figure 3 has "+cnt(3)+". The count for Figure n is n² + "+p+"n"+(q>0?" + "+q:"")+". How many "+ctx+" are in Figure "+N+"?",
+    cnt(N),0.011,
+    "Substitute n = "+N+": "+N+"² + "+p+" × "+N+(q>0?" + "+q:"")+" = "+(N*N)+" + "+(p*N)+(q>0?" + "+q:"")+" = <b>"+cnt(N)+"</b>. (The formula checks against the given figures: for n = 1, 2, 3 it gives "+cnt(1)+", "+cnt(2)+", "+cnt(3)+", as stated.)",
+    {p:p,q:q,N:N,ans:cnt(N)});
+});
+
 /* ============ selection engine ============ */
 /* Mid-course scope (Table of Specifications, verified Oct 26, 2026): the mid-course
    exam samples Unit 4 only to Section 4.3, so the two Radical Equations entries
