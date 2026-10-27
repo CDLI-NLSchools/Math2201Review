@@ -1079,7 +1079,7 @@ E("u4-simplify-add",4,["1.6"],2,"gen",function(){
     radStr(tot,b),[radStr(tot+1,b),radStr(tot,b+1),"\u221A"+(n1+n2)],
     "\u221A"+n1+" = "+radStr(a1,b)+" and \u221A"+n2+" = "+radStr(a2,b)+". Like radicals add: ("+a1+" + "+a2+")\u221A"+b+" = "+radStr(tot,b)+". (You cannot just add the numbers under the roots.)",{b:b,a1:a1,a2:a2});
 });
-E("u4-multiply",4,["1.4"],2,"gen",function(){
+E("u4-multiply",4,["1.6"],2,"gen",function(){
   var k=pick([2,3,5,6,7,10,11,13,14,15]);var i=ri(1,3),j=ri(1,3);var x=k*i*i,y=k*j*j;
   return numq("The product \u221A"+x+" \u00D7 \u221A"+y+" is a whole number. What is it?",
     k*i*j,0.011,"\u221A"+x+" \u00D7 \u221A"+y+" = \u221A("+x+" \u00D7 "+y+") = \u221A"+(x*y)+". Notice "+x+" = "+k+" \u00D7 "+(i*i)+" and "+y+" = "+k+" \u00D7 "+(j*j)+", so the product is "+k+" \u00D7 "+i+" \u00D7 "+j+" = <b>"+(k*i*j)+"</b>.",{p:[x,y]});
@@ -1115,7 +1115,7 @@ E("u4-extraneous",4,["1.11"],3,"gen",function(){
     ["x = "+r+" is extraneous \u2014 it is the larger answer","Neither \u2014 squaring never creates false roots","Both are extraneous, so the equation has no solution"],
     "Check x = "+e+": \u221A("+e+" + "+a+") = \u221A"+(e+a)+" = "+Math.sqrt(e+a)+", but x \u2212 "+b+" = "+(e-b)+" < 0. A principal square root cannot equal a negative number, so x = "+e+" crept in when we squared. x = "+r+" checks: \u221A"+(r+a)+" = "+Math.sqrt(r+a)+" = "+(r-b)+" \u2713.",{b:b,r:r,e:e,a:a});
 });
-E("u4-order",4,["1.3"],2,"gen",function(){
+E("u4-order",4,["1.4"],2,"gen",function(){
   var base=ri(5,10),g1=ri(2,4),g2=ri(2,4),g3=ri(2,5);
   var ins=[base,base+g1,base+g1+g2,base+g1+g2+g3];
   function render(n){var c=Math.floor(Math.sqrt(n));if(c*c===n)return ""+c;var r=n;var co=1;for(var d=2;d*d<=r;d++){while(r%(d*d)===0){r/=(d*d);co*=d;}}return (co>1?co:"")+"\u221A"+r;}
@@ -1677,12 +1677,330 @@ E("u8-angle-sum-rule",8,["5.5"],1,"var",varset([
 </script>
 
 <script>
+/* ============ Tranche 3 (Oct 26): Units 1-4 depth ============
+   Templates reworked from the Holy Spirit sample tests/reviews and the
+   NL Schools topic lists (see harvest/newsites-inventory.md); every item
+   re-created with new numbers and contexts, nothing copied verbatim.
+   Also repairs two indicator tags from the original build: u4-order was
+   tagged 1.3 but it orders radicals (1.4), and u4-multiply was tagged
+   1.4 but it multiplies radicals (an operation, 1.6). */
+
+/* --- Unit 1: Acute Triangle Trigonometry --- */
+E("u1-sine-two-step",1,["7.2"],2,"gen",function(){
+  function rd(d){return d*Math.PI/180;}
+  var A,B,C,tries=0;
+  do{A=ri(28,58);B=ri(24,58);C=180-A-B;tries++;}while((C<25||C>95)&&tries<40);
+  var a=ri(8,30);
+  var c=a*Math.sin(rd(C))/Math.sin(rd(A));
+  var q=numq("In \u25B3ABC, \u2220A = "+A+"\u00B0, \u2220B = "+B+"\u00B0, and the side opposite \u2220A is "+a+" cm. Find the length of the side opposite \u2220C, to one decimal place, in cm.",
+    fmt(c,1),0.06,
+    "First the third angle: \u2220C = 180\u00B0 \u2212 "+A+"\u00B0 \u2212 "+B+"\u00B0 = "+C+"\u00B0. Then the sine law: c \u00F7 sin("+C+"\u00B0) = "+a+" \u00F7 sin("+A+"\u00B0), so c = "+a+" \u00D7 sin("+C+"\u00B0) \u00F7 sin("+A+"\u00B0) = <b>"+fmt(c,1)+" cm</b>.",
+    {A:A,B:B,C:C,a:a});
+  q.figure=triAngSVG({ang:[A+"\u00B0",B+"\u00B0",C+"\u00B0"],side:[a+" cm",null,"?"]});
+  return q;
+});
+E("u1-cosine-context",1,["7.2"],2,"gen",function(){
+  function rd(d){return d*Math.PI/180;}
+  var p=ri(8,38),w=ri(8,38),ang=ri(38,128);
+  var d=Math.sqrt(p*p+w*w-2*p*w*Math.cos(rd(ang)));
+  var ctx=pick([
+    "Two boats leave the same wharf at the same time. One travels "+p+" km and the other travels "+w+" km, with an angle of "+ang+"\u00B0 between their courses.",
+    "Two hikers leave a trailhead at the same time. One walks "+p+" km and the other walks "+w+" km, with an angle of "+ang+"\u00B0 between their paths.",
+    "Two straight roads leave an intersection. A gas station is "+p+" km along one road and a school is "+w+" km along the other, with an angle of "+ang+"\u00B0 between the roads. The distance between the gas station and the school is measured straight across."
+  ]);
+  var q=numq(ctx+" How far apart are the two endpoints, to one decimal place, in km?",
+    fmt(d,1),0.06,
+    "The two distances and the distance apart form a triangle with an included angle of "+ang+"\u00B0, so the cosine law applies: d\u00B2 = "+p+"\u00B2 + "+w+"\u00B2 \u2212 2("+p+")("+w+") cos("+ang+"\u00B0) = "+fmt(p*p+w*w-2*p*w*Math.cos(rd(ang)),1)+", so d = <b>"+fmt(d,1)+" km</b>.",
+    {p:p,w:w,ang:ang});
+  q.figure=triSVG(d,p,w,{L:["A","B","C"],ang:[ang+"\u00B0",null,null],side:["?",w+" km",p+" km"]});
+  return q;
+});
+E("u1-two-station-height",1,["7.3"],3,"gen",function(){
+  function rd(d){return d*Math.PI/180;}
+  var al=ri(18,36),be=al+ri(12,28),dd=pick([15,20,25,30,40,50,60]);
+  var slant=dd*Math.sin(rd(al))/Math.sin(rd(be-al));
+  var h=slant*Math.sin(rd(be));
+  var thing=pick(["a tower","a lighthouse","a communications mast"]);
+  return numq("From a point on level ground, the angle of elevation to the top of "+thing+" is "+al+"\u00B0. Moving "+dd+" m closer to it, the angle of elevation is "+be+"\u00B0. Find its height, to one decimal place, in m.",
+    fmt(h,1),0.06,
+    "The two ground points and the top form a triangle. Its angle at the farther point is "+al+"\u00B0, and its angle at the top is "+be+"\u00B0 \u2212 "+al+"\u00B0 = "+(be-al)+"\u00B0. By the sine law, the distance from the nearer point to the top is "+dd+" \u00D7 sin("+al+"\u00B0) \u00F7 sin("+(be-al)+"\u00B0) = "+fmt(slant,1)+" m. The height is then "+fmt(slant,1)+" \u00D7 sin("+be+"\u00B0) = <b>"+fmt(h,1)+" m</b>.",
+    {al:al,be:be,dd:dd});
+});
+E("u1-law-choice-context",1,["7.1","7.2"],1,"var",varset([
+  function(){return mcq("A triangle has sides of 9 cm and 14 cm with the angle of 58\u00B0 between them. Which law gives the third side directly?",
+    "Cosine law",["Sine law","Either law gives it in one step","Neither law can be used"],
+    "The known angle sits between the two known sides (SAS), so the cosine law gives the third side in one step. The sine law needs a known side-angle pair, which this triangle does not give yet." );},
+  function(){return mcq("A triangle has angles of 47\u00B0 and 71\u00B0 and a side of 12 m opposite the 47\u00B0 angle. Which law gives another side directly?",
+    "Sine law",["Cosine law","Either law gives it in one step","Neither law can be used"],
+    "There is a known side-angle pair (12 m opposite 47\u00B0), so the sine law sets up a proportion for any other side. The cosine law would need two sides around a known angle." );},
+  function(){return mcq("The three sides of a triangle measure 7 km, 10 km and 13 km. Which law gives one of its angles directly?",
+    "Cosine law",["Sine law","Either law gives it in one step","Neither law can be used"],
+    "With all three sides known (SSS) and no angle given, the cosine law rearranges to give an angle. The sine law cannot start without a known angle." );},
+  function(){return mcq("In \u25B3PQR, \u2220P = 39\u00B0, \u2220Q = 84\u00B0, and the side opposite \u2220Q is 15 m. Which law gives the side opposite \u2220P directly?",
+    "Sine law",["Cosine law","Either law gives it in one step","Neither law can be used"],
+    "The side of 15 m is opposite the known angle of 84\u00B0, a known side-angle pair, so the sine law gives the side opposite 39\u00B0 in one proportion.");}
+]));
+
+/* --- Unit 2: Quadratic Functions --- */
+E("u2-which-quadratic",2,["4.10"],1,"var",varset([
+  function(){return mcq("Which relation is quadratic?",
+    "y = (x + 2)(x \u2212 5)",["y = 3x \u2212 7","y = x\u00B3 \u2212 x","y = \u221A(x + 1)"],
+    "(x + 2)(x \u2212 5) expands to x\u00B2 \u2212 3x \u2212 10: an x\u00B2 term and nothing of higher degree. The others are linear, cubic and a radical relation." );},
+  function(){return mcq("Which relation is quadratic?",
+    "y = (2x \u2212 1)(x + 3)",["y = 5 \u00F7 x","y = x(x\u00B2 + 1)","y = \u22124x + 1"],
+    "(2x \u2212 1)(x + 3) expands to 2x\u00B2 + 5x \u2212 3, which is quadratic. Note y = x(x\u00B2 + 1) expands to x\u00B3 + x, a cubic in disguise." );},
+  function(){return mcq("Which relation is quadratic?",
+    "y = (x + 4)\u00B2",["y = 3x","y = x\u00B3 + 2x","y = \u2212x + 9"],
+    "(x + 4)\u00B2 expands to x\u00B2 + 8x + 16, a quadratic. Squaring a binomial always produces an x\u00B2 term." );},
+  function(){return mcq("Which relation is quadratic?",
+    "y = x\u00B2 \u2212 3x",["y = 7 \u2212 x","y = 2x\u00B3","y = \u221A x"],
+    "y = x\u00B2 \u2212 3x has degree 2. The others are linear (degree 1), cubic (degree 3) and a square-root relation.");}
+]));
+E("u2-axis-two-points",2,["4.13"],1,"gen",function(){
+  var x1=ri(-9,3),gap=pick([2,4,6,8,10,12,14]),x2=x1+gap,y=ri(-6,12);
+  var mid=(x1+x2)/2;
+  return numq("The points ("+x1+", "+y+") and ("+x2+", "+y+") lie on the same parabola. What is the equation of the axis of symmetry? Give the value of x.",
+    mid,0.011,
+    "The two points have the same y-coordinate, so they sit at the same height on the parabola, one on each side of the axis. The axis passes midway between them: x = ("+x1+" + "+x2+") \u00F7 2 = <b>"+fmt(mid,1)+"</b>.",
+    {x1:x1,x2:x2,y:y});
+});
+E("u2-standard-from-factored",2,["4.5"],2,"gen",function(){
+  var a=pick([1,2,-2,3,-1]),r1,r2,tries=0;
+  do{r1=ri(-6,6);r2=ri(-6,6);tries++;}while((r1===0||r2===0||r1===r2||r2===-r1)&&tries<40);
+  var B=-a*(r1+r2),C=a*r1*r2;
+  function fs(r){return "(x "+(r>0?"\u2212 "+r:"+ "+(-r))+")";}
+  var pre=(a===1?"":(a<0?"\u2212"+Math.abs(a):""+a));
+  return mcq("Which function is the standard form of y = "+pre+fs(r1)+fs(r2)+"?",
+    "y = "+quadStr(a,B,C),
+    ["y = "+quadStr(a,-B,C),"y = "+quadStr(a,B,-C),"y = "+quadStr(a,-B,-C)],
+    "Expand the factors: "+fs(r1)+fs(r2)+" = x\u00B2 \u2212 ("+r1+" + "+r2+")x + ("+r1+")("+r2+") = x\u00B2 "+((-(r1+r2))>0?"+ ":"\u2212 ")+Math.abs(r1+r2)+"x "+(r1*r2>0?"+ ":"\u2212 ")+Math.abs(r1*r2)+". Multiplying through by "+a+" gives y = "+quadStr(a,B,C)+". Watch the signs: the middle coefficient is \u2212"+a+" \u00D7 ("+r1+" + "+r2+") = "+B+".",
+    {a:a,r1:r1,r2:r2});
+});
+E("u2-revenue-model",2,["4.2"],2,"gen",function(){
+  var N=pick([240,300,360,400,450,500,600]),P=pick([8,10,12,15,20]),s=pick([10,15,20,25,30,40]);
+  var frame=pick([
+    "A theatre sells "+N+" tickets per show at $"+P+" each. For every $1 increase in the ticket price, "+s+" fewer tickets are sold. Let x be the number of $1 increases. Which function gives the revenue R(x)?",
+    "A ferry carries "+N+" passengers per crossing at $"+P+" per passenger. For every $1 added to the fare, "+s+" fewer passengers ride. Let x be the number of $1 increases. Which function gives the revenue R(x)?",
+    "A market stall sells "+N+" jars of preserves a week at $"+P+" each. For every $1 increase in the price, "+s+" fewer jars are sold. Let x be the number of $1 increases. Which function gives the revenue R(x)?"
+  ]);
+  return mcq(frame,
+    "R(x) = ("+N+" \u2212 "+s+"x)("+P+" + x)",
+    ["R(x) = ("+N+" + "+s+"x)("+P+" + x)","R(x) = ("+N+" \u2212 "+s+"x)("+P+" \u2212 x)","R(x) = ("+N+" \u2212 "+s+")("+P+" + x)"],
+    "After x increases, the price is $"+P+" + x and the number sold is "+N+" \u2212 "+s+"x (it drops by "+s+" per increase, so the drop is "+s+"x in total). Revenue is price \u00D7 quantity: R(x) = ("+N+" \u2212 "+s+"x)("+P+" + x).",
+    {N:N,P:P,s:s});
+});
+E("u2-count-intercepts",2,["4.15"],2,"gen",function(){
+  var a=pick([1,2,-1,-2,3,-3]),h=ri(-6,6),k=ri(-9,9);
+  var cnt=(k===0)?1:(((a>0&&k<0)||(a<0&&k>0))?2:0);
+  var aPart=(a===1?"":(a<0?"\u2212"+Math.abs(a):""+a));
+  var base=(h===0)?"x\u00B2":("(x "+(h>0?"\u2212 "+h:"+ "+(-h))+")\u00B2");
+  var vf="y = "+aPart+base+(k>0?" + "+k:(k<0?" \u2212 "+(-k):""));
+  return numq("How many x-intercepts does the graph of "+vf+" have?",
+    cnt,0.011,
+    "The vertex is ("+h+", "+k+") and the parabola opens "+(a>0?"upward":"downward")+". "+(k===0?"The vertex sits right on the x-axis, so the graph touches it at exactly one point: <b>1</b> x-intercept.":(cnt===2?"The vertex is on the opposite side of the x-axis from the direction the parabola opens away from, so the graph must cross the axis twice: <b>2</b> x-intercepts.":"The vertex is on the same side of the x-axis as the opening, so the graph never reaches the axis: <b>0</b> x-intercepts.")),
+    {a:a,h:h,k:k});
+});
+E("u2-max-area",2,["4.2"],3,"gen",function(){
+  var F=4*ri(6,40);
+  var w=F/4,maxA=F*F/8,mode=ri(0,2);
+  var c=pick([
+    "A farmer uses "+F+" m of fencing to enclose a rectangular garden against a long barn wall. The wall forms one full side of the garden, so fencing is needed on only three sides.",
+    "A homeowner uses "+F+" m of fencing to build a rectangular dog pen against the side of a house. The house forms one full side of the pen, so fencing is needed on only three sides.",
+    "A lifeguard uses "+F+" m of rope to mark off a rectangular swimming area along a straight beach. The beach forms one full side, so rope is needed on only three sides."
+  ]);
+  var ask=(mode===0?" What is the maximum area that can be enclosed, in m\u00B2?":(mode===1?" What is the length of each side perpendicular to the wall or beach when the area is greatest, in m?":" What is the length of the side parallel to the wall or beach when the area is greatest, in m?"));
+  return numq(c+ask,
+    mode===0?maxA:(mode===1?w:F/2),0.011,
+    "Let w be the length of each side perpendicular to the wall. The side parallel to the wall is then "+F+" \u2212 2w, and the area is A = w("+F+" \u2212 2w). This quadratic opens downward; its vertex is at w = "+F+" \u00F7 4 = "+w+" m. The maximum area is "+w+" \u00D7 ("+F+" \u2212 2 \u00D7 "+w+") = "+w+" \u00D7 "+(F-2*w)+" = <b>"+maxA+" m\u00B2</b>, with the parallel side measuring "+(F-2*w)+" m.",
+    {F:F,mode:mode});
+});
+
+/* --- Unit 3: Quadratic Equations --- */
+E("u3-zeros-factored",3,["4.6","4.8"],1,"gen",function(){
+  function g2(a,b){while(b){var t=a%b;a=b;b=t;}return a;}
+  function fr(n,d){var g=g2(Math.abs(n),Math.abs(d));n/=g;d/=g;return d===1?(""+n):(n+"/"+d);}
+  var p=ri(2,5),qq,tries=0;
+  do{qq=ri(1,9);tries++;}while(qq===p&&tries<30);
+  var r=ri(1,9);
+  var root1=fr(qq,p);
+  return mcq("What are the zeros of y = ("+p+"x \u2212 "+qq+")(x + "+r+")?",
+    "x = \u2212"+r+" and x = "+root1,
+    ["x = "+r+" and x = "+root1,
+     "x = \u2212"+r+" and x = \u2212"+root1,
+     "x = \u2212"+r+" and x = "+fr(p,qq)],
+    "Set each factor equal to zero. From x + "+r+" = 0, x = \u2212"+r+". From "+p+"x \u2212 "+qq+" = 0, "+p+"x = "+qq+", so x = "+root1+".",
+    {p:p,qq:qq,r:r});
+});
+E("u3-factor-monic",3,["4.8"],2,"gen",function(){
+  var r1,r2,tries=0;
+  do{r1=ri(-9,9);r2=ri(-9,9);tries++;}while((r1===0||r2===0||r1===r2||r2===-r1)&&tries<60);
+  var b=-(r1+r2),c=r1*r2;
+  function fs(r){return "(x "+(r>0?"\u2212 "+r:"+ "+(-r))+")";}
+  return mcq("Which is the factored form of "+quadStr(1,b,c)+"?",
+    fs(r1)+fs(r2),
+    [fs(-r1)+fs(-r2),fs(-r1)+fs(r2),fs(r1)+fs(-r2)],
+    "Look for two numbers that multiply to "+c+" and add to "+b+": they are "+(-r1)+" and "+(-r2)+". So "+quadStr(1,b,c)+" = "+fs(r1)+fs(r2)+". (Expand it back to check: the middle term is \u2212("+r1+" + "+r2+")x = "+b+"x.)",
+    {r1:r1,r2:r2});
+});
+E("u3-first-mistake",3,["4.6"],2,"var",varset([
+  function(){return mcq("A student solves x\u00B2 \u2212 5x + 6 = 0 by factoring.<br>Line 1: (x \u2212 2)(x \u2212 3) = 0<br>Line 2: x \u2212 2 = 0 &nbsp;or&nbsp; x \u2212 3 = 0<br>Line 3: x = 2 &nbsp;or&nbsp; x = \u22123<br>Line 4: The roots are 2 and \u22123.<br>In which line is the FIRST mistake?",
+    "Line 3",["Line 1","Line 2","Line 4"],
+    "The factoring in Line 1 is correct (2 \u00D7 3 = 6 and \u22122 \u2212 3 = \u22125) and Line 2 applies the zero-product rule properly. In Line 3, x \u2212 3 = 0 gives x = +3, not \u22123. The roots are 2 and 3." );},
+  function(){return mcq("A student solves x\u00B2 + 6x + 4 = 0 using the quadratic formula.<br>Line 1: x = (\u22126 \u00B1 \u221A(6\u00B2 \u2212 4(1)(4))) \u00F7 2<br>Line 2: x = (\u22126 \u00B1 \u221A52) \u00F7 2<br>Line 3: x = (\u22126 \u00B1 2\u221A13) \u00F7 2<br>Line 4: x = \u22123 \u00B1 \u221A13<br>In which line is the FIRST mistake?",
+    "Line 2",["Line 1","Line 3","Line 4"],
+    "Line 1 sets up the formula correctly. In Line 2, 6\u00B2 \u2212 4(1)(4) = 36 \u2212 16 = 20, not 52 (the student added instead of subtracting). Everything after is consistent with that wrong value; the correct roots are x = \u22123 \u00B1 \u221A5." );},
+  function(){return mcq("A student solves x\u00B2 = 5x.<br>Line 1: Divide both sides by x: x = 5<br>Line 2: Check: 5\u00B2 = 25 and 5 \u00D7 5 = 25, so x = 5 works<br>Line 3: The only root is x = 5<br>Line 4: Answer: x = 5<br>In which line is the FIRST mistake?",
+    "Line 1",["Line 2","Line 3","Line 4"],
+    "The mistake is Line 1: dividing both sides by x throws away the root x = 0, because you cannot divide by a quantity that might be zero. Done properly: x\u00B2 \u2212 5x = 0, so x(x \u2212 5) = 0, giving x = 0 or x = 5." );},
+  function(){return mcq("A student solves x\u00B2 \u2212 4x \u2212 5 = 0 by factoring.<br>Line 1: (x \u2212 5)(x + 1) = 0<br>Line 2: x \u2212 5 = 0 &nbsp;or&nbsp; x + 1 = 0<br>Line 3: x = 5 &nbsp;or&nbsp; x = 1<br>Line 4: The roots are 5 and 1.<br>In which line is the FIRST mistake?",
+    "Line 3",["Line 1","Line 2","Line 4"],
+    "Line 1 factors correctly (\u22125 \u00D7 1 = \u22125 and \u22125 + 1 = \u22124) and Line 2 is a proper zero-product split. In Line 3, x + 1 = 0 gives x = \u22121, not 1. The roots are 5 and \u22121.");}
+]));
+E("u3-solve-square",3,["4.8"],1,"gen",function(){
+  function g2(a,b){while(b){var t=a%b;a=b;b=t;}return a;}
+  function fr(n,d){var g=g2(Math.abs(n),Math.abs(d));n/=g;d/=g;return d===1?(""+n):(n+"/"+d);}
+  var m=ri(1,9),n=pick([1,2,3,4]),k=pick([1,2,3]),tries=0;
+  while(m===n&&tries<30){m=ri(1,9);tries++;}
+  var A=n*n*k,B=m*m*k;
+  var d3=(m===1)?("x = \u00B1"+fr(2,n)):("x = \u00B1"+fr(m*m,n));
+  return mcq("Solve: "+(A===1?"":A)+"x\u00B2 = "+B+".",
+    "x = \u00B1"+fr(m,n),
+    ["x = "+fr(m,n)+" only","x = \u00B1"+fr(n,m),d3],
+    "Divide both sides by "+A+": x\u00B2 = "+B+" \u00F7 "+A+" = "+fr(B,A)+". Take the square root of both sides, remembering the negative root: x = \u00B1"+fr(m,n)+".",
+    {m:m,n:n,k:k});
+});
+E("u3-gcf-solve",3,["4.8"],2,"gen",function(){
+  var a=ri(2,7),r=ri(-9,9);while(r===0)r=ri(-9,9);
+  var b=a*r;
+  return numq("Solve by factoring: "+quadStr(a,b,0)+" = 0. Give the nonzero root.",
+    -r,0.011,
+    "Factor out the common factor "+a+"x: "+a+"x(x "+(r>0?"+ "+r:"\u2212 "+(-r))+") = 0. So x = 0 or x = "+(-r)+". The nonzero root is <b>"+(-r)+"</b>.",
+    {a:a,r:r});
+});
+E("u3-setup-equation",3,["4.3"],2,"var",varset([
+  function(){return mcq("A flare is launched from the top of a 45 m cliff. Its height above the water after t seconds is h(t) = \u22125t\u00B2 + 30t + 45. Which equation determines the times when the flare is 65 m above the water?",
+    "65 = \u22125t\u00B2 + 30t + 45",
+    ["0 = \u22125t\u00B2 + 30t + 45","t = \u22125(65)\u00B2 + 30(65) + 45","65 = \u22125t\u00B2 + 30t"],
+    "Set the height function equal to the target height: h(t) = 65. The equation 0 = ... would be for hitting the water, and the second option wrongly substitutes 65 for t instead of for h(t)." );},
+  function(){return mcq("A diver's height above a pool after t seconds is h(t) = \u22125t\u00B2 + 8t + 12. Which equation determines the times when the diver is 14 m above the pool?",
+    "14 = \u22125t\u00B2 + 8t + 12",
+    ["0 = \u22125t\u00B2 + 8t + 12","t = \u22125(14)\u00B2 + 8(14) + 12","14 = \u22125t\u00B2 + 8t"],
+    "Set the height function equal to the target height: h(t) = 14, keeping the constant term 12 (the starting height) in place." );},
+  function(){return mcq("A fountain jet's height after t seconds is h(t) = \u22125t\u00B2 + 20t + 3. Which equation determines the times when the water is 18 m above the nozzle?",
+    "18 = \u22125t\u00B2 + 20t + 3",
+    ["0 = \u22125t\u00B2 + 20t + 3","t = \u22125(18)\u00B2 + 20(18) + 3","18 = \u22125t\u00B2 + 20t"],
+    "Set the height function equal to the target height: h(t) = 18. Substituting 18 for t (the second option) would evaluate the height at t = 18 s instead.");}
+]));
+E("u3-border",3,["4.3"],3,"gen",function(){
+  var L=pick([12,16,18,20,24,30]),W=pick([8,10,12,14]),w=pick([1,1.5,2,2.5,3]),tries=0;
+  while(W>=L&&tries<30){W=pick([8,10,12,14]);tries++;}
+  var T=(L+2*w)*(W+2*w);
+  var c=pick([
+    {s:"A rectangular driveway is "+L+" m long and "+W+" m wide. A brick border of uniform width is built around all four sides of the driveway. The total area of the driveway and the border together is "+T+" m\u00B2.",n:"border"},
+    {s:"A rectangular garden plot is "+L+" m by "+W+" m. A gravel path of uniform width is built around all four sides of the plot. The total area of the plot and the path together is "+T+" m\u00B2.",n:"path"}
+  ]);
+  return numq(c.s+" Find the width of the "+c.n+", in m.",
+    w,0.011,
+    "Let the width be w. The border adds w to every side, so the outside dimensions are ("+L+" + 2w) by ("+W+" + 2w), and ("+L+" + 2w)("+W+" + 2w) = "+T+". Expanding: 4w\u00B2 + "+(2*(L+W))+"w + "+(L*W)+" = "+T+", or 4w\u00B2 + "+(2*(L+W))+"w \u2212 "+(T-L*W)+" = 0. The quadratic formula gives w = "+w+" or a negative value; a width cannot be negative, so the width is <b>"+w+" m</b>.",
+    {L:L,W:W,w:w});
+});
+E("u3-exact-roots",3,["4.9"],2,"gen",function(){
+  function g2(a,b){while(b){var t=a%b;a=b;b=t;}return a;}
+  function rootPair(aa,bb,cc){
+    var D=bb*bb-4*aa*cc;if(D<=0)return null;
+    var rt=Math.round(Math.sqrt(D));if(rt*rt===D)return null;
+    var sq=1,d0=D,f;for(f=2;f*f<=d0;f++){while(d0%(f*f)===0){d0/=(f*f);sq*=f;}}
+    if(d0===1)return null;
+    var g=g2(g2(Math.abs(bb),sq),2*aa),nb=-bb/g,s=sq/g,den=(2*aa)/g;
+    var num=(nb<0?"\u2212"+(-nb):""+nb)+" \u00B1 "+(s===1?"":s)+"\u221A"+d0;
+    return den===1?("x = "+num):("x = ("+num+") \u00F7 "+den);
+  }
+  var a,b,c,key,d1,d2,d3,tries=0;
+  do{
+    a=pick([1,2]);b=ri(-9,9);c=ri(-9,9);tries++;
+    if(b===0||c===0){key=null;continue;}
+    key=rootPair(a,b,c);d1=rootPair(a,-b,c);d2=rootPair(a,b,-c);d3=rootPair(a,c,b);
+  }while((!key||!d1||!d2||!d3||d1===key||d2===key||d3===key||d2===d1||d3===d1||d3===d2)&&tries<300);
+  var D=b*b-4*a*c,sq=1,d0=D,f;for(f=2;f*f<=d0;f++){while(d0%(f*f)===0){d0/=(f*f);sq*=f;}}
+  var g=g2(g2(Math.abs(b),sq),2*a);
+  return mcq("What are the exact roots of "+quadStr(a,b,c)+" = 0?",
+    key,[d1,d2,d3],
+    "Quadratic formula: x = (\u2212b \u00B1 \u221A(b\u00B2 \u2212 4ac)) \u00F7 (2a) = ("+(-b)+" \u00B1 \u221A"+D+") \u00F7 "+(2*a)+". Since "+D+" = "+(sq*sq)+" \u00D7 "+d0+", \u221A"+D+" = "+sq+"\u221A"+d0+(g>1?", and dividing numerator and denominator by "+g:"")+", giving <b>"+key+"</b>.",
+    {a:a,b:b,c:c});
+});
+
+/* --- Unit 4: Radicals --- */
+E("u4-variable-mixed",4,["1.3"],2,"gen",function(){
+  var s=ri(2,5),r=pick([2,3,5,6,7]),n=pick([1,2,3]);
+  var coef=s*s*r,p=2*n+1;
+  var sup={"1":"","2":"\u00B2","3":"\u00B3","4":"\u2074","5":"\u2075","7":"\u2077"};
+  function xp(e){return "x"+sup[e];}
+  var xn=(n===1?"x":xp(n));
+  return mcq("Simplify: \u221A("+coef+xp(p)+").",
+    s+xn+"\u221A"+r+"x",
+    [(s+1)+xn+"\u221A"+r+"x", s+xp(n+1)+"\u221A"+r+"x", s+xn+"\u221A"+coef+"x"],
+    coef+" = "+(s*s)+" \u00D7 "+r+" and "+xp(p)+" = ("+xn+")\u00B2 \u00D7 x, so the square factors come out: \u221A("+coef+xp(p)+") = "+s+xn+"\u221A"+r+"x. One x stays inside because the exponent "+p+" is odd.",
+    {s:s,r:r,n:n});
+});
+E("u4-multiply-mixed",4,["1.6"],2,"gen",function(){
+  var pairs=[[2,3],[2,5],[2,6],[2,7],[2,10],[3,5],[3,6],[3,7],[3,10],[5,6],[5,7],[5,10],[6,7],[6,10],[7,10]];
+  var pr=pick(pairs),b=pr[0],d=pr[1],a=ri(2,4),c=ri(2,4);
+  var bd=b*d,t=1,rr=bd,f;for(f=2;f*f<=rr;f++){while(rr%(f*f)===0){rr/=(f*f);t*=f;}}
+  var key=radStr(a*c*t,rr);
+  var d2=(t>1)?radStr(a*c,rr):radStr(a*c*t,d);
+  var d3=radStr(a*c*t,b+d);
+  return mcq("Simplify: ("+radStr(a,b)+")("+radStr(c,d)+").",
+    key,
+    [radStr(a*c*t,b),d2,d3],
+    "Multiply the outside numbers together and the inside numbers together: "+a+" \u00D7 "+c+" = "+(a*c)+" and \u221A"+b+" \u00D7 \u221A"+d+" = \u221A"+bd+". Then simplify \u221A"+bd+" = "+(t>1?(t+"\u221A"+rr):("\u221A"+rr))+", so the product is "+(a*c)+" \u00D7 "+(t>1?(t+"\u221A"+rr):("\u221A"+rr))+" = <b>"+key+"</b>.",
+    {a:a,b:b,c:c,d:d});
+});
+E("u4-equation-restriction",4,["1.8"],1,"gen",function(){
+  var p=pick([1,2,3,4]),m=ri(-6,8),r=ri(2,9),tries=0;
+  while(m===0&&tries<20){m=ri(-6,8);tries++;}
+  var q=-p*m;
+  var inside=(p===1?"x":(""+p+"x"))+(q>0?" + "+q:" \u2212 "+(-q));
+  return mcq("State the restriction on x in the radical equation \u221A("+inside+") = "+r+".",
+    "x \u2265 "+m,
+    ["x \u2264 "+m,"x \u2265 "+(-m),"All real numbers"],
+    "The radicand cannot be negative: "+inside+" \u2265 0 gives "+(p===1?"x":(""+p+"x"))+" \u2265 "+(-q)+", so x \u2265 "+m+". This restriction must hold before the equation can have any solution at all.",
+    {p:p,m:m,r:r});
+});
+E("u4-verify-root",4,["1.10"],2,"gen",function(){
+  var s=ri(3,9),a=ri(3,20),b=ri(2,6);
+  var X=s*s-a;
+  if(Math.random()<0.5){
+    return numq("A student solving \u221A(x + "+a+") = x \u2212 "+b+" claims that x = "+X+" is a root. Substitute x = "+X+": what is the value of the LEFT side, \u221A(x + "+a+")?",
+      s,0.011,
+      "\u221A("+X+" + "+a+") = \u221A"+(s*s)+" = <b>"+s+"</b>. (For comparison, the right side at x = "+X+" is "+X+" \u2212 "+b+" = "+(X-b)+". Both sides must give the same value for x = "+X+" to actually be a root.)",
+      {mode:1,X:X,a:a,b:b});
+  }
+  return numq("A student solving \u221A(x + "+a+") = x \u2212 "+b+" claims that x = "+X+" is a root. Substitute x = "+X+": what is the value of the RIGHT side, x \u2212 "+b+"?",
+    X-b,0.011,
+    X+" \u2212 "+b+" = <b>"+(X-b)+"</b>. (For comparison, the left side at x = "+X+" is \u221A("+X+" + "+a+") = "+s+". Both sides must give the same value for x = "+X+" to actually be a root.)",
+    {mode:2,X:X,a:a,b:b});
+});
+E("u4-model-equation",4,["1.12"],3,"gen",function(){
+  if(Math.random()<0.5){
+    var d=ri(3,60),sp=5*Math.sqrt(d);
+    return numq("Police estimate a car's speed from a skid mark using s = \u221A(25d), where s is the speed in km/h and d is the length of the skid mark in metres. A skid mark at a collision scene measures "+d+" m. Estimate the car's speed, to one decimal place, in km/h.",
+      fmt(sp,1),0.06,
+      "Substitute d = "+d+": s = \u221A(25 \u00D7 "+d+") = \u221A"+(25*d)+" \u2248 <b>"+fmt(sp,1)+" km/h</b>.",
+      {mode:1,d:d});
+  }
+  var T=pick([2,3,4,5,6]),L=T*T/4;
+  return numq("The period of a simple pendulum is modelled by T = 2\u221AL, where T is the period in seconds and L is the length in metres. How long is a pendulum whose period is "+T+" s, in m?",
+    L,0.011,
+    T+" = 2\u221AL, so \u221AL = "+T+" \u00F7 2 = "+fmt(T/2,2)+". Squaring both sides gives L = <b>"+fmt(L,2)+" m</b>.",
+    {mode:2,T:T});
+});
+
 /* ============ selection engine ============ */
 /* Mid-course scope (Table of Specifications, verified Oct 26, 2026): the mid-course
    exam samples Unit 4 only to Section 4.3, so the two Radical Equations entries
    (Section 4.4) are flagged postMid and held out whenever the Mid preset is active.
    Picking Unit 4 directly still serves the full unit. */
-BANK.forEach(function(e){if(e.id==="u4-radical-equation"||e.id==="u4-extraneous")e.postMid=true;});
+BANK.forEach(function(e){if(e.id==="u4-radical-equation"||e.id==="u4-extraneous"||e.id==="u4-model-equation")e.postMid=true;});
 function poolFor(units,inds,cap){
   return BANK.filter(function(e){
     if(cap&&e.postMid)return false;
