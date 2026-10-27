@@ -210,6 +210,20 @@ function triDraw(P,o){
   }
   return out;
 }
+function bowtieSVG(){ /* AB parallel CD with diagonals AD and BC crossing at E; AE = DE ticked (QE angles test Q19 figure) */
+  var A=[52,126],D=[280,102],E=[166,114],B=[218,32],C=[114,196];
+  function ln(p,q,w){return '<line x1="'+p[0]+'" y1="'+p[1]+'" x2="'+q[0]+'" y2="'+q[1]+'" stroke="'+FIG_INK+'" stroke-width="'+(w||2)+'"/>';}
+  var out=ln(A,B)+ln(B,C)+ln(C,D)+ln(A,D);
+  var u=[0.994,-0.105],pv=[0.105,0.994];
+  [[109,120],[223,108]].forEach(function(M){
+    [-3.2,3.2].forEach(function(off){
+      var cx=M[0]+off*u[0],cy=M[1]+off*u[1];
+      out+='<line x1="'+fmt(cx-5.5*pv[0],1)+'" y1="'+fmt(cy-5.5*pv[1],1)+'" x2="'+fmt(cx+5.5*pv[0],1)+'" y2="'+fmt(cy+5.5*pv[1],1)+'" stroke="'+FIG_INK+'" stroke-width="1.8"/>';
+    });
+  });
+  out+=_txt(33,128,"A",14,true)+_txt(227,18,"B",14,true)+_txt(105,211,"C",14,true)+_txt(297,100,"D",14,true)+_txt(150,95,"E",13,true);
+  return '<svg viewBox="0 0 330 240" width="330" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: parallel lines AB and CD with diagonals crossing at E, forming two triangles">'+out+'</svg>';
+}
 function triSVG(a,b,c,o){
   o=o||{};o.L=o.L||["A","B","C"];
   var pts=triLayout(a,b,c),W=330,H=215;
@@ -2221,16 +2235,16 @@ E("u8-proof-reason",8,["5.4"],2,"var",varset([
     ["Nothing \u2014 the reason is correct","The angles are co-interior angles, not alternate interior angles","The angles are vertically opposite angles, not alternate interior angles"],
     "\\(\\angle a\\) and \\(\\angle b\\) sit in the same relative position (top right) at each intersection, which makes them corresponding angles. Alternate interior angles sit between the two lines, on opposite sides of the transversal. The equality is right; the named reason is wrong.",
     {});},
-  function(){return mcq("Given \\(AB \\parallel CD\\) and \\(AE = DE\\), with \\(E\\) on the segment joining the two lines, a proof shows \\(\\triangle ABE \\cong \\triangle DCE\\). One step states \\(\\angle BAE = \\angle CDE\\). Which reason justifies that step?",
+  function(){var q=mcq("Given \\(AB \\parallel CD\\) and \\(AE = DE\\), with \\(E\\) on the segment joining the two lines, a proof shows \\(\\triangle ABE \\cong \\triangle DCE\\). One step states \\(\\angle BAE = \\angle CDE\\). Which reason justifies that step?",
     "Alternate interior angles, because \\(AB \\parallel CD\\)",
     ["Vertically opposite angles","Corresponding angles, because \\(AB \\parallel CD\\)","Co-interior angles, because \\(AB \\parallel CD\\)"],
     "\\(\\angle BAE\\) and \\(\\angle CDE\\) lie between the parallel lines, on opposite sides of the transversal \\(AD\\) (the line through A, E and D), so they are alternate interior angles, which are equal when the lines are parallel. (Co-interior angles would be supplementary, not equal.)",
-    {});},
-  function(){return mcq("In the same proof (\\(AB \\parallel CD\\), \\(AE = DE\\), prove \\(\\triangle ABE \\cong \\triangle DCE\\)), another step states \\(\\angle AEB = \\angle CED\\). Which reason justifies that step?",
+    {});q.figure=bowtieSVG();return q;},
+  function(){var q=mcq("In the same proof (\\(AB \\parallel CD\\), \\(AE = DE\\), prove \\(\\triangle ABE \\cong \\triangle DCE\\)), another step states \\(\\angle AEB = \\angle CED\\). Which reason justifies that step?",
     "Vertically opposite angles",
     ["Alternate interior angles, because \\(AB \\parallel CD\\)","Given information","The SSS congruence postulate"],
     "\\(\\angle AEB\\) and \\(\\angle CED\\) are formed by the same two intersecting lines at point \\(E\\), directly across from each other \u2014 vertically opposite angles, which are always equal. No parallel lines are needed for this step.",
-    {});}
+    {});q.figure=bowtieSVG();return q;}
 ]));
 
 /* ============ Tranche 5 (Oct 26): Payne first, then HHM ============
