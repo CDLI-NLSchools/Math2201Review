@@ -1725,7 +1725,10 @@ function drawSet(units,inds,n,mix,orderMode,cap){
     var shortLevels=[1,2,3].filter(function(L){return counts[L]<targets[L-1];});
     var pref=shortLevels.length?gens.filter(function(e){return shortLevels.indexOf(e.level)>=0;}):[];
     if(shortLevels.length&&!pref.length)break; // no generator can serve the short levels; fall through to other entries
-    chosen.push(pick(pref.length?pref:gens));missing--;short++;
+    var src=pref.length?pref:gens;
+    var ec={};chosen.forEach(function(e){ec[e.id]=(ec[e.id]||0)+1;});
+    var minUse=Math.min.apply(null,src.map(function(e){return ec[e.id]||0;}));
+    chosen.push(pick(src.filter(function(e){return (ec[e.id]||0)===minUse;})));missing--;short++;
   }
   if(missing>0){ // next, fill from any remaining entries at other levels
     var rest=shuffle(pool.filter(function(e){return !used[e.id];}));
@@ -1735,7 +1738,9 @@ function drawSet(units,inds,n,mix,orderMode,cap){
     var src=pool.filter(function(e){return e.kind==="gen";});
     if(!src.length)src=pool.slice(); // no generators in the pool: reuse variant sets (the dedupe guard below prefers unused statics)
     if(!src.length)break;
-    chosen.push(pick(src));missing--;short++;
+    var ec2={};chosen.forEach(function(e){ec2[e.id]=(ec2[e.id]||0)+1;});
+    var minUse2=Math.min.apply(null,src.map(function(e){return ec2[e.id]||0;}));
+    chosen.push(pick(src.filter(function(e){return (ec2[e.id]||0)===minUse2;})));missing--;short++;
   }
   // generate the questions, with a dedupe guard: a reused entry is redrawn (bounded
   // retries) until its canonical question differs from every question already in the set
@@ -1746,10 +1751,22 @@ function drawSet(units,inds,n,mix,orderMode,cap){
     seenC[c]=1;q._entry=e;items.push(q);
   });
   if(orderMode==="unit"){items.sort(function(a,b){return a._entry.unit-b._entry.unit;});}
-  else{items=shuffle(items);}
+  else{items=shuffle(items);
+    // keep repeats of the same question shape from landing side by side:
+    // place the most-repeated remaining shape first whenever it can go in
+    var spread=[],rest=items.slice();
+    while(rest.length){
+      var lastE=spread.length?spread[spread.length-1]._entry.id:null;
+      var rc={};rest.forEach(function(q){rc[q._entry.id]=(rc[q._entry.id]||0)+1;});
+      var ix=-1,best=-1;
+      rest.forEach(function(q,i){if(q._entry.id!==lastE&&rc[q._entry.id]>best){best=rc[q._entry.id];ix=i;}});
+      if(ix<0)ix=0;
+      spread.push(rest.splice(ix,1)[0]);
+    }
+    items=spread;}
   var dup=false,seen2={};
   items.forEach(function(q){var c=canonQ(q);if(seen2[c])dup=true;seen2[c]=1;});
-  return {items:items,reused:short,pool:pool.length,thin:(dup||items.length<n)};
+  return {items:items,reused:short,pool:pool.length,thin:(dup||items.length<n||short>0)};
 }
 /* ============ UI ============ */
 var $=function(id){return document.getElementById(id);};
