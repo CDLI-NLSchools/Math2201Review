@@ -964,6 +964,10 @@ E("u1-two-triangles",1,["7.3"],3,"gen",function(){
 <script>
 /* ============ Unit 2: Quadratic Functions ============ */
 function quadStr(a,b,c){var s=(a===1?"":a===-1?"\u2212":""+a)+"x\u00B2";if(b!==0)s+=" "+(b>0?"+":"\u2212")+" "+(Math.abs(b)===1?"":Math.abs(b))+"x";if(c!==0)s+=" "+(c>0?"+":"\u2212")+" "+Math.abs(c);return s;}
+function quadB(a,b,c){var s=(a===1?"":a===-1?"-":""+a)+"x^2";if(b!==0)s+=(b>0?" + ":" - ")+(Math.abs(b)===1?"":Math.abs(b))+"x";if(c!==0)s+=(c>0?" + ":" - ")+Math.abs(c);return s;}
+function quadT(a,b,c){return "\\("+quadB(a,b,c)+"\\)";}
+function fracT(n,d){return "\\(\\frac{"+n+"}{"+d+"}\\)";}
+function frB(n,d){function g2(x,y){x=Math.abs(x);y=Math.abs(y);while(y){var t=x%y;x=y;y=t;}return x||1;}var g=g2(n,d);n/=g;d/=g;if(d<0){n=-n;d=-d;}if(d===1)return ""+n;return (n<0?"-":"")+"\\frac{"+Math.abs(n)+"}{"+d+"}";}
 E("u2-vertex-x",2,["4.12"],1,"gen",function(){
   var a=pick([1,1,2,-1]),h=ri(-5,6)||2;var b=-2*a*h;var c=a*h*h+ri(-6,6);
   return numq("What is the x-coordinate of the vertex of y = "+quadStr(a,b,c)+"?",
@@ -1030,15 +1034,15 @@ E("u2-max-context",2,["4.2"],3,"gen",function(){
 /* ============ Unit 3: Quadratic Equations ============ */
 E("u3-factor-solve",3,["4.8"],2,"gen",function(){
   var p=ri(-8,-1),q=ri(1,9);var b=-(p+q),c=p*q;var askBig=Math.random()<0.5;
-  return numq("Solve by factoring: "+quadStr(1,b,c)+" = 0. Give the "+(askBig?"larger":"smaller")+" root.",
-    askBig?q:p,0.011,"Factor: (x "+(p>0?"\u2212 "+p:"+ "+(-p))+")(x "+(q>0?"\u2212 "+q:"+ "+(-q))+") = 0, so x = "+p+" or x = "+q+" (check by substituting back). The "+(askBig?"larger":"smaller")+" root is <b>"+(askBig?q:p)+"</b>.",{p:p,q:q,askBig:askBig});
+  return numq("Solve by factoring: "+"\\("+quadB(1,b,c)+" = 0\\)"+". Give the "+(askBig?"larger":"smaller")+" root.",
+    askBig?q:p,0.011,"Factor: \\((x "+(p>0?"- "+p:"+ "+(-p))+")(x "+(q>0?"- "+q:"+ "+(-q))+") = 0\\), so \\(x = "+p+"\\) or \\(x = "+q+"\\) (check by substituting back). The "+(askBig?"larger":"smaller")+" root is <b>\\("+(askBig?q:p)+"\\)</b>.",{p:p,q:q,askBig:askBig});
 });
 E("u3-formula",3,["4.9"],2,"gen",function(){
   var a=pick([1,1,2]),b=ri(-9,9)||3,c=ri(-8,8)||-4;var D=b*b-4*a*c,guard=0;
   while((D<=0||Math.sqrt(D)===Math.floor(Math.sqrt(D)))&&guard++<60){b=ri(-9,9)||3;c=ri(-8,8)||-4;D=b*b-4*a*c;}
   var r1=(-b+Math.sqrt(D))/(2*a),r2=(-b-Math.sqrt(D))/(2*a);var big=Math.max(r1,r2);
-  return numq("Use the quadratic formula to solve "+quadStr(a,b,c)+" = 0. Give the larger root, to two decimal places.",
-    Math.round(big*100)/100,0.011,"D = b\u00B2 \u2212 4ac = "+D+". x = ("+(-b)+" \u00B1 \u221A"+D+") \u00F7 "+(2*a)+", giving x \u2248 "+fmt(r1)+" or x \u2248 "+fmt(r2)+". The larger root is <b>"+fmt(big)+"</b>.",{a:a,b:b,c:c,D:D});
+  return numq("Use the quadratic formula to solve "+"\\("+quadB(a,b,c)+" = 0\\)"+". Give the larger root, to two decimal places.",
+    Math.round(big*100)/100,0.011,"\\(D = b^2 - 4ac = "+D+"\\). \\(x = \\frac{"+(-b)+" \\pm \\sqrt{"+D+"}}{"+(2*a)+"}\\), giving \\(x \\approx "+fmt(r1)+"\\) or \\(x \\approx "+fmt(r2)+"\\). The larger root is <b>\\("+fmt(big)+"\\)</b>.",{a:a,b:b,c:c,D:D});
 });
 E("u3-discriminant",3,["4.7"],2,"gen",function(){
   var kind=pick(["two","one","zero"]);var a=pick([1,2]),b,c,D;
@@ -1046,29 +1050,29 @@ E("u3-discriminant",3,["4.7"],2,"gen",function(){
   else if(kind==="two"){b=ri(3,9);c=ri(-6,3);D=b*b-4*a*c;if(D<=0){c=-5;D=b*b-4*a*c;}}
   else{b=ri(1,4);c=ri(3,9);D=b*b-4*a*c;if(D>=0){b=1;c=9;D=1-4*a*9;}}
   var correct=kind==="two"?"Two x-intercepts \u2014 the discriminant is positive":kind==="one"?"One x-intercept \u2014 the discriminant is zero":"No x-intercepts \u2014 the discriminant is negative";
-  return mcq("How many x-intercepts does the graph of y = "+quadStr(a,b,c)+" have?",correct,
+  return mcq("How many x-intercepts does the graph of \\(y = "+quadB(a,b,c)+"\\) have?",correct,
     ["Two x-intercepts \u2014 the discriminant is positive","One x-intercept \u2014 the discriminant is zero","No x-intercepts \u2014 the discriminant is negative","It is impossible to tell without graphing"].filter(function(s){return s!==correct;}),
-    "Discriminant = b\u00B2 \u2212 4ac = "+(b*b)+" \u2212 "+(4*a*c)+" = "+D+". "+(D>0?"Positive, so the parabola crosses the x-axis twice.":D===0?"Zero, so the vertex just touches the x-axis \u2014 one intercept (a repeated root).":"Negative, so the parabola never reaches the x-axis."),{a:a,b:b,c:c,D:D});
+    "Discriminant: \\(b^2 - 4ac = "+(b*b)+" - "+(4*a*c)+" = "+D+"\\). "+(D>0?"Positive, so the parabola crosses the x-axis twice.":D===0?"Zero, so the vertex just touches the x-axis \u2014 one intercept (a repeated root).":"Negative, so the parabola never reaches the x-axis."),{a:a,b:b,c:c,D:D});
 });
 E("u3-roots-zeros",3,["4.6"],1,"var",varset([
-  function(){return mcq("The equation x\u00B2 \u2212 5x + 6 = 0 has roots 2 and 3. What does that say about the function f(x) = x\u00B2 \u2212 5x + 6?",
-    "Its zeros are 2 and 3, and its graph crosses the x-axis at (2, 0) and (3, 0)",
-    ["Its vertex is at (2, 3)","Its y-intercept is 6 and its maximum is 3","Its zeros are \u22122 and \u22123, the opposite signs"],
-    "Roots of the equation, zeros of the function and x-intercepts of the graph are three names for the same numbers \u2014 where the function\u2019s value is 0.",{});},
+  function(){return mcq("The equation \\(x^2 - 5x + 6 = 0\\) has roots \\(2\\) and \\(3\\). What does that say about the function \\(f(x) = x^2 - 5x + 6\\)?",
+    "Its zeros are \\(2\\) and \\(3\\), and its graph crosses the x-axis at \\((2, 0)\\) and \\((3, 0)\\)",
+    ["Its vertex is at \\((2, 3)\\)","Its y-intercept is \\(6\\) and its maximum is \\(3\\)","Its zeros are \\(-2\\) and \\(-3\\), the opposite signs"],
+    "Roots of the equation, zeros of the function and x-intercepts of the graph are three names for the same numbers \u2014 where the function\u2019s value is \\(0\\).",{});},
   function(){return mcq("A quadratic function\u2019s graph touches the x-axis at exactly one point. What is true of the corresponding equation?",
     "It has one root, repeated \u2014 the discriminant is zero",
     ["It has two different roots","It has no roots at all","Its discriminant is positive"],
-    "Touching at one point means one x-intercept, which matches a repeated root and D = 0.",{});},
-  function(){return mcq("The graph of a quadratic function crosses the x-axis at x = \u22124 and x = 1. What are the roots of the corresponding quadratic equation?",
-    "\u22124 and 1 \u2014 the x-intercepts of the graph are exactly the roots of the equation",
-    ["4 and \u22121, the opposite signs","There are no roots, because the graph crosses the axis","Only 1 \u2014 a root cannot be negative"],
+    "Touching at one point means one x-intercept, which matches a repeated root and \\(D = 0\\).",{});},
+  function(){return mcq("The graph of a quadratic function crosses the x-axis at \\(x = -4\\) and \\(x = 1\\). What are the roots of the corresponding quadratic equation?",
+    "\\(-4\\) and \\(1\\) \u2014 the x-intercepts of the graph are exactly the roots of the equation",
+    ["\\(4\\) and \\(-1\\), the opposite signs","There are no roots, because the graph crosses the axis","Only \\(1\\) \u2014 a root cannot be negative"],
     "Roots of the equation, zeros of the function and x-intercepts of the graph are the same numbers, signs included.",{});}
 ]));
 E("u3-context-area",3,["4.3"],3,"gen",function(){
   var w=ri(3,15),d=ri(2,12);var A=w*(w+d);
   var obj=pick(["garden","patio","deck","vegetable plot","parking pad"]);
-  return numq("A rectangular "+obj+"'s length is "+d+" m more than its width. Its area is "+A+" m\u00B2. What is the width, in metres?",
-    w,0.011,"Let the width be w. Then w(w + "+d+") = "+A+" \u2192 w\u00B2 + "+d+"w \u2212 "+A+" = 0 \u2192 (w + "+(w+d)+")(w \u2212 "+w+") = 0. The roots are w = "+w+" and w = \u2212"+(w+d)+"; a width cannot be negative, so the width is <b>"+w+" m</b>.",{w:w,d:d});
+  return numq("A rectangular "+obj+"'s length is "+d+" m more than its width. Its area is \\("+A+"\\text{ m}^2\\). What is the width, in metres?",
+    w,0.011,"Let the width be \\(w\\). Then \\(w(w + "+d+") = "+A+" \\rightarrow w^2 + "+d+"w - "+A+" = 0 \\rightarrow (w + "+(w+d)+")(w - "+w+") = 0\\). The roots are \\(w = "+w+"\\) and \\(w = -"+(w+d)+"\\); a width cannot be negative, so the width is <b>\\("+w+"\\) m</b>.",{w:w,d:d});
 });
 /* ============ Unit 4: Radicals ============ */
 function radStr(a,b){return (a===1?"":a)+"\u221A"+b;}
@@ -1086,7 +1090,7 @@ E("u4-entire-to-mixed",4,["1.2"],1,"gen",function(){
   var a=ri(2,12),b=pick([2,3,5,6,7,10,11,13,14,15]);var n=a*a*b;
   var frame=pick(["Express "+sqrtT(n)+" as a mixed radical in simplest form.","Write "+sqrtT(n)+" as a mixed radical in simplest form."]);
   return mcq(frame,radT(a,b),[radT(a+1,b),radT(a,b+1),sqrtT(n-1)],
-    "Find the largest perfect square dividing "+n+": \\("+n+" = "+(a*a)+" \\times "+b+"\\). So "+sqrtT(n)+" = "+radT(a,b)+".",{a:a,b:b,n:n});
+    "Find the largest perfect square dividing \\("+n+"\\): \\("+n+" = "+(a*a)+" \\times "+b+"\\). So "+sqrtT(n)+" = "+radT(a,b)+".",{a:a,b:b,n:n});
 });
 E("u4-simplify-add",4,["1.6"],2,"gen",function(){
   var b=pick([2,3,5,6,7,10,11,13]);var a1=pick([2,3,4,5]);var a2=pick([2,3,4,5,6].filter(function(x){return x!==a1;}));
@@ -1097,21 +1101,21 @@ E("u4-simplify-add",4,["1.6"],2,"gen",function(){
 });
 E("u4-multiply",4,["1.6"],2,"gen",function(){
   var k=pick([2,3,5,6,7,10,11,13,14,15]);var i=ri(1,3),j=ri(1,3);var x=k*i*i,y=k*j*j;
-  return numq("The product "+sqrtT(x)+" \u00D7 "+sqrtT(y)+" is a whole number. What is it?",
-    k*i*j,0.011,"\\(\\sqrt{"+x+"} \\times \\sqrt{"+y+"} = \\sqrt{"+x+" \\times "+y+"} = \\sqrt{"+(x*y)+"}\\). Notice "+x+" = "+k+" \u00D7 "+(i*i)+" and "+y+" = "+k+" \u00D7 "+(j*j)+", so the product is "+k+" \u00D7 "+i+" \u00D7 "+j+" = <b>"+(k*i*j)+"</b>.",{p:[x,y]});
+  return numq("The product \\(\\sqrt{"+x+"} \\times \\sqrt{"+y+"}\\) is a whole number. What is it?",
+    k*i*j,0.011,"\\(\\sqrt{"+x+"} \\times \\sqrt{"+y+"} = \\sqrt{"+x+" \\times "+y+"} = \\sqrt{"+(x*y)+"}\\). Notice \\("+x+" = "+k+" \\times "+(i*i)+"\\) and \\("+y+" = "+k+" \\times "+(j*j)+"\\), so the product is <b>\\("+k+" \\times "+i+" \\times "+j+" = "+(k*i*j)+"\\)</b>.",{p:[x,y]});
 });
 E("u4-rationalize",4,["1.7"],2,"gen",function(){
   var d=pick([2,3,5,6,7,10,11,13,14,15]);var c=d*ri(1,5);
   var frame=pick(["Rationalize the denominator: \\(\\frac{"+c+"}{\\sqrt{"+d+"}}\\).","Write \\(\\frac{"+c+"}{\\sqrt{"+d+"}}\\) with a rational denominator."]);
   return mcq(frame,radT(c/d,d),[sqrtT(c*d),"\\(\\frac{"+c+"\\sqrt{"+d+"}}{"+d+"}\\)","\\("+(c/d)+"\\sqrt{"+(d*d)+"}\\)"],
-    "Multiply top and bottom by "+sqrtT(d)+": \\(\\frac{"+c+"}{\\sqrt{"+d+"}} = \\frac{"+c+"\\sqrt{"+d+"}}{"+d+"} = "+(c/d)+"\\sqrt{"+d+"}\\). The denominator is now the rational number "+d+".",{c:c,d:d});
+    "Multiply top and bottom by "+sqrtT(d)+": \\(\\frac{"+c+"}{\\sqrt{"+d+"}} = \\frac{"+c+"\\sqrt{"+d+"}}{"+d+"} = "+(c/d)+"\\sqrt{"+d+"}\\). The denominator is now the rational number \\("+d+"\\).",{c:c,d:d});
 });
 E("u4-restrictions",4,["1.5"],1,"gen",function(){
   var a=ri(-6,15);var flipped=Math.random()<0.5;
   var rad=flipped?"("+a+" - x)":"(x "+(a>=0?"- "+a:"+ "+(-a))+")";
   var frame=pick(["For which values of x is the expression \\(\\sqrt{"+rad+"}\\) defined?","State the restriction on x so that \\(\\sqrt{"+rad+"}\\) is a real number."]);
   return mcq(frame,
-    flipped?"x \u2264 "+a:"x \u2265 "+a,[flipped?"x \u2265 "+a:"x \u2264 "+a,"x > 0","All real numbers"],
+    flipped?"\\(x \\leq "+a+"\\)":"\\(x \\geq "+a+"\\)",[flipped?"\\(x \\geq "+a+"\\)":"\\(x \\leq "+a+"\\)","\\(x > 0\\)","All real numbers"],
     "The radicand cannot be negative: "+(flipped?"\\("+a+" - x \\ge 0\\) gives \\(x \\le "+a+"\\)":"\\(x "+(a>=0?"- "+a:"+ "+(-a))+" \\ge 0\\) gives \\(x \\ge "+a+"\\)")+".",{a:a,flipped:flipped});
 });
 E("u4-radical-equation",4,["1.9"],2,"gen",function(){
@@ -1123,29 +1127,30 @@ E("u4-extraneous",4,["1.11"],3,"gen",function(){
   var b=pick([1,2,3,4]);var r=2*b+ri(1,6);var e=2*b+1-r;var a=b*b-r*e;
   var radicand="x + "+a;
   var frame=pick([
-    "Solving \\(\\sqrt{"+radicand+"} = x - "+b+"\\) by squaring both sides gives two candidates: x = "+r+" and x = "+e+". Which one is extraneous, and why?",
-    "A student solves \\(\\sqrt{"+radicand+"} = x - "+b+"\\) by squaring and gets two candidates: x = "+r+" and x = "+e+". Which candidate is extraneous, and why?",
-    "Squaring both sides of \\(\\sqrt{"+radicand+"} = x - "+b+"\\) produces the candidates x = "+r+" and x = "+e+". Which one is extraneous, and why?"]);
+    "Solving \\(\\sqrt{"+radicand+"} = x - "+b+"\\) by squaring both sides gives two candidates: \\(x = "+r+"\\) and \\(x = "+e+"\\). Which one is extraneous, and why?",
+    "A student solves \\(\\sqrt{"+radicand+"} = x - "+b+"\\) by squaring and gets two candidates: \\(x = "+r+"\\) and \\(x = "+e+"\\). Which candidate is extraneous, and why?",
+    "Squaring both sides of \\(\\sqrt{"+radicand+"} = x - "+b+"\\) produces the candidates \\(x = "+r+"\\) and \\(x = "+e+"\\). Which one is extraneous, and why?"]);
   return mcq(frame,
-    "x = "+e+" is extraneous \u2014 substituting it makes the right side negative, but a square root is never negative",
-    ["x = "+r+" is extraneous \u2014 it is the larger answer","Neither \u2014 squaring never creates false roots","Both are extraneous, so the equation has no solution"],
+    "\\(x = "+e+"\\) is extraneous \u2014 substituting it makes the right side negative, but a square root is never negative",
+    ["\\(x = "+r+"\\) is extraneous \u2014 it is the larger answer","Neither \u2014 squaring never creates false roots","Both are extraneous, so the equation has no solution"],
     "Check \\(x = "+e+"\\): \\(\\sqrt{"+e+" + "+a+"} = \\sqrt{"+(e+a)+"} = "+Math.sqrt(e+a)+"\\), but \\(x - "+b+" = "+(e-b)+" < 0\\). A principal square root cannot equal a negative number, so \\(x = "+e+"\\) crept in when we squared. \\(x = "+r+"\\) checks: \\(\\sqrt{"+(r+a)+"} = "+Math.sqrt(r+a)+" = "+(r-b)+"\\) \u2713.",{b:b,r:r,e:e,a:a});
 });
 E("u4-order",4,["1.4"],2,"gen",function(){
   var base=ri(5,10),g1=ri(2,4),g2=ri(2,4),g3=ri(2,5);
   var ins=[base,base+g1,base+g1+g2,base+g1+g2+g3];
-  function render(n){var c=Math.floor(Math.sqrt(n));if(c*c===n)return ""+c;var r=n;var co=1;for(var d=2;d*d<=r;d++){while(r%(d*d)===0){r/=(d*d);co*=d;}}return "\\("+(co>1?co:"")+"\\sqrt{"+r+"}\\)";}
+  function render(n){var c=Math.floor(Math.sqrt(n));if(c*c===n)return ""+c;var r=n;var co=1;for(var d=2;d*d<=r;d++){while(r%(d*d)===0){r/=(d*d);co*=d;}}return (co>1?co:"")+"\\sqrt{"+r+"}";}
   var items=ins.map(function(n){return {s:render(n),v:Math.sqrt(n)};});
   var sorted=items.slice().sort(function(x,y){return x.v-y.v;});
-  var asc=sorted.map(function(o){return o.s;}).join(", ");
+  function list(arr){return "\\("+arr.map(function(o){return o.s;}).join(", ")+"\\)";}
+  var asc=list(sorted);
   var shown=shuffle(items.slice());
-  var shownStr=shown.map(function(o){return o.s;}).join(", ");
-  var rev=sorted.slice().reverse().map(function(o){return o.s;}).join(", ");
-  var rot=[sorted[1],sorted[2],sorted[3],sorted[0]].map(function(o){return o.s;}).join(", ");
-  var midswap=[sorted[0],sorted[2],sorted[1],sorted[3]].map(function(o){return o.s;}).join(", ");
+  var shownStr=list(shown);
+  var rev=list(sorted.slice().reverse());
+  var rot=list([sorted[1],sorted[2],sorted[3],sorted[0]]);
+  var midswap=list([sorted[0],sorted[2],sorted[1],sorted[3]]);
   return mcq("Which list shows these radicals in order from least to greatest? "+shownStr,
     asc,[rev,rot,midswap],
-    "Square each value (or estimate): "+sorted.map(function(o){return o.s+" \u2248 "+fmt(o.v);}).join(", ")+". Ordered least to greatest: <b>"+asc+"</b>.",{items:items});
+    "Square each value (or estimate): "+sorted.map(function(o){return "\\("+o.s+" \\approx "+fmt(o.v)+"\\)";}).join(", ")+". Ordered least to greatest: <b>"+asc+"</b>.",{items:items});
 });
 </script>
 
@@ -1618,11 +1623,11 @@ E("u3-equation-from-roots",3,["4.6"],2,"gen",function(){
   var r1=pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5]),r2=pick([-5,-4,-3,-2,-1,1,2,3,4,5,6]);
   if(r2===r1||r2===-r1)r2=r2>0?r2+2:r2-2;
   var B=-(r1+r2),C=r1*r2;
-  function eqs(bb,cc){return "x\u00B2"+(bb>0?" + "+bb+"x":bb<0?" \u2212 "+Math.abs(bb)+"x":"")+(cc>0?" + "+cc:cc<0?" \u2212 "+Math.abs(cc):"")+" = 0";}
+  function eqs(bb,cc){return "\\(x^2"+(bb>0?" + "+bb+"x":bb<0?" - "+Math.abs(bb)+"x":"")+(cc>0?" + "+cc:cc<0?" - "+Math.abs(cc):"")+" = 0\\)";}
   var good=eqs(B,C);
   var wrongs=[eqs(-B,C),eqs(B,-C),eqs(-B,-C)].filter(function(x){return x!==good;});
-  return mcq("A quadratic equation in the form x\u00B2 + bx + c = 0 has roots "+r1+" and "+r2+". What is the equation?",good,wrongs,
-    "Work backwards: (x \u2212 ("+r1+"))(x \u2212 ("+r2+")) expands to x\u00B2 \u2212 ("+(r1+r2)+")x + ("+C+"), so b = "+B+" and c = "+C+". The coefficient b is the NEGATIVE of the sum of the roots, and c is their product.",{r1:r1,r2:r2,B:B,C:C,exp:good});
+  return mcq("A quadratic equation in the form \\(x^2 + bx + c = 0\\) has roots \\("+r1+"\\) and \\("+r2+"\\). What is the equation?",good,wrongs,
+    "Work backwards: \\((x - ("+r1+"))(x - ("+r2+"))\\) expands to \\(x^2 - ("+(r1+r2)+")x + ("+C+")\\), so \\(b = "+B+"\\) and \\(c = "+C+"\\). The coefficient \\(b\\) is the NEGATIVE of the sum of the roots, and \\(c\\) is their product.",{r1:r1,r2:r2,B:B,C:C,exp:good});
 });
 E("u6-similar-dimension",6,["6.2"],1,"gen",function(){
   var mode=ri(0,1);
@@ -1838,39 +1843,39 @@ E("u3-zeros-factored",3,["4.6","4.8"],1,"gen",function(){
   var p=ri(2,5),qq,tries=0;
   do{qq=ri(1,9);tries++;}while(qq===p&&tries<30);
   var r=ri(1,9);
-  var root1=fr(qq,p);
-  return mcq("What are the zeros of y = ("+p+"x \u2212 "+qq+")(x + "+r+")?",
-    "x = \u2212"+r+" and x = "+root1,
-    ["x = "+r+" and x = "+root1,
-     "x = \u2212"+r+" and x = \u2212"+root1,
-     "x = \u2212"+r+" and x = "+fr(p,qq)],
-    "Set each factor equal to zero. From x + "+r+" = 0, x = \u2212"+r+". From "+p+"x \u2212 "+qq+" = 0, "+p+"x = "+qq+", so x = "+root1+".",
+  var root1=fr(qq,p),root1T=frB(qq,p);
+  return mcq("What are the zeros of \\(y = ("+p+"x - "+qq+")(x + "+r+")\\)?",
+    "\\(x = -"+r+"\\) and \\(x = "+root1T+"\\)",
+    ["\\(x = "+r+"\\) and \\(x = "+root1T+"\\)",
+     "\\(x = -"+r+"\\) and \\(x = -"+root1T+"\\)",
+     "\\(x = -"+r+"\\) and \\(x = "+frB(p,qq)+"\\)"],
+    "Set each factor equal to zero. From \\(x + "+r+" = 0\\), \\(x = -"+r+"\\). From \\("+p+"x - "+qq+" = 0\\), \\("+p+"x = "+qq+"\\), so \\(x = "+root1T+"\\).",
     {p:p,qq:qq,r:r});
 });
 E("u3-factor-monic",3,["4.8"],2,"gen",function(){
   var r1,r2,tries=0;
   do{r1=ri(-9,9);r2=ri(-9,9);tries++;}while((r1===0||r2===0||r1===r2||r2===-r1)&&tries<60);
   var b=-(r1+r2),c=r1*r2;
-  function fs(r){return "(x "+(r>0?"\u2212 "+r:"+ "+(-r))+")";}
-  return mcq("Which is the factored form of "+quadStr(1,b,c)+"?",
-    fs(r1)+fs(r2),
-    [fs(-r1)+fs(-r2),fs(-r1)+fs(r2),fs(r1)+fs(-r2)],
-    "Look for two numbers that multiply to "+c+" and add to "+b+": they are "+(-r1)+" and "+(-r2)+". So "+quadStr(1,b,c)+" = "+fs(r1)+fs(r2)+". (Expand it back to check: the middle term is \u2212("+r1+" + "+r2+")x = "+b+"x.)",
+  function fs(r){return "(x "+(r>0?"- "+r:"+ "+(-r))+")";}
+  return mcq("Which is the factored form of "+quadT(1,b,c)+"?",
+    "\\("+fs(r1)+fs(r2)+"\\)",
+    ["\\("+fs(-r1)+fs(-r2)+"\\)","\\("+fs(-r1)+fs(r2)+"\\)","\\("+fs(r1)+fs(-r2)+"\\)"],
+    "Look for two numbers that multiply to \\("+c+"\\) and add to \\("+b+"\\): they are \\("+(-r1)+"\\) and \\("+(-r2)+"\\). So \\("+quadB(1,b,c)+" = "+fs(r1)+fs(r2)+"\\). (Expand it back to check: the middle term is \\(-("+r1+" + "+r2+")x = "+b+"x\\).)",
     {r1:r1,r2:r2});
 });
 E("u3-first-mistake",3,["4.6"],2,"var",varset([
-  function(){return mcq("A student solves x\u00B2 \u2212 5x + 6 = 0 by factoring.<br>Line 1: (x \u2212 2)(x \u2212 3) = 0<br>Line 2: x \u2212 2 = 0 &nbsp;or&nbsp; x \u2212 3 = 0<br>Line 3: x = 2 &nbsp;or&nbsp; x = \u22123<br>Line 4: The roots are 2 and \u22123.<br>In which line is the FIRST mistake?",
+  function(){return mcq("A student solves \\(x^2 - 5x + 6 = 0\\) by factoring.<br>Line 1: \\((x - 2)(x - 3) = 0\\)<br>Line 2: \\(x - 2 = 0\\) &nbsp;or&nbsp; \\(x - 3 = 0\\)<br>Line 3: \\(x = 2\\) &nbsp;or&nbsp; \\(x = -3\\)<br>Line 4: The roots are \\(2\\) and \\(-3\\).<br>In which line is the FIRST mistake?",
     "Line 3",["Line 1","Line 2","Line 4"],
-    "The factoring in Line 1 is correct (2 \u00D7 3 = 6 and \u22122 \u2212 3 = \u22125) and Line 2 applies the zero-product rule properly. In Line 3, x \u2212 3 = 0 gives x = +3, not \u22123. The roots are 2 and 3." );},
-  function(){return mcq("A student solves x\u00B2 + 6x + 4 = 0 using the quadratic formula.<br>Line 1: x = (\u22126 \u00B1 \u221A(6\u00B2 \u2212 4(1)(4))) \u00F7 2<br>Line 2: x = (\u22126 \u00B1 \u221A52) \u00F7 2<br>Line 3: x = (\u22126 \u00B1 2\u221A13) \u00F7 2<br>Line 4: x = \u22123 \u00B1 \u221A13<br>In which line is the FIRST mistake?",
+    "The factoring in Line 1 is correct (\\(2 \\times 3 = 6\\) and \\(-2 - 3 = -5\\)) and Line 2 applies the zero-product rule properly. In Line 3, \\(x - 3 = 0\\) gives \\(x = +3\\), not \\(-3\\). The roots are \\(2\\) and \\(3\\)." );},
+  function(){return mcq("A student solves \\(x^2 + 6x + 4 = 0\\) using the quadratic formula.<br>Line 1: \\(x = \\frac{-6 \\pm \\sqrt{6^2 - 4(1)(4)}}{2}\\)<br>Line 2: \\(x = \\frac{-6 \\pm \\sqrt{52}}{2}\\)<br>Line 3: \\(x = \\frac{-6 \\pm 2\\sqrt{13}}{2}\\)<br>Line 4: \\(x = -3 \\pm \\sqrt{13}\\)<br>In which line is the FIRST mistake?",
     "Line 2",["Line 1","Line 3","Line 4"],
-    "Line 1 sets up the formula correctly. In Line 2, 6\u00B2 \u2212 4(1)(4) = 36 \u2212 16 = 20, not 52 (the student added instead of subtracting). Everything after is consistent with that wrong value; the correct roots are x = \u22123 \u00B1 \u221A5." );},
-  function(){return mcq("A student solves x\u00B2 = 5x.<br>Line 1: Divide both sides by x: x = 5<br>Line 2: Check: 5\u00B2 = 25 and 5 \u00D7 5 = 25, so x = 5 works<br>Line 3: The only root is x = 5<br>Line 4: Answer: x = 5<br>In which line is the FIRST mistake?",
+    "Line 1 sets up the formula correctly. In Line 2, \\(6^2 - 4(1)(4) = 36 - 16 = 20\\), not \\(52\\) (the student added instead of subtracting). Everything after is consistent with that wrong value; the correct roots are \\(x = -3 \\pm \\sqrt{5}\\)." );},
+  function(){return mcq("A student solves \\(x^2 = 5x\\).<br>Line 1: Divide both sides by \\(x\\): \\(x = 5\\)<br>Line 2: Check: \\(5^2 = 25\\) and \\(5 \\times 5 = 25\\), so \\(x = 5\\) works<br>Line 3: The only root is \\(x = 5\\)<br>Line 4: Answer: \\(x = 5\\)<br>In which line is the FIRST mistake?",
     "Line 1",["Line 2","Line 3","Line 4"],
-    "The mistake is Line 1: dividing both sides by x throws away the root x = 0, because you cannot divide by a quantity that might be zero. Done properly: x\u00B2 \u2212 5x = 0, so x(x \u2212 5) = 0, giving x = 0 or x = 5." );},
-  function(){return mcq("A student solves x\u00B2 \u2212 4x \u2212 5 = 0 by factoring.<br>Line 1: (x \u2212 5)(x + 1) = 0<br>Line 2: x \u2212 5 = 0 &nbsp;or&nbsp; x + 1 = 0<br>Line 3: x = 5 &nbsp;or&nbsp; x = 1<br>Line 4: The roots are 5 and 1.<br>In which line is the FIRST mistake?",
+    "The mistake is Line 1: dividing both sides by \\(x\\) throws away the root \\(x = 0\\), because you cannot divide by a quantity that might be zero. Done properly: \\(x^2 - 5x = 0\\), so \\(x(x - 5) = 0\\), giving \\(x = 0\\) or \\(x = 5\\)." );},
+  function(){return mcq("A student solves \\(x^2 - 4x - 5 = 0\\) by factoring.<br>Line 1: \\((x - 5)(x + 1) = 0\\)<br>Line 2: \\(x - 5 = 0\\) &nbsp;or&nbsp; \\(x + 1 = 0\\)<br>Line 3: \\(x = 5\\) &nbsp;or&nbsp; \\(x = 1\\)<br>Line 4: The roots are \\(5\\) and \\(1\\).<br>In which line is the FIRST mistake?",
     "Line 3",["Line 1","Line 2","Line 4"],
-    "Line 1 factors correctly (\u22125 \u00D7 1 = \u22125 and \u22125 + 1 = \u22124) and Line 2 is a proper zero-product split. In Line 3, x + 1 = 0 gives x = \u22121, not 1. The roots are 5 and \u22121.");}
+    "Line 1 factors correctly (\\(-5 \\times 1 = -5\\) and \\(-5 + 1 = -4\\)) and Line 2 is a proper zero-product split. In Line 3, \\(x + 1 = 0\\) gives \\(x = -1\\), not \\(1\\). The roots are \\(5\\) and \\(-1\\).");}
 ]));
 E("u3-solve-square",3,["4.8"],1,"gen",function(){
   function g2(a,b){while(b){var t=a%b;a=b;b=t;}return a;}
@@ -1878,46 +1883,46 @@ E("u3-solve-square",3,["4.8"],1,"gen",function(){
   var m=ri(1,9),n=pick([1,2,3,4]),k=pick([1,2,3]),tries=0;
   while(m===n&&tries<30){m=ri(1,9);tries++;}
   var A=n*n*k,B=m*m*k;
-  var d3=(m===1)?("x = \u00B1"+fr(2,n)):("x = \u00B1"+fr(m*m,n));
-  return mcq("Solve: "+(A===1?"":A)+"x\u00B2 = "+B+".",
-    "x = \u00B1"+fr(m,n),
-    ["x = "+fr(m,n)+" only","x = \u00B1"+fr(n,m),d3],
-    "Divide both sides by "+A+": x\u00B2 = "+B+" \u00F7 "+A+" = "+fr(B,A)+". Take the square root of both sides, remembering the negative root: x = \u00B1"+fr(m,n)+".",
+  var d3=(m===1)?("\\(x = \\pm "+frB(2,n)+"\\)"):("\\(x = \\pm "+frB(m*m,n)+"\\)");
+  return mcq("Solve: \\("+(A===1?"":A)+"x^2 = "+B+"\\).",
+    "\\(x = \\pm "+frB(m,n)+"\\)",
+    ["\\(x = "+frB(m,n)+"\\) only","\\(x = \\pm "+frB(n,m)+"\\)",d3],
+    "Divide both sides by \\("+A+"\\): \\(x^2 = \\frac{"+B+"}{"+A+"} = "+frB(B,A)+"\\). Take the square root of both sides, remembering the negative root: \\(x = \\pm "+frB(m,n)+"\\).",
     {m:m,n:n,k:k});
 });
 E("u3-gcf-solve",3,["4.8"],2,"gen",function(){
   var a=ri(2,7),r=ri(-9,9);while(r===0)r=ri(-9,9);
   var b=a*r;
-  return numq("Solve by factoring: "+quadStr(a,b,0)+" = 0. Give the nonzero root.",
+  return numq("Solve by factoring: "+"\\("+quadB(a,b,0)+" = 0\\)"+". Give the nonzero root.",
     -r,0.011,
-    "Factor out the common factor "+a+"x: "+a+"x(x "+(r>0?"+ "+r:"\u2212 "+(-r))+") = 0. So x = 0 or x = "+(-r)+". The nonzero root is <b>"+(-r)+"</b>.",
+    "Factor out the common factor \\("+a+"x\\): \\("+a+"x(x "+(r>0?"+ "+r:"- "+(-r))+") = 0\\). So \\(x = 0\\) or \\(x = "+(-r)+"\\). The nonzero root is <b>\\("+(-r)+"\\)</b>.",
     {a:a,r:r});
 });
 E("u3-setup-equation",3,["4.3"],2,"var",varset([
-  function(){return mcq("A flare is launched from the top of a 45 m cliff. Its height above the water after t seconds is h(t) = \u22125t\u00B2 + 30t + 45. Which equation determines the times when the flare is 65 m above the water?",
-    "65 = \u22125t\u00B2 + 30t + 45",
-    ["0 = \u22125t\u00B2 + 30t + 45","t = \u22125(65)\u00B2 + 30(65) + 45","65 = \u22125t\u00B2 + 30t"],
-    "Set the height function equal to the target height: h(t) = 65. The equation 0 = ... would be for hitting the water, and the second option wrongly substitutes 65 for t instead of for h(t)." );},
-  function(){return mcq("A diver's height above a pool after t seconds is h(t) = \u22125t\u00B2 + 8t + 12. Which equation determines the times when the diver is 14 m above the pool?",
-    "14 = \u22125t\u00B2 + 8t + 12",
-    ["0 = \u22125t\u00B2 + 8t + 12","t = \u22125(14)\u00B2 + 8(14) + 12","14 = \u22125t\u00B2 + 8t"],
-    "Set the height function equal to the target height: h(t) = 14, keeping the constant term 12 (the starting height) in place." );},
-  function(){return mcq("A fountain jet's height after t seconds is h(t) = \u22125t\u00B2 + 20t + 3. Which equation determines the times when the water is 18 m above the nozzle?",
-    "18 = \u22125t\u00B2 + 20t + 3",
-    ["0 = \u22125t\u00B2 + 20t + 3","t = \u22125(18)\u00B2 + 20(18) + 3","18 = \u22125t\u00B2 + 20t"],
-    "Set the height function equal to the target height: h(t) = 18. Substituting 18 for t (the second option) would evaluate the height at t = 18 s instead.");}
+  function(){return mcq("A flare is launched from the top of a 45 m cliff. Its height above the water after t seconds is \\(h(t) = -5t^2 + 30t + 45\\). Which equation determines the times when the flare is 65 m above the water?",
+    "\\(65 = -5t^2 + 30t + 45\\)",
+    ["\\(0 = -5t^2 + 30t + 45\\)","\\(t = -5(65)^2 + 30(65) + 45\\)","\\(65 = -5t^2 + 30t\\)"],
+    "Set the height function equal to the target height: \\(h(t) = 65\\). The equation \\(0 = \\dots\\) would be for hitting the water, and the second option wrongly substitutes \\(65\\) for \\(t\\) instead of for \\(h(t)\\)." );},
+  function(){return mcq("A diver's height above a pool after t seconds is \\(h(t) = -5t^2 + 8t + 12\\). Which equation determines the times when the diver is 14 m above the pool?",
+    "\\(14 = -5t^2 + 8t + 12\\)",
+    ["\\(0 = -5t^2 + 8t + 12\\)","\\(t = -5(14)^2 + 8(14) + 12\\)","\\(14 = -5t^2 + 8t\\)"],
+    "Set the height function equal to the target height: \\(h(t) = 14\\), keeping the constant term \\(12\\) (the starting height) in place." );},
+  function(){return mcq("A fountain jet's height after t seconds is \\(h(t) = -5t^2 + 20t + 3\\). Which equation determines the times when the water is 18 m above the nozzle?",
+    "\\(18 = -5t^2 + 20t + 3\\)",
+    ["\\(0 = -5t^2 + 20t + 3\\)","\\(t = -5(18)^2 + 20(18) + 3\\)","\\(18 = -5t^2 + 20t\\)"],
+    "Set the height function equal to the target height: \\(h(t) = 18\\). Substituting \\(18\\) for \\(t\\) (the second option) would evaluate the height at \\(t = 18\\) s instead.");}
 ]));
 E("u3-border",3,["4.3"],3,"gen",function(){
   var L=pick([12,16,18,20,24,30]),W=pick([8,10,12,14]),w=pick([1,1.5,2,2.5,3]),tries=0;
   while(W>=L&&tries<30){W=pick([8,10,12,14]);tries++;}
   var T=(L+2*w)*(W+2*w);
   var c=pick([
-    {s:"A rectangular driveway is "+L+" m long and "+W+" m wide. A brick border of uniform width is built around all four sides of the driveway. The total area of the driveway and the border together is "+T+" m\u00B2.",n:"border"},
-    {s:"A rectangular garden plot is "+L+" m by "+W+" m. A gravel path of uniform width is built around all four sides of the plot. The total area of the plot and the path together is "+T+" m\u00B2.",n:"path"}
+    {s:"A rectangular driveway is "+L+" m long and "+W+" m wide. A brick border of uniform width is built around all four sides of the driveway. The total area of the driveway and the border together is \\("+T+"\\text{ m}^2\\).",n:"border"},
+    {s:"A rectangular garden plot is "+L+" m by "+W+" m. A gravel path of uniform width is built around all four sides of the plot. The total area of the plot and the path together is \\("+T+"\\text{ m}^2\\).",n:"path"}
   ]);
   return numq(c.s+" Find the width of the "+c.n+", in m.",
     w,0.011,
-    "Let the width be w. The border adds w to every side, so the outside dimensions are ("+L+" + 2w) by ("+W+" + 2w), and ("+L+" + 2w)("+W+" + 2w) = "+T+". Expanding: 4w\u00B2 + "+(2*(L+W))+"w + "+(L*W)+" = "+T+", or 4w\u00B2 + "+(2*(L+W))+"w \u2212 "+(T-L*W)+" = 0. The quadratic formula gives w = "+w+" or a negative value; a width cannot be negative, so the width is <b>"+w+" m</b>.",
+    "Let the width be \\(w\\). The border adds \\(w\\) to every side, so the outside dimensions are \\(("+L+" + 2w)\\) by \\(("+W+" + 2w)\\), and \\(("+L+" + 2w)("+W+" + 2w) = "+T+"\\). Expanding: \\(4w^2 + "+(2*(L+W))+"w + "+(L*W)+" = "+T+"\\), or \\(4w^2 + "+(2*(L+W))+"w - "+(T-L*W)+" = 0\\). The quadratic formula gives \\(w = "+w+"\\) or a negative value; a width cannot be negative, so the width is <b>\\("+w+"\\) m</b>.",
     {L:L,W:W,w:w});
 });
 E("u3-exact-roots",3,["4.9"],2,"gen",function(){
@@ -1928,8 +1933,8 @@ E("u3-exact-roots",3,["4.9"],2,"gen",function(){
     var sq=1,d0=D,f;for(f=2;f*f<=d0;f++){while(d0%(f*f)===0){d0/=(f*f);sq*=f;}}
     if(d0===1)return null;
     var g=g2(g2(Math.abs(bb),sq),2*aa),nb=-bb/g,s=sq/g,den=(2*aa)/g;
-    var num=(nb<0?"\u2212"+(-nb):""+nb)+" \u00B1 "+(s===1?"":s)+"\u221A"+d0;
-    return den===1?("x = "+num):("x = ("+num+") \u00F7 "+den);
+    var num=""+nb+" \\pm "+(s===1?"":s)+"\\sqrt{"+d0+"}";
+    return den===1?("\\(x = "+num+"\\)"):("\\(x = \\frac{"+num+"}{"+den+"}\\)");
   }
   var a,b,c,key,d1,d2,d3,tries=0;
   do{
@@ -1939,9 +1944,9 @@ E("u3-exact-roots",3,["4.9"],2,"gen",function(){
   }while((!key||!d1||!d2||!d3||d1===key||d2===key||d3===key||d2===d1||d3===d1||d3===d2)&&tries<300);
   var D=b*b-4*a*c,sq=1,d0=D,f;for(f=2;f*f<=d0;f++){while(d0%(f*f)===0){d0/=(f*f);sq*=f;}}
   var g=g2(g2(Math.abs(b),sq),2*a);
-  return mcq("What are the exact roots of "+quadStr(a,b,c)+" = 0?",
+  return mcq("What are the exact roots of "+"\\("+quadB(a,b,c)+" = 0\\)"+"?",
     key,[d1,d2,d3],
-    "Quadratic formula: x = (\u2212b \u00B1 \u221A(b\u00B2 \u2212 4ac)) \u00F7 (2a) = ("+(-b)+" \u00B1 \u221A"+D+") \u00F7 "+(2*a)+". Since "+D+" = "+(sq*sq)+" \u00D7 "+d0+", \u221A"+D+" = "+sq+"\u221A"+d0+(g>1?", and dividing numerator and denominator by "+g:"")+", giving <b>"+key+"</b>.",
+    "Quadratic formula: \\(x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} = \\frac{"+(-b)+" \\pm \\sqrt{"+D+"}}{"+(2*a)+"}\\). Since \\("+D+" = "+(sq*sq)+" \\times "+d0+"\\), \\(\\sqrt{"+D+"} = "+sq+"\\sqrt{"+d0+"}\\)"+(g>1?", and dividing numerator and denominator by \\("+g+"\\)":"")+", giving <b>"+key+"</b>.",
     {a:a,b:b,c:c});
 });
 
@@ -1953,7 +1958,7 @@ E("u4-variable-mixed",4,["1.3"],2,"gen",function(){
   return mcq("Simplify: \\(\\sqrt{"+coef+"x^{"+p+"}}\\).",
     "\\("+s+xnT+"\\sqrt{"+r+"x}\\)",
     ["\\("+(s+1)+xnT+"\\sqrt{"+r+"x}\\)", "\\("+s+"x^{"+(n+1)+"}\\sqrt{"+r+"x}\\)", "\\("+s+xnT+"\\sqrt{"+coef+"x}\\)"],
-    "\\("+coef+" = "+(s*s)+" \\times "+r+"\\) and \\(x^{"+p+"} = (x^{"+n+"})^2 x\\), so the square factors come out: \\(\\sqrt{"+coef+"x^{"+p+"}} = "+s+xnT+"\\sqrt{"+r+"x}\\). One x stays inside because the exponent "+p+" is odd.",
+    "\\("+coef+" = "+(s*s)+" \\times "+r+"\\) and \\(x^{"+p+"} = (x^{"+n+"})^2 x\\), so the square factors come out: \\(\\sqrt{"+coef+"x^{"+p+"}} = "+s+xnT+"\\sqrt{"+r+"x}\\). One x stays inside because the exponent \\("+p+"\\) is odd.",
     {s:s,r:r,n:n});
 });
 E("u4-multiply-mixed",4,["1.6"],2,"gen",function(){
@@ -1975,8 +1980,8 @@ E("u4-equation-restriction",4,["1.8"],1,"gen",function(){
   var q=-p*m;
   var inside=(p===1?"x":(""+p+"x"))+(q>0?" + "+q:" - "+(-q));
   return mcq("State the restriction on x in the radical equation \\(\\sqrt{"+inside+"} = "+r+"\\).",
-    "x \u2265 "+m,
-    ["x \u2264 "+m,"x \u2265 "+(-m),"All real numbers"],
+    "\\(x \\geq "+m+"\\)",
+    ["\\(x \\leq "+m+"\\)","\\(x \\geq "+(-m)+"\\)","All real numbers"],
     "The radicand cannot be negative: \\("+inside+" \\ge 0\\) gives \\("+(p===1?"x":(""+p+"x"))+" \\ge "+(-q)+"\\), so \\(x \\ge "+m+"\\). This restriction must hold before the equation can have any solution at all.",
     {p:p,m:m,r:r});
 });
@@ -1986,12 +1991,12 @@ E("u4-verify-root",4,["1.10"],2,"gen",function(){
   if(Math.random()<0.5){
     return numq("A student solving \\(\\sqrt{x + "+a+"} = x - "+b+"\\) claims that \\(x = "+X+"\\) is a root. Substitute \\(x = "+X+"\\): what is the value of the LEFT side, \\(\\sqrt{x + "+a+"}\\)?",
       s,0.011,
-      "\\(\\sqrt{"+X+" + "+a+"} = \\sqrt{"+(s*s)+"}\\) = <b>"+s+"</b>. (For comparison, the right side at \\(x = "+X+"\\) is \\("+X+" - "+b+" = "+(X-b)+"\\). Both sides must give the same value for \\(x = "+X+"\\) to actually be a root.)",
+      "\\(\\sqrt{"+X+" + "+a+"} = \\sqrt{"+(s*s)+"}\\) = <b>\\("+s+"\\)</b>. (For comparison, the right side at \\(x = "+X+"\\) is \\("+X+" - "+b+" = "+(X-b)+"\\). Both sides must give the same value for \\(x = "+X+"\\) to actually be a root.)",
       {mode:1,X:X,a:a,b:b});
   }
   return numq("A student solving \\(\\sqrt{x + "+a+"} = x - "+b+"\\) claims that \\(x = "+X+"\\) is a root. Substitute \\(x = "+X+"\\): what is the value of the RIGHT side, \\(x - "+b+"\\)?",
     X-b,0.011,
-    "\\("+X+" - "+b+"\\) = <b>"+(X-b)+"</b>. (For comparison, the left side at \\(x = "+X+"\\) is \\(\\sqrt{"+X+" + "+a+"} = "+s+"\\). Both sides must give the same value for \\(x = "+X+"\\) to actually be a root.)",
+    "\\("+X+" - "+b+"\\) = <b>\\("+(X-b)+"\\)</b>. (For comparison, the left side at \\(x = "+X+"\\) is \\(\\sqrt{"+X+" + "+a+"} = "+s+"\\). Both sides must give the same value for \\(x = "+X+"\\) to actually be a root.)",
     {mode:2,X:X,a:a,b:b});
 });
 E("u4-model-equation",4,["1.12"],3,"gen",function(){
@@ -1999,13 +2004,13 @@ E("u4-model-equation",4,["1.12"],3,"gen",function(){
     var d=ri(3,60),sp=5*Math.sqrt(d);
     return numq("Police estimate a car's speed from a skid mark using \\(s = \\sqrt{25d}\\), where s is the speed in km/h and d is the length of the skid mark in metres. A skid mark at a collision scene measures "+d+" m. Estimate the car's speed, to one decimal place, in km/h.",
       fmt(sp,1),0.06,
-      "Substitute \\(d = "+d+"\\): \\(s = \\sqrt{25 \\times "+d+"} = \\sqrt{"+(25*d)+"} \\approx "+fmt(sp,1)+"\\). So the speed is about <b>"+fmt(sp,1)+" km/h</b>.",
+      "Substitute \\(d = "+d+"\\): \\(s = \\sqrt{25 \\times "+d+"} = \\sqrt{"+(25*d)+"} \\approx "+fmt(sp,1)+"\\). So the speed is about <b>\\("+fmt(sp,1)+"\\text{ km/h}\\)</b>.",
       {mode:1,d:d});
   }
   var T=pick([2,3,4,5,6]),L=T*T/4;
   return numq("The period of a simple pendulum is modelled by \\(T = 2\\sqrt{L}\\), where T is the period in seconds and L is the length in metres. How long is a pendulum whose period is "+T+" s, in m?",
     L,0.011,
-    "\\("+T+" = 2\\sqrt{L}\\), so \\(\\sqrt{L} = "+T+" \\div 2 = "+fmt(T/2,2)+"\\). Squaring both sides gives \\(L\\) = <b>"+fmt(L,2)+" m</b>.",
+    "\\("+T+" = 2\\sqrt{L}\\), so \\(\\sqrt{L} = "+T+" \\div 2 = "+fmt(T/2,2)+"\\). Squaring both sides gives \\(L\\) = <b>\\("+fmt(L,2)+"\\text{ m}\\)</b>.",
     {mode:2,T:T});
 });
 
@@ -2022,14 +2027,14 @@ E("u4-cube-mixed",4,["1.2"],1,"gen",function(){
   return mcq("Express "+cbrtT((neg?"-":"")+mag)+" as a mixed radical in simplest form.",
     rad3T(neg?-a:a,b),
     [rad3T(neg?-(a+1):a+1,b),rad3T(neg?-a:a,b+1),rad3T(neg?-a:a,a*b)],
-    "Find the largest perfect cube dividing "+mag+": "+mag+" = "+(a*a*a)+" \u00D7 "+b+". Cube roots group factors in threes, so "+cbrtT((neg?"-":"")+mag)+" = "+rad3T(neg?-a:a,b)+"."+(neg?" (A cube root of a negative number is negative.)":""),
+    "Find the largest perfect cube dividing \\("+mag+"\\): \\("+mag+" = "+(a*a*a)+" \\times "+b+"\\). Cube roots group factors in threes, so "+cbrtT((neg?"-":"")+mag)+" = "+rad3T(neg?-a:a,b)+"."+(neg?" (A cube root of a negative number is negative.)":""),
     {a:a,b:b,neg:neg});
 });
 E("u4-cube-equation",4,["1.9"],2,"gen",function(){
   var r=ri(-4,5),p=pick([1,2,3]),x0=ri(-12,20);
   var q=r*r*r-p*x0;
   var inside=(p===1?"x":p+"x")+(q>0?" + "+q:(q<0?" - "+(-q):""));
-  var sol="Cube both sides: \\("+inside+" = {"+r+"}^{3} = "+(r*r*r)+"\\). So \\("+(p===1?"x":p+"x")+" = "+(r*r*r)+(q>0?" - "+q:(q<0?" + "+(-q):""))+" = "+(p*x0)+"\\)."+(p===1?"":" Divide by "+p+":")+" \\(x\\) = <b>"+x0+"</b>. (Cube roots accept negative inputs, so there is no restriction to check.)";
+  var sol="Cube both sides: \\("+inside+" = {"+r+"}^{3} = "+(r*r*r)+"\\). So \\("+(p===1?"x":p+"x")+" = "+(r*r*r)+(q>0?" - "+q:(q<0?" + "+(-q):""))+" = "+(p*x0)+"\\)."+(p===1?"":" Divide by \\("+p+"\\):")+" \\(x\\) = <b>\\("+x0+"\\)</b>. (Cube roots accept negative inputs, so there is no restriction to check.)";
   return numq("Solve: \\(\\sqrt[3]{"+inside+"} = "+r+"\\). Give the value of x.",
     x0,0.011,sol,{r:r,p:p,x0:x0,q:q});
 });
@@ -2049,9 +2054,9 @@ E("u4-combine-multi",4,["1.6"],2,"gen",function(){
   for(var ci=0;ci<cand.length&&ds.length<2;ci++){var cv=cand[ci];if(cv>=1&&cv!==tot&&ds.indexOf(cv)<0)ds.push(cv);}
   var d1=radT(ds[0],b),d2=radT(ds[1],b);
   var d3=sqrtT(M[0]*M[0]*b+M[1]*M[1]*b+M[2]*M[2]*b);
-  return mcq("Simplify: "+term(0)+" "+(SG[1]>0?"+ ":"\u2212 ")+term(1)+" "+(SG[2]>0?"+ ":"\u2212 ")+term(2)+".",
+  return mcq("Simplify: \\("+term(0).slice(2,-2)+(SG[1]>0?" + ":" - ")+term(1).slice(2,-2)+(SG[2]>0?" + ":" - ")+term(2).slice(2,-2)+"\\)",
     key,[d1,d2,d3],
-    "Simplify each term first: "+term(0)+" = "+radT(D[0]*M[0],b)+", "+term(1)+" = "+radT(D[1]*M[1],b)+", and "+term(2)+" = "+radT(D[2]*M[2],b)+". They are like radicals, so combine the coefficients: "+(D[0]*M[0])+" "+(SG[1]>0?"+ ":"\u2212 ")+(D[1]*M[1])+" "+(SG[2]>0?"+ ":"\u2212 ")+(D[2]*M[2])+" = "+tot+", giving <b>"+key+"</b>.",
+    "Simplify each term first: "+term(0)+" = "+radT(D[0]*M[0],b)+", "+term(1)+" = "+radT(D[1]*M[1],b)+", and "+term(2)+" = "+radT(D[2]*M[2],b)+". They are like radicals, so combine the coefficients: \\("+(D[0]*M[0])+" "+(SG[1]>0?"+ ":"- ")+(D[1]*M[1])+" "+(SG[2]>0?"+ ":"- ")+(D[2]*M[2])+" = "+tot+"\\), giving <b>"+key+"</b>.",
     {b:b,D:D,M:M,SG:SG});
 });
 E("u4-binomial-square",4,["1.6"],2,"gen",function(){
@@ -2083,10 +2088,10 @@ E("u4-width-radical",4,["1.6"],2,"gen",function(){
   var keyW=radT(a,b);
   var candW=[[a,b*d],[a*c,b],[a*t,r0],[a,d],[a+1,b],[c,b],[a*c,b*d]],dsW=[];
   for(var ci=0;ci<candW.length&&dsW.length<3;ci++){var stW=radT(candW[ci][0],candW[ci][1]);if(stW!==keyW&&dsW.indexOf(stW)<0)dsW.push(stW);}
-  return mcq("A rectangle has area \\("+(a*c)+"\\sqrt{"+bd+"}\\) cm\u00B2 and length "+radT(c,d)+" cm. What is its width, in simplest radical form?",
+  return mcq("A rectangle has area \\("+(a*c)+"\\sqrt{"+bd+"}\\) \\(cm^2\\) and length "+radT(c,d)+" cm. What is its width, in simplest radical form?",
     keyW,
     dsW,
-    "Width = area \u00F7 length = \\("+(a*c)+"\\sqrt{"+bd+"} \\div "+c+"\\sqrt{"+d+"}\\). Divide the coefficients: \\("+(a*c)+" \\div "+c+" = "+a+"\\). Divide the radicals: \\(\\sqrt{"+bd+"} \\div \\sqrt{"+d+"} = \\sqrt{"+b+"}\\). So the width is <b>"+radT(a,b)+" cm</b>.",
+    "Width = area \\(\\div\\) length = \\("+(a*c)+"\\sqrt{"+bd+"} \\div "+c+"\\sqrt{"+d+"}\\). Divide the coefficients: \\("+(a*c)+" \\div "+c+" = "+a+"\\). Divide the radicals: \\(\\sqrt{"+bd+"} \\div \\sqrt{"+d+"} = \\sqrt{"+b+"}\\). So the width is <b>"+radT(a,b)+" cm</b>.",
     {a:a,b:b,c:c,d:d});
 });
 
@@ -2098,12 +2103,12 @@ E("u3-equation-fraction-roots",3,["4.6"],2,"gen",function(){
   while(r1[0]*r2[1]+r2[0]*r1[1]===0&&tries<40){r2=mkRoot();tries++;}
   var p1=r1[0],q1=r1[1],p2=r2[0],q2=r2[1];
   var A=q1*q2,B=-(p1*q2+p2*q1),C=p1*p2;
-  function fr(p,q){return (p<0?"\u2212":"")+Math.abs(p)+"/"+q;}
-  var key=quadStr(A,B,C)+" = 0";
-  return mcq("Which quadratic equation has roots of "+fr(p1,q1)+" and "+fr(p2,q2)+"?",
+  function fr(p,q){return (p<0?"-":"")+Math.abs(p)+"/"+q;}
+  var key="\\("+quadB(A,B,C)+" = 0\\)";
+  return mcq("Which quadratic equation has roots of \\("+frB(p1,q1)+"\\) and \\("+frB(p2,q2)+"\\)?",
     key,
-    [quadStr(A,-B,C)+" = 0",quadStr(A,B,-C)+" = 0",quadStr(A,-B,-C)+" = 0"],
-    "Build the factors from the roots: ("+q1+"x "+(p1>0?"\u2212 "+p1:"+ "+(-p1))+")("+q2+"x "+(p2>0?"\u2212 "+p2:"+ "+(-p2))+") = 0. Expanding gives "+A+"x\u00B2 "+(B>=0?"+ ":"\u2212 ")+Math.abs(B)+"x "+(C>=0?"+ ":"\u2212 ")+Math.abs(C)+" = 0, that is, <b>"+key+"</b>.",
+    ["\\("+quadB(A,-B,C)+" = 0\\)","\\("+quadB(A,B,-C)+" = 0\\)","\\("+quadB(A,-B,-C)+" = 0\\)"],
+    "Build the factors from the roots: \\(("+q1+"x "+(p1>0?"- "+p1:"+ "+(-p1))+")("+q2+"x "+(p2>0?"- "+p2:"+ "+(-p2))+") = 0\\). Expanding gives \\("+quadB(A,B,C)+" = 0\\), that is, <b>"+key+"</b>.",
     {A:A,B:B,C:C});
 });
 E("u3-solve-height",3,["4.3"],3,"gen",function(){
@@ -2112,31 +2117,31 @@ E("u3-solve-height",3,["4.3"],3,"gen",function(){
   var b=5*(t1+t2),c0=H-5*t1*t2;
   var later=Math.random()<0.5;
   var ctx=pick([["missile","fired from a ship","above the water"],["rocket","launched from a platform","above the ground"],["flare","fired from a cliff top","above the sea"]]);
-  return numq("A "+ctx[0]+" is "+ctx[1]+". Its height "+ctx[2]+" after t seconds is h(t) = \u22125t\u00B2 + "+b+"t + "+c0+" (metres). At what time is it exactly "+H+" m "+ctx[2]+"? Give the "+(later?"later":"earlier")+" time, in s.",
+  return numq("A "+ctx[0]+" is "+ctx[1]+". Its height "+ctx[2]+" after t seconds is \\(h(t) = -5t^2 + "+b+"t + "+c0+"\\) (metres). At what time is it exactly "+H+" m "+ctx[2]+"? Give the "+(later?"later":"earlier")+" time, in s.",
     later?t2:t1,0.011,
-    "Set h(t) = "+H+": \u22125t\u00B2 + "+b+"t + "+c0+" = "+H+", so \u22125t\u00B2 + "+b+"t + "+(c0-H)+" = 0. Divide by \u22125: t\u00B2 \u2212 "+(t1+t2)+"t + "+(t1*t2)+" = 0, which factors as (t \u2212 "+t1+")(t \u2212 "+t2+") = 0. The "+ctx[0]+" is at "+H+" m at t = "+t1+" s and t = "+t2+" s; the "+(later?"later":"earlier")+" time is <b>"+(later?t2:t1)+" s</b>.",
+    "Set \\(h(t) = "+H+"\\): \\(-5t^2 + "+b+"t + "+c0+" = "+H+"\\), so \\(-5t^2 + "+b+"t + "+(c0-H)+" = 0\\). Divide by \\(-5\\): \\(t^2 - "+(t1+t2)+"t + "+(t1*t2)+" = 0\\), which factors as \\((t - "+t1+")(t - "+t2+") = 0\\). The "+ctx[0]+" is at "+H+" m at \\(t = "+t1+"\\) s and \\(t = "+t2+"\\) s; the "+(later?"later":"earlier")+" time is <b>\\("+(later?t2:t1)+"\\) s</b>.",
     {t1:t1,t2:t2,H:H,later:later});
 });
 E("u3-model-number",3,["4.3"],2,"var",varset([
-  function(){return mcq("The product of two consecutive even integers is 120. If x is the smaller integer, which equation models this?",
-    "x(x + 2) = 120",
-    ["x(x + 1) = 120","(x + 2)(x + 2) = 120","x + (x + 2) = 120"],
-    "Consecutive even integers differ by 2, so the integers are x and x + 2. Their product is x(x + 2), set equal to 120.",
+  function(){return mcq("The product of two consecutive even integers is 120. If \\(x\\) is the smaller integer, which equation models this?",
+    "\\(x(x + 2) = 120\\)",
+    ["\\(x(x + 1) = 120\\)","\\((x + 2)(x + 2) = 120\\)","\\(x + (x + 2) = 120\\)"],
+    "Consecutive even integers differ by \\(2\\), so the integers are \\(x\\) and \\(x + 2\\). Their product is \\(x(x + 2)\\), set equal to \\(120\\).",
     {});},
-  function(){return mcq("The sum of the squares of two consecutive integers is 85. If x is the smaller integer, which equation models this?",
-    "x\u00B2 + (x + 1)\u00B2 = 85",
-    ["(x + (x + 1))\u00B2 = 85","x\u00B2 + (x + 2)\u00B2 = 85","2x\u00B2 = 85"],
-    "Consecutive integers are x and x + 1. Square each, then add: x\u00B2 + (x + 1)\u00B2 = 85.",
+  function(){return mcq("The sum of the squares of two consecutive integers is 85. If \\(x\\) is the smaller integer, which equation models this?",
+    "\\(x^2 + (x + 1)^2 = 85\\)",
+    ["\\((x + (x + 1))^2 = 85\\)","\\(x^2 + (x + 2)^2 = 85\\)","\\(2x^2 = 85\\)"],
+    "Consecutive integers are \\(x\\) and \\(x + 1\\). Square each, then add: \\(x^2 + (x + 1)^2 = 85\\).",
     {});},
-  function(){return mcq("A rectangular room is 10 m by 8 m. A strip of width x metres is removed along one full length and one full width, making the room smaller on two adjacent sides. The new area is 48 m\u00B2. Which equation models this?",
-    "(10 \u2212 x)(8 \u2212 x) = 48",
-    ["(10 \u2212 2x)(8 \u2212 2x) = 48","(10 + x)(8 + x) = 48","(10 \u2212 2x)(8 \u2212 x) = 48"],
-    "Only one length and one width shrink, each by x (not 2x): the new dimensions are (10 \u2212 x) and (8 \u2212 x), and their product is the new area, 48.",
+  function(){return mcq("A rectangular room is 10 m by 8 m. A strip of width x metres is removed along one full length and one full width, making the room smaller on two adjacent sides. The new area is \\(48\\text{ m}^2\\). Which equation models this?",
+    "\\((10 - x)(8 - x) = 48\\)",
+    ["\\((10 - 2x)(8 - 2x) = 48\\)","\\((10 + x)(8 + x) = 48\\)","\\((10 - 2x)(8 - x) = 48\\)"],
+    "Only one length and one width shrink, each by \\(x\\) (not \\(2x\\)): the new dimensions are \\((10 - x)\\) and \\((8 - x)\\), and their product is the new area, \\(48\\).",
     {});},
-  function(){return mcq("A rectangle's length is 3 m more than its width. Its area is 40 m\u00B2. If x is the width, which equation models this?",
-    "x(x + 3) = 40",
-    ["x + (x + 3) = 40","x\u00B2 + 3 = 40","(x \u2212 3)x = 40"],
-    "The width is x and the length is x + 3. Area = width \u00D7 length = x(x + 3) = 40.",
+  function(){return mcq("A rectangle's length is 3 m more than its width. Its area is \\(40\\text{ m}^2\\). If \\(x\\) is the width, which equation models this?",
+    "\\(x(x + 3) = 40\\)",
+    ["\\(x + (x + 3) = 40\\)","\\(x^2 + 3 = 40\\)","\\((x - 3)x = 40\\)"],
+    "The width is \\(x\\) and the length is \\(x + 3\\). Area = width \\(\\times\\) length = \\(x(x + 3) = 40\\).",
     {});}
 ]));
 
@@ -2527,40 +2532,40 @@ E("u3-roots-sum-product",3,["4.6"],2,"gen",function(){
   var key=mode==="sum"?r1+r2:r1*r2;
   var cand=[B,-B,C,-C,key+1,key-1,key+2,key-2,r1-r2,r2-r1],ds=[];
   for(var i=0;i<cand.length&&ds.length<3;i++){var v=String(cand[i]);if(cand[i]!==key&&ds.indexOf(v)<0)ds.push(v);}
-  return mcq("For the equation "+quadStr(1,B,C)+" = 0, what is the "+mode+" of the roots?",
-    String(key),ds,
-    "The equation factors as (x "+(r1>0?"− "+r1:"+ "+(-r1))+")(x "+(r2>0?"− "+r2:"+ "+(-r2))+") = 0, so the roots are "+r1+" and "+r2+". Their "+mode+" is "+(mode==="sum"?r1+" + "+r2:r1+" × "+r2)+" = <b>"+key+"</b>. (In general, for x² + bx + c the sum of the roots is −b and the product is c.)",
+  return mcq("For the equation "+"\\("+quadB(1,B,C)+" = 0\\)"+", what is the "+mode+" of the roots?",
+    "\\("+key+"\\)",ds.map(function(v){return "\\("+v+"\\)";}),
+    "The equation factors as \\((x "+(r1>0?"- "+r1:"+ "+(-r1))+")(x "+(r2>0?"- "+r2:"+ "+(-r2))+") = 0\\), so the roots are \\("+r1+"\\) and \\("+r2+"\\). Their "+mode+" is \\("+(mode==="sum"?r1+" + "+r2:r1+" \\times "+r2)+" = "+key+"\\). (In general, for \\(x^2 + bx + c\\) the sum of the roots is \\(-b\\) and the product is \\(c\\).)",
     {r1:r1,r2:r2,B:B,C:C,mode:mode,key:key});
 });
 E("u3-factor-nonmonic",3,["4.8"],2,"gen",function(){
-  function lin(cf,tm){return (cf===1?"x":cf+"x")+(tm>0?" + "+tm:" − "+(-tm));}
+  function lin(cf,tm){return (cf===1?"x":cf+"x")+(tm>0?" + "+tm:" - "+(-tm));}
   function expand(t){return [t[0]*t[2], t[0]*t[3]+t[1]*t[2], t[1]*t[3]];}
   var p,q,r,s,A,B,C,tries=0;
   do{
     p=ri(1,3);q=ri(1,3);r=pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6]);s=pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6]);
     A=p*q;B=p*s+r*q;C=r*s;tries++;
   }while(B===0&&tries<80); /* B = 0 is a difference of squares: the sign-flip distractors collapse there (it has its own entry in tranche 7) */
-  var key="("+lin(p,r)+")("+lin(q,s)+")";
+  var key="\\(("+lin(p,r)+")("+lin(q,s)+")\\)";
   var cands=[[p,-r,q,s],[p,r,q,-s],[p,-r,q,-s],[q,r,p,s],[q,-r,p,-s],[p,-s,q,-r]],ds=[];
   for(var i=0;i<cands.length&&ds.length<3;i++){
     var ex=expand(cands[i]);if(ex[0]===A&&ex[1]===B&&ex[2]===C)continue;
-    var st="("+lin(cands[i][0],cands[i][1])+")("+lin(cands[i][2],cands[i][3])+")";
+    var st="\\(("+lin(cands[i][0],cands[i][1])+")("+lin(cands[i][2],cands[i][3])+")\\)";
     if(st!==key&&ds.indexOf(st)<0)ds.push(st);
   }
-  return mcq("Factor fully: "+quadStr(A,B,C)+".",
+  return mcq("Factor fully: "+quadT(A,B,C)+".",
     key,ds,
-    "Look for a factor pair whose cross-products add to "+B+": ("+lin(p,r)+")("+lin(q,s)+") expands to "+A+"x² + ("+(p*s)+" + "+(r*q)+")x + ("+C+") = "+quadStr(A,B,C)+". So the factored form is <b>"+key+"</b>.",
+    "Look for a factor pair whose cross-products add to \\("+B+"\\): \\(("+lin(p,r)+")("+lin(q,s)+")\\) expands to \\("+quadB(A,B,C)+"\\). So the factored form is <b>"+key+"</b>.",
     {p:p,r:r,q:q,s:s,A:A,B:B,C:C});
 });
 E("u3-standard-coeffs",3,["4.9"],1,"gen",function(){
   var A=ri(2,6),B=ri(-9,9),K=ri(-12,12),tries=0;
   while((B===0||K===0)&&tries<40){B=ri(-9,9);K=ri(-12,12);tries++;}
-  var key="a = "+A+", b = "+B+", c = "+(-K);
-  var cand=["a = "+A+", b = "+B+", c = "+K,"a = "+A+", b = "+(-B)+", c = "+(-K),"a = "+B+", b = "+A+", c = "+(-K),"a = 1, b = "+B+", c = "+(-K)],ds=[];
+  var key="\\(a = "+A+", \\; b = "+B+", \\; c = "+(-K)+"\\)";
+  var cand=["\\(a = "+A+", \\; b = "+B+", \\; c = "+K+"\\)","\\(a = "+A+", \\; b = "+(-B)+", \\; c = "+(-K)+"\\)","\\(a = "+B+", \\; b = "+A+", \\; c = "+(-K)+"\\)","\\(a = 1, \\; b = "+B+", \\; c = "+(-K)+"\\)"],ds=[];
   for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
-  return mcq("The equation "+quadStr(A,B,0)+" = "+K+" is to be solved with the quadratic formula. When it is written in standard form ax² + bx + c = 0, what are a, b and c?",
+  return mcq("The equation \\("+quadB(A,B,0)+" = "+K+"\\) is to be solved with the quadratic formula. When it is written in standard form \\(ax^2 + bx + c = 0\\), what are a, b and c?",
     key,ds,
-    "Move every term to the left: "+quadStr(A,B,0)+" − ("+K+") = 0, that is, "+quadStr(A,B,-K)+" = 0. Reading off the coefficients: <b>"+key+"</b>. The constant changes sign when it crosses the equals sign.",
+    "Move every term to the left: \\("+quadB(A,B,0)+" - ("+K+") = 0\\), that is, \\("+quadB(A,B,-K)+" = 0\\). Reading off the coefficients: <b>"+key+"</b>. The constant changes sign when it crosses the equals sign.",
     {A:A,B:B,K:K});
 });
 E("u3-two-numbers",3,["4.3"],3,"gen",function(){
@@ -2572,7 +2577,7 @@ E("u3-two-numbers",3,["4.3"],3,"gen",function(){
   var N=n*(n+step);
   return numq("The product of two positive "+mode[0]+" is "+N+". What is the smaller of the two integers?",
     n,0.011,
-    "Let the smaller integer be x; the next one is x + "+step+". Then x(x + "+step+") = "+N+", so x² + "+step+"x − "+N+" = 0, which factors as (x − "+n+")(x + "+(n+step)+") = 0. The positive root is x = <b>"+n+"</b> (the other root, −"+(n+step)+", is rejected because the integers are positive). The two integers are "+n+" and "+(n+step)+", and indeed "+n+" × "+(n+step)+" = "+N+".",
+    "Let the smaller integer be \\(x\\); the next one is \\(x + "+step+"\\). Then \\(x(x + "+step+") = "+N+"\\), so \\(x^2 + "+step+"x - "+N+" = 0\\), which factors as \\((x - "+n+")(x + "+(n+step)+") = 0\\). The positive root is \\(x = "+n+"\\) (the other root, \\(-"+(n+step)+"\\), is rejected because the integers are positive). The two integers are \\("+n+"\\) and \\("+(n+step)+"\\), and indeed \\("+n+" \\times "+(n+step)+" = "+N+"\\).",
     {n:n,step:step,N:N,mode:mode[0]});
 });
 
@@ -2583,7 +2588,7 @@ E("u4-evaluate-mixed",4,["1.2"],1,"gen",function(){
   var ans=a+b-c;
   return numq("Evaluate: \\(\\sqrt{"+(a*a)+"} + \\sqrt[3]{"+(b*b*b)+"} - \\sqrt{"+(c*c)+"}\\).",
     ans,0.011,
-    "\\(\\sqrt{"+(a*a)+"} = "+a+"\\) because \\("+a+"^2 = "+(a*a)+"\\); \\(\\sqrt[3]{"+(b*b*b)+"} = "+b+"\\) because \\("+b+"^3 = "+(b*b*b)+"\\); \\(\\sqrt{"+(c*c)+"} = "+c+"\\). So the value is \\("+a+" + "+b+" - "+c+"\\) = <b>"+ans+"</b>.",
+    "\\(\\sqrt{"+(a*a)+"} = "+a+"\\) because \\("+a+"^2 = "+(a*a)+"\\); \\(\\sqrt[3]{"+(b*b*b)+"} = "+b+"\\) because \\("+b+"^3 = "+(b*b*b)+"\\); \\(\\sqrt{"+(c*c)+"} = "+c+"\\). So the value is \\("+a+" + "+b+" - "+c+"\\) = <b>\\("+ans+"\\)</b>.",
     {a:a,b:b,c:c,ans:ans});
 });
 E("u4-divide-radicals",4,["1.6"],2,"gen",function(){
@@ -2594,7 +2599,7 @@ E("u4-divide-radicals",4,["1.6"],2,"gen",function(){
   for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
   return mcq("Simplify: \\(\\frac{\\sqrt{"+A+"}}{\\sqrt{"+B+"}}\\). Give the answer in simplest radical form.",
     key,ds,
-    "Combine under one root: \\(\\frac{\\sqrt{"+A+"}}{\\sqrt{"+B+"}} = \\sqrt{\\frac{"+A+"}{"+B+"}} = \\sqrt{"+(k*k*m)+"}\\). Then simplify: \\(\\sqrt{"+(k*k*m)+"} = "+k+"\\sqrt{"+m+"}\\) because "+(k*k)+" is a perfect square factor. In simplest form: <b>"+key+"</b>.",
+    "Combine under one root: \\(\\frac{\\sqrt{"+A+"}}{\\sqrt{"+B+"}} = \\sqrt{\\frac{"+A+"}{"+B+"}} = \\sqrt{"+(k*k*m)+"}\\). Then simplify: \\(\\sqrt{"+(k*k*m)+"} = "+k+"\\sqrt{"+m+"}\\) because \\("+(k*k)+"\\) is a perfect square factor. In simplest form: <b>"+key+"</b>.",
     {A:A,B:B,k:k,m:m,d0:d0});
 });
 E("u4-rationalize-coefficient",4,["1.7"],2,"gen",function(){
@@ -2606,7 +2611,7 @@ E("u4-rationalize-coefficient",4,["1.7"],2,"gen",function(){
   for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
   return mcq("Rationalize the denominator and simplify: \\(\\frac{"+N+"}{"+c+"\\sqrt{"+m+"}}\\).",
     key,ds,
-    "Multiply the numerator and denominator by \\(\\sqrt{"+m+"}\\): the denominator becomes \\("+c+" \\times \\sqrt{"+m+"} \\times \\sqrt{"+m+"} = "+c+" \\times "+m+" = "+(c*m)+"\\), and the numerator becomes \\("+N+"\\sqrt{"+m+"}\\). Since "+N+" and "+(c*m)+" share no common factor, the simplest form is <b>"+key+"</b>.",
+    "Multiply the numerator and denominator by \\(\\sqrt{"+m+"}\\): the denominator becomes \\("+c+" \\times \\sqrt{"+m+"} \\times \\sqrt{"+m+"} = "+c+" \\times "+m+" = "+(c*m)+"\\), and the numerator becomes \\("+N+"\\sqrt{"+m+"}\\). Since \\("+N+"\\) and \\("+(c*m)+"\\) share no common factor, the simplest form is <b>"+key+"</b>.",
     {N:N,c:c,m:m});
 });
 E("u4-conjugate-area",4,["1.6"],3,"gen",function(){
@@ -2614,9 +2619,9 @@ E("u4-conjugate-area",4,["1.6"],3,"gen",function(){
   for(i=2;i<a*a;i++){var rt=Math.sqrt(i);if(rt!==Math.floor(rt))sq.push(i);}
   var b=pick(sq),area=a*a-b;
   var ctx=pick(["rectangular garden","rectangular rug","rectangular solar panel","rectangular patio"]);
-  return numq("A "+ctx+" measures \\(("+a+" + \\sqrt{"+b+"})\\) m by \\(("+a+" - \\sqrt{"+b+"})\\) m. What is its area, in m²?",
+  return numq("A "+ctx+" measures \\(("+a+" + \\sqrt{"+b+"})\\) m by \\(("+a+" - \\sqrt{"+b+"})\\) m. What is its area, in \\(m^2\\)?",
     area,0.011,
-    "Area = \\(("+a+" + \\sqrt{"+b+"})("+a+" - \\sqrt{"+b+"})\\), a difference of squares: \\("+a+"^2 - (\\sqrt{"+b+"})^2 = "+(a*a)+" - "+b+" = "+area+"\\), so the area is <b>"+area+" m²</b>. The radical terms cancel, which is why conjugate pairs give a whole-number area.",
+    "Area = \\(("+a+" + \\sqrt{"+b+"})("+a+" - \\sqrt{"+b+"})\\), a difference of squares: \\("+a+"^2 - (\\sqrt{"+b+"})^2 = "+(a*a)+" - "+b+" = "+area+"\\), so the area is <b>\\("+area+"\text{ m}^2\\)</b>. The radical terms cancel, which is why conjugate pairs give a whole-number area.",
     {a:a,b:b,area:area});
 });
 
@@ -2723,34 +2728,34 @@ E("u2-max-height",2,["4.2"],3,"gen",function(){
 
 /* --- Unit 3: Quadratic Equations --- */
 E("u3-formula-substitution",3,["4.9"],1,"var",varset([
-  function(){return mcq("To solve x² − 5x + 3 = 0 with the quadratic formula, which substitution is correct?",
-    "x = (5 ± √(25 − 12)) / 2",
-    ["x = (−5 ± √(25 − 12)) / 2","x = (5 ± √(25 + 12)) / 2","x = (5 ± √(5 − 12)) / 2"],
-    "Here a = 1, b = −5, c = 3. The formula starts with −b = 5, and the discriminant is b² − 4ac = 25 − 12. The denominator is 2a = 2.",
+  function(){return mcq("To solve \\(x^2 - 5x + 3 = 0\\) with the quadratic formula, which substitution is correct?",
+    "\\(x = \\frac{5 \\pm \\sqrt{25 - 12}}{2}\\)",
+    ["\\(x = \\frac{-5 \\pm \\sqrt{25 - 12}}{2}\\)","\\(x = \\frac{5 \\pm \\sqrt{25 + 12}}{2}\\)","\\(x = \\frac{5 \\pm \\sqrt{5 - 12}}{2}\\)"],
+    "Here \\(a = 1\\), \\(b = -5\\), \\(c = 3\\). The formula starts with \\(-b = 5\\), and the discriminant is \\(b^2 - 4ac = 25 - 12\\). The denominator is \\(2a = 2\\).",
     {});},
-  function(){return mcq("To solve 2x² + 3x − 4 = 0 with the quadratic formula, which substitution is correct?",
-    "x = (−3 ± √(9 + 32)) / 4",
-    ["x = (3 ± √(9 + 32)) / 4","x = (−3 ± √(9 − 32)) / 4","x = (−3 ± √(9 + 32)) / 2"],
-    "Here a = 2, b = 3, c = −4. The formula starts with −b = −3, the discriminant is 9 − 4(2)(−4) = 9 + 32, and the denominator is 2a = 4.",
+  function(){return mcq("To solve \\(2x^2 + 3x - 4 = 0\\) with the quadratic formula, which substitution is correct?",
+    "\\(x = \\frac{-3 \\pm \\sqrt{9 + 32}}{4}\\)",
+    ["\\(x = \\frac{3 \\pm \\sqrt{9 + 32}}{4}\\)","\\(x = \\frac{-3 \\pm \\sqrt{9 - 32}}{4}\\)","\\(x = \\frac{-3 \\pm \\sqrt{9 + 32}}{2}\\)"],
+    "Here \\(a = 2\\), \\(b = 3\\), \\(c = -4\\). The formula starts with \\(-b = -3\\), the discriminant is \\(9 - 4(2)(-4) = 9 + 32\\), and the denominator is \\(2a = 4\\).",
     {});},
-  function(){return mcq("To solve x² + 7x + 2 = 0 with the quadratic formula, which substitution is correct?",
-    "x = (−7 ± √(49 − 8)) / 2",
-    ["x = (7 ± √(49 − 8)) / 2","x = (−7 ± √(49 + 8)) / 2","x = (−7 ± √(7 − 8)) / 2"],
-    "Here a = 1, b = 7, c = 2. The formula starts with −b = −7, and the discriminant is b² − 4ac = 49 − 8. The denominator is 2a = 2.",
+  function(){return mcq("To solve \\(x^2 + 7x + 2 = 0\\) with the quadratic formula, which substitution is correct?",
+    "\\(x = \\frac{-7 \\pm \\sqrt{49 - 8}}{2}\\)",
+    ["\\(x = \\frac{7 \\pm \\sqrt{49 - 8}}{2}\\)","\\(x = \\frac{-7 \\pm \\sqrt{49 + 8}}{2}\\)","\\(x = \\frac{-7 \\pm \\sqrt{7 - 8}}{2}\\)"],
+    "Here \\(a = 1\\), \\(b = 7\\), \\(c = 2\\). The formula starts with \\(-b = -7\\), and the discriminant is \\(b^2 - 4ac = 49 - 8\\). The denominator is \\(2a = 2\\).",
     {});},
-  function(){return mcq("To solve 3x² − 4x − 6 = 0 with the quadratic formula, which substitution is correct?",
-    "x = (4 ± √(16 + 72)) / 6",
-    ["x = (−4 ± √(16 + 72)) / 6","x = (4 ± √(16 − 72)) / 6","x = (4 ± √(16 + 72)) / 3"],
-    "Here a = 3, b = −4, c = −6. The formula starts with −b = 4, the discriminant is 16 − 4(3)(−6) = 16 + 72, and the denominator is 2a = 6.",
+  function(){return mcq("To solve \\(3x^2 - 4x - 6 = 0\\) with the quadratic formula, which substitution is correct?",
+    "\\(x = \\frac{4 \\pm \\sqrt{16 + 72}}{6}\\)",
+    ["\\(x = \\frac{-4 \\pm \\sqrt{16 + 72}}{6}\\)","\\(x = \\frac{4 \\pm \\sqrt{16 - 72}}{6}\\)","\\(x = \\frac{4 \\pm \\sqrt{16 + 72}}{3}\\)"],
+    "Here \\(a = 3\\), \\(b = -4\\), \\(c = -6\\). The formula starts with \\(-b = 4\\), the discriminant is \\(16 - 4(3)(-6) = 16 + 72\\), and the denominator is \\(2a = 6\\).",
     {});}
 ]));
 E("u3-factor-difference",3,["4.8"],2,"gen",function(){
   var a=ri(1,5),k=ri(2,15),ax=a===1?"x":a+"x";
-  var key="("+ax+" − "+k+")("+ax+" + "+k+")";
-  return mcq("Factor fully: "+(a===1?"x²":(a*a)+"x²")+" − "+(k*k)+".",
+  var key="\\(("+ax+" - "+k+")("+ax+" + "+k+")\\)";
+  return mcq("Factor fully: \\("+(a===1?"x^2":(a*a)+"x^2")+" - "+(k*k)+"\\)",
     key,
-    ["("+ax+" + "+k+")("+ax+" + "+k+")","("+ax+" − "+k+")("+ax+" − "+k+")","("+ax+" − "+(k*k)+")("+ax+" + "+(k*k)+")"],
-    "This is a difference of squares: "+(a===1?"x²":(a*a)+"x²")+" is ("+ax+")² and "+(k*k)+" is "+k+"². A difference of squares factors as (first − second)(first + second): <b>"+key+"</b>.",
+    ["\\(("+ax+" + "+k+")("+ax+" + "+k+")\\)","\\(("+ax+" - "+k+")("+ax+" - "+k+")\\)","\\(("+ax+" - "+(k*k)+")("+ax+" + "+(k*k)+")\\)"],
+    "This is a difference of squares: \\("+(a===1?"x^2":(a*a)+"x^2")+"\\) is \\(("+ax+")^2\\) and \\("+(k*k)+"\\) is \\("+k+"^2\\). A difference of squares factors as (first - second)(first + second): <b>"+key+"</b>.",
     {a:a,k:k});
 });
 E("u3-discriminant-nature",3,["4.7"],2,"gen",function(){
@@ -2766,23 +2771,23 @@ E("u3-discriminant-nature",3,["4.7"],2,"gen",function(){
   }
   D=b*b-4*a*c;
   var nature=mode===0?"two different real roots":(mode===1?"one repeated real root":"no real roots");
-  var key="D = "+D+"; "+nature;
+  var key="\\(D = "+D+"\\); "+nature;
   var others=["two different real roots","one repeated real root","no real roots"].filter(function(x){return x!==nature;});
   var wrongD=D===0?4:-D;
-  return mcq("For the equation "+quadStr(a,b,c)+" = 0, what is the discriminant, and what does it say about the roots?",
+  return mcq("For the equation "+"\\("+quadB(a,b,c)+" = 0\\)"+", what is the discriminant, and what does it say about the roots?",
     key,
-    ["D = "+D+"; "+others[0],"D = "+D+"; "+others[1],"D = "+wrongD+"; "+nature],
-    "D = b² − 4ac = ("+b+")² − 4 × "+a+" × "+c+" = "+(b*b)+" − "+(4*a*c)+" = "+D+". "+(mode===0?"Since D > 0, the equation has two different real roots.":(mode===1?"Since D = 0, the equation has one repeated real root.":"Since D < 0, the equation has no real roots (its graph never crosses the x-axis).")),
+    ["\\(D = "+D+"\\); "+others[0],"\\(D = "+D+"\\); "+others[1],"\\(D = "+wrongD+"\\); "+nature],
+    "\\(D = b^2 - 4ac = ("+b+")^2 - 4 \\times "+a+" \\times "+c+" = "+(b*b)+" - "+(4*a*c)+" = "+D+"\\). "+(mode===0?"Since \\(D > 0\\), the equation has two different real roots.":(mode===1?"Since \\(D = 0\\), the equation has one repeated real root.":"Since \\(D < 0\\), the equation has no real roots (its graph never crosses the x-axis).")),
     {a:a,b:b,c:c,D:D,mode:mode});
 });
 E("u3-root-difference",3,["4.6"],3,"gen",function(){
   var r=ri(2,12),d=ri(1,8),S=2*r+d,K=r*(r+d);
   var frame=pick([
-    "The roots of x² − "+S+"x + k = 0 differ by "+d+". What is the value of k?",
-    "A quadratic equation x² − "+S+"x + k = 0 has two roots, and the larger root is "+d+" more than the smaller root. What is the value of k?"
+    "The roots of \\(x^2 - "+S+"x + k = 0\\) differ by "+d+". What is the value of \\(k\\)?",
+    "A quadratic equation \\(x^2 - "+S+"x + k = 0\\) has two roots, and the larger root is "+d+" more than the smaller root. What is the value of \\(k\\)?"
   ]);
   return numq(frame,K,0.011,
-    "For x² − Sx + k, the sum of the roots is S = "+S+" and the product is k. If the roots differ by "+d+", they are ("+S+" − "+d+") ÷ 2 = "+r+" and "+r+" + "+d+" = "+(r+d)+". So k = "+r+" × "+(r+d)+" = <b>"+K+"</b>.",
+    "For \\(x^2 - Sx + k\\), the sum of the roots is \\(S = "+S+"\\) and the product is \\(k\\). If the roots differ by "+d+", they are \\(("+S+" - "+d+") \\div 2 = "+r+"\\) and \\("+r+" + "+d+" = "+(r+d)+"\\). So \\(k = "+r+" \\times "+(r+d)+" = "+K+"\\).",
     {r:r,d:d,S:S,K:K});
 });
 
@@ -2805,13 +2810,13 @@ E("u4-product-simplify",4,["1.6"],2,"gen",function(){
     var cand=[radT(a+b,m),sqrtT(A*B),radT(a*b,m+1),radT(a*b+1,m)];ds=[];
     for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
   }else{
-    key=String(a*b*m);
-    var cand2=[String(a*b),String((a+b)*m),String(a*b*m+m),radT(a*b,m)];ds=[];
+    key="\\("+(a*b*m)+"\\)";
+    var cand2=["\\("+(a*b)+"\\)","\\("+((a+b)*m)+"\\)","\\("+(a*b*m+m)+"\\)",radT(a*b,m)];ds=[];
     for(var i2=0;i2<cand2.length&&ds.length<3;i2++){if(cand2[i2]!==key&&ds.indexOf(cand2[i2])<0)ds.push(cand2[i2]);}
   }
   return mcq("Simplify: \\(\\sqrt{"+A+"} \\times \\sqrt{"+B+"}\\). Give the answer in simplest form.",
     key,ds,
-    "Simplify each radical first: "+sqrtT(A)+" = "+radT(a,m)+" and "+sqrtT(B)+" = "+(mode===0?b:radT(b,m))+". Multiplying: "+(mode===0?"\\("+a+" \\times "+b+" = "+(a*b)+"\\), giving <b>"+key+"</b>.":"\\("+a+" \\times "+b+" \\times "+m+"\\) because \\(\\sqrt{"+m+"} \\times \\sqrt{"+m+"} = "+m+"\\), giving <b>"+key+"</b>."),
+    "Simplify each radical first: "+sqrtT(A)+" = "+radT(a,m)+" and "+sqrtT(B)+" = "+(mode===0?"\\("+b+"\\)":radT(b,m))+". Multiplying: "+(mode===0?"\\("+a+" \\times "+b+" = "+(a*b)+"\\), giving <b>"+key+"</b>.":"\\("+a+" \\times "+b+" \\times "+m+"\\) because \\(\\sqrt{"+m+"} \\times \\sqrt{"+m+"} = "+m+"\\), giving <b>"+key+"</b>."),
     {a:a,b:b,m:m,mode:mode,A:A,B:B});
 });
 E("u4-add-unlike",4,["1.6"],2,"gen",function(){
@@ -2828,13 +2833,13 @@ E("u4-add-unlike",4,["1.6"],2,"gen",function(){
 E("u4-diagonal-radical",4,["1.6"],3,"gen",function(){
   var s=ri(2,6),m=pick([2,3,5,6,7,10]);
   var r0=2*m,t=1,f;for(f=2;f*f<=r0;f++){while(r0%(f*f)===0){r0/=(f*f);t*=f;}}
-  var key=r0===1?String(s*t):radT(s*t,r0);
-  var cand=[radT(s,m),radT(2*s,m),sqrtT(2*s*s*m),r0===1?String(2*s*t):radT(s*t+1,r0)],ds=[];
+  var key=r0===1?"\\("+(s*t)+"\\)":radT(s*t,r0);
+  var cand=[radT(s,m),radT(2*s,m),sqrtT(2*s*s*m),r0===1?"\\("+(2*s*t)+"\\)":radT(s*t+1,r0)],ds=[];
   for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
   var ctx=pick(["square tile","square panel","square garden plot","square poster"]);
   return mcq("A "+ctx+" has side length "+radT(s,m)+" m. What is the length of its diagonal, in simplest radical form?",
     key,ds,
-    "By Pythagoras, the diagonal is \\(\\sqrt{2}\\) times the side: \\("+s+"\\sqrt{"+m+"} \\times \\sqrt{2} = "+s+"\\sqrt{"+(2*m)+"}\\). Simplifying \\(\\sqrt{"+(2*m)+"} = "+(r0===1?(""+t):(t===1?"\\sqrt{"+r0+"}":t+"\\sqrt{"+r0+"}"))+"\\) gives the diagonal as <b>"+key+" m</b>.",
+    "By Pythagoras, the diagonal is \\(\\sqrt{2}\\) times the side: \\("+s+"\\sqrt{"+m+"} \\times \\sqrt{2} = "+s+"\\sqrt{"+(2*m)+"}\\). Simplifying \\(\\sqrt{"+(2*m)+"} = "+(r0===1?(""+t):(t===1?"\\sqrt{"+r0+"}":t+"\\sqrt{"+r0+"}"))+"\\) gives the diagonal as <b>"+key+"</b> m.",
     {s:s,m:m,t:t,r0:r0});
 });
 
@@ -2967,7 +2972,7 @@ E("u2-factored-max-height",2,["4.2"],3,"gen",function(){
 /* --- Unit 3: Quadratic Equations --- */
 E("u3-formula-exact-roots",3,["4.9"],2,"gen",function(){
   function gcd(x,y){x=Math.abs(x);y=Math.abs(y);while(y){var u=y;y=x%y;x=u;}return x||1;}
-  function fmtRoot(num,coef,rad,den){return "("+num+" ± "+(coef===1?"":coef)+"√"+rad+")"+(den===1?"":" / "+den);}
+  function fmtRoot(num,coef,rad,den){var body=num+" \\pm "+(coef===1?"":coef)+"\\sqrt{"+rad+"}";return den===1?("\\("+body+"\\)"):("\\(\\frac{"+body+"}{"+den+"}\\)");}
   var a,b,c,D,t,Dp,g,tries=0;
   do{
     a=pick([1,2]);b=ri(-9,9);c=ri(-8,8);
@@ -2983,24 +2988,24 @@ E("u3-formula-exact-roots",3,["4.9"],2,"gen",function(){
   var key=fmtRoot(num,coef,Dp,den);
   var cand=[fmtRoot(b/g,coef,Dp,den),fmtRoot(num,1,D,2*a),fmtRoot(num,coef,Dp,a),fmtRoot(num,coef+1,Dp,den),fmtRoot(num+1,coef,Dp,den)],ds=[];
   for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
-  return mcq("Solve "+quadStr(a,b,c)+" = 0. Which option gives the roots in simplest exact form?",
+  return mcq("Solve "+"\\("+quadB(a,b,c)+" = 0\\)"+". Which option gives the roots in simplest exact form?",
     key,ds,
-    "x = (−b ± √(b² − 4ac)) / (2a) = ("+(-b)+" ± √"+D+") / "+(2*a)+". "+(t>1?"Since √"+D+" = "+t+"√"+Dp+", ":"Since √"+D+" does not simplify, ")+(g>1?"and the whole fraction divides by "+g+", ":"")+"the simplest exact form is <b>"+key+"</b>.",
+    "\\(x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} = \\frac{"+(-b)+" \\pm \\sqrt{"+D+"}}{"+(2*a)+"}\\). "+(t>1?"Since \\(\\sqrt{"+D+"} = "+t+"\\sqrt{"+Dp+"}\\), ":"Since \\(\\sqrt{"+D+"}\\) does not simplify, ")+(g>1?"and the whole fraction divides by \\("+g+"\\), ":"")+"the simplest exact form is <b>"+key+"</b>.",
     {a:a,b:b,c:c,D:D,t:t,Dp:Dp,num:num,coef:coef,den:den});
 });
 E("u3-squares-area",3,["4.3"],3,"gen",function(){
   var s=ri(3,14),m=ri(1,6),T=s*s+(s+m)*(s+m);
   var ctx=pick([["two square garden plots","plot"],["two square patios","patio"],["two square quilts","quilt"]]);
-  return numq("A gardener has "+ctx[0]+". The side of the larger "+ctx[1]+" is "+m+" m longer than the side of the smaller one, and their areas add to "+T+" m². What is the side length of the smaller "+ctx[1]+", in metres?",
+  return numq("A gardener has "+ctx[0]+". The side of the larger "+ctx[1]+" is "+m+" m longer than the side of the smaller one, and their areas add to \\("+T+"\\text{ m}^2\\). What is the side length of the smaller "+ctx[1]+", in metres?",
     s,0.011,
-    "Let the smaller side be s; the larger is s + "+m+". Then s² + (s + "+m+")² = "+T+". A shortcut: (2s + "+m+")² = 2 × "+T+" − "+(m*m)+" = "+(2*T-m*m)+", so 2s + "+m+" = "+(2*s+m)+" and s = <b>"+s+" m</b>. (Check: "+s+"² + "+(s+m)+"² = "+(s*s)+" + "+((s+m)*(s+m))+" = "+T+".)",
+    "Let the smaller side be \\(s\\); the larger is \\(s + "+m+"\\). Then \\(s^2 + (s + "+m+")^2 = "+T+"\\). A shortcut: \\((2s + "+m+")^2 = 2 \\times "+T+" - "+(m*m)+" = "+(2*T-m*m)+"\\), so \\(2s + "+m+" = "+(2*s+m)+"\\) and \\(s = "+s+"\\) m. (Check: \\("+s+"^2 + "+(s+m)+"^2 = "+(s*s)+" + "+((s+m)*(s+m))+" = "+T+"\\).)",
     {s:s,m:m,T:T});
 });
 E("u3-number-pair",3,["4.6"],2,"gen",function(){
   var u=ri(-6,10),v=u+ri(1,9),S=u+v,P=u*v;
   return numq("Two numbers add to "+S+" and multiply to "+P+". What is the larger of the two numbers?",
     v,0.011,
-    "The numbers are the roots of x² − ("+S+")x + ("+P+") = 0, which factors as "+(u>=0?"(x − "+u+")":"(x + "+(-u)+")")+(v>=0?"(x − "+v+")":"(x + "+(-v)+")")+" = 0. The roots are "+u+" and "+v+", so the larger number is <b>"+v+"</b>. (Check: "+u+" + "+v+" = "+S+" and "+u+" × "+v+" = "+P+".)",
+    "The numbers are the roots of \\(x^2 - ("+S+")x + ("+P+") = 0\\), which factors as \\("+(u>=0?"(x - "+u+")":"(x + "+(-u)+")")+(v>=0?"(x - "+v+")":"(x + "+(-v)+")")+" = 0\\). The roots are \\("+u+"\\) and \\("+v+"\\), so the larger number is <b>\\("+v+"\\)</b>. (Check: \\("+u+" + "+v+" = "+S+"\\) and \\("+u+" \\times "+v+" = "+P+"\\).)",
     {u:u,v:v,S:S,P:P});
 });
 
@@ -3015,7 +3020,7 @@ E("u4-compare-radicals",4,["1.4"],2,"gen",function(){
   return mcq("Which statement about "+X+" and "+Y+" is true?",
     (xBig?X:Y)+" is the larger value",
     [(xBig?Y:X)+" is the larger value","They are equal","They cannot be compared without a calculator"],
-    "Write both as entire radicals: "+X+" = "+sqrtT(x2)+" and "+Y+" = "+sqrtT(y2)+". Since "+Math.max(x2,y2)+" > "+Math.min(x2,y2)+", the larger value is <b>"+(xBig?X:Y)+"</b>.",
+    "Write both as entire radicals: "+X+" = "+sqrtT(x2)+" and "+Y+" = "+sqrtT(y2)+". Since \\("+Math.max(x2,y2)+" > "+Math.min(x2,y2)+"\\), the larger value is <b>"+(xBig?X:Y)+"</b>.",
     {a:a,b:b,c:c,d:d,x2:x2,y2:y2});
 });
 E("u4-difference-simplify",4,["1.6"],2,"gen",function(){
@@ -3038,7 +3043,7 @@ E("u4-reciprocal-sum",4,["1.7"],3,"gen",function(){
   for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
   return mcq("Simplify, rationalizing the denominator: \\(\\frac{1}{\\sqrt{"+a+"}} + \\frac{1}{\\sqrt{"+B+"}}\\).",
     key,ds,
-    "First, \\(\\sqrt{"+B+"} = "+k+"\\sqrt{"+a+"}\\). Write the sum over a common denominator: \\(\\frac{1}{\\sqrt{"+a+"}} + \\frac{1}{"+k+"\\sqrt{"+a+"}} = \\frac{"+(k+1)+"}{"+k+"\\sqrt{"+a+"}}\\). Rationalizing (multiply top and bottom by \\(\\sqrt{"+a+"}\\)) gives \\(\\frac{"+(k+1)+"\\sqrt{"+a+"}}{"+(k*a)+"}\\)"+(g>1?", which reduces by "+g:"")+" — the simplest form is <b>"+key+"</b>.",
+    "First, \\(\\sqrt{"+B+"} = "+k+"\\sqrt{"+a+"}\\). Write the sum over a common denominator: \\(\\frac{1}{\\sqrt{"+a+"}} + \\frac{1}{"+k+"\\sqrt{"+a+"}} = \\frac{"+(k+1)+"}{"+k+"\\sqrt{"+a+"}}\\). Rationalizing (multiply top and bottom by \\(\\sqrt{"+a+"}\\)) gives \\(\\frac{"+(k+1)+"\\sqrt{"+a+"}}{"+(k*a)+"}\\)"+(g>1?", which reduces by \\("+g+"\\)":"")+" — the simplest form is <b>"+key+"</b>.",
     {a:a,k:k,B:B,g:g,num:num,den:den});
 });
 
