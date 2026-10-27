@@ -1995,12 +1995,231 @@ E("u4-model-equation",4,["1.12"],3,"gen",function(){
     {mode:2,T:T});
 });
 
+/* ============ Tranche 4 (Oct 26): QE RHS harvest — Units 4, 3, 8 ============
+   Templates reworked from the QE RHS radicals / quadratic equations / angles
+   tests and reviews (see harvest/qerhs-inventory.md); every item re-created
+   with new numbers and contexts, nothing copied verbatim. */
+
+/* --- Unit 4: Radicals --- */
+E("u4-cube-mixed",4,["1.2"],1,"gen",function(){
+  function crS(a,b){return (a===1?"":a)+"\u221B"+b;}
+  var a=ri(2,5),b=pick([2,3,5,6,7,10,11,13,14,15,21,22,26,30]);
+  var neg=Math.random()<0.25;
+  var mag=a*a*a*b;
+  return mcq("Express \u221B"+(neg?"\u2212":"")+mag+" as a mixed radical in simplest form.",
+    crS(neg?-a:a,b),
+    [crS(neg?-(a+1):a+1,b),crS(neg?-a:a,b+1),crS(neg?-a:a,a*b)],
+    "Find the largest perfect cube dividing "+mag+": "+mag+" = "+(a*a*a)+" \u00D7 "+b+". Cube roots group factors in threes, so \u221B"+(neg?"\u2212":"")+mag+" = "+crS(neg?-a:a,b)+"."+(neg?" (A cube root of a negative number is negative.)":""),
+    {a:a,b:b,neg:neg});
+});
+E("u4-cube-equation",4,["1.9"],2,"gen",function(){
+  var r=ri(-4,5),p=pick([1,2,3]),x0=ri(-12,20);
+  var q=r*r*r-p*x0;
+  var inside=(p===1?"x":p+"x")+(q>0?" + "+q:(q<0?" \u2212 "+(-q):""));
+  var sol="Cube both sides: "+inside+" = "+r+"\u00B3 = "+(r*r*r)+". So "+(p===1?"x":p+"x")+" = "+(r*r*r)+(q>0?" \u2212 "+q:(q<0?" + "+(-q):""))+" = "+(p*x0)+"."+(p===1?"":" Divide by "+p+":")+" x = <b>"+x0+"</b>. (Cube roots accept negative inputs, so there is no restriction to check.)";
+  return numq("Solve: \u221B("+inside+") = "+r+". Give the value of x.",
+    x0,0.011,sol,{r:r,p:p,x0:x0,q:q});
+});
+E("u4-combine-multi",4,["1.6"],2,"gen",function(){
+  var b=pick([2,3,5,6,7,10,11,13]);
+  var D,M,SG,tot,tries=0;
+  do{
+    D=[ri(1,3),ri(1,3),ri(1,3)];M=[ri(1,4),ri(2,4),ri(1,4)];
+    SG=[1,Math.random()<0.5?-1:1,Math.random()<0.5?-1:1];
+    tot=D[0]*M[0]+SG[1]*D[1]*M[1]+SG[2]*D[2]*M[2];tries++;
+  }while(tot<1&&tries<60);
+  function term(i){return (D[i]===1?"":D[i])+"\u221A"+(M[i]*M[i]*b);}
+  var key=radStr(tot,b);
+  var slip1=D[0]*M[0]-SG[1]*D[1]*M[1]+SG[2]*D[2]*M[2];
+  var d2v=D[0]*M[0]+SG[1]*D[1]*M[1];
+  var cand=[slip1,d2v,tot+1,tot+2,tot+3,tot+5],ds=[];
+  for(var ci=0;ci<cand.length&&ds.length<2;ci++){var cv=cand[ci];if(cv>=1&&cv!==tot&&ds.indexOf(cv)<0)ds.push(cv);}
+  var d1=radStr(ds[0],b),d2=radStr(ds[1],b);
+  var d3="\u221A"+(M[0]*M[0]*b+M[1]*M[1]*b+M[2]*M[2]*b);
+  return mcq("Simplify: "+term(0)+" "+(SG[1]>0?"+ ":"\u2212 ")+term(1)+" "+(SG[2]>0?"+ ":"\u2212 ")+term(2)+".",
+    key,[d1,d2,d3],
+    "Simplify each term first: "+term(0)+" = "+radStr(D[0]*M[0],b)+", "+term(1)+" = "+radStr(D[1]*M[1],b)+", and "+term(2)+" = "+radStr(D[2]*M[2],b)+". They are like radicals, so combine the coefficients: "+(D[0]*M[0])+" "+(SG[1]>0?"+ ":"\u2212 ")+(D[1]*M[1])+" "+(SG[2]>0?"+ ":"\u2212 ")+(D[2]*M[2])+" = "+tot+", giving <b>"+key+"</b>.",
+    {b:b,D:D,M:M,SG:SG});
+});
+E("u4-binomial-square",4,["1.6"],2,"gen",function(){
+  var m=pick([2,3,5,6,7,10,11,13]),n=pick([2,3,5,6,7,10,11,13].filter(function(x){return x!==m;}));
+  var mn=m*n,t=1,r=mn,f;for(f=2;f*f<=r;f++){while(r%(f*f)===0){r/=(f*f);t*=f;}}
+  var plus=Math.random()<0.5;
+  var sgn=plus?"+":"\u2212",osgn=plus?"\u2212":"+";
+  var key=(m+n)+" "+sgn+" "+(2*t)+"\u221A"+r;
+  return mcq("Expand and simplify: (\u221A"+m+" "+sgn+" \u221A"+n+")\u00B2.",
+    key,
+    [(m+n)+" "+osgn+" "+(2*t)+"\u221A"+r,(m+n)+" "+sgn+" \u221A"+mn,(m+n)+" "+sgn+" "+t+"\u221A"+r],
+    "(a "+sgn+" b)\u00B2 = a\u00B2 "+sgn+" 2ab + b\u00B2. Here a\u00B2 = "+m+" and b\u00B2 = "+n+", and the middle term is 2\u221A"+m+" \u00D7 \u221A"+n+" = 2\u221A"+mn+" = "+(2*t)+"\u221A"+r+". So the expansion is "+m+" "+sgn+" "+(2*t)+"\u221A"+r+" + "+n+" = <b>"+key+"</b>.",
+    {m:m,n:n,plus:plus});
+});
+E("u4-triangle-perimeter",4,["1.6"],2,"gen",function(){
+  var b=pick([2,3,5,6,7,10,11,13]);
+  var s1=ri(1,4),s2=ri(1,4),s3=ri(1,4),sum=s1+s2+s3;
+  var n1=s1*s1*b,n2=s2*s2*b,n3=s3*s3*b;
+  return mcq("A triangle has sides of \u221A"+n1+" cm, \u221A"+n2+" cm and \u221A"+n3+" cm. What is its perimeter, in simplest radical form?",
+    radStr(sum,b),
+    [radStr(s1+s2,b),"\u221A"+(n1+n2+n3),radStr(sum+1,b)],
+    "Simplify each side: \u221A"+n1+" = "+radStr(s1,b)+", \u221A"+n2+" = "+radStr(s2,b)+", \u221A"+n3+" = "+radStr(s3,b)+". Add the like radicals: "+s1+" + "+s2+" + "+s3+" = "+sum+", so the perimeter is <b>"+radStr(sum,b)+" cm</b>. (Do not add the numbers under one root.)",
+    {b:b,s:[s1,s2,s3]});
+});
+E("u4-width-radical",4,["1.6"],2,"gen",function(){
+  var a=ri(2,5),b=pick([2,3,5,6,7]),c=ri(2,5),d=pick([2,3,5,6,7]);
+  var bd=b*d,t=1,r0=bd,f;for(f=2;f*f<=r0;f++){while(r0%(f*f)===0){r0/=(f*f);t*=f;}}
+  var keyW=radStr(a,b);
+  var candW=[[a,b*d],[a*c,b],[a*t,r0],[a,d],[a+1,b],[c,b],[a*c,b*d]],dsW=[];
+  for(var ci=0;ci<candW.length&&dsW.length<3;ci++){var stW=radStr(candW[ci][0],candW[ci][1]);if(stW!==keyW&&dsW.indexOf(stW)<0)dsW.push(stW);}
+  return mcq("A rectangle has area "+(a*c)+"\u221A"+bd+" cm\u00B2 and length "+radStr(c,d)+" cm. What is its width, in simplest radical form?",
+    keyW,
+    dsW,
+    "Width = area \u00F7 length = "+(a*c)+"\u221A"+bd+" \u00F7 "+radStr(c,d)+". Divide the coefficients: "+(a*c)+" \u00F7 "+c+" = "+a+". Divide the radicals: \u221A"+bd+" \u00F7 \u221A"+d+" = \u221A"+b+". So the width is <b>"+radStr(a,b)+" cm</b>.",
+    {a:a,b:b,c:c,d:d});
+});
+
+/* --- Unit 3: Quadratic Equations --- */
+E("u3-equation-fraction-roots",3,["4.6"],2,"gen",function(){
+  function gcd(x,y){x=Math.abs(x);y=Math.abs(y);while(y){var u=y;y=x%y;x=u;}return x;}
+  function mkRoot(){var p,q,tries=0;do{p=pick([-3,-2,-1,1,2,3]);q=pick([2,3,4]);tries++;}while(gcd(p,q)!==1&&tries<40);return [p,q];}
+  var r1=mkRoot(),r2=mkRoot(),tries=0;
+  while(r1[0]*r2[1]+r2[0]*r1[1]===0&&tries<40){r2=mkRoot();tries++;}
+  var p1=r1[0],q1=r1[1],p2=r2[0],q2=r2[1];
+  var A=q1*q2,B=-(p1*q2+p2*q1),C=p1*p2;
+  function fr(p,q){return (p<0?"\u2212":"")+Math.abs(p)+"/"+q;}
+  var key=quadStr(A,B,C)+" = 0";
+  return mcq("Which quadratic equation has roots of "+fr(p1,q1)+" and "+fr(p2,q2)+"?",
+    key,
+    [quadStr(A,-B,C)+" = 0",quadStr(A,B,-C)+" = 0",quadStr(A,-B,-C)+" = 0"],
+    "Build the factors from the roots: ("+q1+"x "+(p1>0?"\u2212 "+p1:"+ "+(-p1))+")("+q2+"x "+(p2>0?"\u2212 "+p2:"+ "+(-p2))+") = 0. Expanding gives "+A+"x\u00B2 "+(B>=0?"+ ":"\u2212 ")+Math.abs(B)+"x "+(C>=0?"+ ":"\u2212 ")+Math.abs(C)+" = 0, that is, <b>"+key+"</b>.",
+    {A:A,B:B,C:C});
+});
+E("u3-solve-height",3,["4.3"],3,"gen",function(){
+  var combos=[[1,4,40],[1,4,50],[1,5,40],[1,5,50],[1,5,60],[1,6,50],[1,6,60],[2,4,60],[2,4,80],[2,5,80],[1,7,60],[2,6,100]];
+  var cb=pick(combos),t1=cb[0],t2=cb[1],H=cb[2];
+  var b=5*(t1+t2),c0=H-5*t1*t2;
+  var later=Math.random()<0.5;
+  var ctx=pick([["missile","fired from a ship","above the water"],["rocket","launched from a platform","above the ground"],["flare","fired from a cliff top","above the sea"]]);
+  return numq("A "+ctx[0]+" is "+ctx[1]+". Its height "+ctx[2]+" after t seconds is h(t) = \u22125t\u00B2 + "+b+"t + "+c0+" (metres). At what time is it exactly "+H+" m "+ctx[2]+"? Give the "+(later?"later":"earlier")+" time, in s.",
+    later?t2:t1,0.011,
+    "Set h(t) = "+H+": \u22125t\u00B2 + "+b+"t + "+c0+" = "+H+", so \u22125t\u00B2 + "+b+"t + "+(c0-H)+" = 0. Divide by \u22125: t\u00B2 \u2212 "+(t1+t2)+"t + "+(t1*t2)+" = 0, which factors as (t \u2212 "+t1+")(t \u2212 "+t2+") = 0. The "+ctx[0]+" is at "+H+" m at t = "+t1+" s and t = "+t2+" s; the "+(later?"later":"earlier")+" time is <b>"+(later?t2:t1)+" s</b>.",
+    {t1:t1,t2:t2,H:H,later:later});
+});
+E("u3-model-number",3,["4.3"],2,"var",varset([
+  function(){return mcq("The product of two consecutive even integers is 120. If x is the smaller integer, which equation models this?",
+    "x(x + 2) = 120",
+    ["x(x + 1) = 120","(x + 2)(x + 2) = 120","x + (x + 2) = 120"],
+    "Consecutive even integers differ by 2, so the integers are x and x + 2. Their product is x(x + 2), set equal to 120.",
+    {});},
+  function(){return mcq("The sum of the squares of two consecutive integers is 85. If x is the smaller integer, which equation models this?",
+    "x\u00B2 + (x + 1)\u00B2 = 85",
+    ["(x + (x + 1))\u00B2 = 85","x\u00B2 + (x + 2)\u00B2 = 85","2x\u00B2 = 85"],
+    "Consecutive integers are x and x + 1. Square each, then add: x\u00B2 + (x + 1)\u00B2 = 85.",
+    {});},
+  function(){return mcq("A rectangular room is 10 m by 8 m. A strip of width x metres is removed along one full length and one full width, making the room smaller on two adjacent sides. The new area is 48 m\u00B2. Which equation models this?",
+    "(10 \u2212 x)(8 \u2212 x) = 48",
+    ["(10 \u2212 2x)(8 \u2212 2x) = 48","(10 + x)(8 + x) = 48","(10 \u2212 2x)(8 \u2212 x) = 48"],
+    "Only one length and one width shrink, each by x (not 2x): the new dimensions are (10 \u2212 x) and (8 \u2212 x), and their product is the new area, 48.",
+    {});},
+  function(){return mcq("A rectangle's length is 3 m more than its width. Its area is 40 m\u00B2. If x is the width, which equation models this?",
+    "x(x + 3) = 40",
+    ["x + (x + 3) = 40","x\u00B2 + 3 = 40","(x \u2212 3)x = 40"],
+    "The width is x and the length is x + 3. Area = width \u00D7 length = x(x + 3) = 40.",
+    {});}
+]));
+
+/* --- Unit 8: Properties of Angles and Triangles --- */
+E("u8-congruence-deduce",8,["5.6"],2,"gen",function(){
+  var sets=[["A","B","C"],["P","Q","R"],["X","Y","Z"],["D","E","F"],["M","N","S"],["J","K","L"]];
+  var s1=pick(sets),s2=pick(sets.filter(function(x){return x!==s1;}));
+  var name1=s1.join(""),name2=s2.join("");
+  var corr=s1[0]+"\u2194"+s2[0]+", "+s1[1]+"\u2194"+s2[1]+", "+s1[2]+"\u2194"+s2[2];
+  var i=ri(0,2);
+  if(Math.random()<0.5){
+    var key="\u2220"+s1[i]+" = \u2220"+s2[i];
+    return mcq("Given \u25B3"+name1+" \u2245 \u25B3"+name2+", which equality must be true?",
+      key,
+      ["\u2220"+s1[i]+" = \u2220"+s2[(i+1)%3],"\u2220"+s1[i]+" = \u2220"+s2[(i+2)%3],"\u2220"+s1[(i+1)%3]+" = \u2220"+s2[i]],
+      "In a congruence statement the vertices match in order: "+corr+". So \u2220"+s1[i]+" corresponds to \u2220"+s2[i]+", and corresponding angles of congruent triangles are equal.",
+      {mode:"angle",s1:s1,s2:s2,i:i});
+  }
+  var sides=[[0,1],[1,2],[0,2]],sd=pick(sides),u=sd[0],v=sd[1],w=3-u-v;
+  var keyS=s1[u]+s1[v]+" = "+s2[u]+s2[v];
+  return mcq("Given \u25B3"+name1+" \u2245 \u25B3"+name2+", which equality must be true?",
+    keyS,
+    [s1[u]+s1[v]+" = "+s2[u]+s2[w],s1[u]+s1[v]+" = "+s2[v]+s2[w],s1[u]+s1[w]+" = "+s2[u]+s2[v]],
+    "In a congruence statement the vertices match in order: "+corr+". Side "+s1[u]+s1[v]+" joins the first-named corresponding vertices, so it matches side "+s2[u]+s2[v]+", and corresponding sides of congruent triangles are equal.",
+    {mode:"side",s1:s1,s2:s2,u:u,v:v});
+});
+E("u8-multi-angle",8,["5.8"],2,"var",varset([
+  function(){return mcq("Two parallel lines are cut by a transversal. \u2220x is vertically opposite a 110\u00B0 angle. \u2220y is a corresponding angle to \u2220x. \u2220z forms a co-interior pair with \u2220y. What are the three measures?",
+    "\u2220x = 110\u00B0, \u2220y = 110\u00B0, \u2220z = 70\u00B0",
+    ["\u2220x = 110\u00B0, \u2220y = 70\u00B0, \u2220z = 110\u00B0","\u2220x = 70\u00B0, \u2220y = 110\u00B0, \u2220z = 70\u00B0","\u2220x = 110\u00B0, \u2220y = 110\u00B0, \u2220z = 110\u00B0"],
+    "Vertically opposite angles are equal, so \u2220x = 110\u00B0. Corresponding angles are equal, so \u2220y = 110\u00B0. Co-interior angles are supplementary: \u2220z = 180\u00B0 \u2212 110\u00B0 = 70\u00B0.",
+    {});},
+  function(){return mcq("Two parallel lines are cut by a transversal. \u2220x is a corresponding angle to a 65\u00B0 angle. \u2220y sits beside \u2220x on a straight line. \u2220z is vertically opposite \u2220y. What are the three measures?",
+    "\u2220x = 65\u00B0, \u2220y = 115\u00B0, \u2220z = 115\u00B0",
+    ["\u2220x = 65\u00B0, \u2220y = 65\u00B0, \u2220z = 115\u00B0","\u2220x = 115\u00B0, \u2220y = 65\u00B0, \u2220z = 115\u00B0","\u2220x = 65\u00B0, \u2220y = 115\u00B0, \u2220z = 65\u00B0"],
+    "Corresponding angles are equal, so \u2220x = 65\u00B0. Angles on a straight line add to 180\u00B0, so \u2220y = 115\u00B0. Vertically opposite angles are equal, so \u2220z = 115\u00B0.",
+    {});},
+  function(){return mcq("In \u25B3ABC, \u2220A = 48\u00B0 and \u2220B = 67\u00B0. \u2220D is the exterior angle at C, formed by extending side BC. What are \u2220C and \u2220D?",
+    "\u2220C = 65\u00B0, \u2220D = 115\u00B0",
+    ["\u2220C = 65\u00B0, \u2220D = 65\u00B0","\u2220C = 115\u00B0, \u2220D = 65\u00B0","\u2220C = 67\u00B0, \u2220D = 113\u00B0"],
+    "The interior angles add to 180\u00B0: \u2220C = 180\u00B0 \u2212 48\u00B0 \u2212 67\u00B0 = 65\u00B0. The exterior angle sits on a straight line with \u2220C: \u2220D = 180\u00B0 \u2212 65\u00B0 = 115\u00B0 (which also equals \u2220A + \u2220B).",
+    {});},
+  function(){return mcq("Two parallel lines are cut by a transversal. \u2220p and a 72\u00B0 angle are alternate interior angles. \u2220q forms a co-interior pair with \u2220p. \u2220r is vertically opposite \u2220q. What are the three measures?",
+    "\u2220p = 72\u00B0, \u2220q = 108\u00B0, \u2220r = 108\u00B0",
+    ["\u2220p = 72\u00B0, \u2220q = 72\u00B0, \u2220r = 108\u00B0","\u2220p = 108\u00B0, \u2220q = 72\u00B0, \u2220r = 72\u00B0","\u2220p = 72\u00B0, \u2220q = 108\u00B0, \u2220r = 72\u00B0"],
+    "Alternate interior angles are equal, so \u2220p = 72\u00B0. Co-interior angles are supplementary: \u2220q = 180\u00B0 \u2212 72\u00B0 = 108\u00B0. Vertically opposite angles are equal, so \u2220r = 108\u00B0.",
+    {});}
+]));
+E("u8-triangle-algebra",8,["5.8"],2,"gen",function(){
+  var combos=[[1,2,3],[1,2,6],[2,3,4],[1,3,5],[2,3,7],[3,4,5],[1,4,7],[2,5,8],[3,5,7],[4,5,9],[5,7,8],[1,1,4],[1,2,7],[1,3,6],[2,2,6],[3,3,4],[1,4,5],[2,4,9],[4,4,7],[1,5,9],[3,6,9],[4,6,8],[5,5,8],[2,7,11],[4,7,9],[6,6,8],[1,9,20],[5,10,15],[10,12,14],[9,13,14],[15,20,25],[20,25,45]];
+  var cb=pick(combos),a=cb[0],b=cb[1],c=cb[2];
+  var x=180/(a+b+c),vi=ri(0,2),coef=cb[vi];
+  return numq("The three angles of a triangle measure "+a+"x\u00B0, "+b+"x\u00B0 and "+c+"x\u00B0. What is the measure of the "+coef+"x\u00B0 angle, in degrees?",
+    coef*x,0.011,
+    "The angles add to 180\u00B0: ("+a+" + "+b+" + "+c+")x = 180, so "+(a+b+c)+"x = 180 and x = "+x+". The angle asked for is "+coef+"x = "+coef+" \u00D7 "+x+" = <b>"+(coef*x)+"\u00B0</b>.",
+    {cb:cb,vi:vi});
+});
+E("u8-polygon-inverse",8,["5.5"],1,"gen",function(){
+  var mode=ri(0,2);
+  if(mode===0){
+    var n=ri(5,40),S=(n-2)*180;
+    return numq("The interior angles of a convex polygon add up to "+S+"\u00B0. How many sides does the polygon have?",
+      n,0.011,"The sum is (n \u2212 2) \u00D7 180\u00B0. So n \u2212 2 = "+S+" \u00F7 180 = "+(n-2)+", which gives n = <b>"+n+"</b>.",{mode:0,n:n});
+  }
+  if(mode===1){
+    var pair=pick([[5,108],[6,120],[8,135],[9,140],[10,144],[12,150],[15,156],[18,160],[20,162],[24,165]]),n1=pair[0];
+    return numq("Each interior angle of a regular polygon measures "+pair[1]+"\u00B0. How many sides does the polygon have?",
+      n1,0.011,"For a regular polygon each interior angle is (n \u2212 2) \u00D7 180\u00B0 \u00F7 n. Trying n = "+n1+": ("+n1+" \u2212 2) \u00D7 180 \u00F7 "+n1+" = "+pair[1]+"\u00B0. So n = <b>"+n1+"</b>. (Equivalently, each exterior angle is 180\u00B0 \u2212 "+pair[1]+"\u00B0 = "+(180-pair[1])+"\u00B0, and 360 \u00F7 "+(180-pair[1])+" = "+n1+".)",{mode:1,n:n1});
+  }
+  var pr=pick([[4,90],[5,72],[6,60],[8,45],[9,40],[10,36],[12,30],[15,24],[18,20],[20,18],[24,15],[30,12],[36,10],[40,9],[45,8],[60,6],[72,5],[90,4],[120,3],[180,2]]),n2=pr[0];
+  return numq("Each exterior angle of a regular polygon measures "+pr[1]+"\u00B0. How many sides does the polygon have?",
+    n2,0.011,"The exterior angles of any convex polygon add to 360\u00B0. For a regular polygon they are all equal, so n = 360 \u00F7 "+pr[1]+" = <b>"+n2+"</b>.",{mode:2,n:n2});
+});
+E("u8-proof-reason",8,["5.4"],2,"var",varset([
+  function(){return mcq("Lines PQ and RS are parallel, cut by a transversal. \u2220a is at the top right of the first intersection, and \u2220b is at the top right of the second intersection. A student writes: \u201C\u2220a = \u2220b because they are alternate interior angles.\u201D What is wrong with the reason?",
+    "The angles are corresponding angles, not alternate interior angles",
+    ["Nothing \u2014 the reason is correct","The angles are co-interior angles, not alternate interior angles","The angles are vertically opposite angles, not alternate interior angles"],
+    "\u2220a and \u2220b sit in the same relative position (top right) at each intersection, which makes them corresponding angles. Alternate interior angles sit between the two lines, on opposite sides of the transversal. The equality is right; the named reason is wrong.",
+    {});},
+  function(){return mcq("Given AB \u2225 CD and AE = DE, with E on the segment joining the two lines, a proof shows \u25B3ABE \u2245 \u25B3DCE. One step states \u2220BAE = \u2220CDE. Which reason justifies that step?",
+    "Alternate interior angles, because AB \u2225 CD",
+    ["Vertically opposite angles","Corresponding angles, because AB \u2225 CD","Co-interior angles, because AB \u2225 CD"],
+    "\u2220BAE and \u2220CDE lie between the parallel lines, on opposite sides of the transversal AD (the line through A, E and D), so they are alternate interior angles, which are equal when the lines are parallel. (Co-interior angles would be supplementary, not equal.)",
+    {});},
+  function(){return mcq("In the same proof (AB \u2225 CD, AE = DE, prove \u25B3ABE \u2245 \u25B3DCE), another step states \u2220AEB = \u2220CED. Which reason justifies that step?",
+    "Vertically opposite angles",
+    ["Alternate interior angles, because AB \u2225 CD","Given information","The SSS congruence postulate"],
+    "\u2220AEB and \u2220CED are formed by the same two intersecting lines at point E, directly across from each other \u2014 vertically opposite angles, which are always equal. No parallel lines are needed for this step.",
+    {});}
+]));
+
 /* ============ selection engine ============ */
 /* Mid-course scope (Table of Specifications, verified Oct 26, 2026): the mid-course
    exam samples Unit 4 only to Section 4.3, so the two Radical Equations entries
    (Section 4.4) are flagged postMid and held out whenever the Mid preset is active.
    Picking Unit 4 directly still serves the full unit. */
-BANK.forEach(function(e){if(e.id==="u4-radical-equation"||e.id==="u4-extraneous"||e.id==="u4-model-equation")e.postMid=true;});
+BANK.forEach(function(e){if(e.id==="u4-radical-equation"||e.id==="u4-extraneous"||e.id==="u4-model-equation"||e.id==="u4-cube-equation")e.postMid=true;});
 function poolFor(units,inds,cap){
   return BANK.filter(function(e){
     if(cap&&e.postMid)return false;
