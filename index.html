@@ -174,7 +174,13 @@ function _fit(pts,W,H,pad){
   return function(p){return [W/2+(p[0]-cx)*s, H/2-(p[1]-cy)*s];};
 }
 function _txt(x,y,str,size,bold,anchor){
-  return '<text x="'+fmt(x,1)+'" y="'+fmt(y,1)+'" font-size="'+(size||13)+'" fill="'+FIG_INK+'" text-anchor="'+(anchor||"middle")+'" dominant-baseline="central"'+(bold?' font-weight="bold"':"")+'>'+str+'</text>';
+  return '<text x="'+fmt(x,1)+'" y="'+fmt(y,1)+'" font-size="'+(size||13)+'" fill="'+FIG_INK+'" stroke="#ffffff" stroke-width="3.5" style="paint-order:stroke" stroke-linejoin="round" text-anchor="'+(anchor||"middle")+'" dominant-baseline="central"'+(bold?' font-weight="bold"':"")+'>'+str+'</text>';
+}
+function _sideOff(P1,P2,ref,dist){ /* unit perpendicular to segment P1P2, pointing AWAY from ref, times dist */
+  var d=[P2[0]-P1[0],P2[1]-P1[1]],dl=_vlen(d)||1,perp=[-d[1]/dl,d[0]/dl];
+  var M=[(P1[0]+P2[0])/2,(P1[1]+P2[1])/2];
+  if(perp[0]*(ref[0]-M[0])+perp[1]*(ref[1]-M[1])>0)perp=[-perp[0],-perp[1]];
+  return [perp[0]*dist,perp[1]*dist];
 }
 function triLayout(a,b,c){var Cx=(b*b+c*c-a*a)/(2*c);return [[0,0],[c,0],[Cx,Math.sqrt(Math.max(b*b-Cx*Cx,0.0001))]];}
 function triDraw(P,o){
@@ -183,8 +189,8 @@ function triDraw(P,o){
   var seg=[[1,2],[2,0],[0,1]];
   for(var i=0;i<3;i++){
     var M=[(P[seg[i][0]][0]+P[seg[i][1]][0])/2,(P[seg[i][0]][1]+P[seg[i][1]][1])/2];
-    var off=_vnorm(_vsub(M,G));
-    if(o.side&&o.side[i])out+=_txt(M[0]+off[0]*15,M[1]+off[1]*15,o.side[i],12,false);
+    var off=_sideOff(P[seg[i][0]],P[seg[i][1]],G,16);
+    if(o.side&&o.side[i])out+=_txt(M[0]+off[0],M[1]+off[1],o.side[i],12,false);
     var V=P[i],out2=_vnorm(_vsub(V,G));
     var bis=_vnorm([_vnorm(_vsub(P[(i+1)%3],V))[0]+_vnorm(_vsub(P[(i+2)%3],V))[0],_vnorm(_vsub(P[(i+1)%3],V))[1]+_vnorm(_vsub(P[(i+2)%3],V))[1]]);
     out+=_txt(V[0]+out2[0]*16,V[1]+out2[1]*16,o.L[i],14,true);
@@ -218,9 +224,9 @@ function twoTriSVG(AB,BC,angB,AC,CD,AD,angDAC,angD){
   out+='<polygon class="tri" points="'+[PA,PB,PC].map(function(p){return fmt(p[0],1)+","+fmt(p[1],1);}).join(" ")+'" fill="none" stroke="'+FIG_INK+'" stroke-width="2"/>';
   out+='<polygon class="tri2" points="'+[PA,PC,PD].map(function(p){return fmt(p[0],1)+","+fmt(p[1],1);}).join(" ")+'" fill="none" stroke="'+FIG_INK+'" stroke-width="2"/>';
   function mid(p,q){return [(p[0]+q[0])/2,(p[1]+q[1])/2];}
-  function lab(p,str,dx,dy){return _txt(p[0]+(dx||0),p[1]+(dy||0),str,12,false);}
-  var mAB=mid(PA,PB),mBC=mid(PB,PC),mCD=mid(PC,PD);
-  out+=lab(mAB,AB+" m",-16,-6)+lab(mBC,BC+" m",16,-4)+lab(mCD,"?",16,8);
+  var G1=[(PA[0]+PB[0]+PC[0])/3,(PA[1]+PB[1]+PC[1])/3],G2=[(PA[0]+PC[0]+PD[0])/3,(PA[1]+PC[1]+PD[1])/3];
+  function slab(p,q,ref,str){var M=mid(p,q),off=_sideOff(p,q,ref,15);return _txt(M[0]+off[0],M[1]+off[1],str,12,false);}
+  out+=slab(PA,PB,G1,AB+" m")+slab(PB,PC,G1,BC+" m")+slab(PC,PD,G2,"?");
   out+=_txt(PB[0],PB[1]+18,angB+"°",12,false);
   out+=_txt(PA[0]+20,PA[1]+16,angDAC+"°",12,false);
   out+=_txt(PD[0],PD[1]-14,angD+"°",12,false);
@@ -305,7 +311,6 @@ function normSVG(o){
   });
   return out+'</svg>';
 }
-
 
 /* ============ curriculum map (codes verified against the Math 2201 Curriculum Guide) ============ */
 var UNITS={
