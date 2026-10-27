@@ -55,6 +55,7 @@
   .hint{font-size:.82rem;color:#4b5a61;line-height:1.45;}
   .scoreline{font-size:.95rem;font-weight:bold;margin:6px 0 14px;}
   .thinNote{background:#fdf6ec;border:1px solid var(--accent2);border-radius:8px;padding:9px 12px;font-size:.88rem;line-height:1.45;}
+  .endmode [data-check],.endmode [data-sol]{display:none;}
   .modebar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
   #printArea{display:none;}
   .fig{margin:8px 0 4px;}
@@ -113,6 +114,12 @@
           <option value="0.5">Half space</option>
           <option value="0.25">A little space</option>
           <option value="0">None — use your own paper</option>
+        </select>
+      </label>
+      <label>Checking (online practice)
+        <select id="chkIn">
+          <option value="each">Check each question as I go</option>
+          <option value="end">Check everything at the end</option>
         </select>
       </label>
     </div>
@@ -3299,19 +3306,20 @@ function settings(){
     count:Math.max(1,Math.min(60,+$("countIn").value||10)),
     order:$("orderIn").value,
     ws:($("wsIn")?parseFloat($("wsIn").value):1),
+    chk:($("chkIn")?$("chkIn").value:"each"),
     mix:[+$("lv1").value||0,+$("lv2").value||0,+$("lv3").value||0]};
 }
 function tags(q){
   var e=q._entry;
   return '<span class="tag">Unit '+e.unit+'</span> <span class="tag ind">'+e.indicators.join(", ")+'</span> <span class="tag lvl">Level '+e.level+'</span>';
 }
-var current=null,checkedCount=0,correctCount=0;
+var current=null,checkedCount=0,correctCount=0,checkMode="each",endGraded=false;
 function startOnline(){
   var s=settings();var res=drawSet(s.units,s.inds,s.count,s.mix,s.order,s.midCap);
-  current=res.items;checkedCount=0;correctCount=0;
+  current=res.items;checkedCount=0;correctCount=0;checkMode=(s.chk==="end")?"end":"each";endGraded=false;
   var box=$("session");
   if(!current.length){box.innerHTML='<div class="card"><p>'+(s.units.length?"No questions match that selection yet.":"Choose at least one unit above \u2014 or use the Mid-course review or Final review button \u2014 then start again.")+'</p></div>';return;}
-  var html='<div class="card"><h2>Online practice</h2>'+(res.thin?'<p class="thinNote">Heads up: the question bank is still thin for this selection, so this set repeats practice on the same question shape (with new numbers) because there are not yet enough different questions to fill it.</p>':"")+'<p class="scoreline" id="score"></p>';
+  var html='<div class="card'+(checkMode==="end"?" endmode":"")+'"><h2>Online practice</h2>'+(res.thin?'<p class="thinNote">Heads up: the question bank is still thin for this selection, so this set repeats practice on the same question shape (with new numbers) because there are not yet enough different questions to fill it.</p>':"")+'<p class="scoreline" id="score"></p>';
   current.forEach(function(q,i){
     html+='<div class="q" id="q'+i+'"><div class="qhead"><b>Question '+(i+1)+'</b> '+tags(q)+'</div><div class="prompt">'+q.prompt+'</div>';
     if(q.figure)html+='<div class="fig">'+q.figure+'</div>';
@@ -3327,7 +3335,7 @@ function startOnline(){
       +(REPORT_FORM.url?'<p><button type="button" data-repsend="'+i+'">Send report</button> <button type="button" class="alt" data-repcopy="'+i+'">Copy report text instead</button></p>':'<p><button type="button" data-repcopy="'+i+'">Copy report text</button></p>')
       +'<div class="repstat" id="repstat'+i+'"></div></div></div>';
   });
-  html+='<p><button type="button" id="againBtn">New set of questions</button></p></div>';
+  html+='<p>'+(checkMode==="end"?'<button type="button" id="gradeBtn">Check all my answers</button> ':"")+'<button type="button" id="againBtn">New set of questions</button></p></div>';
   box.innerHTML=html;updateScore();typesetMath(box);
   Array.prototype.forEach.call(box.querySelectorAll("[data-check]"),function(b){b.addEventListener("click",function(){checkQ(+b.getAttribute("data-check"));});});
   Array.prototype.forEach.call(box.querySelectorAll("[data-sol]"),function(b){b.addEventListener("click",function(){$("sol"+b.getAttribute("data-sol")).classList.toggle("show");});});
@@ -3335,6 +3343,7 @@ function startOnline(){
   Array.prototype.forEach.call(box.querySelectorAll("[data-repsend]"),function(b){b.addEventListener("click",function(){openReport(+b.getAttribute("data-repsend"));});});
   Array.prototype.forEach.call(box.querySelectorAll("[data-repcopy]"),function(b){b.addEventListener("click",function(){copyReport(+b.getAttribute("data-repcopy"));});});
   $("againBtn").addEventListener("click",startOnline);
+  if($("gradeBtn"))$("gradeBtn").addEventListener("click",gradeAll);
   box.scrollIntoView({behavior:"smooth"});
 }
 function plainText(h){var d=document.createElement("div");d.innerHTML=String(h).replace(/<br\s*\/?>/gi,"\n");return (d.textContent||"").replace(/[ \t]+/g," ").replace(/\s*\n\s*/g,"\n").trim();}
@@ -3365,7 +3374,13 @@ function copyReport(i){
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,done);}
   else{var ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(err){}document.body.removeChild(ta);done();}
 }
-function updateScore(){$("score").textContent=checkedCount?("Score so far: "+correctCount+" of "+checkedCount+" checked."):"Check each question as you go \u2014 the worked solution is there when you want it.";}
+function updateScore(){
+  if(checkMode==="end"){
+    $("score").textContent=endGraded?("You scored "+correctCount+" of "+current.length+" \u2014 "+Math.round(100*correctCount/current.length)+"%. The worked solutions are open below so you can review each question."):"Answer all the questions, then check them all at the end.";
+    return;
+  }
+  $("score").textContent=checkedCount?("Score so far: "+correctCount+" of "+checkedCount+" checked."):"Check each question as you go \u2014 the worked solution is there when you want it.";
+}
 function checkQ(i){
   var q=current[i],ok=false,given=null;
   if(q.type==="mc"){var sel=document.querySelector('input[name="opt'+i+'"]:checked');if(!sel){$("fb"+i).innerHTML='<span class="notyet">Pick an option first.</span>';$("fb"+i).classList.add("show");return;}given=+sel.value;ok=(given===q.correct);}
@@ -3373,8 +3388,28 @@ function checkQ(i){
   else{var t=($("ans"+i).value||"").trim().toLowerCase().replace(/\s+/g," ");ok=q.answers.some(function(a){return t===a.replace(/\s+/g," ");});}
   var fb=$("fb"+i);fb.classList.add("show");
   if(!fb.dataset.done){checkedCount++;if(ok)correctCount++;fb.dataset.done="1";updateScore();}
-  fb.innerHTML=ok?'<span class="ok">Correct.</span> Nice work.':'<span class="notyet">Not quite.</span> Try again, or open the worked solution.';
+  fb.innerHTML=ok?'<span class="ok">Correct.</span> Nice work.':(checkMode==="end"?'<span class="notyet">Not quite.</span> The worked solution is open below.':'<span class="notyet">Not quite.</span> Try again, or open the worked solution.');
   if(ok)$("sol"+i).classList.remove("show");
+}
+function gradeAll(){
+  if(endGraded||!current)return;
+  endGraded=true;
+  for(var i=0;i<current.length;i++){
+    var q=current[i],fb=$("fb"+i);
+    if(fb.dataset.done)continue;
+    var answered=false;
+    if(q.type==="mc")answered=!!document.querySelector('input[name="opt'+i+'"]:checked');
+    else if(q.type==="num")answered=!isNaN(parseFloat(($("ans"+i).value||"").replace(/[$,%\u00B0]/g,"")));
+    else answered=(($("ans"+i).value||"").trim()!=="");
+    if(!answered){
+      fb.classList.add("show");fb.dataset.done="1";checkedCount++;
+      fb.innerHTML='<span class="notyet">No answer given.</span> The worked solution is open below.';
+    }else checkQ(i);
+  }
+  for(var j=0;j<current.length;j++)$("sol"+j).classList.add("show");
+  updateScore();
+  var b=$("gradeBtn");if(b){b.disabled=true;b.textContent="Answers checked";}
+  $("score").scrollIntoView({behavior:"smooth",block:"center"});
 }
 function startSheet(){
   var s=settings();var res=drawSet(s.units,s.inds,s.count,s.mix,s.order,s.midCap);
@@ -3434,6 +3469,7 @@ function settingsToURL(){
   if(s.inds.length)p.set("indicator",s.inds.join(","));
   p.set("count",s.count);p.set("order",s.order);
   if(s.ws!==1)p.set("ws",s.ws);
+  if(s.chk==="end")p.set("chk","end");
   if(s.mix.join()!=="20,60,20")p.set("levels",s.mix.join(","));
   return location.pathname+"?"+p.toString();
 }
@@ -3446,6 +3482,7 @@ function applyURL(){
   if(p.get("count"))$("countIn").value=p.get("count");
   if(p.get("order"))$("orderIn").value=p.get("order");
   if(p.get("ws")!==null&&$("wsIn"))$("wsIn").value=p.get("ws");
+  if(p.get("chk")==="end"&&$("chkIn"))$("chkIn").value="end";
   if(p.get("levels")){var lv=p.get("levels").split(",").map(Number);if(lv.length===3){$("lv1").value=lv[0];$("lv2").value=lv[1];$("lv3").value=lv[2];$("advBox").open=true;}}
   return touched;
 }
