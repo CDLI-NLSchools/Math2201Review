@@ -602,7 +602,7 @@ E("u5-histogram-concepts",5,["8.7"],2,"var",varset([
     ["The average wait was exactly \\(7\\) minutes","Every wait was between \\(5\\) and \\(9\\) minutes","The longest wait was \\(9\\) minutes"],
     "The tallest bar marks the interval with the highest frequency. Grouped bars hide the exact values, so neither the true average nor the longest wait can be read off the graph.",{});}
 ]));
-E("u5-polygon-compare",5,["8.7"],3,"gen",function(){
+E("u5-polygon-compare",5,["8.7"],2,"gen",function(){
   var ctx=pick(["ferry routes' passenger counts per crossing","city bus routes' passenger counts per trip","school shuttle routes' rider counts per run","commuter train routes' passenger counts per trip"]);
   var lo1=pick([20,25,30,35,40]),hi1=lo1+9;var bHi=pick([49,59,69,79]);
   return mcq("Two "+ctx+" are drawn as frequency polygons on the same axes. Route A's polygon is tall and narrow, peaked at \\("+lo1+"\\text{-}"+hi1+"\\) passengers. Route B's polygon is low and wide, spread from \\(0\\text{-}9\\) up to \\("+(bHi-9)+"\\text{-}"+bHi+"\\) passengers. Which statement is correct?",
@@ -772,7 +772,7 @@ E("u5-z-prob",5,["8.15"],2,"gen",function(){
   q.figure = normSVG({mu:0, sd:1, lo:(right? a : -3.4), hi:(right? 3.4 : a), cuts:[{v:a, label:"z = "+fmt(a)}]});
   return q;
 });
-E("u5-z-applied",5,["8.15"],3,"gen",function(){
+E("u5-z-applied",5,["8.15"],2,"gen",function(){
   var FAMS=[
     {w:"amount of sleep teenagers get on school nights",unit:"hours",mus:[[7.2,0.8],[7.6,0.9],[8.1,0.7],[6.9,1.1]],hi:{verb:"sleep at least",zs:[1,1.5,2]},lo:{verb:"sleep less than",zs:[-1,-1.5,-2]}},
     {w:"lifetimes of a brand of light bulb",unit:"hours",mus:[[1200,90],[1100,120],[1350,75],[1000,150]],hi:{verb:"last at least",zs:[1,1.5,2]},lo:{verb:"burn out in less than",zs:[-1,-1.25,-2]}},
@@ -1052,7 +1052,7 @@ E("u2-eq-from-vertex",2,["4.16"],2,"gen",function(){
   return numq("A parabola has vertex \\(("+h+", "+k+")\\) and passes through \\(("+px+", "+py+")\\). Using \\(y = a(x - h)^2 + k\\), find the value of \\(a\\).",
     a,0.011,"Substitute the point: \\("+py+" = a("+px+" - ("+h+"))^2 + ("+k+") \\rightarrow "+py+" = "+(dx*dx)+"a + ("+k+") \\rightarrow a = \\frac{"+py+" - ("+k+")}{"+(dx*dx)+"} = \\)<b>\\("+a+"\\)</b>.",{h:h,k:k,a:a});
 });
-E("u2-max-context",2,["4.2"],3,"gen",function(){
+E("u2-max-context",2,["4.2"],2,"gen",function(){
   var v=pick([10,20,30,40,50,60,70]),h0=pick([0,2,5,8,10,12,15,20,25,30]);
   var thing=pick(["A ball is thrown upward","A firework shell is launched upward","A water jet from a fountain arcs upward"]);
   var tmax=v/10,hmax=-5*tmax*tmax+v*tmax+h0;
@@ -1096,7 +1096,7 @@ E("u3-roots-zeros",3,["4.6"],1,"var",varset([
     ["\\(4\\) and \\(-1\\), the opposite signs","There are no roots, because the graph crosses the axis","Only \\(1\\) \u2014 a root cannot be negative"],
     "Roots of the equation, zeros of the function and x-intercepts of the graph are the same numbers, signs included.",{});}
 ]));
-E("u3-context-area",3,["4.3"],3,"gen",function(){
+E("u3-context-area",3,["4.3"],2,"gen",function(){
   var w=ri(3,15),d=ri(2,12);var A=w*(w+d);
   var obj=pick(["garden","patio","deck","vegetable plot","parking pad"]);
   return numq("A rectangular "+obj+"'s length is "+d+" m more than its width. Its area is \\("+A+"\\text{ m}^2\\). What is the width, in metres?",
@@ -1265,7 +1265,7 @@ E("u6-slope-rate",6,["6.19"],2,"var",varset([
     ["The fuel used on the trip: \\(25\\text{ L}\\)","The distance travelled: \\(300\\text{ km}\\)","\\(12\\text{ L per km}\\) — slope is fuel divided by distance"],
     "Slope \\(= \\text{rise} \\div \\text{run} = \\text{km} \\div \\text{L}\\), a rate of travel per litre: \\(12\\text{ km/L}\\).",{});}
 ]));
-E("u6-poster-cost",6,["6.14","6.17"],3,"gen",function(){
+E("u6-poster-cost",6,["6.14","6.17"],2,"gen",function(){
   var kw=pick([1.5,2,2.5,3,3.5,4,5]);var W=10*kw,H=15*kw;var area=W*H;var rate=pick([0.02,0.03,0.04,0.05,0.06,0.08,0.1,0.12]);var cost=area*rate;
   var frame=pick([
     "A photo 10 cm by 15 cm is enlarged so its width becomes "+fmt(W)+" cm (the height scales in proportion). A print shop charges $"+fmt(rate)+" per \\(\\text{cm}^2\\) of print area. What does the enlarged print cost, in dollars? (Just the number.)",
@@ -1763,7 +1763,7 @@ E("u1-cosine-context",1,["7.2"],2,"gen",function(){
   q.figure=triSVG(d,p,w,{L:["A","B","C"],ang:[ang+"\u00B0",null,null],side:["?",w+" km",p+" km"]});
   return q;
 });
-E("u1-two-station-height",1,["7.3"],3,"gen",function(){
+E("u1-two-station-height",1,["7.3"],2,"gen",function(){
   function rd(d){return d*Math.PI/180;}
   var al=ri(18,36),be=al+ri(12,28),dd=pick([15,20,25,30,40,50,60]);
   var slant=dd*Math.sin(rd(al))/Math.sin(rd(be-al));
@@ -2022,7 +2022,7 @@ E("u4-verify-root",4,["1.10"],2,"gen",function(){
     "\\("+X+" - "+b+"\\) = <b>\\("+(X-b)+"\\)</b>. (For comparison, the left side at \\(x = "+X+"\\) is \\(\\sqrt{"+X+" + "+a+"} = "+s+"\\). Both sides must give the same value for \\(x = "+X+"\\) to actually be a root.)",
     {mode:2,X:X,a:a,b:b});
 });
-E("u4-model-equation",4,["1.12"],3,"gen",function(){
+E("u4-model-equation",4,["1.12"],2,"gen",function(){
   if(Math.random()<0.5){
     var d=ri(3,60),sp=5*Math.sqrt(d);
     return numq("Police estimate a car's speed from a skid mark using \\(s = \\sqrt{25d}\\), where s is the speed in km/h and d is the length of the skid mark in metres. A skid mark at a collision scene measures "+d+" m. Estimate the car's speed, to one decimal place, in km/h.",
@@ -2134,7 +2134,7 @@ E("u3-equation-fraction-roots",3,["4.6"],2,"gen",function(){
     "Build the factors from the roots: \\(("+q1+"x "+(p1>0?"- "+p1:"+ "+(-p1))+")("+q2+"x "+(p2>0?"- "+p2:"+ "+(-p2))+") = 0\\). Expanding gives \\("+quadB(A,B,C)+" = 0\\), that is, <b>"+key+"</b>.",
     {A:A,B:B,C:C});
 });
-E("u3-solve-height",3,["4.3"],3,"gen",function(){
+E("u3-solve-height",3,["4.3"],2,"gen",function(){
   var combos=[[1,4,40],[1,4,50],[1,5,40],[1,5,50],[1,5,60],[1,6,50],[1,6,60],[2,4,60],[2,4,80],[2,5,80],[1,7,60],[2,6,100]];
   var cb=pick(combos),t1=cb[0],t2=cb[1],H=cb[2];
   var b=5*(t1+t2),c0=H-5*t1*t2;
@@ -2300,7 +2300,7 @@ E("u1-smallest-angle",1,["7.2"],3,"gen",function(){
   q.figure=triSVG(s,m,l,{L:["A","B","C"],ang:["?",null,null],side:[s+" cm",m+" cm",l+" cm"]});
   return q;
 });
-E("u1-angle-between-paths",1,["7.2"],3,"gen",function(){
+E("u1-angle-between-paths",1,["7.2"],2,"gen",function(){
   function rd(d){return d*Math.PI/180;}
   var ctx=pick([["airplane","airport"],["boat","dock"],["airplane","airport"]]);
   var v1=pick([240,280,320,360,400,440,480,520]),v2=pick([240,280,320,360,400,440,480,520].filter(function(x){return x!==v1;}));
@@ -2333,7 +2333,7 @@ E("u1-guy-wire",1,["7.3"],3,"gen",function(){
 });
 
 /* --- Unit 6: Proportional Reasoning (Payne Ch 8a) --- */
-E("u6-pack-cost",6,["6.17"],3,"gen",function(){
+E("u6-pack-cost",6,["6.17"],2,"gen",function(){
   var ctx=pick([
     {item:"bottles of cola",pack:6,use:"fill the store cooler"},
     {item:"juice boxes",pack:8,use:"stock the school canteen"},
@@ -2381,7 +2381,7 @@ E("u6-poster-dimensions",6,["6.14"],2,"gen",function(){
     "The original area is \\("+w+" \\times "+h+" = "+oldA+"\\text{ cm}^2\\). The area scale factor is \\("+trimNum(newA)+" \\div "+oldA+" = "+trimNum(k*k)+"\\), so the LINEAR scale factor is \\(\\sqrt{"+trimNum(k*k)+"} = "+trimNum(k)+"\\). Multiply each dimension by \\("+trimNum(k)+"\\): \\("+w+" \\times "+trimNum(k)+" = "+trimNum(w*k)+"\\text{ cm}\\) and \\("+h+" \\times "+trimNum(k)+" = "+trimNum(h*k)+"\\text{ cm}\\). The poster is <b>"+key+"</b>.",
     {w:w,h:h,k:k});
 });
-E("u6-tile-cost",6,["6.14","6.17"],3,"gen",function(){
+E("u6-tile-cost",6,["6.14","6.17"],2,"gen",function(){
   var frames=[
     {room:"bathroom floor",scale:12,scaleTxt:"1 unit = 12 inches",tile:6,tileTxt:"6 in. by 6 in.",unit:"in."},
     {room:"kitchen floor",scale:12,scaleTxt:"1 unit = 12 inches",tile:12,tileTxt:"12 in. by 12 in.",unit:"in."},
@@ -2591,7 +2591,7 @@ E("u3-standard-coeffs",3,["4.9"],1,"gen",function(){
     "Move every term to the left: \\("+quadB(A,B,0)+" - ("+K+") = 0\\), that is, \\("+quadB(A,B,-K)+" = 0\\). Reading off the coefficients: <b>"+key+"</b>. The constant changes sign when it crosses the equals sign.",
     {A:A,B:B,K:K});
 });
-E("u3-two-numbers",3,["4.3"],3,"gen",function(){
+E("u3-two-numbers",3,["4.3"],2,"gen",function(){
   var mode=pick([["consecutive integers",1],["consecutive even integers",2],["consecutive odd integers",2]]);
   var n,step=mode[1];
   if(mode[0].indexOf("even")>=0)n=2*ri(3,20);
@@ -2637,7 +2637,7 @@ E("u4-rationalize-coefficient",4,["1.7"],2,"gen",function(){
     "Multiply the numerator and denominator by \\(\\sqrt{"+m+"}\\): the denominator becomes \\("+c+" \\times \\sqrt{"+m+"} \\times \\sqrt{"+m+"} = "+c+" \\times "+m+" = "+(c*m)+"\\), and the numerator becomes \\("+N+"\\sqrt{"+m+"}\\). Since \\("+N+"\\) and \\("+(c*m)+"\\) share no common factor, the simplest form is <b>"+key+"</b>.",
     {N:N,c:c,m:m});
 });
-E("u4-conjugate-area",4,["1.6"],3,"gen",function(){
+E("u4-conjugate-area",4,["1.6"],2,"gen",function(){
   var a=ri(4,12),sq=[],i;
   for(i=2;i<a*a;i++){var rt=Math.sqrt(i);if(rt!==Math.floor(rt))sq.push(i);}
   var b=pick(sq),area=a*a-b;
@@ -2739,7 +2739,7 @@ E("u2-factored-y-intercept",2,["4.4"],2,"gen",function(){
     "The y-intercept occurs at \\(x = 0\\): \\(f(0) = "+a+" \\times ("+(0-r1)+") \\times ("+(0-r2)+") = "+a+" \\times "+(r1*r2)+" = \\)<b>\\("+ans+"\\)</b>. (The x-intercepts are \\("+r1+"\\) and \\("+r2+"\\); the y-intercept is \\(a\\) times their product.)",
     {a:a,r1:r1,r2:r2,ans:ans});
 });
-E("u2-max-height",2,["4.2"],3,"gen",function(){
+E("u2-max-height",2,["4.2"],2,"gen",function(){
   var k=ri(3,9),B=10*k,C=ri(2,30),max=C+5*k*k;
   var ctx=pick([["ball","kicked"],["stone","thrown"],["water jet","a fountain"],["flare","fired"]]);
   return numq("A "+ctx[0]+" is "+ctx[1]+". Its height is \\(h(t) = -5t^2 + "+B+"t + "+C+"\\) metres, \\(t\\) seconds after it starts. What is the greatest height it reaches, in metres?",
@@ -2852,7 +2852,7 @@ E("u4-add-unlike",4,["1.6"],2,"gen",function(){
     "Simplify each term first: "+sqrtT(A)+" = "+radT(a,m)+" and "+sqrtT(B)+" = "+radT(b,m)+". They are like radicals, so add the coefficients: \\("+a+" + "+b+" = "+(a+b)+"\\), giving <b>"+key+"</b>. (The numbers under the roots are never added together.)",
     {a:a,b:b,m:m,A:A,B:B});
 });
-E("u4-diagonal-radical",4,["1.6"],3,"gen",function(){
+E("u4-diagonal-radical",4,["1.6"],2,"gen",function(){
   var s=ri(2,6),m=pick([2,3,5,6,7,10]);
   var r0=2*m,t=1,f;for(f=2;f*f<=r0;f++){while(r0%(f*f)===0){r0/=(f*f);t*=f;}}
   var key=r0===1?"\\("+(s*t)+"\\)":radT(s*t,r0);
@@ -2882,7 +2882,7 @@ E("u8-cointerior-algebra",8,["5.8"],2,"gen",function(){
   q.figure=transversalSVG("TR","("+expr(a,b)+")°","BR","?");
   return q;
 });
-E("u8-congruence-perimeter",8,["5.6"],3,"gen",function(){
+E("u8-congruence-perimeter",8,["5.6"],2,"gen",function(){
   var s=ri(6,16),s2=ri(5,16),s3,tries=0;
   do{s3=ri(5,18);tries++;}while((s3>=s+s2||s3<=Math.abs(s-s2))&&tries<60);
   var a=ri(2,5),x0=ri(3,12),b,safe=0;
@@ -2893,7 +2893,7 @@ E("u8-congruence-perimeter",8,["5.6"],3,"gen",function(){
     "Corresponding vertices match in order, so side \\(DE\\) corresponds to side \\(AB\\): \\("+a+"x "+(b>0?"+ "+b:"- "+(-b))+" = "+s+"\\), giving \\(x = "+x0+"\\). Congruent triangles have the same perimeter: \\("+s+" + "+s2+" + "+s3+" = "+P+"\\text{ cm}\\)."+(mode===0?" So \\(x = \\)<b>\\("+x0+"\\)</b>.":" So the perimeter of \\(\\triangle DEF\\) is <b>\\("+P+"\\text{ cm}\\)</b>."),
     {s:s,s2:s2,s3:s3,a:a,b:b,x0:x0,P:P,mode:mode,ans:ans});
 });
-E("u8-angle-chase",8,["5.8"],3,"var",varset([
+E("u8-angle-chase",8,["5.8"],2,"var",varset([
   function(){return mcq("Two parallel lines are cut by a transversal. \\(\\angle x\\) forms a co-interior pair with a \\(64^\\circ\\) angle. \\(\\angle y\\) is vertically opposite \\(\\angle x\\). \\(\\angle z\\) is a corresponding angle to \\(\\angle y\\). What is the measure of \\(\\angle z\\)?",
     "\\(116^\\circ\\)",
     ["\\(64^\\circ\\)","\\(128^\\circ\\)","\\(90^\\circ\\)"],
@@ -3014,7 +3014,7 @@ E("u3-formula-exact-roots",3,["4.9"],2,"gen",function(){
     "\\(x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} = \\frac{"+(-b)+" \\pm \\sqrt{"+D+"}}{"+(2*a)+"}\\). "+(t>1?"Since \\(\\sqrt{"+D+"} = "+t+"\\sqrt{"+Dp+"}\\), ":"Since \\(\\sqrt{"+D+"}\\) does not simplify, ")+(g>1?"and the whole fraction divides by \\("+g+"\\), ":"")+"the simplest exact form is <b>"+key+"</b>.",
     {a:a,b:b,c:c,D:D,t:t,Dp:Dp,num:num,coef:coef,den:den});
 });
-E("u3-squares-area",3,["4.3"],3,"gen",function(){
+E("u3-squares-area",3,["4.3"],2,"gen",function(){
   var s=ri(3,14),m=ri(1,6),T=s*s+(s+m)*(s+m);
   var ctx=pick([["two square garden plots","plot"],["two square patios","patio"],["two square quilts","quilt"]]);
   return numq("A gardener has "+ctx[0]+". The side of the larger "+ctx[1]+" is "+m+" m longer than the side of the smaller one, and their areas add to \\("+T+"\\text{ m}^2\\). What is the side length of the smaller "+ctx[1]+", in metres?",
@@ -3054,7 +3054,7 @@ E("u4-difference-simplify",4,["1.6"],2,"gen",function(){
     "Simplify each term first: "+sqrtT(A)+" = "+radT(a,m)+" and "+sqrtT(B)+" = "+radT(b,m)+". They are like radicals, so subtract the coefficients: \\("+a+" - "+b+" = "+(a-b)+"\\), giving <b>"+key+"</b>.",
     {a:a,b:b,m:m,A:A,B:B});
 });
-E("u4-reciprocal-sum",4,["1.7"],3,"gen",function(){
+E("u4-reciprocal-sum",4,["1.7"],2,"gen",function(){
   function gcd(x,y){while(y){var u=y;y=x%y;x=u;}return x;}
   var a=pick([2,3,5,6,7,10,11,13,14,15,17,19,21,22,23,26]),k=ri(2,6),B=a*k*k;
   var g=gcd(k+1,k*a),num=(k+1)/g,den=(k*a)/g;
