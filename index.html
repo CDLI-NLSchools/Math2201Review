@@ -669,22 +669,22 @@ E("u5-sd-interpret",5,["8.10"],2,"gen",function(){
     {small:small,big:big});
 });
 E("u5-sd-decisions",5,["8.16"],3,"var",varset([
-  function(){return mcq("A brand of light bulb has a mean life of \\(1{,}000\\) hours with a standard deviation of \\(80\\) hours. The bulbs are sold with an \\(840\\)-hour warranty. What does the standard deviation say about warranty claims?",
-    "Very few bulbs should fail before \\(840\\) hours, because the warranty length is \\(2\\) standard deviations below the mean",
-    ["About half the bulbs will fail before \\(840\\) hours, because \\(840\\) is below the mean","Claims cannot be predicted, because the standard deviation is smaller than the mean","Every bulb will last at least \\(840\\) hours, because the standard deviation is only \\(80\\)"],
-    "\\(840\\) is \\(\\frac{1{,}000 - 840}{80} = 2\\) standard deviations below the mean. On a normal curve only about \\(2.5\\%\\) of bulbs fall below that, so claims should be rare.",{mean:1000,sd:80,w:840});},
+  function(){return mcq("A phone maker is choosing which model to sell with a guarantee that the battery will still be going after \\(20\\) hours of use, or the phone is replaced. Model P has a mean battery life of \\(26\\) hours with a standard deviation of \\(3\\) hours. Model Q has a mean battery life of \\(30\\) hours with a standard deviation of \\(6\\) hours. Which model should produce fewer guarantee replacements?",
+    "Model P, because \\(20\\) hours is \\(2\\) standard deviations below its mean, but only about \\(1.7\\) standard deviations below Model Q's mean, so far fewer Model P batteries die early despite the lower mean",
+    ["Model Q, because its mean battery life is higher","Model Q, because its larger standard deviation means more batteries last far longer than \\(20\\) hours","Both will produce the same number of replacements, because both means are above \\(20\\) hours"],
+    "What matters is how far the guarantee sits below the mean, in standard deviations: P: \\(\\frac{26 - 20}{3} = 2\\); Q: \\(\\frac{30 - 20}{6} \\approx 1.7\\). Model Q's wider spread puts a bigger share of its batteries below \\(20\\) hours.",{a:{m:26,s:3},b:{m:30,s:6},w:20});},
   function(){return mcq("A company is choosing which freezer model to cover with a \\(6\\)-year warranty. Model A has a mean life of \\(9\\) years with a standard deviation of \\(1.5\\) years. Model B has a mean life of \\(11\\) years with a standard deviation of \\(3\\) years. Which model should produce fewer warranty claims?",
     "Model A, because \\(6\\) years is \\(2\\) standard deviations below its mean, but only about \\(1.7\\) standard deviations below Model B's mean, so far fewer Model A units fail early despite the lower mean",
     ["Model B, because its mean life is higher","Model B, because its larger standard deviation means more long-lived units","Both will produce the same number of claims, because both means are above \\(6\\) years"],
     "What matters is how far the warranty sits below the mean, in standard deviations: A: \\(\\frac{9 - 6}{1.5} = 2\\); B: \\(\\frac{11 - 6}{3} \\approx 1.7\\). Model B's wider spread puts a bigger share of its units below \\(6\\) years.",{a:{m:9,s:1.5},b:{m:11,s:3},w:6});},
-  function(){return mcq("An insurance company compares two groups of drivers. Both groups have the same mean annual claim amount, $750. Group A's claims have a standard deviation of $120; Group B's, $540. Which group is harder for the company to predict, and why?",
-    "Group B, because its much larger standard deviation means claim amounts vary far more widely around the same mean",
-    ["Group A, because its smaller standard deviation hides the large claims","Neither \u2014 prediction depends only on the mean claim amount","Group B is easier to predict, because a larger standard deviation averages out over more drivers"],
-    "Predictability is about spread. Group B's claims typically land hundreds of dollars from the mean in either direction, so the company faces far more uncertainty, even though the means match.",{});},
-  function(){return mcq("A pollster warns a candidate: \u201CYour support is \\(52\\%\\) with a margin of error of \\(\\pm 4\\) points, so we cannot yet say you are ahead.\u201D Why is the warning fair, using standard-deviation thinking?",
-    "The interval reaches below \\(50\\%\\), so the true support could be a minority \u2014 the estimate is not spread out enough from \\(50\\%\\) to be sure",
-    ["Because \\(52\\%\\) is less than two margins of error above zero","Because a margin of error always means the poll is wrong","Because support above \\(50\\%\\) can never be claimed from a sample"],
-    "The confidence interval is \\(48\\% \\text{ to } 56\\%\\). Since it includes values below half, the lead is inside the poll's natural variability \u2014 the same idea as a value sitting within about one standard deviation of a boundary.",{});}
+  function(){return mcq("A seed company guarantees a minimum yield of \\(40\\) bushels per acre, or the farmer's seed is free. Variety A has a mean yield of \\(52\\) bushels per acre with a standard deviation of \\(6\\). Variety B has a mean yield of \\(64\\) bushels per acre with a standard deviation of \\(16\\). Which variety should trigger the guarantee less often?",
+    "Variety A, because \\(40\\) bushels is \\(2\\) standard deviations below its mean, but only \\(1.5\\) standard deviations below Variety B's mean, so far fewer of Variety A's fields fall short despite the lower mean",
+    ["Variety B, because its mean yield is higher","Variety B, because its larger standard deviation means more fields yield far above \\(40\\) bushels","Both will trigger the guarantee equally often, because both means are above \\(40\\) bushels"],
+    "What matters is how far the guaranteed minimum sits below the mean, in standard deviations: A: \\(\\frac{52 - 40}{6} = 2\\); B: \\(\\frac{64 - 40}{16} = 1.5\\). Variety B's wider spread puts a bigger share of its fields below \\(40\\) bushels.",{a:{m:52,s:6},b:{m:64,s:16},w:40});},
+  function(){return mcq("A retailer is choosing which brand of washing machine to cover with a \\(7\\)-year warranty. Brand A has a mean life of \\(11\\) years with a standard deviation of \\(2\\) years. Brand B has a mean life of \\(13\\) years with a standard deviation of \\(4\\) years. Which brand should produce fewer warranty claims?",
+    "Brand A, because \\(7\\) years is \\(2\\) standard deviations below its mean, but only \\(1.5\\) standard deviations below Brand B's mean, so far fewer Brand A machines fail early despite the lower mean",
+    ["Brand B, because its mean life is higher","Brand B, because its larger standard deviation means more machines last well beyond \\(7\\) years","Both will produce the same number of claims, because both means are above \\(7\\) years"],
+    "What matters is how far the warranty sits below the mean, in standard deviations: A: \\(\\frac{11 - 7}{2} = 2\\); B: \\(\\frac{13 - 7}{4} = 1.5\\). Brand B's wider spread puts a bigger share of its machines below \\(7\\) years.",{a:{m:11,s:2},b:{m:13,s:4},w:7});}
 ]));
 /* --- normal curve (8.11-8.14) --- */
 E("u5-normal-props",5,["8.11","8.13"],1,"var",varset([
@@ -880,14 +880,14 @@ E("u5-media",5,["8.20","8.21","8.22"],3,"var",varset([
     "\u2018Overwhelmingly\u2019 is too strong \u2014 the interval \\(50\\% \\text{ to } 62\\%\\) is consistent with support being barely half",
     ["The report is fine, because \\(56\\%\\) is a majority","The poll must be wrong, because its margin of error is positive","Nothing \u2014 word choice does not matter in statistics"],
     "\\(56\\% \\pm 6\\) gives \\(50\\% \\text{ to } 62\\%\\). A result that could be a coin-flip is real support, but \u2018overwhelming\u2019 overstates what the numbers carry.",{});},
-  function(){return mcq("A website headline reads: \u2018Nine out of ten dentists recommend our toothpaste!\u2019 No sample size, margin of error, or survey method is reported. Why should a reader be cautious?",
-    "With no sample size or margin of error, there is no way to judge how much the result could vary \u2014 the claim is uncheckable",
-    ["Because dentists cannot be surveyed about toothpaste","Because nine out of ten is not a percentage","Because all advertising statistics are invented"],
-    "A statistic without its method \u2014 how many were asked, how they were chosen, and the margin of error \u2014 cannot be evaluated. Nine could be nine of ten people in one office.",{});},
-  function(){return mcq("A radio station asks listeners to text in whether the town should build a new arena. By midnight, \\(78\\%\\) of texts say yes. The station reports \u2018the town strongly supports the arena\u2019. What is the biggest problem?",
-    "The sample is self-selected \u2014 people who feel strongly (and who listen to that station) did the choosing, so it does not represent the town",
-    ["\\(78\\%\\) is not a large enough majority","The poll was taken at night","Text messages cannot be counted accurately"],
-    "Voluntary samples over-represent strong opinions and the station's own audience. A random sample of the town, even a much smaller one, would say far more.",{});},
+  function(){return mcq("A toothpaste ad announces: \u2018Nine out of ten dentists recommend our brand!\u2019 The fine print reveals the survey behind it: the company asked \\(10\\) dentists, every one of them a paid consultant for the company, and \\(9\\) said yes. Does the claim hold up as evidence about dentists in general?",
+    "No \u2014 the \u2018sample\u2019 is \\(10\\) dentists hand-picked and paid by the company itself, so the result says nothing reliable about dentists in general",
+    ["Yes \u2014 \\(9\\) out of \\(10\\) is \\(90\\%\\), an overwhelming majority of dentists","Yes \u2014 dentists are experts, so their answers settle the question","No \u2014 \\(9\\) out of \\(10\\) cannot be turned into a percentage, so the claim is meaningless"],
+    "A result is only as good as the sample behind it. Ten people chosen by the seller, with a financial tie to the company, are not a fair sample of dentists \u2014 \u20189 out of 10\u2019 describes those \\(10\\) consultants, not the profession.",{});},
+  function(){return mcq("A radio station asks listeners to text in whether the town should build a new arena. More than \\(4{,}000\\) texts come in, and \\(78\\%\\) of them say yes. The station reports: \u2018The town strongly supports the arena.\u2019 Does the claim hold up?",
+    "No \u2014 the respondents chose themselves, so \\(78\\%\\) measures the station's motivated listeners, not the town; the sample does not represent the population",
+    ["Yes \u2014 \\(78\\%\\) is a large majority, so the town clearly supports the arena","Yes \u2014 over \\(4{,}000\\) responses is a big sample, and big samples are reliable","No \u2014 a vote taken after dark cannot count toward a town decision"],
+    "Size is not the issue \u2014 who got counted is. A text-in poll only hears from people who listen to that station and felt strongly enough to respond, so the \\(78\\%\\) cannot be extended to the whole town. A much smaller random sample would say far more.",{});},
   function(){return mcq("A community garden group reports: \u2018In our survey of 300 residents, \\(67\\% \\pm 4\\) support expanding the garden.\u2019 A councillor says the survey proves most residents support the expansion. Is the councillor right?",
     "Yes \u2014 the interval \\(63\\% \\text{ to } 71\\%\\) lies entirely above \\(50\\%\\), so a majority is supported throughout the interval",
     ["No \u2014 \\(67\\%\\) of a sample never proves anything about residents","No \u2014 the margin of error means support could be under half","Yes \u2014 but only because \\(300\\) is a large sample"],
@@ -1452,10 +1452,6 @@ E("u8-polygon-ratio",8,["5.2"],2,"gen",function(){
     n,0.011,"\\(\\text{Interior} + \\text{exterior} = 180^\\circ\\). With interior \\(= "+r+" \\times \\text{exterior}\\): \\(("+r+" + 1) \\times \\text{exterior} = 180^\\circ\\), so each exterior angle is \\("+fmt(ext)+"^\\circ\\) (and each interior angle is \\("+fmt(interior)+"^\\circ\\)). The exterior angles make one full turn: \\(360 \\div "+fmt(ext)+" = \\)<b>\\("+fmt(n)+"\\text{ sides}\\)</b>.",{r:r,ext:ext});
 });
 E("u7-reasoning-type",7,["2.7"],2,"var",varset([
-  function(){return mcq("Which option uses DEDUCTIVE reasoning to show that the sum of two odd numbers is always even?",
-    "Let the two numbers be \\(2a + 1\\) and \\(2b + 1\\). Their sum is \\(2a + 2b + 2 = 2(a + b + 1)\\), which is a multiple of \\(2\\) — so the sum is even for every pair of odd numbers",
-    ["\\(3 + 5 = 8\\), \\(7 + 9 = 16\\) and \\(11 + 13 = 24\\) — in each case the sum is even","Let the two numbers be \\(2a + 1\\) and \\(2b + 1\\). Their sum is \\(2ab + 2\\), which is even","A calculator checked \\(500\\) random pairs of odd numbers and every sum came out even"],
-    "Deductive reasoning starts from a general form \u2014 every odd number can be written as \\(2a + 1\\) — and the algebra settles the claim for all cases at once. Checking examples, even \\(500\\) of them, is inductive: it can suggest the claim but never prove it. And the option giving the sum as \\(2ab + 2\\) is algebra gone wrong \u2014 that is not what the sum is.",{});},
   function(){return mcq("Which option uses INDUCTIVE reasoning?",
     "\\(4 \\times 6 = 24\\), \\(2 \\times 8 = 16\\) and \\(10 \\times 12 = 120\\) — in every case tried, the product of two even numbers is even",
     ["Let the numbers be \\(2a\\) and \\(2b\\). Their product is \\(4ab = 2(2ab)\\), a multiple of \\(2\\), so it is even","An even number is defined as a multiple of \\(2\\), and a product of multiples of \\(2\\) is a multiple of \\(2\\)","Let one number be \\(2a + 1\\) and the other \\(2b + 1\\). Their product is \\(4ab + 2a + 2b + 1\\)"],
@@ -1467,7 +1463,13 @@ E("u7-reasoning-type",7,["2.7"],2,"var",varset([
   function(){return mcq("The angles in any triangle add to \\(180^\\circ\\). Priya uses that rule to work out the third angle of the triangle in her homework. What kind of reasoning is she using?",
     "Deductive \u2014 she applies a general rule to a specific case",
     ["Inductive \u2014 she is looking for a pattern in triangles","A counterexample \u2014 she is testing whether the rule fails","Circular \u2014 she assumes the very thing she is proving"],
-    "Deduction moves from the general to the specific: the rule covers every triangle, so it covers hers.",{});},
+    "Deduction moves from the general to the specific: the rule covers every triangle, so it covers hers.",{});}
+]));
+E("u7-proof-pick",7,["2.7"],3,"var",varset([
+  function(){return mcq("Which option uses DEDUCTIVE reasoning to show that the sum of two odd numbers is always even?",
+    "Let the two numbers be \\(2a + 1\\) and \\(2b + 1\\). Their sum is \\(2a + 2b + 2 = 2(a + b + 1)\\), which is a multiple of \\(2\\) — so the sum is even for every pair of odd numbers",
+    ["\\(3 + 5 = 8\\), \\(7 + 9 = 16\\) and \\(11 + 13 = 24\\) — in each case the sum is even","Let the two numbers be \\(2a + 1\\) and \\(2b + 1\\). Their sum is \\(2ab + 2\\), which is even","A calculator checked \\(500\\) random pairs of odd numbers and every sum came out even"],
+    "Deductive reasoning starts from a general form \u2014 every odd number can be written as \\(2a + 1\\) — and the algebra settles the claim for all cases at once. Checking examples, even \\(500\\) of them, is inductive: it can suggest the claim but never prove it. And the option giving the sum as \\(2ab + 2\\) is algebra gone wrong \u2014 that is not what the sum is.",{});},
   function(){return mcq("Which option uses DEDUCTIVE reasoning to show that the sum of three even integers is always even?",
     "Write the integers as \\(2a\\), \\(2b\\) and \\(2c\\). Their sum is \\(2a + 2b + 2c = 2(a + b + c)\\), a multiple of \\(2\\), so the sum is even",
     ["\\(2 + 4 + 6 = 12\\) and \\(4 + 8 + 10 = 22\\) — the sums are even","Write the integers as \\(2a\\), \\(2b\\) and \\(2c\\). Their sum is \\(2a + 2b + 2c = 6abc\\), which is even","A spreadsheet tested \\(500\\) triples of even integers and every sum was even"],
@@ -2286,7 +2288,7 @@ E("u1-law-formula",1,["7.1","7.2"],1,"var",varset([
     "From \\(\\frac{b}{\\sin B} = \\frac{a}{\\sin A}\\), multiply both sides by \\(\\sin B\\): \\(b = \\frac{a \\sin B}{\\sin A}\\). Side \\(b\\) pairs with angle \\(B\\), and the known pair is \\(a\\) with \\(A\\).",
     {});}
 ]));
-E("u1-smallest-angle",1,["7.2"],3,"gen",function(){
+E("u1-smallest-angle",1,["7.2"],2,"gen",function(){
   function rd(d){return d*Math.PI/180;}
   var s,m,l,tries=0;
   do{
@@ -2313,7 +2315,7 @@ E("u1-angle-between-paths",1,["7.2"],2,"gen",function(){
     "In \\("+t+"\\text{ h}\\) the "+ctx[0]+"s travel \\("+v1+" \\times "+t+" = "+d1+"\\text{ km}\\) and \\("+v2+" \\times "+t+" = "+d2+"\\text{ km}\\), so the triangle has sides \\("+d1+"\\text{ km}\\), \\("+d2+"\\text{ km}\\) and \\("+D+"\\text{ km}\\). The angle between the paths is at the "+ctx[1]+", opposite the \\("+D+"\\text{ km}\\) side: \\(\\cos\\theta = \\frac{"+d1+"^2 + "+d2+"^2 - "+D+"^2}{2 \\times "+d1+" \\times "+d2+"}\\), giving \\(\\theta = \\)<b>\\("+Math.round(ang)+"^\\circ\\)</b>.",
     {d1:d1,d2:d2,D:D});
 });
-E("u1-guy-wire",1,["7.3"],3,"gen",function(){
+E("u1-guy-wire",1,["7.3"],2,"gen",function(){
   function rd(d){return d*Math.PI/180;}
   var al=ri(42,72),be=ri(42,76),tries=0;
   while(Math.abs(al-be)<6&&tries<40){be=ri(42,76);tries++;}
@@ -2689,17 +2691,19 @@ E("u8-corresponding-algebra",8,["5.8"],2,"gen",function(){
   return q;
 });
 E("u8-exterior-algebra",8,["5.11"],3,"gen",function(){
-  function expr(cf,kn){return cf+"x"+(kn>0?" + "+kn:(kn<0?" − "+(-kn):""));}
-  function exprT(cf,kn){return expr(cf,kn).replace(/\u2212/g,"-");}
-  var x0,A1,A2,E,p,q2,r,s,t,u,tries=0;
+  function linT(cf,kn){return cf+"x"+(kn>0?" + "+kn:(kn<0?" - "+(-kn):""));}
+  function quadT(B,C){var out="x^2";if(B>0)out+=" + "+B+"x";else if(B<0)out+=" - "+(-B)+"x";if(C>0)out+=" + "+C;else if(C<0)out+=" - "+(-C);return out;}
+  var v,w,d,p,r,A1,A2,q,s,b,c,E,Ew,R1w,R2w,tries=0;
   do{
-    x0=ri(3,12);A1=ri(32,78);A2=ri(32,78);E=A1+A2;
-    p=ri(2,6);q2=A1-p*x0;r=ri(2,6);s=A2-r*x0;t=ri(2,7);u=E-t*x0;tries++;
-  }while((q2===0||s===0||u===0||q2<-30||q2>40||s<-30||s>40||u<-30||u>40)&&tries<90);
-  return numq("In \\(\\triangle ABC\\), the two remote interior angles for the exterior angle at \\(C\\) measure \\(("+exprT(p,q2)+")^\\circ\\) and \\(("+exprT(r,s)+")^\\circ\\). The exterior angle at \\(C\\) measures \\(("+exprT(t,u)+")^\\circ\\). What is the measure of the exterior angle at \\(C\\), in degrees?",
+    v=ri(4,12);d=ri(6,14);w=v+d;
+    p=ri(2,5);r=ri(2,5);A1=ri(35,80);A2=ri(35,80);
+    q=A1-p*v;s=A2-r*v;b=(p+r)-(v+w);c=q+s+v*w;E=A1+A2;
+    Ew=E+(p+r)*d;R1w=A1+p*d;R2w=A2+r*d;tries++;
+  }while((q===0||s===0||Math.abs(q)>45||Math.abs(s)>45||c<20||Ew<=180||Ew>320||R1w>=180||R2w>=180)&&tries<200);
+  return numq("In \\(\\triangle ABC\\), the two remote interior angles for the exterior angle at \\(C\\) measure \\(("+linT(p,q)+")^\\circ\\) and \\(("+linT(r,s)+")^\\circ\\). The exterior angle at \\(C\\) measures \\(("+quadT(b,c)+")^\\circ\\). What is the measure of the exterior angle at \\(C\\), in degrees?",
     E,0.011,
-    "An exterior angle equals the sum of the two remote interior angles: \\("+exprT(t,u)+" = ("+exprT(p,q2)+") + ("+exprT(r,s)+") = "+exprT(p+r,q2+s)+"\\). Solving gives \\(x = "+x0+"\\). The exterior angle is then \\("+t+" \\times "+x0+(u>0?" + "+u:" - "+(-u))+" = \\)<b>\\("+E+"^\\circ\\)</b>. (Check with the remote angles: \\("+A1+"^\\circ + "+A2+"^\\circ = "+E+"^\\circ\\).)",
-    {p:p,q:q2,r:r,s:s,t:t,u:u,x0:x0,A1:A1,A2:A2,E:E});
+    "An exterior angle equals the sum of the two remote interior angles: \\("+quadT(b,c)+" = ("+linT(p,q)+") + ("+linT(r,s)+")\\). Rearranging gives \\("+quadT(-(v+w),v*w)+" = 0\\), which factors as \\((x - "+v+")(x - "+w+") = 0\\), so \\(x = "+v+"\\) or \\(x = "+w+"\\). Try \\(x = "+w+"\\): the exterior angle would be \\("+Ew+"^\\circ\\) \u2014 greater than \\(180^\\circ\\), which no exterior angle of a triangle can be \u2014 so \\(x = "+w+"\\) is extraneous. With \\(x = "+v+"\\), the remote interior angles are \\("+A1+"^\\circ\\) and \\("+A2+"^\\circ\\), and the exterior angle is \\("+A1+" + "+A2+" = \\)<b>\\("+E+"^\\circ\\)</b>.",
+    {p:p,q:q,r:r,s:s,b:b,c:c,v:v,w:w,A1:A1,A2:A2,E:E,Ew:Ew});
 });
 
 /* ============ Tranche 7 (Oct 27): finish-line pass, tranche 2 of 3 ============
@@ -2981,7 +2985,7 @@ E("u2-vertex-shift",2,["4.15"],2,"gen",function(){
     "In \\(y = a(x - h)^2 + k\\) the vertex is \\((h, k)\\). Here the squared part is \\((x "+(h>0?"- "+h:"+ "+(-h))+")\\), so \\(h = "+h+"\\) (the sign flips from how it appears), and \\(k = "+k+"\\). Since \\(a = "+a+"\\) is "+(a>0?"positive":"negative")+", the graph opens "+open+". The vertex is <b>"+key+"</b>.",
     {a:a,h:h,k:k});
 });
-E("u2-factored-max-height",2,["4.2"],3,"gen",function(){
+E("u2-factored-max-height",2,["4.2"],2,"gen",function(){
   var a=pick([2,3,4,5]),r1=ri(3,14),r2=ri(1,8);if(r2>=r1)r2=r1-1;
   var S=r1+r2,max=a*S*S/4,tstar=(r1-r2)/2;
   return numq("A projectile's height is modelled by \\(h(t) = -"+a+"(t - "+r1+")(t + "+r2+")\\) metres, \\(t\\) seconds after launch. What is the greatest height it reaches? Give the exact value, in metres.",
