@@ -1050,7 +1050,7 @@ E("u2-vertex-form-params",2,["4.15"],1,"var",varset([
 E("u2-eq-from-vertex",2,["4.16"],2,"gen",function(){
   var h=ri(-4,4),k=ri(-5,5),a=pick([1,2,3,-1]);var dx=pick([1,2]);var px=h+dx,py=a*dx*dx+k;
   return numq("A parabola has vertex \\(("+h+", "+k+")\\) and passes through \\(("+px+", "+py+")\\). Using \\(y = a(x - h)^2 + k\\), find the value of \\(a\\).",
-    a,0.011,"Substitute the point: \\("+py+" = a("+px+" - ("+h+"))^2 + ("+k+") \\rightarrow "+py+" = "+(dx*dx)+"a + ("+k+") \\rightarrow a = \\frac{"+py+" - ("+k+")}{"+(dx*dx)+"} = \\)<b>\\("+a+"\\)</b>.",{h:h,k:k,a:a});
+    a,0.011,"Substitute the point: \\[\\begin{aligned} "+py+" &= a("+px+" - ("+h+"))^2 + ("+k+") \\\\ &= "+(dx*dx)+"a + ("+k+") \\\\ a &= \\frac{"+py+" - ("+k+")}{"+(dx*dx)+"} = "+a+" \\end{aligned}\\]",{h:h,k:k,a:a});
 });
 E("u2-max-context",2,["4.2"],2,"gen",function(){
   var v=pick([10,20,30,40,50,60,70]),h0=pick([0,2,5,8,10,12,15,20,25,30]);
@@ -1100,7 +1100,7 @@ E("u3-context-area",3,["4.3"],2,"gen",function(){
   var w=ri(3,15),d=ri(2,12);var A=w*(w+d);
   var obj=pick(["garden","patio","deck","vegetable plot","parking pad"]);
   return numq("A rectangular "+obj+"'s length is "+d+" m more than its width. Its area is \\("+A+"\\text{ m}^2\\). What is the width, in metres?",
-    w,0.011,"Let the width be \\(w\\). Then \\(w(w + "+d+") = "+A+" \\rightarrow w^2 + "+d+"w - "+A+" = 0 \\rightarrow (w + "+(w+d)+")(w - "+w+") = 0\\). The roots are \\(w = "+w+"\\) and \\(w = -"+(w+d)+"\\); a width cannot be negative, so the width is <b>\\("+w+"\\) m</b>.",{w:w,d:d});
+    w,0.011,"Let the width be \\(w\\). Then \\[\\begin{aligned} w(w + "+d+") &= "+A+" \\\\ w^2 + "+d+"w - "+A+" &= 0 \\\\ (w + "+(w+d)+")(w - "+w+") &= 0 \\end{aligned}\\] The roots are \\(w = "+w+"\\) and \\(w = -"+(w+d)+"\\); a width cannot be negative, so the width is <b>\\("+w+"\\) m</b>.",{w:w,d:d});
 });
 /* ============ Unit 4: Radicals ============ */
 function radStr(a,b){return (a===1?"":a)+"\u221A"+b;}
@@ -1130,13 +1130,13 @@ E("u4-simplify-add",4,["1.6"],2,"gen",function(){
 E("u4-multiply",4,["1.6"],2,"gen",function(){
   var k=pick([2,3,5,6,7,10,11,13,14,15]);var i=ri(1,3),j=ri(1,3);var x=k*i*i,y=k*j*j;
   return numq("The product \\(\\sqrt{"+x+"} \\times \\sqrt{"+y+"}\\) is a whole number. What is it?",
-    k*i*j,0.011,"\\(\\sqrt{"+x+"} \\times \\sqrt{"+y+"} = \\sqrt{"+x+" \\times "+y+"} = \\sqrt{"+(x*y)+"}\\). Notice \\("+x+" = "+k+" \\times "+(i*i)+"\\) and \\("+y+" = "+k+" \\times "+(j*j)+"\\), so the product is <b>\\("+k+" \\times "+i+" \\times "+j+" = "+(k*i*j)+"\\)</b>.",{p:[x,y]});
+    k*i*j,0.011,"\\[\\begin{aligned} \\sqrt{"+x+"} \\times \\sqrt{"+y+"} &= \\sqrt{"+x+" \\times "+y+"} \\\\ &= \\sqrt{"+(x*y)+"} \\end{aligned}\\] Notice \\("+x+" = "+k+" \\times "+(i*i)+"\\) and \\("+y+" = "+k+" \\times "+(j*j)+"\\), so the product is <b>\\("+k+" \\times "+i+" \\times "+j+" = "+(k*i*j)+"\\)</b>.",{p:[x,y]});
 });
 E("u4-rationalize",4,["1.7"],2,"gen",function(){
   var d=pick([2,3,5,6,7,10,11,13,14,15]);var c=d*ri(1,5);
   var frame=pick(["Rationalize the denominator: \\(\\frac{"+c+"}{\\sqrt{"+d+"}}\\).","Write \\(\\frac{"+c+"}{\\sqrt{"+d+"}}\\) with a rational denominator."]);
   return mcq(frame,radT(c/d,d),[sqrtT(c*d),"\\(\\frac{"+c+"\\sqrt{"+d+"}}{"+d+"}\\)","\\("+(c/d)+"\\sqrt{"+(d*d)+"}\\)"],
-    "Multiply top and bottom by "+sqrtT(d)+": \\(\\frac{"+c+"}{\\sqrt{"+d+"}} = \\frac{"+c+"\\sqrt{"+d+"}}{"+d+"} = "+(c/d)+"\\sqrt{"+d+"}\\). The denominator is now the rational number \\("+d+"\\).",{c:c,d:d});
+    "Multiply top and bottom by "+sqrtT(d)+": \\[\\begin{aligned} \\frac{"+c+"}{\\sqrt{"+d+"}} &= \\frac{"+c+"\\sqrt{"+d+"}}{"+d+"} \\\\ &= "+(c/d)+"\\sqrt{"+d+"} \\end{aligned}\\] The denominator is now the rational number \\("+d+"\\).",{c:c,d:d});
 });
 E("u4-restrictions",4,["1.5"],1,"gen",function(){
   var a=ri(-6,15);var flipped=Math.random()<0.5;
@@ -1149,7 +1149,7 @@ E("u4-restrictions",4,["1.5"],1,"gen",function(){
 E("u4-radical-equation",4,["1.9"],2,"gen",function(){
   var b=ri(3,7),a=ri(1,15);var x=b*b-a;
   return numq("Solve \\(\\sqrt{x + "+a+"} = "+b+"\\). Give the value of x.",
-    x,0.011,"Square both sides: \\(x + "+a+" = "+(b*b)+"\\), so \\(x = "+(b*b)+" - "+a+" = "+x+"\\). Check: \\(\\sqrt{"+x+" + "+a+"} = \\sqrt{"+(b*b)+"} = "+b+"\\) \u2713.",{a:a,b:b});
+    x,0.011,"Square both sides: \\[\\begin{aligned} x + "+a+" &= "+(b*b)+" \\\\ x &= "+(b*b)+" - "+a+" \\\\ &= "+x+" \\end{aligned}\\] Check: \\(\\sqrt{"+x+" + "+a+"} = \\sqrt{"+(b*b)+"} = "+b+"\\) \u2713.",{a:a,b:b});
 });
 E("u4-extraneous",4,["1.11"],3,"gen",function(){
   var b=pick([1,2,3,4]);var r=2*b+ri(1,6);var e=2*b+1-r;var a=b*b-r*e;
@@ -1379,7 +1379,7 @@ E("u8-co-interior",8,["5.8"],2,"gen",function(){
 E("u8-alternate-algebra",8,["5.8"],2,"gen",function(){
   var x=ri(8,20);var a=3,b=ri(1,15);var val=a*x+b;
   var q = numq("Two parallel lines are cut by a transversal. Alternate interior angles measure \\(("+a+"x + "+b+")^\\circ\\) and \\("+val+"^\\circ\\). Find \\(x\\).",
-    x,0.011,"Alternate interior angles between parallel lines are equal: \\("+a+"x + "+b+" = "+val+" \\rightarrow "+a+"x = "+(val-b)+" \\rightarrow x = \\)<b>\\("+x+"\\)</b>.",{x:x});
+    x,0.011,"Alternate interior angles between parallel lines are equal: \\[\\begin{aligned} "+a+"x + "+b+" &= "+val+" \\\\ "+a+"x &= "+(val-b)+" \\\\ x &= "+x+" \\end{aligned}\\]",{x:x});
   q.figure = transversalSVG("TR", "("+a+"x + "+b+")°", "BL", val+"°");
   return q;
 });
@@ -1822,7 +1822,7 @@ E("u2-standard-from-factored",2,["4.5"],2,"gen",function(){
   return mcq("Which function is the standard form of "+factT(a,r1,r2)+"?",
     "\\(y = "+quadB(a,B,C)+"\\)",
     ["\\(y = "+quadB(a,-B,C)+"\\)","\\(y = "+quadB(a,B,-C)+"\\)","\\(y = "+quadB(a,-B,-C)+"\\)"],
-    "Expand the factors: \\("+fsB(r1)+fsB(r2)+" = x^2 - ("+r1+" + "+r2+")x + ("+r1+")("+r2+") = x^2 "+((-(r1+r2))>0?"+ ":"- ")+Math.abs(r1+r2)+"x "+(r1*r2>0?"+ ":"- ")+Math.abs(r1*r2)+"\\). Multiplying through by \\("+a+"\\) gives \\(y = "+quadB(a,B,C)+"\\). Watch the signs: the middle coefficient is \\(-"+a+" \\times ("+r1+" + "+r2+") = "+B+"\\).",
+    "Expand the factors: \\[\\begin{aligned} "+fsB(r1)+fsB(r2)+" &= x^2 - ("+r1+" + "+r2+")x + ("+r1+")("+r2+") \\\\ &= x^2 "+((-(r1+r2))>0?"+ ":"- ")+Math.abs(r1+r2)+"x "+(r1*r2>0?"+ ":"- ")+Math.abs(r1*r2)+" \\end{aligned}\\] Multiplying through by \\("+a+"\\) gives \\(y = "+quadB(a,B,C)+"\\). Watch the signs: the middle coefficient is \\(-"+a+" \\times ("+r1+" + "+r2+") = "+B+"\\).",
     {a:a,r1:r1,r2:r2});
 });
 E("u2-revenue-model",2,["4.2"],2,"gen",function(){
@@ -1912,7 +1912,7 @@ E("u3-solve-square",3,["4.8"],1,"gen",function(){
   return mcq("Solve: \\("+(A===1?"":A)+"x^2 = "+B+"\\).",
     "\\(x = \\pm "+frB(m,n)+"\\)",
     ["\\(x = "+frB(m,n)+"\\) only","\\(x = \\pm "+frB(n,m)+"\\)",d3],
-    "Divide both sides by \\("+A+"\\): \\(x^2 = \\frac{"+B+"}{"+A+"} = "+frB(B,A)+"\\). Take the square root of both sides, remembering the negative root: \\(x = \\pm "+frB(m,n)+"\\).",
+    "Divide both sides by \\("+A+"\\), then take the square root of both sides, remembering the negative root: \\[\\begin{aligned} x^2 &= \\frac{"+B+"}{"+A+"} = "+frB(B,A)+" \\\\ x &= \\pm "+frB(m,n)+" \\end{aligned}\\]",
     {m:m,n:n,k:k});
 });
 E("u3-gcf-solve",3,["4.8"],2,"gen",function(){
@@ -1947,7 +1947,7 @@ E("u3-border",3,["4.3"],3,"gen",function(){
   ]);
   return numq(c.s+" Find the width of the "+c.n+", in m.",
     w,0.011,
-    "Let the width be \\(w\\). The border adds \\(w\\) to every side, so the outside dimensions are \\(("+L+" + 2w)\\) by \\(("+W+" + 2w)\\), and \\(("+L+" + 2w)("+W+" + 2w) = "+T+"\\). Expanding: \\(4w^2 + "+(2*(L+W))+"w + "+(L*W)+" = "+T+"\\), or \\(4w^2 + "+(2*(L+W))+"w - "+(T-L*W)+" = 0\\). The quadratic formula gives \\(w = "+w+"\\) or a negative value; a width cannot be negative, so the width is <b>\\("+w+"\\) m</b>.",
+    "Let the width be \\(w\\). The border adds \\(w\\) to every side, so the outside dimensions are \\(("+L+" + 2w)\\) by \\(("+W+" + 2w)\\), and \\[\\begin{aligned} ("+L+" + 2w)("+W+" + 2w) &= "+T+" \\\\ 4w^2 + "+(2*(L+W))+"w + "+(L*W)+" &= "+T+" \\\\ 4w^2 + "+(2*(L+W))+"w - "+(T-L*W)+" &= 0 \\end{aligned}\\] The quadratic formula gives \\(w = "+w+"\\) or a negative value; a width cannot be negative, so the width is <b>\\("+w+"\\) m</b>.",
     {L:L,W:W,w:w});
 });
 E("u3-exact-roots",3,["4.9"],2,"gen",function(){
@@ -1971,7 +1971,7 @@ E("u3-exact-roots",3,["4.9"],2,"gen",function(){
   var g=g2(g2(Math.abs(b),sq),2*a);
   return mcq("What are the exact roots of "+"\\("+quadB(a,b,c)+" = 0\\)"+"?",
     key,[d1,d2,d3],
-    "Quadratic formula: \\(x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} = \\frac{"+(-b)+" \\pm \\sqrt{"+D+"}}{"+(2*a)+"}\\). Since \\("+D+" = "+(sq*sq)+" \\times "+d0+"\\), \\(\\sqrt{"+D+"} = "+sq+"\\sqrt{"+d0+"}\\)"+(g>1?", and dividing numerator and denominator by \\("+g+"\\)":"")+", giving <b>"+key+"</b>.",
+    "Quadratic formula: \\[\\begin{aligned} x &= \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\\\ &= \\frac{"+(-b)+" \\pm \\sqrt{"+D+"}}{"+(2*a)+"} \\end{aligned}\\] Since \\("+D+" = "+(sq*sq)+" \\times "+d0+"\\), \\(\\sqrt{"+D+"} = "+sq+"\\sqrt{"+d0+"}\\)"+(g>1?", and dividing numerator and denominator by \\("+g+"\\)":"")+", giving <b>"+key+"</b>.",
     {a:a,b:b,c:c});
 });
 
@@ -2059,7 +2059,7 @@ E("u4-cube-equation",4,["1.9"],2,"gen",function(){
   var r=ri(-4,5),p=pick([1,2,3]),x0=ri(-12,20);
   var q=r*r*r-p*x0;
   var inside=(p===1?"x":p+"x")+(q>0?" + "+q:(q<0?" - "+(-q):""));
-  var sol="Cube both sides: \\("+inside+" = {"+r+"}^{3} = "+(r*r*r)+"\\). So \\("+(p===1?"x":p+"x")+" = "+(r*r*r)+(q>0?" - "+q:(q<0?" + "+(-q):""))+" = "+(p*x0)+"\\)."+(p===1?"":" Divide by \\("+p+"\\):")+" \\(x\\) = <b>\\("+x0+"\\)</b>. (Cube roots accept negative inputs, so there is no restriction to check.)";
+  var sol="Cube both sides"+(p>1?", then divide by \\("+p+"\\)":"")+": \\[\\begin{aligned} "+inside+" &= {"+r+"}^{3} = "+(r*r*r)+" \\\\ "+(p===1?"x":p+"x")+" &= "+(r*r*r)+(q>0?" - "+q:(q<0?" + "+(-q):""))+" = "+(p*x0)+" \\\\ x &= "+x0+" \\end{aligned}\\] (Cube roots accept negative inputs, so there is no restriction to check.)";
   return numq("Solve: \\(\\sqrt[3]{"+inside+"} = "+r+"\\). Give the value of x.",
     x0,0.011,sol,{r:r,p:p,x0:x0,q:q});
 });
@@ -2144,7 +2144,7 @@ E("u3-solve-height",3,["4.3"],2,"gen",function(){
   var ctx=pick([["missile","fired from a ship","above the water"],["rocket","launched from a platform","above the ground"],["flare","fired from a cliff top","above the sea"]]);
   return numq("A "+ctx[0]+" is "+ctx[1]+". Its height "+ctx[2]+" after t seconds is \\(h(t) = -5t^2 + "+b+"t + "+c0+"\\) (metres). At what time is it exactly "+H+" m "+ctx[2]+"? Give the "+(later?"later":"earlier")+" time, in s.",
     later?t2:t1,0.011,
-    "Set \\(h(t) = "+H+"\\): \\(-5t^2 + "+b+"t + "+c0+" = "+H+"\\), so \\(-5t^2 + "+b+"t + "+(c0-H)+" = 0\\). Divide by \\(-5\\): \\(t^2 - "+(t1+t2)+"t + "+(t1*t2)+" = 0\\), which factors as \\((t - "+t1+")(t - "+t2+") = 0\\). The "+ctx[0]+" is at "+H+" m at \\(t = "+t1+"\\) s and \\(t = "+t2+"\\) s; the "+(later?"later":"earlier")+" time is <b>\\("+(later?t2:t1)+"\\) s</b>.",
+    "Set \\(h(t) = "+H+"\\), then divide by \\(-5\\) and factor: \\[\\begin{aligned} -5t^2 + "+b+"t + "+c0+" &= "+H+" \\\\ -5t^2 + "+b+"t + "+(c0-H)+" &= 0 \\\\ t^2 - "+(t1+t2)+"t + "+(t1*t2)+" &= 0 \\\\ (t - "+t1+")(t - "+t2+") &= 0 \\end{aligned}\\] The "+ctx[0]+" is at "+H+" m at \\(t = "+t1+"\\) s and \\(t = "+t2+"\\) s; the "+(later?"later":"earlier")+" time is <b>\\("+(later?t2:t1)+"\\) s</b>.",
     {t1:t1,t2:t2,H:H,later:later});
 });
 E("u3-model-number",3,["4.3"],2,"var",varset([
@@ -2221,7 +2221,7 @@ E("u8-triangle-algebra",8,["5.8"],2,"gen",function(){
   var x=180/(a+b+c),vi=ri(0,2),coef=cb[vi];
   return numq("The three angles of a triangle measure \\(("+a+"x)^\\circ\\), \\(("+b+"x)^\\circ\\) and \\(("+c+"x)^\\circ\\). What is the measure of the \\(("+coef+"x)^\\circ\\) angle, in degrees?",
     coef*x,0.011,
-    "The angles add to \\(180^\\circ\\): \\(("+a+" + "+b+" + "+c+")x = 180\\), so \\("+(a+b+c)+"x = 180\\) and \\(x = "+x+"\\). The angle asked for is \\("+coef+"x = "+coef+" \\times "+x+" = \\)<b>\\("+(coef*x)+"^\\circ\\)</b>.",
+    "The angles add to \\(180^\\circ\\): \\[\\begin{aligned} ("+a+" + "+b+" + "+c+")x &= 180 \\\\ "+(a+b+c)+"x &= 180 \\\\ x &= "+x+" \\end{aligned}\\] The angle asked for is \\("+coef+"x = "+coef+" \\times "+x+" = \\)<b>\\("+(coef*x)+"^\\circ\\)</b>.",
     {cb:cb,vi:vi});
 });
 E("u8-polygon-inverse",8,["5.5"],1,"gen",function(){
@@ -2602,7 +2602,7 @@ E("u3-two-numbers",3,["4.3"],2,"gen",function(){
   var N=n*(n+step);
   return numq("The product of two positive "+mode[0]+" is "+N+". What is the smaller of the two integers?",
     n,0.011,
-    "Let the smaller integer be \\(x\\); the next one is \\(x + "+step+"\\). Then \\(x(x + "+step+") = "+N+"\\), so \\(x^2 + "+step+"x - "+N+" = 0\\), which factors as \\((x - "+n+")(x + "+(n+step)+") = 0\\). The positive root is \\(x = "+n+"\\) (the other root, \\(-"+(n+step)+"\\), is rejected because the integers are positive). The two integers are \\("+n+"\\) and \\("+(n+step)+"\\), and indeed \\("+n+" \\times "+(n+step)+" = "+N+"\\).",
+    "Let the smaller integer be \\(x\\); the next one is \\(x + "+step+"\\). Then \\[\\begin{aligned} x(x + "+step+") &= "+N+" \\\\ x^2 + "+step+"x - "+N+" &= 0 \\\\ (x - "+n+")(x + "+(n+step)+") &= 0 \\end{aligned}\\] The positive root is \\(x = "+n+"\\) (the other root, \\(-"+(n+step)+"\\), is rejected because the integers are positive). The two integers are \\("+n+"\\) and \\("+(n+step)+"\\), and indeed \\("+n+" \\times "+(n+step)+" = "+N+"\\).",
     {n:n,step:step,N:N,mode:mode[0]});
 });
 
@@ -2624,7 +2624,7 @@ E("u4-divide-radicals",4,["1.6"],2,"gen",function(){
   for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
   return mcq("Simplify: \\(\\frac{\\sqrt{"+A+"}}{\\sqrt{"+B+"}}\\). Give the answer in simplest radical form.",
     key,ds,
-    "Combine under one root: \\(\\frac{\\sqrt{"+A+"}}{\\sqrt{"+B+"}} = \\sqrt{\\frac{"+A+"}{"+B+"}} = \\sqrt{"+(k*k*m)+"}\\). Then simplify: \\(\\sqrt{"+(k*k*m)+"} = "+k+"\\sqrt{"+m+"}\\) because \\("+(k*k)+"\\) is a perfect square factor. In simplest form: <b>"+key+"</b>.",
+    "Combine under one root, then simplify (\\("+(k*k)+"\\) is a perfect square factor): \\[\\begin{aligned} \\frac{\\sqrt{"+A+"}}{\\sqrt{"+B+"}} &= \\sqrt{\\frac{"+A+"}{"+B+"}} \\\\ &= \\sqrt{"+(k*k*m)+"} \\\\ &= "+k+"\\sqrt{"+m+"} \\end{aligned}\\] In simplest form: <b>"+key+"</b>.",
     {A:A,B:B,k:k,m:m,d0:d0});
 });
 E("u4-rationalize-coefficient",4,["1.7"],2,"gen",function(){
@@ -2824,7 +2824,7 @@ E("u4-entire-cube",4,["1.1"],1,"gen",function(){
   return mcq("Express "+rad3T(a,b)+" as an entire radical.",
     key,
     [cbrtT(a*b),cbrtT(a*a*b),cbrtT((a+1)*(a+1)*(a+1)*b)],
-    "The coefficient must be cubed to move under a cube root: \\("+a+" = \\sqrt[3]{"+(a*a*a)+"}\\). So "+rad3T(a,b)+" = \\(\\sqrt[3]{"+(a*a*a)+" \\times "+b+"}\\) = "+key+". (Squaring the coefficient would be right for a square root, not a cube root.)",
+    "The coefficient must be cubed to move under a cube root: \\("+a+" = \\sqrt[3]{"+(a*a*a)+"}\\). So \\[\\begin{aligned} "+a+"\\sqrt[3]{"+b+"} &= \\sqrt[3]{"+(a*a*a)+" \\times "+b+"} \\\\ &= \\sqrt[3]{"+(a*a*a*b)+"} \\end{aligned}\\] (Squaring the coefficient would be right for a square root, not a cube root.)",
     {a:a,b:b});
 });
 E("u4-product-simplify",4,["1.6"],2,"gen",function(){
@@ -3015,7 +3015,7 @@ E("u3-formula-exact-roots",3,["4.9"],2,"gen",function(){
   for(var i=0;i<cand.length&&ds.length<3;i++){if(cand[i]!==key&&ds.indexOf(cand[i])<0)ds.push(cand[i]);}
   return mcq("Solve "+"\\("+quadB(a,b,c)+" = 0\\)"+". Which option gives the roots in simplest exact form?",
     key,ds,
-    "\\(x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} = \\frac{"+(-b)+" \\pm \\sqrt{"+D+"}}{"+(2*a)+"}\\). "+(t>1?"Since \\(\\sqrt{"+D+"} = "+t+"\\sqrt{"+Dp+"}\\), ":"Since \\(\\sqrt{"+D+"}\\) does not simplify, ")+(g>1?"and the whole fraction divides by \\("+g+"\\), ":"")+"the simplest exact form is <b>"+key+"</b>.",
+    "\\[\\begin{aligned} x &= \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\\\ &= \\frac{"+(-b)+" \\pm \\sqrt{"+D+"}}{"+(2*a)+"} \\end{aligned}\\] "+(t>1?"Since \\(\\sqrt{"+D+"} = "+t+"\\sqrt{"+Dp+"}\\), ":"Since \\(\\sqrt{"+D+"}\\) does not simplify, ")+(g>1?"and the whole fraction divides by \\("+g+"\\), ":"")+"the simplest exact form is <b>"+key+"</b>.",
     {a:a,b:b,c:c,D:D,t:t,Dp:Dp,num:num,coef:coef,den:den});
 });
 E("u3-squares-area",3,["4.3"],2,"gen",function(){
