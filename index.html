@@ -2646,7 +2646,7 @@ E("u4-conjugate-area",4,["1.6"],2,"gen",function(){
   var ctx=pick(["rectangular garden","rectangular rug","rectangular solar panel","rectangular patio"]);
   return numq("A "+ctx+" measures \\(("+a+" + \\sqrt{"+b+"})\\) m by \\(("+a+" - \\sqrt{"+b+"})\\) m. What is its area, in \\(m^2\\)?",
     area,0.011,
-    "Area = \\(("+a+" + \\sqrt{"+b+"})("+a+" - \\sqrt{"+b+"})\\), a difference of squares: \\("+a+"^2 - (\\sqrt{"+b+"})^2 = "+(a*a)+" - "+b+" = "+area+"\\), so the area is <b>\\("+area+"\text{ m}^2\\)</b>. The radical terms cancel, which is why conjugate pairs give a whole-number area.",
+    "Area = \\(("+a+" + \\sqrt{"+b+"})("+a+" - \\sqrt{"+b+"})\\), a difference of squares: \\("+a+"^2 - (\\sqrt{"+b+"})^2 = "+(a*a)+" - "+b+" = "+area+"\\), so the area is <b>\\("+area+"\\text{ m}^2\\)</b>. The radical terms cancel, which is why conjugate pairs give a whole-number area.",
     {a:a,b:b,area:area});
 });
 
