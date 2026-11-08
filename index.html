@@ -101,10 +101,93 @@
   .summarybox{margin-top:14px;border-top:2px solid #dfe6f0;padding-top:10px;}
   details#builderBox{margin-bottom:14px;}
   details#builderBox>summary{cursor:pointer;font-size:1.15rem;font-weight:bold;padding:12px 16px;background:#fff;border:1px solid #dfe6f0;border-radius:10px;}
+  /* ============ Accessibility settings (pilot, Nov 2026) ============
+     Device-local display settings, stored in localStorage and applied as
+     data-a11y-* attributes on <html> (pre-paint bootstrap in <head>;
+     applyA11y() in the UI script). Screen-only by construction: text-size
+     and spacing rules are anchored to online-practice elements inside #app
+     (printed output is built in #printArea, outside #app, from .pq markup
+     these rules never touch), and the theme/font rules are reset inside
+     @media print at the end of this block. No font-family on any universal
+     selector anywhere here: that breaks KaTeX glyphs. */
+  :focus-visible{outline:3px solid var(--accent2);outline-offset:2px;}
+  details#a11yBox{margin-bottom:14px;}
+  details#a11yBox>summary{cursor:pointer;font-size:1.15rem;font-weight:bold;padding:12px 16px;background:#fff;border:1px solid #dfe6f0;border-radius:10px;}
+  .a11yGrid{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;}
+  .a11yGrid label{font-size:.85rem;display:flex;flex-direction:column;gap:4px;}
+  .a11yGrid label.chk{flex-direction:row;align-items:center;gap:6px;font-size:.9rem;}
+  /* Text size: online practice only (.q items, worked examples, reference
+     panels). Sheet and exam markup (.pq, .sheetPrev, #printArea) is
+     deliberately not matched, so printables keep their exact sizes. */
+  html[data-a11y-text="large"] #app .q .prompt,html[data-a11y-text="large"] #app .exbox,html[data-a11y-text="large"] #app .refbody{font-size:1.12rem;}
+  html[data-a11y-text="large"] #app .q .opts label,html[data-a11y-text="large"] #app .exbox .opts label{font-size:1.09rem;}
+  html[data-a11y-text="large"] #app .q .fb,html[data-a11y-text="large"] #app .q .sol,html[data-a11y-text="large"] #app .q .rep{font-size:1.06rem;}
+  html[data-a11y-text="large"] #app .q input[type=text].ans{font-size:1.1rem;}
+  html[data-a11y-text="xlarge"] #app .q .prompt,html[data-a11y-text="xlarge"] #app .exbox,html[data-a11y-text="xlarge"] #app .refbody{font-size:1.3rem;}
+  html[data-a11y-text="xlarge"] #app .q .opts label,html[data-a11y-text="xlarge"] #app .exbox .opts label{font-size:1.26rem;}
+  html[data-a11y-text="xlarge"] #app .q .fb,html[data-a11y-text="xlarge"] #app .q .sol,html[data-a11y-text="xlarge"] #app .q .rep{font-size:1.22rem;}
+  html[data-a11y-text="xlarge"] #app .q input[type=text].ans{font-size:1.28rem;}
+  /* Roomier spacing, same online-practice scope as text size. */
+  html[data-a11y-spacing="roomy"] #app .q .prompt{line-height:1.9;letter-spacing:.015em;}
+  html[data-a11y-spacing="roomy"] #app .q .opts{gap:12px;}
+  html[data-a11y-spacing="roomy"] #app .q .opts label{line-height:1.7;}
+  html[data-a11y-spacing="roomy"] #app .q .fb,html[data-a11y-spacing="roomy"] #app .q .sol{line-height:1.85;}
+  html[data-a11y-spacing="roomy"] #app .exbox,html[data-a11y-spacing="roomy"] #app .refbody{line-height:1.85;}
+  /* Reading font: same element list as the base font rule, so nothing new
+     is matched. KaTeX spans inherit from the .katex element itself, whose
+     own font comes from katex.min.css, so math is untouched. All fonts are
+     locally installed system fonts; nothing is fetched. */
+  html[data-a11y-font="reading"] body,html[data-a11y-font="reading"] button,html[data-a11y-font="reading"] input,html[data-a11y-font="reading"] select,html[data-a11y-font="reading"] textarea{font-family:"Comic Sans MS","Comic Neue","Chalkboard SE","Trebuchet MS",Verdana,Geneva,sans-serif;}
+  /* Reduced motion: kills transitions/animations and CSS smooth scroll;
+     the JS scrollIntoView calls check the same setting via scrollBehavior(). */
+  html[data-a11y-motion="reduced"] *,html[data-a11y-motion="reduced"] *::before,html[data-a11y-motion="reduced"] *::after{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
+  /* Dark, high-contrast theme: variable swap plus overrides for the few
+     surfaces with hard-coded light colours. The sheet preview keeps its
+     paper look on purpose: it represents the printed page. */
+  html[data-a11y-theme="dark"]{--ink:#eef4f1;--bg:#0e1418;--card:#1a232a;--line:#43525b;--good:#4ade80;--bad:#f87171;}
+  html[data-a11y-theme="dark"] summary,html[data-a11y-theme="dark"] .group h3{color:#5eead4;}
+  html[data-a11y-theme="dark"] .sub,html[data-a11y-theme="dark"] .hint,html[data-a11y-theme="dark"] .repstat{color:#b9c6cc;}
+  html[data-a11y-theme="dark"] .sol,html[data-a11y-theme="dark"] .thinNote{background:#2b2118;}
+  html[data-a11y-theme="dark"] .rep{background:#141c21;}
+  html[data-a11y-theme="dark"] .refpanel,html[data-a11y-theme="dark"] .timerbar{background:#16202a;border-color:#33475c;}
+  html[data-a11y-theme="dark"] .exbox{background:#1d2a1a;border-color:#4a6741;}
+  html[data-a11y-theme="dark"] .summarybox{border-top-color:#33475c;}
+  html[data-a11y-theme="dark"] button.alt{background:var(--card);}
+  html[data-a11y-theme="dark"] .indbox{background:var(--card);}
+  html[data-a11y-theme="dark"] details#builderBox>summary,html[data-a11y-theme="dark"] details#a11yBox>summary{background:var(--card);border-color:var(--line);}
+  html[data-a11y-theme="dark"] input,html[data-a11y-theme="dark"] select,html[data-a11y-theme="dark"] textarea{background:#222e35;color:var(--ink);border-color:var(--line);}
+  html[data-a11y-theme="dark"] :focus-visible{outline-color:#ffd166;}
+  /* Print safety: whatever the screen settings, paper gets the standard
+     palette and font. (!important and the repeated attribute selectors
+     keep these ahead of the screen rules above in the print cascade.) */
+  @media print{
+    html[data-a11y-theme="dark"]{--ink:#1c2b33 !important;--bg:#ffffff !important;--card:#ffffff !important;--line:#d8d2c4 !important;--good:#15803d !important;--bad:#b91c1c !important;}
+    html[data-a11y-font="reading"] body{font-family:Verdana,Geneva,sans-serif !important;}
+  }
 </style>
 <link rel="stylesheet" href="katex/katex.min.css">
 <script src="katex/katex.min.js"></script>
 <script src="katex/contrib/auto-render.min.js"></script>
+<script>
+/* Accessibility pre-paint bootstrap: copies this device's saved display
+   settings (localStorage key m2201-a11y-v1) onto <html> as data-a11y-*
+   attributes before the page paints, so a returning student never sees a
+   flash of the default theme or text size. The full settings code
+   (a11yLoad / a11yApply / a11yInit) lives in the UI script; keep the key
+   and the attribute values in sync with it. Fully guarded: any failure
+   just leaves the defaults in place. */
+(function(){try{
+  var store=window.localStorage||null;if(!store)return;
+  var raw=store.getItem("m2201-a11y-v1");if(!raw)return;
+  var p=JSON.parse(raw);if(!p)return;
+  var h=document.documentElement;
+  if(p.text==="large"||p.text==="xlarge")h.setAttribute("data-a11y-text",p.text);
+  if(p.theme==="dark")h.setAttribute("data-a11y-theme","dark");
+  if(p.font)h.setAttribute("data-a11y-font","reading");
+  if(p.spacing)h.setAttribute("data-a11y-spacing","roomy");
+  if(p.motion)h.setAttribute("data-a11y-motion","reduced");
+}catch(e){}})();
+</script>
 </head>
 <body>
 <div class="wrap" id="app">
@@ -120,6 +203,32 @@
     <div class="modebar"><button type="button" id="faceStart" style="font-size:1.15rem;padding:14px 30px;">Start practising</button></div>
     <p class="hint">Want different units, a printed sheet or a practice exam? Open "Build your own practice" below.</p>
   </div>
+
+  <details id="a11yBox">
+  <summary>Accessibility settings</summary>
+  <div class="card">
+    <div class="a11yGrid">
+      <label>Text size
+        <select id="a11yText">
+          <option value="std">Standard</option>
+          <option value="large">Large</option>
+          <option value="xlarge">Extra large</option>
+        </select>
+      </label>
+      <label>Colour theme
+        <select id="a11yTheme">
+          <option value="light">Light</option>
+          <option value="dark">Dark (high contrast)</option>
+        </select>
+      </label>
+      <label class="chk"><input type="checkbox" id="a11yFont"> Reading font (letter shapes that are easier to tell apart)</label>
+      <label class="chk"><input type="checkbox" id="a11ySpacing"> Extra spacing between lines</label>
+      <label class="chk"><input type="checkbox" id="a11yMotion"> Reduce motion</label>
+      <button type="button" id="a11yReset" class="alt">Reset display settings</button>
+    </div>
+    <p class="hint">These settings are saved on this device only. They are never part of a shared link, and they never change printed sheets or exams.</p>
+  </div>
+  </details>
 
   <details id="builderBox">
   <summary>Build your own practice</summary>
@@ -3380,6 +3489,53 @@ function drawSet(units,inds,n,mix,orderMode,cap,pred){
 }
 /* ============ UI ============ */
 var $=function(id){return document.getElementById(id);};
+/* ============ Accessibility settings (pilot, Nov 2026) ============
+   Device-local display settings: text size, dark high-contrast theme,
+   reading font, roomier spacing, reduced motion. Persisted in
+   localStorage under A11Y_KEY and applied as data-a11y-* attributes on
+   <html>; the CSS at the end of the <style> block keys off those
+   attributes, and a bootstrap in <head> applies them before first paint.
+   Deliberately NOT part of settings()/settingsToURL(): shared links carry
+   practice settings only, never a student's display settings. */
+var A11Y_KEY="m2201-a11y-v1";
+var a11y={text:"std",theme:"light",font:false,spacing:false,motion:false};
+function a11yStore(){try{return window.localStorage||null;}catch(e){return null;}}
+function a11yLoad(){
+  var had=false,store=a11yStore();
+  if(store){try{var raw=store.getItem(A11Y_KEY);if(raw){var p=JSON.parse(raw);if(p){had=true;
+    if(p.text==="std"||p.text==="large"||p.text==="xlarge")a11y.text=p.text;
+    if(p.theme==="light"||p.theme==="dark")a11y.theme=p.theme;
+    a11y.font=!!p.font;a11y.spacing=!!p.spacing;a11y.motion=!!p.motion;}}}catch(e){}}
+  if(!had&&typeof window!=="undefined"&&window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)a11y.motion=true;
+}
+function a11ySave(){var store=a11yStore();if(!store)return;try{store.setItem(A11Y_KEY,JSON.stringify(a11y));}catch(e){}}
+function a11yApply(){
+  var h=document.documentElement;if(!h||!h.setAttribute)return;
+  function set(name,val){if(val)h.setAttribute(name,val);else h.removeAttribute(name);}
+  set("data-a11y-text",a11y.text==="std"?null:a11y.text);
+  set("data-a11y-theme",a11y.theme==="dark"?"dark":null);
+  set("data-a11y-font",a11y.font?"reading":null);
+  set("data-a11y-spacing",a11y.spacing?"roomy":null);
+  set("data-a11y-motion",a11y.motion?"reduced":null);
+  var t=$("a11yText");if(t)t.value=a11y.text;
+  var th=$("a11yTheme");if(th)th.value=a11y.theme;
+  var f=$("a11yFont");if(f)f.checked=!!a11y.font;
+  var sp=$("a11ySpacing");if(sp)sp.checked=!!a11y.spacing;
+  var mo=$("a11yMotion");if(mo)mo.checked=!!a11y.motion;
+}
+/* The one place smooth scrolling is decided: every scrollIntoView in the
+   app goes through this, so Reduce motion is honoured everywhere. */
+function scrollBehavior(){return a11y.motion?"auto":"smooth";}
+function a11yInit(){
+  a11yLoad();a11yApply();
+  function on(id,fn){var el=$(id);if(el)el.addEventListener("change",fn);}
+  on("a11yText",function(){a11y.text=$("a11yText").value;a11ySave();a11yApply();});
+  on("a11yTheme",function(){a11y.theme=$("a11yTheme").value;a11ySave();a11yApply();});
+  on("a11yFont",function(){a11y.font=!!$("a11yFont").checked;a11ySave();a11yApply();});
+  on("a11ySpacing",function(){a11y.spacing=!!$("a11ySpacing").checked;a11ySave();a11yApply();});
+  on("a11yMotion",function(){a11y.motion=!!$("a11yMotion").checked;a11ySave();a11yApply();});
+  var r=$("a11yReset");if(r)r.addEventListener("click",function(){a11y={text:"std",theme:"light",font:false,spacing:false,motion:false};a11ySave();a11yApply();});
+}
 /* Typeset TeX segments \( ... \) in generated content with KaTeX (self-hosted
    under katex/). Existing plain-Unicode strings pass through untouched. If
    KaTeX failed to load, strip the delimiters so the TeX source still reads
@@ -3593,7 +3749,7 @@ function startOnline(){
   Array.prototype.forEach.call(box.querySelectorAll("[data-repcopy]"),function(b){b.addEventListener("click",function(){copyReport(+b.getAttribute("data-repcopy"));});});
   $("againBtn").addEventListener("click",startOnline);
   if($("gradeBtn"))$("gradeBtn").addEventListener("click",gradeAll);
-  box.scrollIntoView({behavior:"smooth"});
+  box.scrollIntoView({behavior:scrollBehavior()});
 }
 function stepHTML(h){
   var out="",i=0,inTex=false;
@@ -3675,7 +3831,7 @@ function gradeAll(){
   maybeSummary();
   updateScore();
   var b=$("gradeBtn");if(b){b.disabled=true;b.textContent="Answers checked";}
-  $("score").scrollIntoView({behavior:"smooth",block:"center"});
+  $("score").scrollIntoView({behavior:scrollBehavior(),block:"center"});
 }
 var _probeCache={};
 function probeType(e){if(_probeCache[e.id])return _probeCache[e.id];var t="mc",seen=null;for(var i=0;i<4;i++){try{var q=e.gen();if(q&&q.type){if(q.type==="mc"){seen="mc";break;}seen=seen||q.type;}}catch(err){}}if(seen)t=seen;_probeCache[e.id]=t;return t;}
@@ -4612,7 +4768,7 @@ function setPreset(units,cap){state.units=units;state.inds=[];state.midCap=!!cap
 $("presetMid").addEventListener("click",function(){setPreset([1,2,3,4],true);});
 $("presetFinal").addEventListener("click",function(){setPreset([5,6,7,8]);});
 $("presetAll").addEventListener("click",function(){setPreset([1,2,3,4,5,6,7,8]);});
-$("faceStart").addEventListener("click",function(){if(!settings().units.length){var bb=$("builderBox");bb.open=true;bb.scrollIntoView({behavior:"smooth"});return;}startOnline();});
+$("faceStart").addEventListener("click",function(){if(!settings().units.length){var bb=$("builderBox");bb.open=true;bb.scrollIntoView({behavior:scrollBehavior()});return;}startOnline();});
 $("seedGen").addEventListener("click",function(){var words=["otter","maple","harbour","compass","lantern","meadow","pebble","willow","falcon","juniper","birch","cove"];$("seedIn").value=pick(words)+"-"+ri(10,99);refreshFace();});
 $("seedIn").addEventListener("input",refreshFace);
 $("countIn").addEventListener("input",refreshFace);
@@ -4626,6 +4782,7 @@ $("copyLink").addEventListener("click",function(){
   $("poolInfo").textContent="Link copied (or copy it from the address bar): "+url;
   history.replaceState(null,"",settingsToURL());
 });
+a11yInit();
 var urlTouched=applyURL();
 unitCheckboxes();renderIndicators();updatePoolInfo();
 if(urlTouched&&(new URLSearchParams(location.search).get("unit")||new URLSearchParams(location.search).get("preset")||new URLSearchParams(location.search).get("indicator"))){
