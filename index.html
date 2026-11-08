@@ -610,15 +610,15 @@ E("u5-centre-mode",5,["PK.1"],1,"gen",function(){
 E("u5-choosing-measure",5,["PK.1"],2,"var",varset([
   function(){return mcq("A school store manager asks students to name their favourite hoodie design so she knows which design to order most of. Which measure of central tendency is most useful for this decision?",
     "The mode, because the data are categories and the most common choice is what matters",
-    ["The mean, because it uses every student's answer","The median, because it is the middle answer when the designs are listed","The range, because it shows how spread out the choices are"],
+    ["The mean, because it uses every student's answer and averages all the choices together","The median, because it is the middle answer when the designs are listed in order","The range, because it shows how spread out the choices are across all the designs named"],
     "The answers are categories, not numbers, so only the mode can be found \u2014 and the most-chosen design is exactly what she needs to order.",{});},
   function(){return mcq("At a small company, most workers earn about $650 a week, but the owner earns $3,800 a week. Which statement best describes a typical worker's earnings?",
     "The median, because the owner's salary pulls the mean well above what most workers earn",
-    ["The mean, because it includes every salary in the company","The mode, because it is the salary paid most often in every company","The range, because it is unaffected by the owner's salary"],
+    ["The mean, because it includes every salary in the company, and every salary should count","The mode, because it is the salary paid most often in every company, whatever the rest are","The range, because it is unaffected by the owner's salary and shows the spread of pay"],
     "One very large value pulls the mean up. The median sits in the middle of the workers' actual salaries, so it describes a typical worker far better.",{});},
   function(){return mcq("A data set contains one value that is far lower than all the others. What is the effect of that value?",
     "It pulls the mean down, while the median is barely affected",
-    ["It pulls the median down by about the same amount as the mean","It changes the mode of the data set","It leaves the range unchanged"],
+    ["It pulls the median down by about the same amount as the mean","It changes the mode of the data set to a new most common value","It leaves the range unchanged, since the spread stays the same"],
     "The mean uses every value, so an extreme value drags it. The median depends only on the middle position, and the range must grow because the lowest value dropped.",{});}
 ]));
 /* --- dispersion (8.6) --- */
@@ -652,9 +652,9 @@ E("u5-dispersion-compare",5,["8.6"],2,"gen",function(){
   var winner=A<B?"A":"B";
   return mcq(ctx.who+" both have the same "+ctx.avg+" for "+ctx.unit+". Person A/class A's results have a range of \\("+A+"\\); B's have a range of \\("+B+"\\). Which statement is correct?",
     winner+" is more consistent, because "+winner+"'s results stay closer to the shared "+ctx.avg,
-    [(winner==="A"?"B":"A")+" is more consistent, because a larger range means steadier results",
-     "Both are equally consistent, because their "+ctx.avg+"s are equal",
-     "Consistency cannot be compared without knowing each median"],
+    [(winner==="A"?"B":"A")+" is more consistent, because a larger range means steadier results in the long run",
+     "Both are equally consistent, because equal "+ctx.avg+"s mean the spread can be ignored",
+     "Consistency cannot be compared without knowing each median value as well"],
     "Both have the same centre, so compare the spread. The smaller range (\\("+Math.min(A,B)+"\\)) means results cluster closer to the "+ctx.avg+" \u2014 that is the more consistent performance. Equal means say nothing about consistency.",
     {A:A,B:B,winner:winner});
 });
@@ -664,7 +664,7 @@ E("u5-ad-claim",5,["8.6"],3,"gen",function(){
   var claim=Math.round(m);
   return mcq("A gym advertises: \u201COur members lose an average of "+claim+" lb in their first month!\u201D The amounts actually lost by eight members were <b>\\(\\{"+data.join(", ")+"\\}\\)</b> lb. Why is the advertisement misleading?",
     "It uses the mean, which one member's \\("+big+"\\) lb loss pulls far above what a typical member loses (the median loss is \\("+fmt(md)+"\\) lb)",
-    ["It uses the median, which one large loss pulls up","The range of the losses is too small to support the claim","The mode of the losses is higher than the advertised average"],
+    ["It uses the median, which one large loss pulls far above the rest, so the median ends up inflated like the advertised figure","The range of the losses is too small to support the claim, because so narrow a range means no one lost enough to lift the average that high","The mode of the losses is higher than the advertised average, because the most common loss sits above what the gym says members lose"],
     "Mean \\(= "+fmt(sum(data))+" \\div 8 = "+fmt(m)+" \\approx "+claim+"\\), so the gym used the mean. But sorted, the middle values give a median of \\("+fmt(md)+"\\) lb \u2014 a far better picture of a typical member. One extreme value did all the work in the ad.",
     {data:data,mean:m,median:md,big:big});
 });
@@ -727,15 +727,15 @@ E("u5-polygon-point",5,["8.7"],2,"gen",function(){
 E("u5-histogram-concepts",5,["8.7"],2,"var",varset([
   function(){return mcq("Why do the bars in a histogram touch each other, while the bars in a bar graph do not?",
     "A histogram's intervals are continuous number ranges with no gaps between them; a bar graph shows separate categories",
-    ["Histogram bars are always wider than bar graph bars","Touching bars make the frequencies easier to add","A histogram has no vertical axis, so the bars join together"],
+    ["Histogram bars are always wider than bar graph bars, because bar width is what separates the two graphs","Touching bars make the frequencies easier to add, since bars that touch can be totalled at a glance, unlike separated bars","A histogram has no vertical axis, so the bars join together, because joined bars are how histograms are drawn"],
     "A histogram groups a continuous measurement into intervals that run into each other, so the bars touch. A bar graph compares separate categories, so its bars stay apart.",{});},
   function(){return mcq("Which statement about a histogram is correct?",
     "The exact values are hidden by grouping, so counts per interval can be read but individual values cannot",
-    ["The exact data values can be read off the bars","The height of each bar is the midpoint of its interval","The bars must all be the same height when the intervals are equal"],
+    ["The exact data values can be read off the bars, because each bar stands for one central value","The height of each bar is the midpoint of its interval, because a bar rises to the middle value it covers","The bars must all be the same height when the intervals are equal, since equal intervals carry equal counts"],
     "Once values are grouped into an interval, the graph shows only how many fell in \u2014 the individual values are gone. That is the trade-off of grouping.",{});},
   function(){return mcq("A histogram of coffee-shop wait times has its tallest bar over the interval \\(5\\text{-}9\\) minutes. What can you conclude?",
     "More waits fell in the \\(5\\text{-}9\\) minute interval than in any other single interval",
-    ["The average wait was exactly \\(7\\) minutes","Every wait was between \\(5\\) and \\(9\\) minutes","The longest wait was \\(9\\) minutes"],
+    ["The average wait was exactly \\(7\\) minutes, the midpoint of the tallest bar's interval","Every wait was between \\(5\\) and \\(9\\) minutes, because that bar covers every wait","The longest wait was \\(9\\) minutes, the top of the interval under the tallest bar"],
     "The tallest bar marks the interval with the highest frequency. Grouped bars hide the exact values, so neither the true average nor the longest wait can be read off the graph.",{});}
 ]));
 E("u5-polygon-compare",5,["8.7"],2,"gen",function(){
@@ -743,7 +743,7 @@ E("u5-polygon-compare",5,["8.7"],2,"gen",function(){
   var lo1=pick([20,25,30,35,40]),hi1=lo1+9;var bHi=pick([49,59,69,79]);
   return mcq("Two "+ctx+" are drawn as frequency polygons on the same axes. Route A's polygon is tall and narrow, peaked at \\("+lo1+"\\text{-}"+hi1+"\\) passengers. Route B's polygon is low and wide, spread from \\(0\\text{-}9\\) up to \\("+(bHi-9)+"\\text{-}"+bHi+"\\) passengers. Which statement is correct?",
     "Route B's passenger counts are more spread out, because its polygon covers a much wider range of intervals",
-    ["Route A carries more passengers in total, because its polygon is taller","Both routes are equally consistent, because both polygons peak","Route B's mean is exactly \\("+fmt(bHi-4.5,1)+"\\) passengers, the midpoint of its widest interval"],
+    ["Route A carries more passengers in total, because its polygon is taller, and its taller peak means more carried overall","Both routes are equally consistent, because both polygons peak, and a peak in the middle means equal consistency","Route B's mean is \\("+fmt(bHi-4.5,1)+"\\) passengers, the midpoint of its widest interval, so that midpoint is the mean"],
     "A polygon stretched over many intervals means the values vary widely \u2014 Route B is far more spread out. Height alone does not give a total, and a midpoint is not a mean.",{lo1:lo1});
 });
 </script>
@@ -771,15 +771,15 @@ E("u5-sd-from-variance",5,["8.9"],1,"gen",function(){
 E("u5-sd-meaning",5,["8.8"],1,"var",varset([
   function(){return mcq("What does the standard deviation of a data set measure?",
     "How far the values typically lie from the mean",
-    ["The difference between the largest and smallest values","The value in the middle of the data set","How many values the data set contains"],
+    ["The difference between the largest and smallest values","The value in the middle of the data set","How many values the data set contains in total"],
     "Standard deviation is a typical distance from the mean. The largest-minus-smallest description is the range, and the middle value is the median.",{});},
   function(){return mcq("A data set has a standard deviation of \\(0\\). What does that tell you about the set?",
     "Every value in the set is the same",
-    ["The mean of the set is \\(0\\)","The set contains no values","The values are spread as far apart as possible"],
+    ["The mean of the set is \\(0\\) as well","The set contains no values at all","The values are spread as far apart as possible"],
     "If every value equals the mean, every deviation is \\(0\\), so the standard deviation is \\(0\\) \u2014 the set has no spread at all.",{});},
   function(){return mcq("Two sets have the same mean. Set P has a standard deviation of \\(2\\); Set Q has a standard deviation of \\(11\\). What does that tell you?",
     "Set Q's values are spread much farther from the mean than Set P's",
-    ["Set Q's values must all be larger than Set P's","Set P has more values than Set Q","Nothing \u2014 standard deviation cannot be compared between sets"],
+    ["Set Q's values must all be larger than Set P's, because its spread is bigger","Set P has more values than Set Q, so its values are spread out more","Nothing \u2014 standard deviation cannot be compared between sets"],
     "Standard deviation is measured in the data's own units as a typical distance from the mean, so \\(11\\) means far more spread than \\(2\\).",{});}
 ]));
 E("u5-sd-compare",5,["8.8"],2,"gen",function(){
@@ -788,7 +788,7 @@ E("u5-sd-compare",5,["8.8"],2,"gen",function(){
   var first=swap?B:A,second=swap?A:B;var wider=swap?"A":"B";
   return mcq("Set A is \\(\\{"+first.join(", ")+"\\}\\). Set B is \\(\\{"+second.join(", ")+"\\}\\). Both sets have mean \\("+m+"\\). Which statement is correct?",
     "Set "+wider+" has the larger standard deviation, because its values lie farther from the mean",
-    ["Set "+(wider==="A"?"B":"A")+" has the larger standard deviation, because its values are closer together","Both sets have the same standard deviation, because they have the same mean","Neither set has a standard deviation, because they have only three values"],
+    ["Set "+(wider==="A"?"B":"A")+" has the larger standard deviation, because its values are closer together overall","Both sets have the same standard deviation, because they have the same mean value","Neither set has a standard deviation, because they have only three values each"],
     "Both sets are centred at \\("+m+"\\), but Set "+wider+"'s values sit \\("+(wider==="A"?(swap?d2:d1):(swap?d1:d2))+"\\) units away while the other's sit closer. Farther from the mean means a larger standard deviation, whatever the mean is.",
     {A:A,B:B,wider:wider,m:m});
 });
@@ -800,62 +800,62 @@ E("u5-sd-interpret",5,["8.10"],2,"gen",function(){
   var small=ri(2,5),big=small+ri(4,8);
   return mcq(ctx.who+" with the same mean (\\("+ctx.m+"\\) "+ctx.unit+"). One has a standard deviation of \\("+small+"\\) "+ctx.unit+"; the other, \\("+big+"\\) "+ctx.unit+". Which one is more consistent, and why?",
     "The one with standard deviation \\("+small+"\\), because a smaller standard deviation means the "+ctx.thing+" cluster closer to the mean",
-    ["The one with standard deviation \\("+big+"\\), because a larger standard deviation means steadier "+ctx.thing,"Neither \u2014 consistency cannot be compared when the means are equal","Both are equally consistent, because they share the same mean"],
+    ["The one with standard deviation \\("+big+"\\), because a larger standard deviation means steadier "+ctx.thing+" that stay close to the mean","Neither \u2014 consistency cannot be compared when the means are equal, because sets with the same mean must be equally steady","Both are equally consistent, because they share the same mean, and their results stay just as close to that mean"],
     "Consistency is about spread, not centre. A standard deviation of \\("+small+"\\) means results typically land within about \\("+small+"\\) "+ctx.unit+" of the mean \u2014 much steadier than \\("+big+"\\).",
     {small:small,big:big});
 });
 E("u5-sd-decisions",5,["8.16"],3,"var",varset([
   function(){return mcq("A phone maker is choosing which model to sell with a guarantee that the battery will still be going after \\(20\\) hours of use, or the phone is replaced. Model P has a mean battery life of \\(26\\) hours with a standard deviation of \\(3\\) hours. Model Q has a mean battery life of \\(30\\) hours with a standard deviation of \\(6\\) hours. Which model should produce fewer guarantee replacements?",
     "Model P, because \\(20\\) hours is \\(2\\) standard deviations below its mean, but only about \\(1.7\\) standard deviations below Model Q's mean, so far fewer Model P batteries die early despite the lower mean",
-    ["Model Q, because its mean battery life is higher","Model Q, because its larger standard deviation means more batteries last far longer than \\(20\\) hours","Both will produce the same number of replacements, because both means are above \\(20\\) hours"],
+    ["Model Q, because its mean battery life is higher than Model P's by four hours, and the model with the higher mean will always give fewer early failures, no matter how widely its battery lives are spread out","Model Q, because its larger standard deviation means more batteries last far longer than \\(20\\) hours, and those long-lasting batteries are what keep the total number of guarantee replacements down","Both will produce the same number of replacements, because both means are above \\(20\\) hours, and once the mean clears the guarantee mark the spread around that mean makes no difference to early failures"],
     "What matters is how far the guarantee sits below the mean, in standard deviations: P: \\(\\frac{26 - 20}{3} = 2\\); Q: \\(\\frac{30 - 20}{6} \\approx 1.7\\). Model Q's wider spread puts a bigger share of its batteries below \\(20\\) hours.",{a:{m:26,s:3},b:{m:30,s:6},w:20});},
   function(){return mcq("A company is choosing which freezer model to cover with a \\(6\\)-year warranty. Model A has a mean life of \\(9\\) years with a standard deviation of \\(1.5\\) years. Model B has a mean life of \\(11\\) years with a standard deviation of \\(3\\) years. Which model should produce fewer warranty claims?",
     "Model A, because \\(6\\) years is \\(2\\) standard deviations below its mean, but only about \\(1.7\\) standard deviations below Model B's mean, so far fewer Model A units fail early despite the lower mean",
-    ["Model B, because its mean life is higher","Model B, because its larger standard deviation means more long-lived units","Both will produce the same number of claims, because both means are above \\(6\\) years"],
+    ["Model B, because its mean life is higher than Model A's by two full years, and the model with the higher mean will always give fewer early failures, no matter how widely its working lives are spread out","Model B, because its larger standard deviation means more of its units last far longer than average, and those long-lived units are what keep the total number of warranty claims down over the years","Both will produce the same number of claims, because both means are above \\(6\\) years, and once the mean clears the warranty mark the spread around that mean makes no difference to early failures"],
     "What matters is how far the warranty sits below the mean, in standard deviations: A: \\(\\frac{9 - 6}{1.5} = 2\\); B: \\(\\frac{11 - 6}{3} \\approx 1.7\\). Model B's wider spread puts a bigger share of its units below \\(6\\) years.",{a:{m:9,s:1.5},b:{m:11,s:3},w:6});},
   function(){return mcq("A seed company guarantees a minimum yield of \\(40\\) bushels per acre, or the farmer's seed is free. Variety A has a mean yield of \\(52\\) bushels per acre with a standard deviation of \\(6\\). Variety B has a mean yield of \\(64\\) bushels per acre with a standard deviation of \\(16\\). Which variety should trigger the guarantee less often?",
     "Variety A, because \\(40\\) bushels is \\(2\\) standard deviations below its mean, but only \\(1.5\\) standard deviations below Variety B's mean, so far fewer of Variety A's fields fall short despite the lower mean",
-    ["Variety B, because its mean yield is higher","Variety B, because its larger standard deviation means more fields yield far above \\(40\\) bushels","Both will trigger the guarantee equally often, because both means are above \\(40\\) bushels"],
+    ["Variety B, because its mean yield is higher than Variety A's by twelve bushels per acre, and the variety with the higher mean will always fall short less often, no matter how widely its yields are spread out","Variety B, because its larger standard deviation means more fields yield far above \\(40\\) bushels, and those high-yielding fields are what keep the total number of guarantee payouts down across a season","Both will trigger the guarantee equally often, because both means are above \\(40\\) bushels, and once the mean clears the guaranteed minimum the spread around that mean makes no difference to poor fields"],
     "What matters is how far the guaranteed minimum sits below the mean, in standard deviations: A: \\(\\frac{52 - 40}{6} = 2\\); B: \\(\\frac{64 - 40}{16} = 1.5\\). Variety B's wider spread puts a bigger share of its fields below \\(40\\) bushels.",{a:{m:52,s:6},b:{m:64,s:16},w:40});},
   function(){return mcq("A retailer is choosing which brand of washing machine to cover with a \\(7\\)-year warranty. Brand A has a mean life of \\(11\\) years with a standard deviation of \\(2\\) years. Brand B has a mean life of \\(13\\) years with a standard deviation of \\(4\\) years. Which brand should produce fewer warranty claims?",
     "Brand A, because \\(7\\) years is \\(2\\) standard deviations below its mean, but only \\(1.5\\) standard deviations below Brand B's mean, so far fewer Brand A machines fail early despite the lower mean",
-    ["Brand B, because its mean life is higher","Brand B, because its larger standard deviation means more machines last well beyond \\(7\\) years","Both will produce the same number of claims, because both means are above \\(7\\) years"],
+    ["Brand B, because its mean life is higher than Brand A's by two full years, and the brand with the higher mean will always give fewer early failures, no matter how widely its machines' lives are spread out","Brand B, because its larger standard deviation means more machines last well beyond \\(7\\) years, and those long-lasting machines are what keep the total number of warranty claims down over the years","Both will produce the same number of claims, because both means are above \\(7\\) years, and once the mean clears the warranty mark the spread around that mean makes no difference to failures"],
     "What matters is how far the warranty sits below the mean, in standard deviations: A: \\(\\frac{11 - 7}{2} = 2\\); B: \\(\\frac{13 - 7}{4} = 1.5\\). Brand B's wider spread puts a bigger share of its machines below \\(7\\) years.",{a:{m:11,s:2},b:{m:13,s:4},w:7});}
 ]));
 /* --- normal curve (8.11-8.14) --- */
 E("u5-normal-props",5,["8.11","8.13"],1,"var",varset([
   function(){return mcq("Which statement about a normal distribution is true?",
     "It is symmetric, and its mean, median and mode are all equal",
-    ["Its mean is larger than its median","It is skewed to the right","Its total area under the curve is \\(100\\)"],
+    ["Its mean is larger than its median, sitting above the middle one","It is skewed to the right, tailing off toward larger values","Its total area under the curve is \\(100\\), not a proportion of one"],
     "A normal curve is a single symmetric hump centred on the mean, so mean = median = mode, and the total area under the curve is \\(1\\) (\\(100\\%\\) of the data).",{});},
   function(){return mcq("Two caf\u00E9s both serve lunch in a mean time of \\(14\\) minutes. Caf\u00E9 A has a standard deviation of \\(2\\) minutes; Caf\u00E9 B, \\(5\\) minutes. What do the two normal curves look like?",
     "Caf\u00E9 A's curve is taller and narrower; Caf\u00E9 B's is shorter and wider, and both are centred at \\(14\\)",
-    ["Caf\u00E9 B's curve is taller and narrower, because its times vary more","Both curves are identical, because the means are equal","Caf\u00E9 A's curve is centred at \\(2\\) and Caf\u00E9 B's at \\(5\\)"],
+    ["Caf\u00E9 B's curve is taller and narrower, because its times vary more, and more variation raises the peak","Both curves are identical, because the means are equal, and equal means mean equal shapes","Caf\u00E9 A's curve is centred at \\(2\\) and Caf\u00E9 B's at \\(5\\), because each centre is a standard deviation"],
     "Same mean means the same centre. A smaller standard deviation squeezes the data toward the centre, so the curve grows taller and narrower to keep the same total area.",{});},
   function(){return mcq("What does the standard deviation do to the shape of a normal curve?",
     "A larger standard deviation makes the curve wider and flatter; a smaller one makes it taller and narrower",
-    ["It moves the curve left or right along the axis","It makes the curve skewed toward the larger values","It has no effect on the shape, only on the labels"],
+    ["It moves the curve left or right along the axis, because more spread slides the curve toward larger values","It makes the curve skewed toward the larger values, stretching the side with the larger values out sideways","It has no effect on the shape, only on the labels, because the curve is fixed once the mean is set"],
     "The mean sets the centre; the standard deviation sets the spread, and the curve's width follows it.",{});}
 ]));
 E("u5-isnormal",5,["8.12"],2,"var",varset([
   function(){return mcq("Which data set would be expected to approximate a normal distribution?",
     "The heights of \\(500\\) randomly chosen adults",
-    ["The number of pets owned by students in a class","The daily high temperature on the coldest day of each winter month","The jersey numbers of players on a hockey team"],
+    ["The number of pets owned by students in a class","The high temperature on the coldest day of each winter month","The jersey numbers on a hockey team roster"],
     "Heights pile up symmetrically around a central value with fewer and fewer people toward the extremes \u2014 the normal shape. Pet counts are small whole numbers bunched at 0, 1 and 2, and jersey numbers are labels, not measurements.",{});},
   function(){return mcq("A teacher plots her class's marks and gets a histogram with one hump, but the hump leans left with a long tail of low marks stretching down. Does the data approximate a normal distribution?",
     "No \u2014 a normal curve is symmetric, and this distribution is skewed by the tail of low marks",
-    ["Yes \u2014 any single-humped histogram is normal","Yes \u2014 the tail proves the standard deviation is large","No \u2014 normal data can never come from a class of students"],
+    ["Yes \u2014 any single-humped histogram is normal, and this one has a single clear hump","Yes \u2014 the tail proves the standard deviation is large, and large spread makes data normal","No \u2014 normal data can never come from a class of students, because class marks are always skewed"],
     "Symmetry is the test. A long tail on one side means the data are skewed, however the rest looks; a normal curve's two halves mirror each other.",{});},
   function(){return mcq("Which is the best first check of whether a data set approximates a normal distribution?",
     "Graph it and look for a single-peaked, roughly symmetric bell shape centred near the mean and median",
-    ["Check that the standard deviation is larger than the mean","Check that there are exactly \\(100\\) values in the set","Check that the highest and lowest values are equal"],
+    ["Check that the standard deviation is larger than the mean, because normal data spread wider","Check that there are exactly \\(100\\) values in the set, because a normal shape needs that many values","Check that the highest and lowest values are equal, because the extremes of a normal distribution match"],
     "Normal data announce themselves in the graph: one peak, mirror-image sides, and centre measures that nearly coincide.",{});}
 ]));
 E("u5-compare-normal",5,["8.13"],2,"gen",function(){
   var m=ri(10,20),s1=ri(1,3),s2=s1+ri(2,4);
   var q = mcq("Two bakeries' morning prep times are normally distributed with the same mean, \\("+m+"\\) minutes. Bakery A has a standard deviation of \\("+s1+"\\) minutes; Bakery B, \\("+s2+"\\) minutes. Which statement is correct?",
     "Bakery B's times are more spread out, and its curve is wider and flatter",
-    ["Bakery A's times are more spread out, because a small standard deviation means more variation","Both bakeries are equally consistent, because their means are equal","Bakery B must have the higher mean, because its standard deviation is larger"],
+    ["Bakery A is more spread out, because a small standard deviation means more variation","Both bakeries are equally consistent, because their means are equal here","Bakery B must have the higher mean, because its standard deviation is larger"],
     "The standard deviation is the spread. \\("+s2+" > "+s1+"\\), so Bakery B varies more, and its normal curve spreads wider and flatter to keep the same area.",{m:m,s1:s1,s2:s2});
   q.figure = normSVG({mu:m, sd:s1, curve2:{sd:s2, tagA:"A: \u03C3 = "+s1, tagB:"B: \u03C3 = "+s2}});
   return q;
@@ -890,7 +890,7 @@ E("u5-z-compare",5,["8.15"],2,"gen",function(){
   var winner=a.z>b.z?pr[0]:pr[1];
   return mcq(pr[0]+" scored \\("+a.x+"\\) on a test with mean \\("+a.mu+"\\) and standard deviation \\("+a.sd+"\\). "+pr[1]+" scored \\("+b.x+"\\) on a different test with mean \\("+b.mu+"\\) and standard deviation \\("+b.sd+"\\). Who did better, relative to their class?",
     winner+", with a z-score of \\("+fmt(Math.max(a.z,b.z))+"\\) compared to \\("+fmt(Math.min(a.z,b.z))+"\\)",
-    [(winner===pr[0]?pr[1]:pr[0])+", because that raw score is on the harder test","They did equally well, because both scored above their means","Whoever scored the higher raw mark, since z-scores ignore the class results"],
+    [(winner===pr[0]?pr[1]:pr[0])+", because that raw score is on the harder test","They did equally well, both above their means","The higher raw mark, since z-scores ignore class results"],
     pr[0]+"'s \\(z = \\frac{"+a.x+" - "+a.mu+"}{"+a.sd+"} = "+fmt(a.z)+"\\); "+pr[1]+"'s \\(z = \\frac{"+b.x+" - "+b.mu+"}{"+b.sd+"} = "+fmt(b.z)+"\\). Z-scores put both on the same scale, and "+winner+"'s is higher.",{a:a,b:b,winner:winner});
 });
 E("u5-z-backwards",5,["8.15"],2,"gen",function(){
@@ -953,51 +953,51 @@ E("u5-ci-count",5,["8.19"],2,"gen",function(){
 E("u5-ci-samplesize",5,["8.18"],1,"var",varset([
   function(){return mcq("The same survey is run three times with random samples of \\(25\\), \\(250\\) and \\(2{,}500\\) people. Which sample gives the smallest margin of error, and why?",
     "The sample of \\(2{,}500\\) \u2014 larger random samples vary less from the population value, so the interval narrows",
-    ["The sample of \\(25\\) \u2014 fewer people means fewer mistakes","All three give the same margin of error, because the survey is the same","The sample of \\(250\\) \u2014 medium samples are the most reliable"],
+    ["The sample of \\(25\\) \u2014 fewer people means fewer mistakes, and each person asked counts for more in the result","All three give the same margin of error, because the survey is the same and the question wording never changes at all","The sample of \\(250\\) \u2014 medium samples are the most reliable, because they balance the small samples and the large ones"],
     "Margin of error shrinks as the sample grows: more data averages out the randomness. (Roughly, multiplying the sample by \\(100\\) divides the margin of error by \\(10\\).)",{});},
   function(){return mcq("A town polls 80 riders and finds \\(58\\% \\pm 10\\%\\) use the bus daily. It polls 800 riders and gets \\(58\\% \\pm 3\\%\\). What changed?",
     "The larger sample narrowed the margin of error, so the estimate is more precise",
-    ["The larger sample changed the true percentage","The margin of error grew because more people were asked","Nothing \u2014 the percentages are the same, so both polls say the same thing"],
+    ["The larger sample changed the true percentage of riders who use the bus daily overall","The margin of error grew because more people were asked and answered","Nothing \u2014 the percentages are the same, so both polls say the same thing"],
     "Same centre, tighter interval: \\(55\\% \\text{ to } 61\\%\\) instead of \\(48\\% \\text{ to } 68\\%\\). Bigger random samples pin the value down more closely.",{});},
   function(){return mcq("A polling firm wants to cut its margin of error roughly in half. What should it do to its sample?",
     "Use a much larger random sample \u2014 roughly four times as many people, because the margin of error shrinks with the square root of the sample size",
-    ["Ask exactly twice as many people \u2014 double the sample, half the error","Survey the same people twice and average the two results","Nothing \u2014 the sample size does not affect the margin of error"],
+    ["Ask exactly twice as many people \u2014 double the sample, half the error, because the margin shrinks in direct proportion to the sample size each time","Survey the same people twice and average the two results, because asking twice gives the firm twice as much information as asking once","Nothing \u2014 the sample size does not affect the margin of error, because the margin is set by the question and by how the firm reports it"],
     "Margin of error behaves like \\(\\frac{1}{\\sqrt{n}}\\): quadrupling \\(n\\) halves it. Doubling the sample only shrinks it by a factor of about \\(1.4\\).",{});}
 ,
 function(){return mcq("Four surveys ask the same question using random samples of \\(120\\), \\(480\\), \\(1{,}200\\) and \\(3{,}000\\) people. Which sample gives the LEAST margin of error?",
     "\\(3{,}000\\) \u2014 the largest sample, so its results vary least from the population value",
-    ["\\(120\\) \u2014 the smallest sample has the least room for error","\\(480\\) \u2014 a medium sample balances cost and accuracy","All four give the same margin of error \u2014 only the question matters"],
+    ["\\(120\\) \u2014 the smallest sample has the least room for error, because fewer answers can go wrong","\\(480\\) \u2014 a medium sample balances cost and accuracy, and middle samples are the most reliable","All four give the same margin of error \u2014 only the question matters, nothing else"],
     "Larger random samples sit closer to the population value, so their margins of error are smaller.",{});},
   function(){return mcq("Four surveys ask the same question using random samples of \\(45\\), \\(180\\), \\(720\\) and \\(1{,}500\\) people. Which sample gives the GREATEST margin of error?",
     "\\(45\\) \u2014 the smallest sample, so it can stray furthest from the population value",
-    ["\\(1{,}500\\) \u2014 the largest sample has the most room for error","\\(720\\) \u2014 a medium sample is the least stable","All four give the same margin of error \u2014 only the question matters"],
+    ["\\(1{,}500\\) \u2014 the largest sample has the most room for error, because more people answer","\\(720\\) \u2014 a medium sample is the least stable, sitting between the two","All four give the same margin of error \u2014 only the question matters, and it never changes"],
     "Small samples bounce around more: with only \\(45\\) people, the sample percentage can land far from the true one, which is exactly what a big margin of error says.",{});},
   function(){return mcq("Instead of sampling, a town surveys EVERY household \u2014 a census. What happens to the margin of error?",
     "There is no sampling margin of error \u2014 the count IS the population value, so there is no sampling gap to allow for",
-    ["It doubles, because there are more responses to process","It stays whatever it would be for a sample of \\(1{,}000\\)","It becomes \\(100\\%\\), because the whole population was asked"],
+    ["It doubles, because there are more responses to process and each one adds its own sampling error to the total","It stays whatever it would be for a sample of \\(1{,}000\\), because a census is counted just like any other survey","It becomes \\(100\\%\\), because the whole population was asked and the margin grows to match the population size in the end"],
     "Margin of error exists because a sample might not mirror the population. Survey everyone and that particular uncertainty disappears (people can still misreport, but that is a different problem).",{});}
 ]));
 E("u5-ci-level",5,["8.18"],2,"var",varset([
   function(){return mcq("A researcher recomputes the same survey results at a \\(99\\%\\) confidence level instead of \\(95\\%\\). What happens to the interval?",
     "It gets wider \u2014 being right more often requires allowing a bigger range",
-    ["It gets narrower \u2014 higher confidence means a better estimate","It stays the same \u2014 the confidence level does not affect the interval","The centre moves to \\(99\\%\\)"],
+    ["It gets narrower \u2014 higher confidence means a better estimate","It stays the same \u2014 the confidence level does not affect the interval","The centre moves to \\(99\\%\\) - the interval shifts up with the level too"],
     "There is a trade-off: to capture the true value \\(99\\) times out of \\(100\\) instead of \\(95\\), the interval must stretch. Higher confidence, wider interval, same centre.",{});},
   function(){return mcq("What does a \\(95\\%\\) confidence level mean?",
     "In the long run, intervals built this way capture the true population value about \\(95\\) times out of \\(100\\) (\\(19\\) times out of \\(20\\))",
-    ["\\(95\\%\\) of the sample agreed with the result","There is a \\(95\\%\\) chance this one interval is exactly centred on the true value","\\(95\\%\\) of the population was surveyed"],
+    ["\\(95\\%\\) of the sample agreed with the result, and the rest of the sample gave the opposite answer to the same question","There is a \\(95\\%\\) chance this one interval is exactly centred on the true value, and the rest of the chance is that it misses entirely","\\(95\\%\\) of the population was surveyed, so the result covers nearly every person in the group being described in the study"],
     "The \\(95\\%\\) describes the method's long-run success rate: repeat the survey many times and about \\(19\\) of every \\(20\\) intervals contain the true value.",{});},
   function(){return mcq("Two reports use the SAME survey. One gives a \\(90\\%\\) confidence interval of \\(51\\% \\pm 3\\%\\). The other gives a \\(99\\%\\) interval from the same data. What must be true of the \\(99\\%\\) interval?",
     "Its margin of error is larger than \\(3\\%\\) \u2014 higher confidence is bought with a wider interval",
-    ["Its margin of error is smaller than \\(3\\%\\)","It is centred on a different percentage","It must be wrong, because a survey produces only one correct interval"],
+    ["Its margin of error is smaller than \\(3\\%\\) - higher confidence gives a tighter interval estimate","It is centred on a different percentage, because a new level moves the centre too","It must be wrong, because a survey produces only one correct interval for its data"],
     "Same data, same centre (\\(51\\%\\)). Raising the confidence level stretches the interval both ways, so the margin of error grows past \\(3\\%\\).",{});}
 ,
 function(){return mcq("Intervals are computed from the SAME survey data at \\(90\\%\\), \\(95\\%\\) and \\(99\\%\\) confidence. Which statement is true?",
     "All three are centred on the same value; the \\(99\\%\\) interval is the widest and the \\(90\\%\\) interval is the narrowest",
-    ["The \\(99\\%\\) interval is the narrowest, because it is the most certain","Each confidence level gives an interval centred on a different value","Only the \\(95\\%\\) interval can be correct"],
+    ["The \\(99\\%\\) interval is the narrowest, because it is the most certain, and the most certain interval is always the tightest one","Each confidence level gives an interval centred on a different value, because the centre is worked out again for each level","Only the \\(95\\%\\) interval can be correct, because the other two levels are not the standard ones used in reports"],
     "The centre comes from the data and does not move. Demanding more confidence stretches the interval wider around that same centre.",{});},
   function(){return mcq("A weather station reports mean June rainfall as \\(84\\) mm, with a \\(95\\%\\) confidence interval of \\(78\\) mm to \\(90\\) mm. If the SAME data were reported at \\(99\\%\\) confidence, what would the interval look like?",
     "Still centred on \\(84\\) mm, but wider than \\(78\\) mm to \\(90\\) mm",
-    ["Still centred on \\(84\\) mm, but narrower \u2014 about \\(80\\) mm to \\(88\\) mm","Centred on \\(99\\) mm instead of \\(84\\) mm","Exactly the same: \\(78\\) mm to \\(90\\) mm"],
+    ["Still centred on \\(84\\) mm, but narrower \u2014 about \\(80\\) mm to \\(88\\) mm","Centred on \\(99\\) mm instead of \\(84\\) mm, with the same width","Exactly the same: \\(78\\) mm to \\(90\\) mm, because nothing changes"],
     "Raising the confidence level never moves the centre and never narrows the interval \u2014 it widens it, so the method captures the true value more often.",{});}
 ]));
 E("u5-ci-majority",5,["8.19","8.21"],3,"gen",function(){
@@ -1006,41 +1006,41 @@ E("u5-ci-majority",5,["8.19","8.21"],3,"gen",function(){
   var lo=p-moe,hi=p+moe;
   return mcq("A headline announces: \u201CMost teens support a later school start time!\u201D The survey behind it found \\("+p+"\\%\\) support, with a margin of error of \\(\\pm "+moe+"\\) points. Is the headline justified?",
     supported?"Yes \u2014 the whole interval, \\("+lo+"\\% \\text{ to } "+hi+"\\%\\), sits above \\(50\\%\\), so a majority is plausible throughout":"No \u2014 the interval, \\("+lo+"\\% \\text{ to } "+hi+"\\%\\), dips below \\(50\\%\\), so support could actually be a minority",
-    [supported?"No \u2014 surveys can never justify the word \u2018most\u2019":"Yes \u2014 \\("+p+"\\%\\) is more than half, and that settles it",
-     "Yes \u2014 the margin of error is small enough to ignore","The headline is justified only if the sample was larger than \\(1{,}000\\)"],
+    [supported?"No \u2014 surveys can never justify the word \u2018most\u2019, however far above half the reported figure sits":"Yes \u2014 \\("+p+"\\%\\) is more than half, and that settles it, so the headline can treat it as settled fact",
+     "Yes \u2014 the margin of error is small enough to ignore, because a few points change nothing","The headline is justified only if the sample was larger than \\(1{,}000\\), since small samples cannot support it"],
     "\u2018Most\u2019 means more than \\(50\\%\\). The interval runs \\("+lo+"\\% \\text{ to } "+hi+"\\%\\)"+(supported?", entirely above \\(50\\%\\), so the claim holds up.":", and it crosses below \\(50\\%\\), so the honest headline is \u2018about half of teens support\u2026\u2019.")+" Always check whether the whole interval clears the claim's bar.",
     {p:p,moe:moe,supported:supported});
 });
 E("u5-media",5,["8.20","8.21","8.22"],3,"var",varset([
   function(){return mcq("A news report says support for a new ferry sailing is \\(56\\%\\) and calls it \u2018overwhelming\u2019. The poll's margin of error is \\(\\pm 6\\) points. What is the fairest criticism?",
     "\u2018Overwhelmingly\u2019 is too strong \u2014 the interval \\(50\\% \\text{ to } 62\\%\\) is consistent with support being barely half",
-    ["The report is fine, because \\(56\\%\\) is a majority","The poll must be wrong, because its margin of error is positive","Nothing \u2014 word choice does not matter in statistics"],
+    ["The report is fine, because \\(56\\%\\) is a majority, and a result above half can fairly be called overwhelming","The poll must be wrong, because its margin of error is positive, and any margin above zero makes the figure untrustworthy","Nothing \u2014 word choice does not matter in statistics, so reporters may use whatever words seem strongest"],
     "\\(56\\% \\pm 6\\) gives \\(50\\% \\text{ to } 62\\%\\). A result that could be a coin-flip is real support, but \u2018overwhelming\u2019 overstates what the numbers carry.",{});},
   function(){return mcq("A toothpaste ad announces: \u2018Nine out of ten dentists recommend our brand!\u2019 The fine print reveals the survey behind it: the company asked \\(10\\) dentists, every one of them a paid consultant for the company, and \\(9\\) said yes. Does the claim hold up as evidence about dentists in general?",
     "No \u2014 the \u2018sample\u2019 is \\(10\\) dentists hand-picked and paid by the company itself, so the result says nothing reliable about dentists in general",
-    ["Yes \u2014 \\(9\\) out of \\(10\\) is \\(90\\%\\), an overwhelming majority of dentists","Yes \u2014 dentists are experts, so their answers settle the question","No \u2014 \\(9\\) out of \\(10\\) cannot be turned into a percentage, so the claim is meaningless"],
+    ["Yes \u2014 \\(9\\) out of \\(10\\) is \\(90\\%\\), an overwhelming majority of dentists, and a result that one-sided settles the question for dentists everywhere","Yes \u2014 dentists are experts, so their answers settle the question completely, and expert surveys need no fair sample behind them","No \u2014 \\(9\\) out of \\(10\\) cannot be turned into a percentage, so the claim is meaningless as evidence about dentists in general"],
     "A result is only as good as the sample behind it. Ten people chosen by the seller, with a financial tie to the company, are not a fair sample of dentists \u2014 \u20189 out of 10\u2019 describes those \\(10\\) consultants, not the profession.",{});},
   function(){return mcq("A radio station asks listeners to text in whether the town should build a new arena. More than \\(4{,}000\\) texts come in, and \\(78\\%\\) of them say yes. The station reports: \u2018The town strongly supports the arena.\u2019 Does the claim hold up?",
     "No \u2014 the respondents chose themselves, so \\(78\\%\\) measures the station's motivated listeners, not the town; the sample does not represent the population",
-    ["Yes \u2014 \\(78\\%\\) is a large majority, so the town clearly supports the arena","Yes \u2014 over \\(4{,}000\\) responses is a big sample, and big samples are reliable","No \u2014 a vote taken after dark cannot count toward a town decision"],
+    ["Yes \u2014 \\(78\\%\\) is a large majority, so the town clearly supports the arena, and a share that large leaves no doubt where the town stands","Yes \u2014 over \\(4{,}000\\) responses is a big sample, and big samples are reliable, because a sample that large must reflect the whole town, whoever took part","No \u2014 a vote taken after dark cannot count toward a town decision, because responses sent in at night are no valid part of a town survey"],
     "Size is not the issue \u2014 who got counted is. A text-in poll only hears from people who listen to that station and felt strongly enough to respond, so the \\(78\\%\\) cannot be extended to the whole town. A much smaller random sample would say far more.",{});},
   function(){return mcq("A community garden group reports: \u2018In our survey of 300 residents, \\(67\\% \\pm 4\\) support expanding the garden.\u2019 A councillor says the survey proves most residents support the expansion. Is the councillor right?",
     "Yes \u2014 the interval \\(63\\% \\text{ to } 71\\%\\) lies entirely above \\(50\\%\\), so a majority is supported throughout the interval",
-    ["No \u2014 \\(67\\%\\) of a sample never proves anything about residents","No \u2014 the margin of error means support could be under half","Yes \u2014 but only because \\(300\\) is a large sample"],
+    ["No \u2014 \\(67\\%\\) of a sample never proves anything about residents, because a sample describes only its respondents","No \u2014 the margin of error means support could be under half, since the margin can pull the true figure below half in the end","Yes \u2014 but only because \\(300\\) is a large sample, since a sample that size makes the result exact for the town"],
     "The whole confidence interval clears \\(50\\%\\), so the majority claim is as solid as polling gets: the plausible range for true support is \\(63\\% \\text{ to } 71\\%\\).",{});}
 ]));
 E("u5-interpret-ci",5,["8.21"],2,"var",varset([
   function(){return mcq("A poll reports a candidate at \\(49\\%\\) with a margin of error of \\(\\pm 3.1\\) points, \\(19\\) times out of \\(20\\). What is the correct reading?",
     "The candidate's true support is plausibly between \\(45.9\\%\\) and \\(52.1\\%\\), and intervals built this way are right about \\(19\\) times in \\(20\\)",
-    ["The candidate will get exactly \\(49\\%\\) of the vote","The candidate is definitely behind, because \\(49\\%\\) is less than half","The margin of error means the poll is off by exactly \\(3.1\\) points"],
+    ["The candidate will get exactly \\(49\\%\\) of the vote on election day, because a poll's percentage is what the election will produce","The candidate is definitely behind, because \\(49\\%\\) is less than half, and a figure below half can never finish ahead once the votes are counted","The margin of error means the poll is off by exactly \\(3.1\\) points, because the margin states the poll's exact error in advance"],
     "Add and subtract the margin of error: \\(45.9\\% \\text{ to } 52.1\\%\\). The \u2018\\(19\\) times out of \\(20\\)\u2019 is the confidence level \u2014 the method's long-run record, not a guarantee for this one poll.",{p:49,moe:3.1});},
   function(){return mcq("A city survey of 400 adults finds \\(62\\%\\) support a new compost pickup, with a margin of error of \\(\\pm 4.9\\) points, \\(19\\) times out of \\(20\\). What is the correct reading?",
     "True support is plausibly between \\(57.1\\%\\) and \\(66.9\\%\\), and intervals built this way contain the truth about \\(19\\) times in \\(20\\)",
-    ["Exactly \\(62\\%\\) of all adults in the city support the pickup","Support is certainly between \\(57.1\\%\\) and \\(66.9\\%\\) \u2014 the survey method cannot miss","The result is off by exactly \\(4.9\\) people out of the \\(400\\) surveyed"],
+    ["Exactly \\(62\\%\\) of all adults in the city support the pickup, because the sample percentage is the whole city's percentage too","Support is certainly between \\(57.1\\%\\) and \\(66.9\\%\\) \u2014 the survey method cannot miss, and the method behind it cannot miss the truth","The result is off by exactly \\(4.9\\) people out of the \\(400\\) surveyed, because the margin counts the people the survey got wrong"],
     "Add and subtract the margin of error: \\(62 - 4.9 = 57.1\\) and \\(62 + 4.9 = 66.9\\). \u2018\\(19\\) times out of \\(20\\)\u2019 describes the method's long-run success rate, not a promise about this one survey.",{p:62,moe:4.9});},
   function(){return mcq("A poll reports \\(38\\%\\) of voters preferring a four-day school week, with a margin of error of \\(\\pm 3\\) points, \\(19\\) times out of \\(20\\). Which statement is correct?",
     "The true share of all voters who prefer it is plausibly somewhere from \\(35\\%\\) to \\(41\\%\\)",
-    ["There is a \\(95\\%\\) chance the true share is exactly \\(38\\%\\)","The share of all voters is \\(38\\%\\), give or take exactly \\(3\\) people","Any result outside \\(35\\%\\) to \\(41\\%\\) would prove the poll was rigged"],
+    ["There is a \\(95\\%\\) chance the true share is exactly \\(38\\%\\), as the level guarantees","The share of all voters is \\(38\\%\\), give or take exactly \\(3\\) people in the end","Any result outside \\(35\\%\\) to \\(41\\%\\) would prove the poll was rigged, without any exception"],
     "The confidence interval is \\(38 \\pm 3\\), that is \\(35\\% \\text{ to } 41\\%\\). It is a plausible range for the true value, built by a method that works about \\(19\\) times in \\(20\\) \u2014 not a certainty and not a count of people.",{p:38,moe:3});}
 ]));
 /* ============ Unit 1: Acute Triangle Trigonometry ============ */
@@ -1048,24 +1048,24 @@ function angFmt(x){return fmt(x,1)+"\u00B0";}
 E("u1-law-choice",1,["7.1","7.2"],1,"var",varset([
   function(){return mcq("In triangle ABC you know two angles and the side between them. Which law starts the solution?",
     "The sine law \u2014 an angle and its opposite side form a complete pair",
-    ["The cosine law \u2014 it needs no angles","The tangent ratio \u2014 it works in any triangle","The Pythagorean theorem \u2014 first find the third angle"],
+    ["The cosine law \u2014 it needs no angles, so the known pair does not matter","The tangent ratio \u2014 it works in any triangle, right-angled or not","The Pythagorean theorem \u2014 first find the third angle from the two given"],
     "Two angles give the third by the angle sum, and the known side sits opposite a known angle: a complete sine-law pair. (Pythagoras and the tangent ratio are for right triangles only.)",{});},
   function(){return mcq("In triangle PQR you know two sides and the angle between them, and you need the third side. Which law do you use?",
     "The cosine law \u2014 it is built for the side-angle-side case",
-    ["The sine law \u2014 it only needs the two sides","The sine law, after splitting the triangle in two","The Pythagorean theorem, because two sides are known"],
+    ["The sine law \u2014 it only needs the two sides and no other information","The sine law, after splitting the triangle in two parts","The Pythagorean theorem, because two sides are known and that is enough here"],
     "With no angle-opposite-side pair, the sine law has nothing to anchor to. The cosine law, \\(c^2 = a^2 + b^2 - 2ab\\cos C\\), handles SAS directly.",{});},
   function(){return mcq("You know all three sides of an acute triangle and need its largest angle. Which law, and why?",
     "The cosine law, rearranged \u2014 it is the only one that uses three sides to give an angle",
-    ["The sine law, because three sides give three ratios","The tangent ratio, using the two longest sides","No law is needed — the largest angle is always \\(90^\\circ\\)"],
+    ["The sine law, because three sides give three ratios to set equal for the angle","The tangent ratio, using the two longest sides as the opposite and adjacent pair","No law is needed — the largest angle is always \\(90^\\circ\\) in a triangle with three known sides"],
     "\\(\\cos A = \\frac{b^2 + c^2 - a^2}{2bc}\\) uses exactly the three sides. The largest angle sits opposite the longest side.",{});}
 ,
 function(){var q = mcq("In triangle ABC, a diagram marks side \\(a = 9\\text{ cm}\\) (opposite angle \\(A\\)), side \\(b = 7\\text{ cm}\\), and angle \\(A = 35^\\circ\\). Which set-up finds angle B?",
     "\\(\\frac{\\sin B}{7} = \\frac{\\sin 35^\\circ}{9}\\) — each angle is paired with the side opposite it",
-    ["\\(\\frac{\\sin B}{9} = \\frac{\\sin 35^\\circ}{7}\\) \u2014 the marked sides stay with their marked angles","\\(b^2 = a^2 + c^2 - 2ac\\cos B\\) — the cosine law, because two sides are known","\\(\\tan B = \\frac{7}{9}\\) — opposite over adjacent"],
+    ["\\(\\frac{\\sin B}{9} = \\frac{\\sin 35^\\circ}{7}\\) \u2014 the marked sides stay with their marked angles","\\(b^2 = a^2 + c^2 - 2ac\\cos B\\) — the cosine law, because two sides are known","\\(\\tan B = \\frac{7}{9}\\) — opposite over adjacent in the marked triangle"],
     "The sine law pairs each side with the sine of its OPPOSITE angle: \\(\\frac{a}{\\sin A} = \\frac{b}{\\sin B}\\), so \\(\\frac{9}{\\sin 35^\\circ} = \\frac{7}{\\sin B}\\). The first trap swaps the pairing; the cosine law would need the side between the two known sides' angle, which is not what is marked.",{});q.figure=(function(){var Bv=Math.asin(7*Math.sin(35*Math.PI/180)/9)*180/Math.PI;return triSVG(9, 7, 9*Math.sin((180-35-Bv)*Math.PI/180)/Math.sin(35*Math.PI/180), {L:["A","B","C"], ang:["35°","?",null], side:["9 cm","7 cm",null]});})();return q;},
   function(){return mcq("You know two sides of a triangle and an angle opposite one of them, and you need another angle. Which law starts the solution, and what must you watch for?",
     "The sine law \u2014 and the angle it gives might not be the only possibility: an angle and its supplement both have the same sine, so the diagram has to rule one out",
-    ["The cosine law \u2014 it is the only law that works with two known sides","The sine law \u2014 and its answer is always the one correct angle","The angle-sum rule \u2014 the third angle comes first, then either law finishes it"],
+    ["The cosine law \u2014 it is the only law that works with two known sides, so it must start the solution, and the angle it gives will be the one correct angle for the triangle shown","The sine law \u2014 and its answer is always the one correct angle, because the inverse sine returns the angle that fits the triangle, with no second candidate to check","The angle-sum rule \u2014 the third angle comes first, then either law finishes it, because knowing all three angles is what lets a law find the remaining angle"],
     "Side-side-angle is the ambiguous case for the sine law: \\(\\sin\\theta = \\sin(180^\\circ - \\theta)\\), so the calculation can offer two candidate angles and the shape of the triangle decides which one fits.",{});}
 ]));
 E("u1-sine-side",1,["7.2"],2,"gen",function(){
@@ -1172,11 +1172,11 @@ E("u2-domain-range",2,["4.1"],2,"gen",function(){
 E("u2-vertex-form-params",2,["4.15"],1,"var",varset([
   function(){return mcq("In \\(y = (x - 3)^2 + 5\\), what is the vertex?",
     "\\((3, 5)\\) — the graph of \\(y = x^2\\) shifted right \\(3\\) and up \\(5\\)",
-    ["\\((-3, 5)\\) — shifted left \\(3\\) and up \\(5\\)","\\((3, -5)\\) — shifted right \\(3\\) and down \\(5\\)","\\((5, 3)\\) — the numbers swap places"],
+    ["\\((-3, 5)\\) — the graph of \\(y = x^2\\) shifted left \\(3\\) and up \\(5\\)","\\((3, -5)\\) — shifted right \\(3\\) and down \\(5\\) from the origin","\\((5, 3)\\) — the numbers swap places, so the vertical shift comes first"],
     "Vertex form \\(y = a(x - h)^2 + k\\) has vertex \\((h, k)\\). The minus sign in \\((x - 3)\\) means \\(h = +3\\).",{});},
   function(){return mcq("What does the value of \\(a\\) do in \\(y = a(x - h)^2 + k\\)?",
     "If \\(|a| > 1\\) the parabola narrows; if \\(a < 0\\) it opens downward",
-    ["It moves the vertex left or right","It moves the vertex up or down","It changes only the y-intercept"],
+    ["It moves the vertex left or right, changing where the parabola is centred","It moves the vertex up or down, raising the whole parabola","It changes only the y-intercept, leaving the shape of the parabola untouched"],
     "\\(h\\) shifts sideways, \\(k\\) shifts vertically, and \\(a\\) controls opening direction and width — the 'stretch' of the parabola.",{});},
   function(){return mcq("The graph of \\(y = x^2\\) is shifted left \\(4\\) and down \\(2\\). What is its equation?",
     "\\(y = (x + 4)^2 - 2\\)",
@@ -1221,15 +1221,15 @@ E("u3-discriminant",3,["4.7"],2,"gen",function(){
 E("u3-roots-zeros",3,["4.6"],1,"var",varset([
   function(){return mcq("The equation \\(x^2 - 5x + 6 = 0\\) has roots \\(2\\) and \\(3\\). What does that say about the function \\(f(x) = x^2 - 5x + 6\\)?",
     "Its zeros are \\(2\\) and \\(3\\), and its graph crosses the x-axis at \\((2, 0)\\) and \\((3, 0)\\)",
-    ["Its vertex is at \\((2, 3)\\)","Its y-intercept is \\(6\\) and its maximum is \\(3\\)","Its zeros are \\(-2\\) and \\(-3\\), the opposite signs"],
+    ["Its vertex is at \\((2, 3)\\), because the two roots become the coordinates of the turning point","Its y-intercept is \\(6\\) and its maximum is \\(3\\), so the graph never crosses the x-axis at all","Its zeros are \\(-2\\) and \\(-3\\), because finding the zeros changes the sign of each root"],
     "Roots of the equation, zeros of the function and x-intercepts of the graph are three names for the same numbers \u2014 where the function\u2019s value is \\(0\\).",{});},
   function(){return mcq("A quadratic function\u2019s graph touches the x-axis at exactly one point. What is true of the corresponding equation?",
     "It has one root, repeated \u2014 the discriminant is zero",
-    ["It has two different roots","It has no roots at all","Its discriminant is positive"],
+    ["It has two different roots, as most quadratics do","It has no roots at all, because touching is not the same as crossing","Its discriminant is positive, as it is whenever a graph meets the axis"],
     "Touching at one point means one x-intercept, which matches a repeated root and \\(D = 0\\).",{});},
   function(){return mcq("The graph of a quadratic function crosses the x-axis at \\(x = -4\\) and \\(x = 1\\). What are the roots of the corresponding quadratic equation?",
     "\\(-4\\) and \\(1\\) \u2014 the x-intercepts of the graph are exactly the roots of the equation",
-    ["\\(4\\) and \\(-1\\), the opposite signs","There are no roots, because the graph crosses the axis","Only \\(1\\) \u2014 a root cannot be negative"],
+    ["\\(4\\) and \\(-1\\), the opposite signs, because the roots change sign when read from the graph","There are no roots, because the graph crosses the axis instead of touching it","Only \\(1\\) \u2014 a root cannot be negative, so the crossing at \\(-4\\) does not count as a root"],
     "Roots of the equation, zeros of the function and x-intercepts of the graph are the same numbers, signs included.",{});}
 ]));
 E("u3-context-area",3,["4.3"],2,"gen",function(){
@@ -1296,7 +1296,7 @@ E("u4-extraneous",4,["1.11"],3,"gen",function(){
     "Squaring both sides of \\(\\sqrt{"+radicand+"} = x - "+b+"\\) produces the candidates \\(x = "+r+"\\) and \\(x = "+e+"\\). Which one is extraneous, and why?"]);
   return mcq(frame,
     "\\(x = "+e+"\\) is extraneous \u2014 substituting it makes the right side negative, but a square root is never negative",
-    ["\\(x = "+r+"\\) is extraneous \u2014 it is the larger answer","Neither \u2014 squaring never creates false roots","Both are extraneous, so the equation has no solution"],
+    ["\\(x = "+r+"\\) is extraneous - it is the larger answer, and the larger answer from squaring is always false","Neither is extraneous - squaring both sides never creates false roots, so both candidates work in the original equation","Both are extraneous, so the equation has no solution - each candidate fails when substituted back into the equation"],
     "Check \\(x = "+e+"\\): \\(\\sqrt{"+e+" + "+a+"} = \\sqrt{"+(e+a)+"} = "+Math.sqrt(e+a)+"\\), but \\(x - "+b+" = "+(e-b)+" < 0\\). A principal square root cannot equal a negative number, so \\(x = "+e+"\\) crept in when we squared. \\(x = "+r+"\\) checks: \\(\\sqrt{"+(r+a)+"} = "+Math.sqrt(r+a)+" = "+(r-b)+"\\) \u2713.",{b:b,r:r,e:e,a:a});
 });
 E("u4-order",4,["1.4"],2,"gen",function(){
@@ -1370,7 +1370,7 @@ E("u6-better-buy",6,["6.17"],2,"gen",function(){
   var winner=A.p/A.q<B.p/B.q?"The first option":"The second option";
   return mcq("Option 1: "+A.q+" "+prod.w+" for $"+fmt(A.p)+". Option 2: "+B.q+" "+prod.w+" for $"+fmt(B.p)+". Which is the better buy?",
     winner+" — its unit rate is \\(\\$"+fmt(Math.min(A.p/A.q,B.p/B.q))+"\\) per "+prod.u+", the lower of the two",
-    [(winner==="The first option"?"The second option":"The first option")+" \u2014 a bigger package is always cheaper per item","They are the same value \u2014 the prices scale exactly","Whichever costs less overall, regardless of quantity"],
+    [(winner==="The first option"?"The second option":"The first option")+" - a bigger package is always cheaper per item in every case","They are the same value - the prices scale exactly for both packs","Whichever costs less overall, regardless of quantity, is always the better buy here"],
     "Unit rates: Option 1: \\("+fmt(A.p)+" \\div "+A.q+" = \\$"+fmt(A.p/A.q)+"\\); Option 2: \\("+fmt(B.p)+" \\div "+B.q+" = \\$"+fmt(B.p/B.q)+"\\). Compare unit rates, not sticker prices — "+winner.toLowerCase()+" wins.",{A:A,B:B});
 });
 E("u6-rate-solve",6,["6.1"],2,"gen",function(){
@@ -1390,15 +1390,15 @@ E("u6-rate-solve",6,["6.1"],2,"gen",function(){
 E("u6-slope-rate",6,["6.19"],2,"var",varset([
   function(){return mcq("A graph shows distance from home (km) against time (h) for a drive. The line passes through \\((0, 0)\\) and \\((2, 110)\\). What does the slope of the line represent, and what is it?",
     "The speed: \\(110 \\div 2 = 55\\text{ km/h}\\) — the slope of a distance–time graph is the rate of travel",
-    ["The total distance: \\(110\\text{ km}\\)","The time taken: \\(2\\text{ h}\\)","The acceleration: \\(55\\text{ km/h}^2\\)"],
+    ["The total distance: \\(110\\text{ km}\\) - the distance covered over the whole drive, end to end","The time taken: \\(2\\text{ h}\\) - the time the whole drive lasted from start to the finish of the trip","The acceleration: \\(55\\text{ km/h}^2\\) - the rate at which the speed changes during the drive"],
     "Slope \\(= \\text{rise} \\div \\text{run} = \\) change in distance \\(\\div\\) change in time, which is exactly a rate: \\(55\\text{ km/h}\\).",{});},
   function(){return mcq("On a graph of water volume (L) versus time (min), a filling tank's line rises \\(60\\text{ L}\\) over \\(4\\text{ min}\\). What is the slope, and what does it mean?",
     "\\(15\\text{ L/min}\\) — the rate at which water is flowing into the tank",
-    ["\\(60\\text{ L}\\) — the tank's capacity","\\(4\\text{ min}\\) — the time to fill the tank","\\(240\\text{ L/min}\\) — rise times run"],
+    ["\\(60\\text{ L}\\) - the tank's capacity when it is filled right to the top","\\(4\\text{ min}\\) - the time to fill the tank from empty to full at this rate","\\(240\\text{ L/min}\\) - rise times run, the amount multiplied by the time"],
     "Slope \\(= 60 \\div 4 = 15\\), and its units (L per min) name the rate directly.",{});},
   function(){return mcq("A graph of distance travelled (km) against fuel used (L) for a delivery van is a straight line through \\((0, 0)\\) and \\((25, 300)\\). What does its slope represent, and what is it?",
     "Fuel efficiency: \\(300 \\div 25 = 12\\text{ km per litre}\\) — the slope is distance per unit of fuel",
-    ["The fuel used on the trip: \\(25\\text{ L}\\)","The distance travelled: \\(300\\text{ km}\\)","\\(12\\text{ L per km}\\) — slope is fuel divided by distance"],
+    ["The fuel used on the trip: \\(25\\text{ L}\\) - the fuel the van used on the whole trip","The distance travelled: \\(300\\text{ km}\\) - the distance the van travelled over the whole trip shown","\\(12\\text{ L per km}\\) - slope is fuel divided by distance: \\(300 \\div 25 = 12\\text{ L per km}\\) on this trip"],
     "Slope \\(= \\text{rise} \\div \\text{run} = \\text{km} \\div \\text{L}\\), a rate of travel per litre: \\(12\\text{ km/L}\\).",{});}
 ]));
 E("u6-poster-cost",6,["6.14","6.17"],2,"gen",function(){
@@ -1427,71 +1427,71 @@ E("u7-counterexample",7,["2.4"],2,"var",varset([
     "A counterexample must satisfy the conjecture's condition (prime) and break its claim (odd). Only \\(2\\) does both: it is prime, and it is even. One counterexample is enough to kill a conjecture.",{});},
   function(){return mcq("Conjecture: \u2018Every number divisible by \\(3\\) is also divisible by \\(6\\).\u2019 Which value is a counterexample?",
     "\\(9\\) — divisible by \\(3\\), but \\(9 \\div 6\\) is not whole",
-    ["\\(12\\) — divisible by both \\(3\\) and \\(6\\)","\\(18\\) — divisible by both \\(3\\) and \\(6\\)","\\(4\\) — not divisible by \\(3\\) or \\(6\\)"],
+    ["\\(12\\) — divisible by both \\(3\\) and \\(6\\), so it agrees","\\(18\\) — divisible by both \\(3\\) and \\(6\\), so it agrees","\\(4\\) — not divisible by \\(3\\) or \\(6\\)"],
     "\\(9\\) meets the condition (divisible by \\(3\\)) but fails the claim (not divisible by \\(6\\)). \\(12\\) and \\(18\\) support the conjecture; \\(4\\) never meets its condition.",{});},
   function(){return mcq("Conjecture: \u2018The product of two odd numbers is always even.\u2019 Which calculation is a counterexample?",
     "\\(3 \\times 5 = 15\\) — two odd numbers with an odd product",
-    ["\\(3 \\times 4 = 12\\) — but \\(4\\) is even, so the condition is not met","\\(2 \\times 5 = 10\\) — but \\(2\\) is even, so the condition is not met","\\(4 \\times 6 = 24\\) — both factors are even, so the condition is not met"],
+    ["\\(3 \\times 4 = 12\\) - \\(4\\) is even, so the condition fails","\\(2 \\times 5 = 10\\) — but \\(2\\) is even, so the condition is not met","\\(4 \\times 6 = 24\\) — both factors are even, so it fails"],
     "A counterexample must use two odd numbers (the condition) and break the claim (an even product). Only \\(3 \\times 5 = 15\\) does that. The others smuggle in an even factor, so they never test the conjecture.",{});}
 ,
 function(){return mcq("Conjecture: \u2018The square of a number is always greater than the number itself.\u2019 Which value is a counterexample?",
     "\\(\\frac{1}{2}\\) — its square is \\(\\frac{1}{4}\\), and \\(\\frac{1}{4}\\) is less than \\(\\frac{1}{2}\\)",
-    ["\\(2\\) — its square is \\(4\\), which is greater than \\(2\\), so it agrees with the conjecture","\\(3\\) — its square is \\(9\\), which is greater than \\(3\\), so it agrees with the conjecture","\\(-1\\) — its square is \\(1\\), which is greater than \\(-1\\), so it agrees with the conjecture"],
+    ["\\(2\\) - its square is \\(4\\), so it agrees with the conjecture","\\(3\\) - its square is \\(9\\), greater than \\(3\\), so it agrees","\\(-1\\) - its square is \\(1\\), so it agrees with the conjecture too"],
     "A counterexample must break the claim. Squaring a number between \\(0\\) and \\(1\\) makes it SMALLER: \\(\\frac{1}{2} \\times \\frac{1}{2} = \\frac{1}{4}\\), and \\(\\frac{1}{4} < \\frac{1}{2}\\). The other values all agree with the conjecture, so they cannot refute it.",{});},
   function(){return mcq("Conjecture: \u2018Dividing one natural number by another always gives a result smaller than the number you started with.\u2019 Which calculation is a counterexample?",
     "\\(6 \\div 1 = 6\\) — the result equals the starting number instead of being smaller",
-    ["\\(6 \\div 2 = 3\\) — smaller than \\(6\\), so it agrees with the conjecture","\\(6 \\div 3 = 2\\) — smaller than \\(6\\), so it agrees with the conjecture","\\(6 \\div 6 = 1\\) — smaller than \\(6\\), so it agrees with the conjecture"],
+    ["\\(6 \\div 2 = 3\\) - smaller than \\(6\\), so it agrees with the conjecture completely","\\(6 \\div 3 = 2\\) — smaller than \\(6\\), so it agrees with the conjecture","\\(6 \\div 6 = 1\\) — smaller than \\(6\\), so it agrees with the conjecture"],
     "Dividing by \\(1\\) leaves a number unchanged, so the result is not smaller. One counterexample is enough to show the conjecture is false.",{});}
 ]));
 E("u7-inductive-false",7,["2.2"],1,"var",varset([
   function(){return mcq("A student notices \\(3\\), \\(5\\) and \\(7\\) are all prime and concludes \u2018every odd number is prime\u2019. Why might this inductive conclusion be false?",
     "Inductive reasoning generalizes from a few cases — an unchecked case (like \\(9 = 3 \\times 3\\)) can break the pattern",
-    ["Because \\(3\\), \\(5\\) and \\(7\\) are not really prime","Because odd numbers cannot be studied by patterns","Because conclusions need at least ten examples to be allowed"],
+    ["Because \\(3\\), \\(5\\) and \\(7\\) are not really prime, and a conclusion based on unchecked examples cannot be trusted","Because odd numbers cannot be studied by patterns, so no pattern spotted among odd numbers can ever lead to a conclusion","Because conclusions need \(3 + 7 = 10\) examples to be allowed, and three cases is far too few to count"],
     "Induction spots a pattern in observed cases but never checks them all. The very next odd numbers include \\(9\\), which is composite — the conjecture fails.",{});},
   function(){return mcq("Which statement best compares inductive and deductive reasoning?",
     "Inductive reasoning moves from examples to a general conjecture that might be false; deductive reasoning starts from accepted facts and its conclusions must follow",
-    ["Inductive reasoning is always wrong and deductive reasoning is always right","Deductive reasoning is based on examples; inductive reasoning is based on definitions","They are two names for the same process"],
+    ["Inductive reasoning is always wrong and deductive reasoning is always right, because reasoning from examples can never be trusted in any situation whatsoever","Deductive reasoning is based on examples; inductive reasoning is based on definitions, and the two labels are fixed by those starting points in every question","They are two names for the same process, and the difference between them is only a matter of wording, not of how the conclusion is actually reached in the end"],
     "Induction suggests; deduction proves. A conjecture from induction still needs a deductive proof \u2014 or one counterexample ends it.",{});},
   function(){return mcq("A student lists the primes \\(3, 5, 7, 11\\) and \\(13\\), notices they are all odd, and concludes every prime number is odd. Which number is a counterexample?",
     "\\(2\\) — it is prime, and it is even",
-    ["\\(9\\) — it is odd","\\(1\\) — it is neither prime nor composite","\\(15\\) — it is odd and composite"],
+    ["\\(9\\) — it is odd and composite","\\(1\\) — it is neither prime nor composite","\\(15\\) — it is odd and composite"],
     "A single counterexample destroys a universal claim. The student's list simply skipped \\(2\\), the one even prime — induction from a partial list is never a proof.",{});}
 ,
 function(){return mcq("A fair coin has landed heads five times in a row. Marcus concludes it will land heads on every future toss. Why is this inductive conclusion unreliable?",
     "Five tosses are a tiny sample \u2014 each toss is independent, so tails can still come up; a short streak does not establish a rule",
-    ["Because after five heads, tails is now due \u2014 the coin has to balance out","Because five heads in a row proves the coin must be rigged","Because inductive conclusions are always false"],
+    ["Because after five heads, tails is now due \u2014 the coin has to balance out soon, since long runs always correct themselves before long","Because five heads in a row proves the coin must be rigged, since a fair coin could never land the same way five times","Because inductive conclusions are always false, whatever they are based on, so a conclusion reached this way can simply be thrown out"],
     "Induction from a handful of cases is fragile. Nothing about the first five tosses changes the coin, and a longer run would very likely include tails.",{});},
   function(){return mcq("A bakery's Saturday sales doubled three weeks running: \\(40\\), \\(80\\), then \\(160\\) loaves. The owner concludes sales will keep doubling and orders ingredients for \\(1{,}280\\) loaves in week \\(6\\). What is the weakness in this inductive reasoning?",
     "The pattern rests on only three weeks and ignores real limits \u2014 oven space, staff and the number of customers in town cap how much can actually be sold",
-    ["Doubling patterns never continue past three terms","The arithmetic is wrong — week \\(6\\) would be \\(1{,}024\\) loaves, not \\(1{,}280\\)","Inductive reasoning can never be used to plan a business"],
+    ["Doubling patterns never continue past three terms, because a pattern that doubles is guaranteed to stop once it has appeared three times in a row in a sequence","The arithmetic is wrong — week \\(6\\) would be \\(1{,}024\\) loaves, not \\(1{,}280\\), because the owner worked the doubling out wrongly for week six","Inductive reasoning can never be used to plan a business, because spotting a pattern in past sales tells the owner nothing useful at all about what will happen next"],
     "Three observations make a shaky rule, and this one also runs into the real world: demand and capacity do not double forever. Week \\(6\\) at \\(1{,}280\\) follows the pattern \\((40, 80, 160, 320, 640, 1{,}280)\\) — the flaw is trusting the pattern, not the arithmetic.",{});}
 ]));
 E("u7-valid-argument",7,["2.3"],2,"var",varset([
   function(){return mcq("Argument: \u2018All provincial parks charge an entry fee. Gros Morne is a provincial park. Therefore Gros Morne charges an entry fee.\u2019 (Take the premises as given.) Is the argument valid?",
     "Yes \u2014 if the premises are true, the conclusion must follow: the park belongs to the group the first statement covers",
-    ["No \u2014 because Gros Morne is actually a national park, the argument is invalid","No \u2014 arguments about fees are never valid","Yes \u2014 because the conclusion happens to be true"],
+    ["No - because Gros Morne is actually a national park and not a provincial one, the argument is invalid as stated here","No - arguments about money and entry fees are about real world charges rather than logic, so an argument like this can never be valid","Yes - because the conclusion happens to be true, and any argument whose conclusion is true in real life must be valid"],
     "Validity is about the logic, not the real-world facts. (Gros Morne is in fact a national park, which makes a premise false in reality \u2014 but the argument's form is valid: membership in the group forces the conclusion.)",{});},
   function(){return mcq("Argument: \u2018All squares are rectangles. This shape is a rectangle. Therefore this shape is a square.\u2019 Is the argument valid?",
     "No \u2014 being a rectangle does not force the shape to be a square; the reasoning runs the rule backwards",
-    ["Yes \u2014 squares and rectangles are the same thing","Yes \u2014 the conclusion is true for some shapes","No \u2014 because no shape can be both"],
+    ["Yes - squares and rectangles are the same thing, because both have four sides and four right angles","Yes - the conclusion is true for some shapes, and validity only needs the conclusion to hold in some cases","No - because no shape can be both a square and a rectangle at the same time, so the conclusion cannot follow here"],
     "The premise covers squares inside rectangles, but rectangles form the bigger group. Membership in the bigger group says nothing about the smaller one \u2014 the argument is invalid.",{});},
   function(){return mcq("Argument: \u2018All teachers at this school have a classroom key. Ms. Lee has a classroom key. Therefore Ms. Lee is a teacher at this school.\u2019 Is the argument valid?",
     "No \u2014 having a key does not force her to be a teacher here; custodians and substitutes hold keys too, so the reasoning runs the rule backwards",
-    ["Yes \u2014 the conclusion sounds reasonable","Yes \u2014 every statement in the argument is about the school","No \u2014 an argument is only valid if it contains numbers"],
+    ["Yes - the conclusion sounds reasonable, Ms. Lee is at the school daily, and nothing in the premises rules out her being a teacher there","Yes - every statement in the argument is about the school, its keys, and an argument stays valid when all of its statements stay on the one topic","No - an argument is only valid if it contains numbers, measurements or a calculation, and this argument contains nothing but words about keys"],
     "The premise puts teachers inside the bigger group of key-holders. Membership in the bigger group cannot prove membership in the smaller one \u2014 the same backwards step as the rectangle argument.",{});}
 ]));
 E("u7-proof-error",7,["2.8"],3,"var",varset([
   function(){return mcq("A famous fake proof starts with \\(a = b\\), multiplies out to reach \\((a - b)(a + b) = b(a - b)\\), then cancels \\((a - b)\\) from both sides — and ends with \\(2 = 1\\). Where is the error?",
     "Cancelling \\((a - b)\\) divides both sides by \\(a - b\\), which is \\(0\\) — division by zero is not allowed",
-    ["The error is in the first line: \\(a\\) can never equal \\(b\\)","The error is that \\((a + b)\\) should be \\((a - b)\\)","There is no error; the proof shows \\(2 = 1\\)"],
+    ["The error is in the first line: \\(a\\) can never equal \\(b\\), because two letters cannot name one number","The error is that \\((a + b)\\) should be \\((a - b)\\), because each term there should come from a subtraction","There is no error; the proof shows \\(2 = 1\\), which means arithmetic breaks down when letters replace numbers"],
     "Since \\(a = b\\), \\(a - b = 0\\). Every later step is fine algebra \u2014 but that one cancellation divides by zero, and from a false step anything can \u2018follow\u2019.",{});},
   function(){return mcq("A student \u2018proves\u2019 that every triangle is isosceles by drawing an angle bisector and a perpendicular bisector, then claiming two pairs of congruent triangles force the two sides equal. What kind of flaw should you look for first?",
     "The proof leans on the diagram \u2014 the intersection point was drawn inside the triangle, but in general it falls outside, changing the argument",
-    ["Triangles can never be proved congruent","Angle bisectors do not exist in all triangles","The flaw is arithmetic in the side lengths"],
+    ["Triangles can never be proved congruent, because no two drawn triangles are ever exactly alike, so every congruence claim rests on the picture","Angle bisectors do not exist in all triangles, because only some triangles have an angle that can be split into two equal parts by a line","The flaw is arithmetic in the side lengths: the student added the side lengths up incorrectly when comparing the two triangles in the proof"],
     "Deductive proofs must follow from stated facts, not from how one picture happens to look. A diagram-based assumption is the classic hidden flaw.",{});},
   function(){return mcq("A student ‘proves’ that \\(-1 = 1\\): ‘Since \\((-1)^2 = 1^2\\), taking the square root of both sides gives \\(-1 = 1\\).’ What is the flaw?",
     "Taking the square root loses the sign — \\(x^2 = y^2\\) only implies \\(x = \\pm y\\), not \\(x = y\\)",
-    ["The arithmetic is wrong: \\((-1)^2\\) is \\(-1\\), not \\(1\\)","You are never allowed to square both sides of an equation","There is no flaw \u2014 the proof is correct"],
+    ["The arithmetic is wrong: \\((-1)^2\\) is \\(-1\\), not \\(1\\), because a negative times a negative stays negative","You are never allowed to square both sides of an equation, because squaring is not a permitted step","There is no flaw - the proof is correct, because square rooting undoes squaring exactly"],
     "Squaring is not reversible on its own: both \\(1\\) and \\(-1\\) square to \\(1\\). The step treats the square root as if it restored the original number exactly.",{});}
 ]));
 /* ============ Unit 8: Properties of Angles and Triangles ============ */
@@ -1552,29 +1552,29 @@ E("u8-exterior",8,["5.11"],2,"gen",function(){
 E("u8-congruent",8,["5.6"],1,"var",varset([
   function(){return mcq("Which piece of information is NOT enough, on its own, to prove two triangles congruent?",
     "Three pairs of equal angles (AAA) \u2014 the triangles could be different sizes",
-    ["Three pairs of equal sides (SSS)","Two sides and the contained angle (SAS)","Two angles and the side between them (ASA)"],
+    ["Three pairs of equal sides (SSS) - all three sides match in pairs","Two sides and the contained angle (SAS) - the equal angle sits between the sides","Two angles and the side between them (ASA) - the side between the equal angles"],
     "AAA fixes the shape but not the size \u2014 those triangles are similar, not necessarily congruent. Congruence needs at least one side length anchored.",{});},
   function(){return mcq("Two triangles share a side, have another pair of sides equal, and the angles between those sides are equal. Which congruence rule applies?",
     "SAS \u2014 two sides and the contained angle",
-    ["SSS \u2014 three sides","ASA \u2014 two angles and a side","AAA \u2014 three angles"],
+    ["SSS - three sides, matched in pairs","ASA - two angles and a side included between them","AAA - three angles in matching pairs"],
     "The equal angle sits between the two equal sides, which is exactly the side-angle-side pattern.",{});},
   function(){return mcq("Two triangles have two pairs of equal angles, and the side between those two angles is the same length in both triangles. Which rule proves the triangles congruent?",
     "ASA \u2014 two angles and the side between them",
-    ["SAS \u2014 two sides and the contained angle","SSS \u2014 three sides","AAA \u2014 three angles"],
+    ["SAS \u2014 two sides and the contained angle","SSS - three sides, matched in pairs","AAA - three angles, matched in pairs at each vertex"],
     "The equal side sits between the two equal angles in each triangle, which is the angle-side-angle pattern.",{});}
 ]));
 E("u8-parallel-check",8,["5.9"],2,"var",varset([
   function(){return mcq("A transversal cuts two lines. Corresponding angles measure \\(112^\\circ\\) and \\(112^\\circ\\). What can you conclude?",
     "The lines are parallel \u2014 equal corresponding angles is one of the tests for parallel lines",
-    ["The lines are not parallel, because the angles should add to \\(180^\\circ\\)","Nothing \u2014 angle measures cannot tell us about parallel lines","The lines are perpendicular"],
+    ["The lines are not parallel, because the angles should add to \\(180^\\circ\\) rather than be equal to each other","Nothing - angle measures cannot tell us about parallel lines or about any other lines","The lines are perpendicular, because equal angles show the lines meet at right angles"],
     "When a transversal makes corresponding angles equal, the lines are parallel. (Supplementary is the test for co-interior angles, a different pair.)",{});},
   function(){return mcq("A transversal cuts two lines, and co-interior angles measure \\(105^\\circ\\) and \\(82^\\circ\\). Are the lines parallel?",
     "No — co-interior angles between parallel lines must be supplementary, and \\(105 + 82 = 187 \\neq 180\\)",
-    ["Yes \u2014 any two angles formed by a transversal prove the lines parallel","Yes \u2014 because both angles are obtuse and acute in balance","No \u2014 because co-interior angles must be equal"],
+    ["Yes - any two angles formed by a transversal prove the lines parallel, whatever they measure","Yes - because both angles are obtuse and acute in balance, which makes the lines parallel","No - because co-interior angles must be equal, so \\(105 = 82\\) must hold for parallel lines"],
     "For parallel lines, co-interior angles add to exactly \\(180^\\circ\\). \\(187^\\circ\\) misses, so the lines are not parallel.",{});},
   function(){return mcq("A transversal cuts two lines, and a pair of alternate exterior angles both measure \\(74^\\circ\\). What can you conclude?",
     "The lines are parallel \u2014 equal alternate exterior angles is one of the tests for parallel lines",
-    ["The lines are not parallel — alternate angles must add to \\(180^\\circ\\)","Nothing \u2014 angles outside the lines give no information","The lines are perpendicular"],
+    ["The lines are not parallel - alternate angles must add to \\(180^\\circ\\) rather than match each other","Nothing - angles outside the lines give no information about whether the two lines are parallel or not","The lines are perpendicular - matching outside angles show the lines meet at right angles"],
     "Equal corresponding angles, equal alternate angles, or supplementary co-interior angles each certify parallel lines. Here the alternate exterior pair matches at \\(74^\\circ\\).",{});}
 ]));
 E("u8-polygon-ratio",8,["5.2"],2,"gen",function(){
@@ -1590,25 +1590,25 @@ E("u8-polygon-ratio",8,["5.2"],2,"gen",function(){
 E("u7-reasoning-type",7,["2.7"],2,"var",varset([
   function(){return mcq("Which option uses INDUCTIVE reasoning?",
     "\\(4 \\times 6 = 24\\), \\(2 \\times 8 = 16\\) and \\(10 \\times 12 = 120\\) — in every case tried, the product of two even numbers is even",
-    ["Let the numbers be \\(2a\\) and \\(2b\\). Their product is \\(4ab = 2(2ab)\\), a multiple of \\(2\\), so it is even","An even number is defined as a multiple of \\(2\\), and a product of multiples of \\(2\\) is a multiple of \\(2\\)","Let one number be \\(2a + 1\\) and the other \\(2b + 1\\). Their product is \\(4ab + 2a + 2b + 1\\)"],
+    ["Let the numbers be \\(2a\\) and \\(2b\\). Their product is \\(4ab = 2(2ab)\\), a multiple of \\(2\\), so it is even","An even number is defined as a multiple of \\(2\\), and a product of multiples of \\(2\\) is a multiple of \\(2\\)","Let one number be \\(2a + 1\\) and the other \\(2b + 1\\). Their product is \\(4ab + 2a + 2b + 1\\), which is an odd number"],
     "Inductive reasoning generalizes from specific cases that were actually tried. The other options argue from general forms or definitions \u2014 that is deduction (and the last one is even about odd numbers, not this claim).",{});},
   function(){return mcq("Sam writes: \u2018The bus was late on Monday and on Tuesday, so it will be late again tomorrow.\u2019 What kind of reasoning is this?",
     "Inductive \u2014 it predicts tomorrow from a few observed cases",
-    ["Deductive \u2014 the conclusion has to follow","A counterexample \u2014 it disproves the bus schedule","A proof \u2014 two examples are enough to prove a pattern"],
+    ["Deductive \u2014 the conclusion simply has to follow","A counterexample \u2014 it disproves the bus schedule","A proof \u2014 two examples are enough to prove a pattern holds"],
     "Sam observed two cases and generalized to an unobserved one. That is induction: the conclusion is plausible, not guaranteed.",{});},
   function(){return mcq("The angles in any triangle add to \\(180^\\circ\\). Priya uses that rule to work out the third angle of the triangle in her homework. What kind of reasoning is she using?",
     "Deductive \u2014 she applies a general rule to a specific case",
-    ["Inductive \u2014 she is looking for a pattern in triangles","A counterexample \u2014 she is testing whether the rule fails","Circular \u2014 she assumes the very thing she is proving"],
+    ["Inductive \u2014 she is looking for a pattern in triangles","A counterexample \u2014 she is testing whether the rule ever fails","Circular \u2014 she assumes the very thing she is proving"],
     "Deduction moves from the general to the specific: the rule covers every triangle, so it covers hers.",{});}
 ]));
 E("u7-proof-pick",7,["2.7"],3,"var",varset([
   function(){return mcq("Which option uses DEDUCTIVE reasoning to show that the sum of two odd numbers is always even?",
     "Let the two numbers be \\(2a + 1\\) and \\(2b + 1\\). Their sum is \\(2a + 2b + 2 = 2(a + b + 1)\\), which is a multiple of \\(2\\) — so the sum is even for every pair of odd numbers",
-    ["\\(3 + 5 = 8\\), \\(7 + 9 = 16\\) and \\(11 + 13 = 24\\) — in each case the sum is even","Let the two numbers be \\(2a + 1\\) and \\(2b + 1\\). Their sum is \\(2ab + 2\\), which is even","A calculator checked \\(500\\) random pairs of odd numbers and every sum came out even"],
+    ["\\(3 + 5 = 8\\), \\(7 + 9 = 16\\), \\(11 + 13 = 24\\), \\(15 + 17 = 32\\), \\(21 + 23 = 44\\) and \\(31 + 33 = 64\\) - in each case the sum is even, so odd numbers add to an even sum","Let the two numbers be \\(2a + 1\\) and \\(2b + 1\\). Their sum is \\(2ab + 2\\), which is a multiple of \\(2\\), so the sum is even for every pair of odd numbers, for all values of \\(a\\) and \\(b\\)","A calculator checked \\(500\\) random pairs of odd numbers, small ones and large ones in the hundreds and thousands alike, and every sum came out even, with no exception found"],
     "Deductive reasoning starts from a general form \u2014 every odd number can be written as \\(2a + 1\\) — and the algebra settles the claim for all cases at once. Checking examples, even \\(500\\) of them, is inductive: it can suggest the claim but never prove it. And the option giving the sum as \\(2ab + 2\\) is algebra gone wrong \u2014 that is not what the sum is.",{});},
   function(){return mcq("Which option uses DEDUCTIVE reasoning to show that the sum of three even integers is always even?",
     "Write the integers as \\(2a\\), \\(2b\\) and \\(2c\\). Their sum is \\(2a + 2b + 2c = 2(a + b + c)\\), a multiple of \\(2\\), so the sum is even",
-    ["\\(2 + 4 + 6 = 12\\) and \\(4 + 8 + 10 = 22\\) — the sums are even","Write the integers as \\(2a\\), \\(2b\\) and \\(2c\\). Their sum is \\(2a + 2b + 2c = 6abc\\), which is even","A spreadsheet tested \\(500\\) triples of even integers and every sum was even"],
+    ["\\(2 + 4 + 6 = 12\\), \\(4 + 8 + 10 = 22\\), \\(6 + 10 + 14 = 30\\) and \\(8 + 12 + 16 = 36\\) - in every case the sum comes out even","Write the integers as \\(2a\\), \\(2b\\) and \\(2c\\). Their sum is \\(2a + 2b + 2c = 6abc\\), which is even, so the sum is always even","A spreadsheet tested \\(500\\) triples of even integers, small triples and large ones alike, and every sum the spreadsheet produced was even"],
     "Only the option that factors the sum as \\(2(a + b + c)\\) proves the claim for every triple at once. Examples and spreadsheet checks are inductive, and \\(6abc\\) is not the sum of \\(2a\\), \\(2b\\) and \\(2c\\).",{});}
 ]));
 E("u7-counterexample-gen",7,["2.4"],2,"gen",function(){
@@ -1639,19 +1639,19 @@ E("u7-sequence-gap",7,["2.1"],1,"gen",function(){
 E("u7-proof-steps",7,["2.8"],3,"var",varset([
   function(){return mcq("A number trick says: pick a number, add 6, double it, subtract 4, divide by 2, then subtract your starting number. (It always ends at \\(4\\) — try starting with \\(5\\).) A student 'proves' the trick with this algebra:<br>Step 1: Start with \\(n\\). Add \\(6\\): \\(n + 6\\).<br>Step 2: Double it: \\(2n + 6\\).<br>Step 3: Subtract \\(4\\): \\(2n + 2\\).<br>Step 4: Divide by \\(2\\), then subtract \\(n\\): \\((n + 1) - n = 1\\) — so the trick always ends at \\(1\\).<br>The conclusion is wrong. In which step does the FIRST error occur?",
     "Step 2 — doubling \\(n + 6\\) gives \\(2n + 12\\), not \\(2n + 6\\): both terms must double",
-    ["Step 1 — adding \\(6\\) to \\(n\\) should give \\(6n\\)","Step 3 — subtracting \\(4\\) from \\(2n + 6\\) should give \\(2n + 10\\)","Step 4 \u2014 the division must be carried out before the subtraction"],
+    ["Step 1 — adding \\(6\\) to \\(n\\) should give \\(6n\\), because the two merge into one term","Step 3 — subtracting \\(4\\) from \\(2n + 6\\) should give \\(2n + 10\\) when the subtraction is done","Step 4 \u2014 the division must be carried out before the subtraction step is reached"],
     "Every later step follows correctly from the line before it \u2014 the damage is done when \\(2(n + 6)\\) is written as \\(2n + 6\\) instead of \\(2n + 12\\). With that fixed, the proof ends at \\((2n + 8) \\div 2 - n = 4\\), exactly as the trick promises.",{});},
   function(){return mcq("A number trick says: pick a number, multiply it by 3, add 9, divide by 3, then subtract your starting number. (It always ends at \\(3\\) — try starting with \\(2\\).) A student 'proves' the trick like this:<br>Step 1: Start with \\(n\\). Multiply by \\(3\\): \\(3n\\).<br>Step 2: Add \\(9\\): \\(3n + 9\\).<br>Step 3: Divide by \\(3\\): \\(n + 9\\).<br>Step 4: Subtract \\(n\\): \\(9\\) — so the trick always ends at \\(9\\).<br>The conclusion is wrong. In which step does the FIRST error occur?",
     "Step 3 — dividing \\(3n + 9\\) by \\(3\\) gives \\(n + 3\\), not \\(n + 9\\): both terms must be divided",
-    ["Step 1 — multiplying \\(n\\) by \\(3\\) should give \\(n3\\)","Step 2 — adding \\(9\\) to \\(3n\\) should give \\(12n\\)","Step 4 — subtracting \\(n\\) from \\(n + 9\\) should give \\(9n\\)"],
+    ["Step 1 — multiplying \\(n\\) by \\(3\\) should give \\(n3\\), because the number belongs after the letter","Step 2 — adding \\(9\\) to \\(3n\\) should give \\(12n\\), because the two combine into a bigger term","Step 4 — subtracting \\(n\\) from \\(n + 9\\) should give \\(9n\\), because the letter stays in the result"],
     "Only the \\(3n\\) was divided; the \\(+9\\) slipped through untouched. Fixed, the proof reads \\((3n + 9) \\div 3 - n = (n + 3) - n = 3\\).",{});},
   function(){return mcq("A number trick says: pick a number, add 4, multiply by 2, subtract 6, then divide by 2. (It always ends one MORE than your starting number — try starting with \\(5\\) and you get \\(6\\).) A student 'proves' the trick like this:<br>Step 1: Start with \\(n\\). Add \\(4\\): \\(n + 4\\).<br>Step 2: Multiply by \\(2\\): \\(2n + 8\\).<br>Step 3: Subtract \\(6\\): \\(2n + 2\\).<br>Step 4: Divide by \\(2\\): \\(2n + 1\\) — so the trick always ends at one more than DOUBLE your number.<br>The conclusion is wrong. In which step does the FIRST error occur?",
     "Step 4 — dividing \\(2n + 2\\) by \\(2\\) gives \\(n + 1\\), not \\(2n + 1\\): both terms must be divided",
-    ["Step 1 — adding \\(4\\) to \\(n\\) should give \\(4n\\)","Step 2 — multiplying \\(n + 4\\) by \\(2\\) should give \\(2n + 4\\)","Step 3 — subtracting \\(6\\) from \\(2n + 8\\) should give \\(2n + 14\\)"],
+    ["Step 1 — adding \\(4\\) to \\(n\\) should give \\(4n\\), because adding merges them into a single product","Step 2 — multiplying \\(n + 4\\) by \\(2\\) should give \\(2n + 4\\), because only the first term doubles","Step 3 — subtracting \\(6\\) from \\(2n + 8\\) should give \\(2n + 14\\), because the constant grows"],
     "Steps \\(1\\) to \\(3\\) are correct. The last division halves only the constant in the student's line: \\((2n + 2) \\div 2 = n + 1\\), which is exactly what the trick promises \u2014 one more than the starting number.",{});},
   function(){return mcq("A number trick says: pick a number, double it, add 10, divide by 2, then subtract 3. (It always ends \\(2\\) above your starting number — try starting with \\(4\\) and you get \\(6\\).) A student 'proves' the trick like this:<br>Step 1: Start with \\(n\\).<br>Step 2: Double it, then add \\(10\\): \\(2(n + 10) = 2n + 20\\).<br>Step 3: Divide by \\(2\\): \\(n + 10\\).<br>Step 4: Subtract \\(3\\): \\(n + 7\\) — so the trick always ends \\(7\\) above the starting number.<br>The conclusion is wrong. In which step does the FIRST error occur?",
     "Step 2 — 'double it, then add \\(10\\)' means \\(2n + 10\\); writing \\(2(n + 10)\\) adds the \\(10\\) BEFORE doubling, which doubles the \\(10\\) as well",
-    ["Step 1 — the starting number should have been called \\(x\\), not \\(n\\)","Step 3 — dividing \\(2n + 20\\) by \\(2\\) should give \\(2n + 10\\)","Step 4 — subtracting \\(3\\) from \\(n + 10\\) should give \\(n + 13\\)"],
+    ["Step 1 — the starting number should have been called \\(x\\), not \\(n\\), because using the wrong letter invalidates every later step in the proof","Step 3 — dividing \\(2n + 20\\) by \\(2\\) should give \\(2n + 10\\), because only the constant term is halved, not the whole expression","Step 4 — subtracting \\(3\\) from \\(n + 10\\) should give \\(n + 13\\), because subtracting a number raises the constant term in the line"],
     "The trick doubles first and adds \\(10\\) second: \\(2n + 10\\). The brackets quietly reversed that order. Done correctly: \\((2n + 10) \\div 2 - 3 = n + 2\\).",{});}
 ]));
 E("u5-ci-level-from-report",5,["8.21"],1,"gen",function(){
@@ -1682,41 +1682,41 @@ E("u5-ci-shrink",5,["8.18"],2,"gen",function(){
 E("u5-poll-position",5,["8.20","8.22"],3,"var",varset([
   function(){return mcq("An advertisement announces: \u2018In a survey, \\(80\\%\\) of users said our toothpaste gave them a cleaner feeling!\u2019 The fine print says the survey is accurate within \\(\\pm 4\\) percentage points, \\(9\\) times out of \\(10\\). Which statement is the honest summary of the survey?",
     "The survey supports a range of about \\(76\\% \\text{ to } 84\\%\\) \u2014 the ad quotes the single middle number as if it were exact",
-    ["At least \\(80\\%\\) for sure \u2014 that is the number the survey found","The range is \\(72\\% \\text{ to } 88\\%\\), because the margin counts twice on each side","The ad is fair \u2014 being right \\(9\\) times out of \\(10\\) makes the \\(80\\%\\) nearly exact"],
+    ["At least \\(80\\%\\) for sure \u2014 that is the number the survey found, and the true figure cannot fall below a found figure","The range is \\(72\\% \\text{ to } 88\\%\\), because the margin counts twice on each side, once below the figure and once above it","The ad is fair \u2014 being right \\(9\\) times out of \\(10\\) makes the \\(80\\%\\) nearly exact, so the single figure is fair"],
     "\\(80\\% \\pm 4\\) points gives \\(76\\% \\text{ to } 84\\%\\). The honest figure could sit several points either side of the advertised one.",{});},
   function(){return mcq("Two candidates poll at \\(47\\%\\) and \\(44\\%\\), with a margin of error of \\(\\pm 4\\) points. The first candidate's campaign claims: \u2018We have a clear lead.\u2019 Is the claim supported?",
     "No \u2014 the intervals (\\(43\\% \\text{ to } 51\\%\\) and \\(40\\% \\text{ to } 48\\%\\)) overlap, so the trailing candidate could actually be ahead",
-    ["Yes \u2014 \\(47\\) is greater than \\(44\\), so the lead is real","Yes \u2014 the margin of error applies only to the trailing candidate","No \u2014 any poll with a margin of error is worthless"],
+    ["Yes \u2014 \\(47\\) is greater than \\(44\\), so the lead is real, because the larger reported figure truly leads, margin or no margin","Yes \u2014 the margin of error applies only to the trailing candidate, so the leading figure stands exactly as reported","No \u2014 any poll with a margin of error is worthless, because a poll admitting error tells readers nothing reliable"],
     "A lead smaller than the margin of error is not a secure lead. With \\(\\pm 4\\) points, the true support could run the other way.",{});},
   function(){return mcq("A survey at a school of 1,200 students finds \\(68\\% \\pm 5\\) points favour a later start time. The principal announces: \u2018At least \\(800\\) of our students want this change.\u2019 Is the announcement justified by the survey?",
     "Not necessarily \u2014 the interval reaches down to \\(63\\%\\), and \\(63\\%\\) of \\(1{,}200\\) is \\(756\\) students, which is below \\(800\\)",
-    ["Yes \u2014 \\(68\\%\\) of \\(1{,}200\\) is \\(816\\) students, comfortably over \\(800\\)","Yes \u2014 a survey of a whole school gives exact figures","No \u2014 the true figure could be fewer than \\(600\\) students"],
+    ["Yes \u2014 \\(68\\%\\) of \\(1{,}200\\) is \\(816\\) students, comfortably over \\(800\\), and the middle estimate is the count the school should go by","Yes \u2014 a survey of a whole school gives exact figures, because asking within one school leaves no sampling error of any kind to allow for at all","No \u2014 the true figure could be fewer than \\(600\\) students, because five points of error can hide hundreds of students here"],
     "The middle estimate (\\(816\\)) clears \\(800\\), but the interval's low end (\\(756\\)) does not. A claim of 'at least \\(800\\)' needs the whole interval above \\(800\\).",{});},
   function(){return mcq("In a town of 25,000 voters, a poll finds \\(54\\% \\pm 3\\) points support a new arena. A councillor says: \u2018Somewhere between \\(12{,}000\\) and \\(15{,}000\\) voters back this.\u2019 Is she reading the poll correctly?",
     "Yes \u2014 \\(51\\% \\text{ to } 57\\%\\) of \\(25{,}000\\) voters is \\(12{,}750\\) to \\(14{,}250\\) voters, which sits inside the range she quoted",
-    ["No \u2014 the range is \\(13{,}500\\) voters, give or take \\(3\\) voters","No \u2014 a percentage from a sample can never be applied to a whole population","Yes \u2014 exactly \\(13{,}500\\) voters support the arena"],
+    ["No \u2014 the range is \\(13{,}500\\) voters, give or take \\(3\\) voters, because the margin counts individual voters","No \u2014 a percentage from a sample can never be applied to a whole population, because percentages describe only the people asked","Yes \u2014 exactly \\(13{,}500\\) voters support the arena, because the middle percentage gives the town's exact count"],
     "Apply both ends of the interval to the population: \\(0.51 \\times 25{,}000 = 12{,}750\\) and \\(0.57 \\times 25{,}000 = 14{,}250\\). Her wider range safely contains the poll's range.",{});}
 ]));
 E("u7-valid-chains",7,["2.3"],2,"var",varset([
   function(){return mcq("Premises: Rex is a Chocolate Lab. All Chocolate Labs are brown. What can be deduced?",
     "Rex is brown",
-    ["All brown dogs are Chocolate Labs","Rex must love swimming","Some Chocolate Labs are not brown"],
+    ["All brown dogs are Labs","Rex must love swimming","Rex is black"],
     "Rex belongs to the group the second premise covers, so its property follows. The first trap reverses the premise (nothing says brown dogs are Labs), and the last one contradicts it.",{});},
   function(){return mcq("Premises: All band members play an instrument. Everyone who plays an instrument can read music. Leo is in the band. What can be deduced?",
     "Leo can read music",
-    ["Leo must be the best musician in the band","Everyone who can read music is in the band","Leo plays in an orchestra"],
+    ["Leo is the best","All music readers are in the band","Leo plays in an orchestra"],
     "The chain runs Leo \u2192 band \u2192 instrument \u2192 reads music, one premise at a time. The second trap reverses the chain, and the others add facts no premise gives.",{});},
   function(){return mcq("Premises: Everyone who attends spin class regularly gets fitter. Maya attends spin class regularly. Consider two conclusions: I. Maya gets fitter. II. Maya is the fittest person in the class. Which conclusions follow?",
     "I only \u2014 the premises say she gets fitter, but they never compare her with anyone else",
-    ["II only \u2014 regular attendance is what matters most","Both I and II","Neither I nor II"],
+    ["II only \u2014 regular attendance matters most, making her the fittest in the class","Both I and II - the premises also compare her with everyone else in the class","Neither I nor II - regular attendance alone cannot support either conclusion drawn here"],
     "Conclusion I is the premise applied directly. Conclusion II is a superlative the premises cannot support \u2014 getting fitter does not mean fittest.",{});},
   function(){return mcq("Premises: All squares are rectangles. Figure X is a rectangle. What can be deduced about Figure X?",
     "Only that X is a rectangle \u2014 it may or may not be a square",
-    ["X must be a square","X cannot be a square","All four of X's sides must be equal"],
+    ["X must be a square - all rectangles here are squares","X cannot be a square - squares and rectangles never overlap at all","All four of X's sides must be equal, just as they would be for a square"],
     "Every square is a rectangle, but the premise does not run backwards: most rectangles are not squares. Nothing given decides whether X is one of the square ones.",{});},
   function(){return mcq("Take these premises as given, even though one is false in real life: All fish can fly. A trout is a fish. Is the conclusion \u2018a trout can fly\u2019 validly deduced?",
     "Yes \u2014 the conclusion follows from the premises, so the argument is valid; the problem is the false premise, not the logic",
-    ["No \u2014 a false premise automatically makes an argument invalid","No \u2014 trout live in water, so the conclusion cannot be reached","Yes \u2014 because some trout really can fly"],
+    ["No \u2014 a false premise automatically makes an argument invalid, however carefully the reasoning is built on it","No \u2014 trout live in water, so the conclusion cannot be reached, because real world facts override whatever the premises say","Yes \u2014 because some trout really can fly, and a conclusion that is true in real life makes the whole argument a valid one"],
     "Validity is about the chain, not the facts. If the premises were true, the conclusion would have to be true \u2014 that is a valid argument built on a false premise.",{});}
 ]));
 E("u5-ci-build",5,["8.21"],1,"gen",function(){
@@ -1740,7 +1740,7 @@ E("u5-ci-read-report",5,["8.21"],2,"var",varset([
     "The mean is the midpoint: \\(\\frac{3.0 + 3.4}{2} = 3.2\\) kg. The margin of error is half the width: \\(\\frac{3.4 - 3.0}{2} = 0.2\\) kg.",{});},
   function(){return mcq("A survey reports a \\(90\\%\\) confidence level, a margin of error of \\(\\pm 3\\) points, and a confidence interval of \\(57\\%\\) to \\(63\\%\\). What percentage did the survey itself find?",
     "\\(60\\%\\) \u2014 the interval is centred on the survey result",
-    ["\\(57\\%\\) \u2014 the bottom of the interval is the result","\\(63\\%\\) \u2014 the top of the interval is the result","\\(90\\%\\) \u2014 the confidence level is the result"],
+    ["\\(57\\%\\) \u2014 the bottom of the interval is the result itself","\\(63\\%\\) \u2014 the top of the interval is the result itself","\\(90\\%\\) \u2014 the confidence level is the survey result"],
     "The interval is built as result \\(\\pm\\) margin: \\(60\\% - 3 = 57\\%\\) and \\(60\\% + 3 = 63\\%\\). The reported percentage is the centre, \\(60\\%\\).",{});},
   function(){return mcq("A factory reports that \\(85\\%\\) of its batteries pass a 100-hour test, accurate within \\(\\pm 2.5\\) percentage points, \\(19\\) times out of \\(20\\). What is the confidence interval for the true pass rate?",
     "\\(82.5\\% \\text{ to } 87.5\\%\\)",
@@ -2379,17 +2379,17 @@ E("u8-polygon-inverse",8,["5.5"],1,"gen",function(){
 E("u8-proof-reason",8,["5.4"],2,"var",varset([
   function(){return mcq("Lines \\(PQ\\) and \\(RS\\) are parallel, cut by a transversal. \\(\\angle a\\) is at the top right of the first intersection, and \\(\\angle b\\) is at the top right of the second intersection. A student writes: “\\(\\angle a = \\angle b\\) because they are alternate interior angles.” What is wrong with the reason?",
     "The angles are corresponding angles, not alternate interior angles",
-    ["Nothing \u2014 the reason is correct","The angles are co-interior angles, not alternate interior angles","The angles are vertically opposite angles, not alternate interior angles"],
+    ["Nothing - the reason given is correct for these two angles","The angles are co-interior angles, not alternate interior angles","The angles are vertically opposite angles, not alternate interior angles"],
     "\\(\\angle a\\) and \\(\\angle b\\) sit in the same relative position (top right) at each intersection, which makes them corresponding angles. Alternate interior angles sit between the two lines, on opposite sides of the transversal. The equality is right; the named reason is wrong.",
     {});},
   function(){var q=mcq("Given \\(AB \\parallel CD\\) and \\(AE = DE\\), with \\(E\\) on the segment joining the two lines, a proof shows \\(\\triangle ABE \\cong \\triangle DCE\\). One step states \\(\\angle BAE = \\angle CDE\\). Which reason justifies that step?",
     "Alternate interior angles, because \\(AB \\parallel CD\\)",
-    ["Vertically opposite angles","Corresponding angles, because \\(AB \\parallel CD\\)","Co-interior angles, because \\(AB \\parallel CD\\)"],
+    ["Vertically opposite angles at the crossing","Corresponding angles, because \\(AB \\parallel CD\\) holds here","Co-interior angles, because \\(AB \\parallel CD\\) - they add up"],
     "\\(\\angle BAE\\) and \\(\\angle CDE\\) lie between the parallel lines, on opposite sides of the transversal \\(AD\\) (the line through A, E and D), so they are alternate interior angles, which are equal when the lines are parallel. (Co-interior angles would be supplementary, not equal.)",
     {});q.figure=bowtieSVG();return q;},
   function(){var q=mcq("In the same proof (\\(AB \\parallel CD\\), \\(AE = DE\\), prove \\(\\triangle ABE \\cong \\triangle DCE\\)), another step states \\(\\angle AEB = \\angle CED\\). Which reason justifies that step?",
     "Vertically opposite angles",
-    ["Alternate interior angles, because \\(AB \\parallel CD\\)","Given information","The SSS congruence postulate"],
+    ["Alternate interior angles, because \\(AB \\parallel CD\\)","Given information stated","The SSS congruence postulate"],
     "\\(\\angle AEB\\) and \\(\\angle CED\\) are formed by the same two intersecting lines at point \\(E\\), directly across from each other \u2014 vertically opposite angles, which are always equal. No parallel lines are needed for this step.",
     {});q.figure=bowtieSVG();return q;}
 ]));
@@ -2575,22 +2575,22 @@ E("u7-race-order",7,["2.3"],2,"gen",function(){
 E("u7-everyday-counterexample",7,["2.4"],1,"var",varset([
   function(){return mcq("Conjecture: \u201CAny piece of furniture with four legs is a chair.\u201D Which of the following is a counterexample?",
     "A dining table (a piece of furniture with four legs)",
-    ["A chair with four legs","A three-legged stool","A bookshelf with no legs"],
+    ["A chair with four legs and a padded seat at the table","A three-legged stool with a round wooden seat","A bookshelf with no legs, fixed flat against the wall"],
     "A counterexample must satisfy the condition (furniture with four legs) but break the conclusion (not a chair). A dining table does both. The stool and bookshelf never meet the four-leg condition, and the chair is just an example that agrees.",
     {});},
   function(){return mcq("Conjecture: \u201CIf the grass is wet, then it rained last night.\u201D Which of the following is a counterexample?",
     "The grass is wet because the sprinkler ran this morning",
-    ["It rained last night and the grass is wet","The grass is dry and it did not rain last night","Rain is in the forecast for tonight"],
+    ["It rained last night and the grass is wet","The grass is dry and it did not rain last night","Rain is in the forecast for tonight, starting after midnight"],
     "A counterexample needs wet grass WITHOUT last night's rain. The sprinkler gives exactly that: the condition (wet grass) holds, but the conclusion (it rained) is false.",
     {});},
   function(){return mcq("Conjecture: \u201CIf something has a knob, then it is a door.\u201D Which of the following is a counterexample?",
     "A stove, which has control knobs",
-    ["A door with a round knob","A window with no knob","A door with a lever handle instead of a knob"],
+    ["A door with a round metal knob","A window with no knob at all","A door with a lever handle instead of a knob"],
     "The stove has knobs (condition met) but is not a door (conclusion broken) \u2014 a true counterexample. The lever-handled door never meets the \u201Chas a knob\u201D condition.",
     {});},
   function(){return mcq("Conjecture: \u201CAll students at the school play a sport.\u201D Which of the following is a counterexample?",
     "One student at the school is in the chess club and plays no sport",
-    ["Many students at the school play hockey","One student at the school plays two sports","A teacher at the school plays no sport"],
+    ["Many students at the school play hockey on the school team each winter","One student at the school plays two sports, both hockey and soccer","A teacher at the school plays no sport and coaches no team either"],
     "To disprove \u201Call students,\u201D one student who plays no sport is enough. The teacher is not a student, so that option does not touch the claim.",
     {});}
 ]));
@@ -2634,7 +2634,7 @@ E("u7-counterexample-claims",7,["2.4"],2,"var",varset([
     {});},
   function(){return mcq("Conjecture: \u201CThe product of two numbers is always greater than each of the two numbers.\u201D Which calculation is a counterexample?",
     "\\(6 \\times \\frac{1}{2} = 3\\)",
-    ["\\(3 \\times 4 = 12\\)","\\(1.5 \\times 2 = 3\\)","\\(10 \\times 1.1 = 11\\)"],
+    ["\\(3 \\times 4 = 12\\)","\\(\\frac{3}{2} \\times 2 = 3\\)","\\(10 \\times 1.1 = 11\\)"],
     "\\(6 \\times \\frac{1}{2} = 3\\), and \\(3\\) is NOT greater than \\(6\\), so the claim fails — multiplying by a fraction between \\(0\\) and \\(1\\) shrinks the number. In each other calculation the product is greater than both factors.",
     {});}
 ]));
@@ -3067,22 +3067,22 @@ E("u8-angle-chase",8,["5.8"],2,"var",varset([
 E("u1-ambiguous-count",1,["7.2"],3,"var",varset([
   function(){return mcq("In \\(\\triangle ABC\\), \\(\\angle A = 40^\\circ\\), side \\(b = 10\\text{ cm}\\) and side \\(a = 5\\text{ cm}\\) (\\(a\\) is opposite \\(\\angle A\\)). How many different triangles fit this information?",
     "No triangle is possible",
-    ["Exactly one triangle (a right triangle)","Exactly one triangle","Two different triangles"],
+    ["Exactly one triangle (a right triangle)","Exactly one triangle","Two different triangles are possible"],
     "Compare \\(a\\) with the height \\(h = b\\sin A = 10 \\times \\sin 40^\\circ \\approx 6.43\\text{ cm}\\). Since \\(a = 5\\text{ cm}\\) is SHORTER than \\(6.43\\text{ cm}\\), side \\(a\\) cannot reach the base line at all — no triangle closes.",
     {});},
   function(){return mcq("In \\(\\triangle ABC\\), \\(\\angle A = 30^\\circ\\), side \\(b = 10\\text{ cm}\\) and side \\(a = 5\\text{ cm}\\) (\\(a\\) is opposite \\(\\angle A\\)). How many different triangles fit this information?",
     "Exactly one triangle (a right triangle)",
-    ["No triangle is possible","Exactly one triangle","Two different triangles"],
+    ["No triangle is possible from these lengths","Exactly one triangle","Two different triangles fit this data"],
     "The height is \\(h = b\\sin A = 10 \\times \\sin 30^\\circ = 5\\text{ cm}\\). Side \\(a\\) equals \\(h\\) exactly, so side \\(a\\) just reaches the base at a right angle — exactly one triangle, and it is right-angled.",
     {});},
   function(){return mcq("In \\(\\triangle ABC\\), \\(\\angle A = 40^\\circ\\), side \\(b = 10\\text{ cm}\\) and side \\(a = 8\\text{ cm}\\) (\\(a\\) is opposite \\(\\angle A\\)). How many different triangles fit this information?",
     "Two different triangles",
-    ["No triangle is possible","Exactly one triangle (a right triangle)","Exactly one triangle"],
+    ["No triangle is possible from these lengths","Exactly one triangle (a right triangle)","Exactly one triangle"],
     "The height is \\(h = 10 \\times \\sin 40^\\circ \\approx 6.43\\text{ cm}\\). Side \\(a = 8\\text{ cm}\\) is longer than \\(h\\) but shorter than \\(b = 10\\text{ cm}\\), so it can swing to two different positions on the base — the ambiguous case gives two different triangles.",
     {});},
   function(){return mcq("In \\(\\triangle ABC\\), \\(\\angle A = 50^\\circ\\), side \\(b = 9\\text{ cm}\\) and side \\(a = 11\\text{ cm}\\) (\\(a\\) is opposite \\(\\angle A\\)). How many different triangles fit this information?",
     "Exactly one triangle",
-    ["No triangle is possible","Exactly one triangle (a right triangle)","Two different triangles"],
+    ["No triangle is possible in this case","Exactly one triangle (a right triangle)","Two triangles in all"],
     "Side \\(a = 11\\text{ cm}\\) is longer than side \\(b = 9\\text{ cm}\\), so it can only land in one position past the foot of the height — exactly one triangle. (Two triangles need \\(h < a < b\\).)",
     {});}
 ]));
@@ -3180,7 +3180,7 @@ E("u4-compare-radicals",4,["1.4"],2,"gen",function(){
   var X=radT(a,b),Y=radT(c,d),xBig=x2>y2;
   return mcq("Which statement about "+X+" and "+Y+" is true?",
     (xBig?X:Y)+" is the larger value",
-    [(xBig?Y:X)+" is the larger value","They are equal","They cannot be compared without a calculator"],
+    [(xBig?Y:X)+" is the larger value","They are equal in value","They cannot be compared without a calculator"],
     "Write both as entire radicals: "+X+" = "+sqrtT(x2)+" and "+Y+" = "+sqrtT(y2)+". Since \\("+Math.max(x2,y2)+" > "+Math.min(x2,y2)+"\\), the larger value is <b>"+(xBig?X:Y)+"</b>.",
     {a:a,b:b,c:c,d:d,x2:x2,y2:y2});
 });
