@@ -2617,9 +2617,9 @@ E("u6-pack-cost",6,["6.17"],2,"gen",function(){
 });
 E("u6-rate-difference",6,["6.16"],2,"gen",function(){
   var frames=[
-    {a:"Maya",b:"Leo",thing:"text messages",per:"day",unit:"texts",periods:[5,7,10,14,20,28,31],rMin:80,rMax:220},
-    {a:"Priya",b:"Owen",thing:"pages read",per:"day",unit:"pages",periods:[4,5,6,7,10,14],rMin:25,rMax:90},
-    {a:"Sofia",b:"Liam",thing:"laps swum",per:"hour",unit:"laps",periods:[2,3,4,5,6,8],rMin:18,rMax:45}
+    {a:"Maya",b:"Leo",verb:"sent",thing:"text messages",per:"day",unit:"texts",periods:[5,7,10,14,20,28,31],rMin:80,rMax:220},
+    {a:"Priya",b:"Owen",verb:"read",thing:"pages",per:"day",unit:"pages",periods:[4,5,6,7,10,14],rMin:25,rMax:90},
+    {a:"Sofia",b:"Liam",verb:"swam",thing:"laps",per:"hour",unit:"laps",periods:[2,3,4,5,6,8],rMin:18,rMax:45}
   ];
   var F=pick(frames);
   var r1=ri(F.rMin,F.rMax),diff=ri(8,40),r2=r1+(Math.random()<0.5?diff:-diff),tries=0;
@@ -2627,7 +2627,7 @@ E("u6-rate-difference",6,["6.16"],2,"gen",function(){
   var p1=pick(F.periods),p2=pick(F.periods);
   var T1=r1*p1,T2=r2*p2;
   var winA=r1>r2,win=winA?F.a:F.b,lose=winA?F.b:F.a;
-  return mcq(F.a+" completed "+T1+" "+F.thing+" in "+p1+" "+F.per+"s. "+F.b+" completed "+T2+" "+F.thing+" in "+p2+" "+F.per+"s. Who has the higher rate, and by how many "+F.unit+" per "+F.per+"?",
+  return mcq(F.a+" "+F.verb+" "+T1+" "+F.thing+" in "+p1+" "+F.per+"s. "+F.b+" "+F.verb+" "+T2+" "+F.thing+" in "+p2+" "+F.per+"s. Who has the higher rate, and by how many "+F.unit+" per "+F.per+"?",
     win+", by \\("+diff+"\\) per "+F.per,
     [lose+", by \\("+diff+"\\) per "+F.per,win+", by \\("+(diff+5)+"\\) per "+F.per,lose+", by \\("+(diff+5)+"\\) per "+F.per],
     F.a+"'s rate: \\("+T1+" \\div "+p1+" = "+r1+"\\text{ "+F.unit+" per "+F.per+"}\\). "+F.b+"'s rate: \\("+T2+" \\div "+p2+" = "+r2+"\\text{ "+F.unit+" per "+F.per+"}\\). The higher rate is "+win+"'s, by \\("+Math.max(r1,r2)+" - "+Math.min(r1,r2)+" = \\)<b>\\("+diff+"\\text{ per "+F.per+"}\\)</b>.",
@@ -4768,7 +4768,7 @@ function exportGame(kind,items,statusEl,leftOutOverride){
    PNG files at the package root and referenced by bare filename, the
    questiondb image convention; if a rasterization fails the SVG markup
    is embedded inline instead and counted in the status line. */
-var BS_QUIZ_FILE="quiz_d2l_M2201BS.xml",BS_QUIZ_TITLE="Math 2201 Review: Practice Set";
+var BS_QUIZ_FILE="quiz_d2l_M2201BS.xml",BS_QUIZ_TITLE="Math 2201 Review: Practice Set",BS_APP_NAME="Math 2201 Review";
 function bsUuid(){
   var b=new Uint8Array(16);
   if(window.crypto&&crypto.getRandomValues)crypto.getRandomValues(b);else for(var i=0;i<16;i++)b[i]=Math.floor(Math.random()*256);
@@ -4912,14 +4912,22 @@ function bsItemXml(q,poolNo,varNo,pts,st,files,rasterFn){
   });
 }
 function bsQuizXml(poolsXml,nPools,nVars){
-  var intro='&lt;p&gt;This quiz mirrors a practice set built in the Math 2201 Review app. Each question is drawn at random from a pool of '+nVars+' variants of the same question, so learners can see different numbers for the same task. The worked solution for every question is stored as that question&amp;#39;s feedback.&lt;/p&gt;';
+  /* The quiz Description lives in the assessment-level rubric mattext
+     with texttype="text/html" and isdisplayed="yes", exactly as the
+     native single-quiz export writes it (its Description goes there and
+     its Introduction goes to intro_message). An earlier build put the
+     description into intro_message instead, leaving the rubric mattext
+     empty, and the quiz preview summary page showed the text as raw
+     HTML; intro_message stays in the empty form the native sandbox
+     export and the authored Unit 6 quizzes both carry. */
+  var desc='&lt;p&gt;This quiz mirrors a practice set built in the '+BS_APP_NAME+' app. Each question is drawn at random from a pool of '+nVars+' variants of the same question, so learners can see different numbers for the same task. The worked solution for every question is stored as that question\'s feedback.&lt;/p&gt;';
   return '<?xml version="1.0" encoding="utf-8"?>\n'
     +'<questestinterop xmlns:d2l_2p0="http://desire2learn.com/xsd/d2lcp_v2p0">'
     +'<assessment d2l_2p0:id="1" title="'+BS_QUIZ_TITLE+'" ident="res_quiz_M2201BS">'
-    +'<rubric><flow_mat><material><mattext d2l_2p0:isdisplayed="yes" texttype="text/plain" /></material></flow_mat></rubric>'
+    +'<rubric><flow_mat><material><mattext d2l_2p0:isdisplayed="yes" texttype="text/html">'+desc+'</mattext></material></flow_mat></rubric>'
     +'<assessmentcontrol hide_question_pointsswitch="no" hintswitch="no" solutionswitch="yes" feedbackswitch="no" />'
     +'<presentation_material><flow_mat><material label="page header"><mattext d2l_2p0:isdisplayed="yes" texttype="text/html" /></material><material label="page footer"><mattext d2l_2p0:isdisplayed="yes" texttype="text/html" /></material></flow_mat></presentation_material>'
-    +'<assess_procextension><d2l_2p0:intro_message d2l_2p0:isdisplayed="yes" texttype="text/html">'+intro+'</d2l_2p0:intro_message>'
+    +'<assess_procextension><d2l_2p0:intro_message d2l_2p0:isdisplayed="no" texttype="text/plain" />'
     +'<category ident="M2201REVCAT" d2l_2p0:sortorder="1">Math 2201 Review</category>'
     +'<d2l_2p0:disable_right_click>no</d2l_2p0:disable_right_click><d2l_2p0:disable_pager_access>no</d2l_2p0:disable_pager_access><is_active>no</is_active><d2l_2p0:is_single_session>no</d2l_2p0:is_single_session><d2l_2p0:annotation_tools_enabled>yes</d2l_2p0:annotation_tools_enabled><d2l_2p0:date_start /><d2l_2p0:date_end /><d2l_2p0:date_due /><d2l_2p0:has_schedule_event>no</d2l_2p0:has_schedule_event><d2l_2p0:password /><d2l_2p0:is_attempt_Rldb>no</d2l_2p0:is_attempt_Rldb><d2l_2p0:is_subview_Rldb>no</d2l_2p0:is_subview_Rldb><d2l_2p0:time_limit>0</d2l_2p0:time_limit><d2l_2p0:show_clock>no</d2l_2p0:show_clock><d2l_2p0:enforce_time_limit>no</d2l_2p0:enforce_time_limit><d2l_2p0:quiz_start_type>no</d2l_2p0:quiz_start_type><d2l_2p0:grace_period>0</d2l_2p0:grace_period><d2l_2p0:late_limit>2</d2l_2p0:late_limit><d2l_2p0:attempts_allowed>0</d2l_2p0:attempts_allowed><d2l_2p0:attempt_restrictions /><d2l_2p0:mark_calculation_type>1</d2l_2p0:mark_calculation_type><d2l_2p0:is_forward_only>no</d2l_2p0:is_forward_only><d2l_2p0:paging_type_id>0</d2l_2p0:paging_type_id></assess_procextension>'
     +'<assessfeedback title=""><rubric><flow_mat><material><mattext texttype="yes" /></material></flow_mat></rubric><d2l_2p0:duration>0</d2l_2p0:duration><d2l_2p0:response_display_type_id>2</d2l_2p0:response_display_type_id><d2l_2p0:show_correct_answers>yes</d2l_2p0:show_correct_answers><d2l_2p0:submission_restrictip>no</d2l_2p0:submission_restrictip><d2l_2p0:show_class_average>no</d2l_2p0:show_class_average><d2l_2p0:show_score_distribution>no</d2l_2p0:show_score_distribution></assessfeedback>'
