@@ -643,6 +643,7 @@ var INDICATORS={
  "1.9":"Determine the roots of a radical equation algebraically",
  "1.11":"Explain why some roots of a radical equation are extraneous",
  "PK.1":"Prior knowledge: measures of central tendency (Unit 5, Section 1 \u2014 uncoded in the guide)",
+ "PK.2":"Prior knowledge: factoring quadratic expressions (Unit 3 \u2014 a 1201 skill supporting 4.8)",
  "8.6":"Use dispersion to describe the differences between two sets of data",
  "8.7":"Create frequency tables and graphs from a set of data",
  "8.8":"Explain, using examples, the meaning of standard deviation",
@@ -685,7 +686,7 @@ var INDICATORS={
 };
 var UNIT_IND={
  1:["7.1","7.2","7.3"],2:["4.1","4.2","4.4","4.5","4.10","4.11","4.12","4.13","4.14","4.15","4.16"],
- 3:["4.3","4.6","4.7","4.8","4.9"],4:["1.1","1.2","1.4","1.5","1.6","1.7","1.9","1.11"],
+ 3:["PK.2","4.3","4.6","4.7","4.8","4.9"],4:["1.1","1.2","1.4","1.5","1.6","1.7","1.9","1.11"],
  5:["PK.1","8.6","8.7","8.8","8.9","8.10","8.11","8.12","8.13","8.14","8.15","8.16","8.17","8.18","8.19","8.20","8.21","8.22"],
  6:["6.2","6.5","6.9","6.10","6.14","6.16","6.17","6.19","6.23"],
  7:["2.1","2.2","2.3","2.4","2.7","2.8"],8:["5.1","5.3","5.5","5.6","5.8","5.9","5.11"]};
@@ -806,7 +807,7 @@ E("u5-freq-missing",5,["8.7"],1,"gen",function(){
   return numq("A grouped frequency table has a total of "+total+" values. Three of its intervals have frequencies "+a+", "+b+" and "+c+". What is the frequency of the remaining interval?",
     miss,0.001,"The frequencies must add to the total: <b>\\("+total+" - ("+a+" + "+b+" + "+c+") = "+total+" - "+(a+b+c)+" = "+miss+"\\)</b>.",{total:total,a:a,b:b,c:c});
 });
-E("u5-freq-countin",5,["8.7"],2,"gen",function(){
+E("u5-freq-countin",5,["8.7"],1,"gen",function(){
   var w=pick([5,10]);var lo=ri(0,3)*w;var hi=lo+w;
   var data=[],i;for(i=0;i<18;i++)data.push(ri(0,hi+w+8));
   var cnt=data.filter(function(x){return x>=lo&&x<hi;}).length;
@@ -821,7 +822,7 @@ E("u5-relfreq",5,["8.7"],1,"gen",function(){
   return numq(ctx+" frequency \\("+f+"\\) out of a total of \\("+total+"\\) values. What is its <b>relative frequency</b>, as a percent? (Just the number.)",
     pct,0.11,"Relative frequency \\(= \\frac{"+f+"}{"+total+"} = "+fmt(f/total,4)+"\\), which is <b>\\("+fmt(pct)+"\\%\\)</b>.",{f:f,total:total});
 });
-E("u5-relfreq-rev",5,["8.7"],2,"gen",function(){
+E("u5-relfreq-rev",5,["8.7"],1,"gen",function(){
   var pcts=[5,10,12.5,15,20,25,30,35,40,45,50,60,75,80],totals=[40,60,80,100,120,150,200,240,300];
   var total,pct,f,guard=0;
   do{total=pick(totals);pct=pick(pcts);f=total*pct/100;guard++;}while(f!==Math.floor(f)&&guard<60);
@@ -829,7 +830,7 @@ E("u5-relfreq-rev",5,["8.7"],2,"gen",function(){
   return numq(ctx+" relative frequency is \\("+fmt(pct)+"\\%\\), and the table's total is \\("+total+"\\) values. What is the interval's frequency?",
     f,0.001,"<b>\\("+fmt(pct)+"\\% \\text{ of } "+total+" = "+fmt(pct/100,4)+" \\times "+total+" = "+f+"\\)</b>.",{total:total,pct:pct});
 });
-E("u5-histogram-read",5,["8.7"],2,"gen",function(){
+E("u5-histogram-read",5,["8.7"],1,"gen",function(){
   var labels=["\\(0\\text{-}9\\)","\\(10\\text{-}19\\)","\\(20\\text{-}29\\)","\\(30\\text{-}39\\)"];var fs=[ri(2,7),ri(8,13),ri(5,10),ri(1,5)];
   var ans=fs[2]+fs[3];
   var rows=labels.map(function(l,i){return "<tr><td>"+l+"</td><td>\\("+fs[i]+"\\)</td></tr>";}).join("");
@@ -842,7 +843,7 @@ E("u5-midpoint",5,["8.7"],1,"gen",function(){
   return numq("What is the <b>midpoint</b> of the interval \\("+lo+"\\text{-}"+hi+"\\)"+tail+"?",
     mid,0.011,"Midpoint <b>\\(= \\frac{"+lo+" + "+hi+"}{2} = "+fmt(mid)+"\\)</b>. A frequency polygon plots each interval's frequency at its midpoint.",{lo:lo,hi:hi});
 });
-E("u5-polygon-point",5,["8.7"],2,"gen",function(){
+E("u5-polygon-point",5,["8.7"],1,"gen",function(){
   var w=pick([10]);var lo=ri(0,4)*w;var hi=lo+w-1;var mid=(lo+hi)/2;var f=ri(3,12);
   return mcq("A frequency polygon is drawn for a table in which the interval \\("+lo+"\\text{-}"+hi+"\\) has frequency \\("+f+"\\). At which point is that interval's polygon point plotted?",
     "\\(("+fmt(mid)+", "+f+")\\)",
@@ -986,7 +987,7 @@ E("u5-compare-normal",5,["8.13"],2,"gen",function(){
   q.figure = normSVG({mu:m, sd:s1, curve2:{sd:s2, tagA:"A: \u03C3 = "+s1, tagB:"B: \u03C3 = "+s2}});
   return q;
 });
-E("u5-empirical",5,["8.14"],2,"gen",function(){
+E("u5-empirical",5,["8.14"],1,"gen",function(){
   var ctx=pick([{w:"mass of loaves of bread",u:"g"},{w:"lifespan of a brand of battery",u:"hours"},{w:"finishing times in a fun run",u:"minutes"},{w:"length of fish of one species",u:"cm"}]);
   var mu=ri(20,60)*10,sd=pick([5,10,15,20]);var k=pick([1,2]);var pct=k===1?68:95;
   var q = numq("The "+ctx.w+" is normally distributed with mean \\("+mu+"\\) "+ctx.u+" and standard deviation \\("+sd+"\\) "+ctx.u+". About what percent of the values lie between \\("+(mu-k*sd)+"\\) and \\("+(mu+k*sd)+"\\) "+ctx.u+"? (Just the number.)",
@@ -1024,7 +1025,7 @@ E("u5-z-backwards",5,["8.15"],2,"gen",function(){
   return numq("Tomato plants in a greenhouse have heights with mean \\("+mu+"\\) cm and standard deviation \\("+sd+"\\) cm. A plant is \\("+fmt(Math.abs(z))+"\\) standard deviations "+(z>=0?"above":"below")+" the mean. How tall is the plant, in cm?",
     Math.round(x*10)/10,0.06,"Work backwards: <b>\\(x = \\mu + z\\sigma = "+mu+" + ("+fmt(z)+")("+sd+") = "+fmt(x)+"\\)</b> cm.",{mu:mu,sd:sd,z:z});
 });
-E("u5-z-prob",5,["8.15"],2,"gen",function(){
+E("u5-z-prob",5,["8.15"],1,"gen",function(){
   var mags=[0.25,0.3,0.5,0.6,0.64,0.75,0.85,0.9,1,1.18,1.2,1.25,1.5,1.75,1.8,1.86,1.97,2,2.1,2.25,2.4,2.5,2.8];
   var a=pick(mags)*(Math.random()<0.5?-1:1);
   var right=Math.random()<0.4;var cdf=zTab(a);var ans=right?Math.round((1-cdf)*10000)/10000:cdf;
@@ -1054,7 +1055,7 @@ E("u5-z-applied",5,["8.15"],2,"gen",function(){
 
 <script>
 /* --- confidence intervals (8.17-8.22) --- */
-E("u5-ci-endpoint",5,["8.17"],2,"gen",function(){
+E("u5-ci-endpoint",5,["8.17"],1,"gen",function(){
   var p=pick([52,57,63,68,74,81]);var moe=Math.round(rf(3,7)*2)/2;var askUp=Math.random()<0.5;
   var ans=askUp?p+moe:p-moe;
   return numq("A survey reports that \\("+p+"\\%\\) of residents support a new rink, with a margin of error of \\(\\pm "+fmt(moe)+"\\) percentage points. What is the "+(askUp?"upper":"lower")+" endpoint of the confidence interval, as a percent? (Just the number.)",
@@ -1194,7 +1195,7 @@ function(){var q = mcq("In triangle ABC, a diagram marks side \\(a = 9\\text{ cm
     ["The cosine law \u2014 it is the only law that works with two known sides, so it must start the solution, and the angle it gives will be the one correct angle for the triangle shown","The sine law \u2014 and its answer is always the one correct angle, because the inverse sine returns the angle that fits the triangle, with no second candidate to check","The angle-sum rule \u2014 the third angle comes first, then either law finishes it, because knowing all three angles is what lets a law find the remaining angle"],
     "Side-side-angle is the ambiguous case for the sine law: \\(\\sin\\theta = \\sin(180^\\circ - \\theta)\\), so the calculation can offer two candidate angles and the shape of the triangle decides which one fits.",{});}
 ]));
-E("u1-sine-side",1,["7.2"],2,"gen",function(){
+E("u1-sine-side",1,["7.2"],1,"gen",function(){
   var A=pick([35,40,50,55,65]),B=pick([45,60,70,80]);var a=ri(8,20);
   var b=a*Math.sin(B*Math.PI/180)/Math.sin(A*Math.PI/180);
   var q = numq("In \\(\\triangle ABC\\), \\(\\angle A = "+A+"^\\circ\\), \\(\\angle B = "+B+"^\\circ\\), and side \\(a = "+a+"\\text{ cm}\\) (opposite \\(\\angle A\\)). Find side \\(b\\), to one decimal place, in cm.",
@@ -1202,7 +1203,7 @@ E("u1-sine-side",1,["7.2"],2,"gen",function(){
   q.figure = triSVG(a, b, a*Math.sin((180-A-B)*Math.PI/180)/Math.sin(A*Math.PI/180), {L:["A","B","C"], ang:[A+"°",B+"°",null], side:[a+" cm","?",null]});
   return q;
 });
-E("u1-sine-angle",1,["7.2"],2,"gen",function(){
+E("u1-sine-angle",1,["7.2"],1,"gen",function(){
   var tri=pick([{n:"DEF",u:"m"},{n:"ABC",u:"cm"},{n:"PQR",u:"km"}]);
   var A=pick([25,30,35,40,45,50,55,60]),a=pick([6,7,8,9,10,11,12,13,14,15,16]);
   var bts=[50,55,60,65,70,75,80].filter(function(x){return x>A+15&&A+x<175;});
@@ -1216,7 +1217,7 @@ E("u1-sine-angle",1,["7.2"],2,"gen",function(){
   q.figure = triSVG(a, b, (function(){var Bx=Math.asin(Math.min(1,b*Math.sin(A*Math.PI/180)/a))*180/Math.PI;return a*Math.sin((180-A-Bx)*Math.PI/180)/Math.sin(A*Math.PI/180);})(), {L:[L1,L2,tri.n.charAt(2)], ang:[A+"°","?",null], side:[a+" "+tri.u, fmt(b,1)+" "+tri.u, null]});
   return q;
 });
-E("u1-cosine-side",1,["7.2"],2,"gen",function(){
+E("u1-cosine-side",1,["7.2"],1,"gen",function(){
   var C=pick([50,60,70,80]),a=ri(6,14),b=ri(6,14);
   var c=Math.sqrt(a*a+b*b-2*a*b*Math.cos(C*Math.PI/180));
   var q = numq("In \\(\\triangle PQR\\), sides \\(p = "+a+"\\text{ km}\\) and \\(q = "+b+"\\text{ km}\\) meet at \\(\\angle R = "+C+"^\\circ\\) between them. Find the side opposite \\(\\angle R\\), to one decimal place, in km.",
@@ -1224,7 +1225,7 @@ E("u1-cosine-side",1,["7.2"],2,"gen",function(){
   q.figure = triSVG(a, b, c, {L:["P","Q","R"], ang:[null,null,C+"°"], side:[a+" km",b+" km","?"]});
   return q;
 });
-E("u1-cosine-angle",1,["7.2"],2,"gen",function(){
+E("u1-cosine-angle",1,["7.2"],1,"gen",function(){
   var Atar=pick([45,55,65,75]);var b=ri(6,12),c=ri(6,12);
   var aTrue=Math.sqrt(b*b+c*c-2*b*c*Math.cos(Atar*Math.PI/180));
   var a=Math.round(aTrue*10)/10;
@@ -1277,17 +1278,24 @@ E("u2-axis-from-intercepts",2,["4.13"],1,"gen",function(){
 });
 E("u2-xintercepts",2,["4.4"],2,"gen",function(){
   var p=ri(-9,-1),q=ri(1,10);var b=-(p+q),c=p*q;
-  var factored=Math.random()<0.5;
+  var factored=false;
   var prompt=factored? "A parabola has equation "+factT(1,p,q)+". What is the larger x-intercept?"
                      : "Find the larger x-intercept of \\(y = "+quadB(1,b,c)+"\\)"+".";
   return numq(prompt,q,0.011,"Factor: "+factT(1,p,q)+". The intercepts are \\(x = "+p+"\\) and \\(x = "+q+"\\); the larger is <b>\\("+q+"\\)</b>.",{p:p,q:q});
 });
-E("u2-factored-coeffs",2,["4.5"],2,"gen",function(){
+E("u2-xintercepts-factored",2,["4.4"],1,"gen",function(){
+  var p=ri(-9,-1),q=ri(1,10);var b=-(p+q),c=p*q;
+  var factored=true;
+  var prompt=factored? "A parabola has equation "+factT(1,p,q)+". What is the larger x-intercept?"
+                     : "Find the larger x-intercept of \\(y = "+quadB(1,b,c)+"\\)"+".";
+  return numq(prompt,q,0.011,"Factor: "+factT(1,p,q)+". The intercepts are \\(x = "+p+"\\) and \\(x = "+q+"\\); the larger is <b>\\("+q+"\\)</b>.",{p:p,q:q});
+});
+E("u2-factored-coeffs",2,["4.5"],1,"gen",function(){
   var p=ri(-7,-2),q=ri(2,7);var askB=Math.random()<0.5;
   return numq("A quadratic function has zeros \\("+p+"\\) and \\("+q+"\\), so its equation can be written \\(y = (x - ("+p+"))(x - ("+q+"))\\). Expanded into the form \\(y = x^2 + bx + c\\), what is the value of \\("+(askB?"b":"c")+"\\)?",
     askB?-(p+q):p*q,0.011,"Expanding: \\((x - ("+p+"))(x - ("+q+")) = x^2 - ("+(p+q)+")x + ("+(p*q)+")\\), so \\(b = "+(-(p+q))+"\\) and \\(c = "+(p*q)+"\\). The asked coefficient is <b>\\("+(askB?-(p+q):p*q)+"\\)</b>.",{p:p,q:q,askB:askB});
 });
-E("u2-domain-range",2,["4.1"],2,"gen",function(){
+E("u2-domain-range",2,["4.1"],1,"gen",function(){
   var a=pick([1,-1,2]),h=ri(-4,4),k=ri(-6,10);
   var correct=a>0?"Domain: all real numbers; Range: \\(y \\geq "+k+"\\)":"Domain: all real numbers; Range: \\(y \\leq "+k+"\\)";
   return mcq("A quadratic function has vertex \\(("+h+", "+k+")\\) and opens "+(a>0?"upward":"downward")+". What are its domain and range?",correct,
@@ -1394,7 +1402,7 @@ E("u4-multiply",4,["1.6"],2,"gen",function(){
   return numq("The product \\(\\sqrt{"+x+"} \\times \\sqrt{"+y+"}\\) is a whole number. What is it?",
     k*i*j,0.011,"\\[\\begin{aligned} \\sqrt{"+x+"} \\times \\sqrt{"+y+"} &= \\sqrt{"+x+" \\times "+y+"} \\\\ &= \\sqrt{"+(x*y)+"} \\end{aligned}\\] Notice \\("+x+" = "+k+" \\times "+(i*i)+"\\) and \\("+y+" = "+k+" \\times "+(j*j)+"\\), so the product is <b>\\("+k+" \\times "+i+" \\times "+j+" = "+(k*i*j)+"\\)</b>.",{p:[x,y]});
 });
-E("u4-rationalize",4,["1.7"],2,"gen",function(){
+E("u4-rationalize",4,["1.7"],1,"gen",function(){
   var d=pick([2,3,5,6,7,10,11,13,14,15]);var c=d*ri(1,5);
   var frame=pick(["Rationalize the denominator: \\(\\frac{"+c+"}{\\sqrt{"+d+"}}\\).","Write \\(\\frac{"+c+"}{\\sqrt{"+d+"}}\\) with a rational denominator."]);
   return mcq(frame,radT(c/d,d),[sqrtT(c*d),"\\(\\frac{"+c+"\\sqrt{"+d+"}}{"+d+"}\\)","\\("+(c/d)+"\\sqrt{"+(d*d)+"}\\)"],
@@ -1455,20 +1463,20 @@ E("u6-scale-factor",6,["6.9"],1,"gen",function(){
   return numq(frame,
     k,0.011,"Scale factor = \\("+real+" \\div "+model+" = \\)<b>\\("+k+"\\)</b>. The scale is \\(1 : "+k+"\\).",{k:k,model:model});
 });
-E("u6-unknown-dimension",6,["6.9"],2,"gen",function(){
+E("u6-unknown-dimension",6,["6.9"],1,"gen",function(){
   var k=pick([10,12,15,20,24,25,30,40,50,60,100]);var obj=pick([{w:"toy car",u:"cm"},{w:"model boat",u:"cm"},{w:"dollhouse room",u:"cm"},{w:"model train",u:"cm"},{w:"miniature lighthouse",u:"cm"},{w:"model airplane",u:"cm"}]);
   var modelDim=pick([3,4,5,6,7,8,9,10,12,14]);var real=modelDim*k;
   return numq("A "+obj.w+" is built to a scale of \\(1 : "+k+"\\). A part that is "+modelDim+" "+obj.u+" long on the model represents what length on the real object, in "+obj.u+"?",
     real,0.011,"Multiply by the scale factor: \\("+modelDim+" \\times "+k+" = \\)<b>\\("+real+"\\text{ "+obj.u+"}\\)</b>.",{k:k,modelDim:modelDim});
 });
-E("u6-area-scale",6,["6.5","6.14"],2,"gen",function(){
+E("u6-area-scale",6,["6.5","6.14"],1,"gen",function(){
   var k=pick([2,3,4,5,6,8,10]);var areaD=pick([3,4,5,6,7,8,9,10,12,14,15,16,18,20,24,25]);
   var obj=pick(["room","garden plot","mural","kitchen floor","rug design"]);
   var real=areaD*k*k;
   return numq("A scale diagram uses scale factor \\("+k+"\\) (diagram : actual = \\(1 : "+k+"\\)). A "+obj+" has area \\("+areaD+"\\text{ cm}^2\\) on the diagram. What is its actual area, in \\(\\text{cm}^2\\)?",
     real,0.011,"Areas scale by the square of the scale factor: \\("+areaD+" \\times "+k+"^2 = "+areaD+" \\times "+(k*k)+" = \\)<b>\\("+real+"\\text{ cm}^2\\)</b>. (Lengths scale by \\("+k+"\\); areas by \\("+k+"^2\\); volumes by \\("+k+"^3\\).)",{k:k,areaD:areaD});
 });
-E("u6-volume-scale",6,["6.10","6.14"],2,"gen",function(){
+E("u6-volume-scale",6,["6.10","6.14"],1,"gen",function(){
   var k=pick([2,3,4,5,6,10]);var askVol=Math.random()<0.5;var base=pick([3,4,5,6,8,10,12,15,20,25]);var f=askVol?k*k*k:k*k;var ans=base*f;
   var obj=pick(["model car","aquarium","storage tank","dollhouse"]);
   return numq("A "+obj+" is built at scale \\(1 : "+k+"\\). The model’s "+(askVol?"volume is \\("+base+"\\text{ cm}^3\\)":"surface area is \\("+base+"\\text{ cm}^2\\)")+". What is the corresponding measurement for the real object, in the same cubic/square units?",
@@ -1499,7 +1507,7 @@ E("u6-better-buy",6,["6.17"],2,"gen",function(){
     [(winner==="The first option"?"The second option":"The first option")+" - a bigger package is always cheaper per item in every case","They are the same value - the prices scale exactly for both packs","Whichever costs less overall, regardless of quantity, is always the better buy here"],
     "Unit rates: Option 1: \\("+fmt(A.p)+" \\div "+A.q+" = \\$"+fmt(A.p/A.q)+"\\); Option 2: \\("+fmt(B.p)+" \\div "+B.q+" = \\$"+fmt(B.p/B.q)+"\\). Compare unit rates, not sticker prices — "+winner.toLowerCase()+" wins.",{A:A,B:B});
 });
-E("u6-rate-solve",6,["6.1"],2,"gen",function(){
+E("u6-rate-solve",6,["6.1"],1,"gen",function(){
   var ctxs=[
     function(R,T){return "A tap delivers "+R+" litres of water per minute. How many minutes does it take to fill a "+T+" L tank?";},
     function(R,T){return "A cyclist rides at a steady "+R+" km/h. How many hours does a "+T+" km ride take?";},
@@ -1513,7 +1521,7 @@ E("u6-rate-solve",6,["6.1"],2,"gen",function(){
   return numq(pick(ctxs)(rate,total),
     t,0.011,"Amount \\(= \\text{rate} \\times \\text{time}\\), so time \\(= \\text{amount} \\div \\text{rate} = "+total+" \\div "+rate+" = \\)<b>\\("+t+"\\)</b>. Isolating the variable first keeps the arithmetic in one step.",{t:t,total:total,rate:rate});
 });
-E("u6-slope-rate",6,["6.19"],2,"var",varset([
+E("u6-slope-rate",6,["6.19"],1,"var",varset([
   function(){return mcq("A graph shows distance from home (km) against time (h) for a drive. The line passes through \\((0, 0)\\) and \\((2, 110)\\). What does the slope of the line represent, and what is it?",
     "The speed: \\(110 \\div 2 = 55\\text{ km/h}\\) — the slope of a distance–time graph is the rate of travel",
     ["The total distance: \\(110\\text{ km}\\) - the distance covered over the whole drive, end to end","The time taken: \\(2\\text{ h}\\) - the time the whole drive lasted from start to the finish of the trip","The acceleration: \\(55\\text{ km/h}^2\\) - the rate at which the speed changes during the drive"],
@@ -1535,7 +1543,7 @@ E("u6-poster-cost",6,["6.14","6.17"],2,"gen",function(){
   return numq(frame,Math.round(cost*100)/100,0.02,"Scale factor \\(= "+fmt(W)+" \\div 10 = "+fmt(kw)+"\\), so the height becomes \\(15 \\times "+fmt(kw)+" = "+fmt(H)+"\\text{ cm}\\). Area \\(= "+fmt(W)+" \\times "+fmt(H)+" = "+fmt(area)+"\\text{ cm}^2\\) (that is the original \\(150\\text{ cm}^2\\) times \\("+fmt(kw)+"^2\\), as areas scale by \\(k^2\\)). Cost \\(= "+fmt(area)+" \\times \\$"+fmt(rate)+" = \\)<b>\\(\\$"+fmt(cost)+"\\)</b>.",{kw:kw,area:area,rate:rate});
 });
 /* ============ Unit 7: Inductive and Deductive Reasoning ============ */
-E("u7-pattern-next",7,["2.1"],1,"gen",function(){
+E("u7-pattern-next",7,["2.1"],2,"gen",function(){
   var a=ri(2,6),b=ri(1,9);var terms=[1,2,3,4].map(function(n){return a*n+b;});
   var askN=pick([8,10,12]);var ans=a*askN+b;
   return numq("A pattern begins \\("+terms.join(", ")+", \\ldots\\) The rule is linear. What is term \\("+askN+"\\) of the pattern?",
@@ -1546,7 +1554,7 @@ E("u7-pattern-quad",7,["2.1"],2,"gen",function(){
   return numq("A pattern of figures is built from "+obj+": figure 1 uses "+terms[0]+" "+obj+", figure 2 uses "+terms[1]+", figure 3 uses "+terms[2]+", figure 4 uses "+terms[3]+". How many "+obj+" does figure "+askN+" use?",
     ans,0.011,"The counts are \\(1^2"+(c?" + "+c:"")+", 2^2"+(c?" + "+c:"")+", 3^2"+(c?" + "+c:"")+"\\), \\(\\ldots\\) so figure \\(n\\) uses \\(n^2"+(c?" + "+c:"")+"\\) "+obj+". Figure \\("+askN+"\\) uses \\("+askN+"^2"+(c?" + "+c:"")+" = \\)<b>\\("+ans+"\\)</b>.",{c:c,askN:askN});
 });
-E("u7-counterexample",7,["2.4"],2,"var",varset([
+E("u7-counterexample",7,["2.4"],1,"var",varset([
   function(){return mcq("Conjecture: \u2018All prime numbers are odd.\u2019 Which value is a counterexample?",
     "\\(2\\) — it is prime but not odd",
     ["\\(9\\) — it is odd but not prime","\\(15\\) — it is odd and composite","\\(1\\) — it is neither prime nor composite"],
@@ -1629,7 +1637,7 @@ E("u8-triangle-sum",8,["5.3"],1,"gen",function(){
   q.figure = triAngSVG(a, b, 180-a-b, {ang:[a+"°",b+"°","?"]});
   return q;
 });
-E("u8-co-interior",8,["5.8"],2,"gen",function(){
+E("u8-co-interior",8,["5.8"],1,"gen",function(){
   var a=ri(55,160);var b=180-a;
   var frame=pick([
     "Two parallel lines are cut by a transversal. A co-interior angle measures \\("+a+"^\\circ\\). What is the measure of the co-interior angle on the same side of the transversal, in degrees?",
@@ -1668,7 +1676,7 @@ E("u8-regular-angle",8,["5.1"],1,"gen",function(){
   q.figure = polySVG(n, true);
   return q;
 });
-E("u8-exterior",8,["5.11"],2,"gen",function(){
+E("u8-exterior",8,["5.11"],1,"gen",function(){
   var a=ri(30,70),b=ri(30,70);var ext=a+b;
   var q = numq("In a triangle, the two non-adjacent interior angles measure \\("+a+"^\\circ\\) and \\("+b+"^\\circ\\). What is the measure of the exterior angle at the third vertex, in degrees?",
     ext,0.011,"The exterior angle equals the sum of the two remote interior angles: \\("+a+" + "+b+" = \\)<b>\\("+ext+"^\\circ\\)</b>. It is also \\(180^\\circ\\) minus the adjacent interior angle — the two facts agree.",{a:a,b:b});
@@ -1689,7 +1697,7 @@ E("u8-congruent",8,["5.6"],1,"var",varset([
     ["SAS \u2014 two sides and the contained angle","SSS - three sides, matched in pairs","AAA - three angles, matched in pairs at each vertex"],
     "The equal side sits between the two equal angles in each triangle, which is the angle-side-angle pattern.",{});}
 ]));
-E("u8-parallel-check",8,["5.9"],2,"var",varset([
+E("u8-parallel-check",8,["5.9"],1,"var",varset([
   function(){return mcq("A transversal cuts two lines. Corresponding angles measure \\(112^\\circ\\) and \\(112^\\circ\\). What can you conclude?",
     "The lines are parallel \u2014 equal corresponding angles is one of the tests for parallel lines",
     ["The lines are not parallel, because the angles should add to \\(180^\\circ\\) rather than be equal to each other","Nothing - angle measures cannot tell us about parallel lines or about any other lines","The lines are perpendicular, because equal angles show the lines meet at right angles"],
@@ -1713,7 +1721,7 @@ E("u8-polygon-ratio",8,["5.2"],2,"gen",function(){
   return numq(frame,
     n,0.011,"\\(\\text{Interior} + \\text{exterior} = 180^\\circ\\). With interior \\(= "+r+" \\times \\text{exterior}\\): \\(("+r+" + 1) \\times \\text{exterior} = 180^\\circ\\), so each exterior angle is \\("+fmt(ext)+"^\\circ\\) (and each interior angle is \\("+fmt(interior)+"^\\circ\\)). The exterior angles make one full turn: \\(360 \\div "+fmt(ext)+" = \\)<b>\\("+fmt(n)+"\\text{ sides}\\)</b>.",{r:r,ext:ext});
 });
-E("u7-reasoning-type",7,["2.7"],2,"var",varset([
+E("u7-reasoning-type",7,["2.7"],1,"var",varset([
   function(){return mcq("Which option uses INDUCTIVE reasoning?",
     "\\(4 \\times 6 = 24\\), \\(2 \\times 8 = 16\\) and \\(10 \\times 12 = 120\\) — in every case tried, the product of two even numbers is even",
     ["Let the numbers be \\(2a\\) and \\(2b\\). Their product is \\(4ab = 2(2ab)\\), a multiple of \\(2\\), so it is even","An even number is defined as a multiple of \\(2\\), and a product of multiples of \\(2\\) is a multiple of \\(2\\)","Let one number be \\(2a + 1\\) and the other \\(2b + 1\\). Their product is \\(4ab + 2a + 2b + 1\\), which is an odd number"],
@@ -1737,7 +1745,7 @@ E("u7-proof-pick",7,["2.7"],3,"var",varset([
     ["\\(2 + 4 + 6 = 12\\), \\(4 + 8 + 10 = 22\\), \\(6 + 10 + 14 = 30\\) and \\(8 + 12 + 16 = 36\\) - in every case the sum comes out even","Write the integers as \\(2a\\), \\(2b\\) and \\(2c\\). Their sum is \\(2a + 2b + 2c = 6abc\\), which is even, so the sum is always even","A spreadsheet tested \\(500\\) triples of even integers, small triples and large ones alike, and every sum the spreadsheet produced was even"],
     "Only the option that factors the sum as \\(2(a + b + c)\\) proves the claim for every triple at once. Examples and spreadsheet checks are inductive, and \\(6abc\\) is not the sum of \\(2a\\), \\(2b\\) and \\(2c\\).",{});}
 ]));
-E("u7-counterexample-gen",7,["2.4"],2,"gen",function(){
+E("u7-counterexample-gen",7,["2.4"],1,"gen",function(){
   var pairs=[[3,4],[3,5],[4,6],[5,6],[2,5],[6,8],[6,9],[4,10],[6,10],[6,15],[8,12],[9,12],[10,15],[5,7],[4,7]];
   var pr=pick(pairs),A=pr[0],B=pr[1];
   function gg(x,y){while(y){var t=x%y;x=y;y=t;}return x;}
@@ -1855,7 +1863,7 @@ E("u5-ci-build",5,["8.21"],1,"gen",function(){
     rng(lo,hi),[rng(p,hi),rng(lo,p),rng(p-2*m,p+2*m)],
     "The interval runs the margin of error in BOTH directions from the result: \\("+p+"\\% - "+fmt(m)+" = "+fmt(lo)+"\\%\\) and \\("+p+"\\% + "+fmt(m)+" = "+fmt(hi)+"\\%\\).",{p:p,m:m});
 });
-E("u5-ci-read-report",5,["8.21"],2,"var",varset([
+E("u5-ci-read-report",5,["8.21"],1,"var",varset([
   function(){return mcq("A survey reports a confidence interval of \\(74.9\\% \\text{ to } 79.1\\%\\), accurate \\(9\\) times out of \\(10\\). What are the margin of error and the confidence level?",
     "Margin of error \\(2.1\\) points; confidence level \\(90\\%\\)",
     ["Margin of error \\(4.2\\) points; confidence level \\(90\\%\\)","Margin of error \\(2.1\\) points; confidence level \\(95\\%\\)","Margin of error \\(77\\) points; confidence level \\(90\\%\\)"],
@@ -1920,7 +1928,7 @@ E("u3-equation-from-roots",3,["4.6"],2,"gen",function(){
   return mcq("A quadratic equation in the form \\(x^2 + bx + c = 0\\) has roots \\("+r1+"\\) and \\("+r2+"\\). What is the equation?",good,wrongs,
     "Work backwards: \\((x - ("+r1+"))(x - ("+r2+"))\\) expands to \\(x^2 - ("+(r1+r2)+")x + ("+C+")\\), so \\(b = "+B+"\\) and \\(c = "+C+"\\). The coefficient \\(b\\) is the NEGATIVE of the sum of the roots, and \\(c\\) is their product.",{r1:r1,r2:r2,B:B,C:C,exp:good});
 });
-E("u6-similar-dimension",6,["6.2"],1,"gen",function(){
+E("u6-similar-dimension",6,["6.2"],2,"gen",function(){
   var mode=ri(0,1);
   if(mode===0){
     var dims=pick([[3,4],[4,6],[5,8],[6,9],[4,10],[8,12],[6,10],[10,14]]);
@@ -1935,8 +1943,8 @@ E("u6-similar-dimension",6,["6.2"],1,"gen",function(){
   var small=trip.map(function(x){return x*m1;}),known=trip[j]*m2,ans=trip[l]*m2;
   function gg2(x,y){while(y){var t=x%y;x=y;y=t;}return x;}
   var gd=gg2(m2,m1),fnum=m2/gd,fden=m1/gd,ftxt=fden===1?""+fnum:"\\frac{"+fnum+"}{"+fden+"}";
-  return numq("Two triangles are similar. The smaller has sides \\("+small.join("\\text{ cm}, ")+"\\text{ cm}\\). The larger triangle's side corresponding to the \\("+trip[j]+"\\text{ cm}\\) side measures \\("+known+"\\text{ cm}\\). What is the length, in cm, of the larger triangle's side corresponding to the \\("+trip[l]+"\\text{ cm}\\) side?",
-    ans,0.011,"The scale factor from small to large is \\("+known+" \\div "+(trip[j]*m1)+" = "+ftxt+"\\). Apply it to the \\("+trip[l]+"\\text{ cm}\\) side's counterpart: \\("+(trip[l]*m1)+" \\times "+ftxt+" = \\)<b>\\("+ans+"\\text{ cm}\\)</b>.",{mode:mode,trip:trip,m1:m1,m2:m2,j:j,l:l,ans:ans});
+  return numq("Two triangles are similar. The smaller has sides \\("+small.join("\\text{ cm}, ")+"\\text{ cm}\\). The larger triangle's side corresponding to the \\("+(trip[j]*m1)+"\\text{ cm}\\) side measures \\("+known+"\\text{ cm}\\). What is the length, in cm, of the larger triangle's side corresponding to the \\("+(trip[l]*m1)+"\\text{ cm}\\) side?",
+    ans,0.011,"The scale factor from small to large is \\("+known+" \\div "+(trip[j]*m1)+" = "+ftxt+"\\). Apply it to the \\("+(trip[l]*m1)+"\\text{ cm}\\) side's counterpart: \\("+(trip[l]*m1)+" \\times "+ftxt+" = \\)<b>\\("+ans+"\\text{ cm}\\)</b>.",{mode:mode,trip:trip,m1:m1,m2:m2,j:j,l:l,ans:ans});
 });
 E("u6-compare-rates",6,["6.16"],2,"gen",function(){
   var ctx=pick([{n:"cyclist",vs:[14,16,18,20,22,24,26,28,30]},{n:"bus",vs:[50,55,60,65,70,75,80,85,90]},{n:"delivery van",vs:[40,45,50,55,60,70,80]},{n:"kayaker",vs:[6,7,8,9,10,11,12]}]);
@@ -1946,7 +1954,7 @@ E("u6-compare-rates",6,["6.16"],2,"gen",function(){
   return numq("Two "+ctx.n+"s travel on the same route. The first covers "+d1+" km in "+t1+" hours; the second covers "+d2+" km in "+t2+" hours. How many km/h faster is the faster "+ctx.n+"? (Just the number.)",
     ans,0.011,"Rates first: \\("+d1+" \\div "+t1+" = "+v1+"\\text{ km/h}\\) and \\("+d2+" \\div "+t2+" = "+v2+"\\text{ km/h}\\). The difference is \\("+Math.max(v1,v2)+" - "+Math.min(v1,v2)+" = \\)<b>\\("+ans+"\\text{ km/h}\\)</b>.",{v1:v1,v2:v2,ans:ans});
 });
-E("u6-rate-isolate",6,["6.23"],2,"gen",function(){
+E("u6-rate-isolate",6,["6.23"],1,"gen",function(){
   var mode=ri(0,2);
   if(mode===0){
     var v=pick([25,40,50,60,75,80,90,100]),t=pick([1.5,2,2.5,3,4,5]),d=v*t;
@@ -2011,7 +2019,7 @@ E("u1-sine-two-step",1,["7.2"],2,"gen",function(){
   q.figure=triAngSVG(A,B,C,{ang:[A+"\u00B0",B+"\u00B0",C+"\u00B0"],side:[a+" cm",null,"?"]});
   return q;
 });
-E("u1-cosine-context",1,["7.2"],2,"gen",function(){
+E("u1-cosine-context",1,["7.2"],1,"gen",function(){
   function rd(d){return d*Math.PI/180;}
   var p=ri(8,38),w=ri(8,38),ang=ri(38,128);
   var d=Math.sqrt(p*p+w*w-2*p*w*Math.cos(rd(ang)));
@@ -2076,7 +2084,7 @@ E("u2-axis-two-points",2,["4.13"],1,"gen",function(){
     "The two points have the same y-coordinate, so they sit at the same height on the parabola, one on each side of the axis. The axis passes midway between them: \\(x = \\frac{"+x1+" + "+x2+"}{2} = \\)<b>\\("+fmt(mid,1)+"\\)</b>.",
     {x1:x1,x2:x2,y:y});
 });
-E("u2-standard-from-factored",2,["4.5"],2,"gen",function(){
+E("u2-standard-from-factored",2,["4.5"],1,"gen",function(){
   var a=pick([1,2,-2,3,-1]),r1,r2,tries=0;
   do{r1=ri(-6,6);r2=ri(-6,6);tries++;}while((r1===0||r2===0||r1===r2||r2===-r1)&&tries<40);
   var B=-a*(r1+r2),C=a*r1*r2;
@@ -2100,7 +2108,7 @@ E("u2-revenue-model",2,["4.2"],2,"gen",function(){
     "After \\(x\\) increases, the price is \\("+P+" + x\\) dollars and the number sold is \\("+N+" - "+s+"x\\) (it drops by "+s+" per increase, so the drop is \\("+s+"x\\) in total). Revenue is price \\(\\times\\) quantity: \\(R(x) = ("+N+" - "+s+"x)("+P+" + x)\\).",
     {N:N,P:P,s:s});
 });
-E("u2-count-intercepts",2,["4.15"],2,"gen",function(){
+E("u2-count-intercepts",2,["4.15"],1,"gen",function(){
   var a=pick([1,2,-1,-2,3,-3]),h=ri(-6,6),k=ri(-9,9);
   var cnt=(k===0)?1:(((a>0&&k<0)||(a<0&&k>0))?2:0);
   return numq("How many x-intercepts does the graph of "+vertT(a,h,k)+" have?",
@@ -2139,7 +2147,7 @@ E("u3-zeros-factored",3,["4.6","4.8"],1,"gen",function(){
     "Set each factor equal to zero. From \\(x + "+r+" = 0\\), \\(x = -"+r+"\\). From \\("+p+"x - "+qq+" = 0\\), \\("+p+"x = "+qq+"\\), so \\(x = "+root1T+"\\).",
     {p:p,qq:qq,r:r});
 });
-E("u3-factor-monic",3,["4.8"],2,"gen",function(){
+E("u3-factor-monic",3,["PK.2"],1,"gen",function(){
   var r1,r2,tries=0;
   do{r1=ri(-9,9);r2=ri(-9,9);tries++;}while((r1===0||r2===0||r1===r2||r2===-r1)&&tries<60);
   var b=-(r1+r2),c=r1*r2;
@@ -2164,7 +2172,7 @@ E("u3-first-mistake",3,["4.6"],2,"var",varset([
     "Line 3",["Line 1","Line 2","Line 4"],
     "Line 1 factors correctly (\\(-5 \\times 1 = -5\\) and \\(-5 + 1 = -4\\)) and Line 2 is a proper zero-product split. In Line 3, \\(x + 1 = 0\\) gives \\(x = -1\\), not \\(1\\). The roots are \\(5\\) and \\(-1\\).");}
 ]));
-E("u3-solve-square",3,["4.8"],1,"gen",function(){
+E("u3-solve-square",3,["4.8"],2,"gen",function(){
   function g2(a,b){while(b){var t=a%b;a=b;b=t;}return a;}
   function fr(n,d){var g=g2(Math.abs(n),Math.abs(d));n/=g;d/=g;return d===1?(""+n):(n+"/"+d);}
   var m=ri(1,9),n=pick([1,2,3,4]),k=pick([1,2,3]),tries=0;
@@ -2272,7 +2280,7 @@ E("u4-equation-restriction",4,["1.8"],1,"gen",function(){
     "The radicand cannot be negative: \\("+inside+" \\ge 0\\) gives \\("+(p===1?"x":(""+p+"x"))+" \\ge "+(-q)+"\\), so \\(x \\ge "+m+"\\). This restriction must hold before the equation can have any solution at all.",
     {p:p,m:m,r:r});
 });
-E("u4-verify-root",4,["1.10"],2,"gen",function(){
+E("u4-verify-root",4,["1.10"],1,"gen",function(){
   var s=ri(3,9),a=ri(3,20),b=ri(2,6);
   var X=s*s-a;
   if(Math.random()<0.5){
@@ -2287,18 +2295,20 @@ E("u4-verify-root",4,["1.10"],2,"gen",function(){
     {mode:2,X:X,a:a,b:b});
 });
 E("u4-model-equation",4,["1.12"],2,"gen",function(){
-  if(Math.random()<0.5){
+  var T=pick([2,3,4,5,6]),L=T*T/4;
+  return numq("The period of a simple pendulum is modelled by \\(T = 2\\sqrt{L}\\), where T is the period in seconds and L is the length in metres. How long is a pendulum whose period is "+T+" s, in m?",
+    L,0.011,
+    "\\("+T+" = 2\\sqrt{L}\\), so \\(\\sqrt{L} = "+T+" \\div 2 = "+fmt(T/2,2)+"\\). Squaring both sides gives \\(L\\) = <b>\\("+fmt(L,2)+"\\text{ m}\\)</b>.",
+    {mode:2,T:T});
+});
+E("u4-model-evaluate",4,["1.12"],1,"gen",function(){
+  {
     var d=ri(3,60),sp=5*Math.sqrt(d);
     return numq("Police estimate a car's speed from a skid mark using \\(s = \\sqrt{25d}\\), where s is the speed in km/h and d is the length of the skid mark in metres. A skid mark at a collision scene measures "+d+" m. Estimate the car's speed, to one decimal place, in km/h.",
       fmt(sp,1),0.06,
       "Substitute \\(d = "+d+"\\): \\(s = \\sqrt{25 \\times "+d+"} = \\sqrt{"+(25*d)+"} \\approx "+fmt(sp,1)+"\\). So the speed is about <b>\\("+fmt(sp,1)+"\\text{ km/h}\\)</b>.",
       {mode:1,d:d});
   }
-  var T=pick([2,3,4,5,6]),L=T*T/4;
-  return numq("The period of a simple pendulum is modelled by \\(T = 2\\sqrt{L}\\), where T is the period in seconds and L is the length in metres. How long is a pendulum whose period is "+T+" s, in m?",
-    L,0.011,
-    "\\("+T+" = 2\\sqrt{L}\\), so \\(\\sqrt{L} = "+T+" \\div 2 = "+fmt(T/2,2)+"\\). Squaring both sides gives \\(L\\) = <b>\\("+fmt(L,2)+"\\text{ m}\\)</b>.",
-    {mode:2,T:T});
 });
 
 /* ============ Tranche 4 (Oct 26): QE RHS harvest — Units 4, 3, 8 ============
@@ -2433,7 +2443,7 @@ E("u3-model-number",3,["4.3"],2,"var",varset([
 ]));
 
 /* --- Unit 8: Properties of Angles and Triangles --- */
-E("u8-congruence-deduce",8,["5.6"],2,"gen",function(){
+E("u8-congruence-deduce",8,["5.6"],1,"gen",function(){
   var sets=[["A","B","C"],["P","Q","R"],["X","Y","Z"],["D","E","F"],["M","N","S"],["J","K","L"]];
   var s1=pick(sets),s2=pick(sets.filter(function(x){return x!==s1;}));
   var name1=s1.join(""),name2=s2.join("");
@@ -2502,7 +2512,7 @@ E("u8-polygon-inverse",8,["5.5"],1,"gen",function(){
   return numq("Each exterior angle of a regular polygon measures \\("+pr[1]+"^\\circ\\). How many sides does the polygon have?",
     n2,0.011,"The exterior angles of any convex polygon add to \\(360^\\circ\\). For a regular polygon they are all equal, so \\(n = 360 \\div "+pr[1]+" = \\)<b>\\("+n2+"\\)</b>.",{mode:2,n:n2});
 });
-E("u8-proof-reason",8,["5.4"],2,"var",varset([
+E("u8-proof-reason",8,["5.4"],1,"var",varset([
   function(){return mcq("Lines \\(PQ\\) and \\(RS\\) are parallel, cut by a transversal. \\(\\angle a\\) is at the top right of the first intersection, and \\(\\angle b\\) is at the top right of the second intersection. A student writes: “\\(\\angle a = \\angle b\\) because they are alternate interior angles.” What is wrong with the reason?",
     "The angles are corresponding angles, not alternate interior angles",
     ["Nothing - the reason given is correct for these two angles","The angles are co-interior angles, not alternate interior angles","The angles are vertically opposite angles, not alternate interior angles"],
@@ -2737,7 +2747,7 @@ E("u7-pattern-equation",7,["2.1"],2,"var",varset([
     "The multipliers are multiples of \\(9\\) (\\(9, 18, 27, \\ldots\\)) and each product repeats the digit matching the multiple: \\(36 = 4 \\times 9\\), so the product is nine \\(4\\)s: \\(444{,}444{,}444\\).",
     {});}
 ]));
-E("u7-counterexample-claims",7,["2.4"],2,"var",varset([
+E("u7-counterexample-claims",7,["2.4"],1,"var",varset([
   function(){return mcq("Conjecture: \u201CIf a number is divisible by \\(4\\), then it is divisible by \\(8\\).\u201D Which number is a counterexample?",
     "\\(12\\)",
     ["\\(16\\)","\\(24\\)","\\(40\\)"],
@@ -2812,7 +2822,7 @@ E("u2-fence-max",2,["4.2"],3,"gen",function(){
 });
 
 /* --- Unit 3: Quadratic Equations --- */
-E("u3-roots-sum-product",3,["4.6"],2,"gen",function(){
+E("u3-roots-sum-product",3,["4.6"],1,"gen",function(){
   var pool=[-8,-7,-6,-5,-4,-3,-2,-1,1,2,3,4,5,6,7,8];
   var r1=pick(pool),r2=pick(pool.filter(function(x){return x!==r1;}));
   var B=-(r1+r2),C=r1*r2,mode=Math.random()<0.5?"sum":"product";
@@ -2824,14 +2834,14 @@ E("u3-roots-sum-product",3,["4.6"],2,"gen",function(){
     "The equation factors as \\((x "+(r1>0?"- "+r1:"+ "+(-r1))+")(x "+(r2>0?"- "+r2:"+ "+(-r2))+") = 0\\), so the roots are \\("+r1+"\\) and \\("+r2+"\\). Their "+mode+" is \\("+(mode==="sum"?r1+" + "+r2:r1+" \\times "+r2)+" = "+key+"\\). (In general, for \\(x^2 + bx + c\\) the sum of the roots is \\(-b\\) and the product is \\(c\\).)",
     {r1:r1,r2:r2,B:B,C:C,mode:mode,key:key});
 });
-E("u3-factor-nonmonic",3,["4.8"],2,"gen",function(){
+E("u3-factor-nonmonic",3,["PK.2"],2,"gen",function(){
   function lin(cf,tm){return (cf===1?"x":cf+"x")+(tm>0?" + "+tm:" - "+(-tm));}
   function expand(t){return [t[0]*t[2], t[0]*t[3]+t[1]*t[2], t[1]*t[3]];}
   var p,q,r,s,A,B,C,tries=0;
   do{
     p=ri(1,3);q=ri(1,3);r=pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6]);s=pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6]);
     A=p*q;B=p*s+r*q;C=r*s;tries++;
-  }while(B===0&&tries<80); /* B = 0 is a difference of squares: the sign-flip distractors collapse there (it has its own entry in tranche 7) */
+  }while((B===0||A===1)&&tries<80); /* B = 0 is a difference of squares: the sign-flip distractors collapse there (it has its own entry in tranche 7) */
   var key="\\(("+lin(p,r)+")("+lin(q,s)+")\\)";
   var cands=[[p,-r,q,s],[p,r,q,-s],[p,-r,q,-s],[q,r,p,s],[q,-r,p,-s],[p,-s,q,-r]],ds=[];
   for(var i=0;i<cands.length&&ds.length<3;i++){
@@ -2889,7 +2899,7 @@ E("u4-divide-radicals",4,["1.6"],2,"gen",function(){
     "Combine under one root, then simplify (\\("+(k*k)+"\\) is a perfect square factor): \\[\\begin{aligned} \\frac{\\sqrt{"+A+"}}{\\sqrt{"+B+"}} &= \\sqrt{\\frac{"+A+"}{"+B+"}} \\\\ &= \\sqrt{"+(k*k*m)+"} \\\\ &= "+k+"\\sqrt{"+m+"} \\end{aligned}\\] In simplest form: <b>"+key+"</b>.",
     {A:A,B:B,k:k,m:m,d0:d0});
 });
-E("u4-rationalize-coefficient",4,["1.7"],2,"gen",function(){
+E("u4-rationalize-coefficient",4,["1.7"],1,"gen",function(){
   function gcd(x,y){while(y){var u=y;y=x%y;x=u;}return x;}
   var c,m,N,tries=0;
   do{c=ri(2,5);m=pick([2,3,5,6,7,10,11,13]);N=ri(2,11);tries++;}while(gcd(N,c*m)!==1&&tries<80);
@@ -2924,7 +2934,7 @@ E("u8-diagonals",8,["5.5"],1,"gen",function(){
       :"Each of the \\("+n+"\\) vertices connects to \\("+n+" - 3\\) others by a diagonal (not itself, not its two neighbours), and each diagonal is counted twice, once from each end: \\("+n+" \\times "+(n-3)+" \\div 2 = \\)<b>\\("+ans+"\\)</b>.",
     {n:n,mode:mode,ans:ans});
 });
-E("u8-isosceles-angles",8,["5.3"],2,"gen",function(){
+E("u8-isosceles-angles",8,["5.3"],1,"gen",function(){
   var mode=ri(0,1),base,vertex,ans;
   if(mode===0){base=ri(28,72);vertex=180-2*base;ans=vertex;}
   else{vertex=2*ri(20,65);base=(180-vertex)/2;ans=base;}
@@ -2986,7 +2996,7 @@ E("u2-concavity",2,["4.10"],1,"gen",function(){
     "The sign of the \\(x^2\\) coefficient decides the opening: \\(a = "+a+"\\) is "+(up?"positive, so the parabola opens upward and the vertex is the lowest point — a minimum":"negative, so the parabola opens downward and the vertex is the highest point — a maximum")+". The other terms shift the graph but do not change its opening.",
     {a:a,b:b,c:c,up:up});
 });
-E("u2-vertex-form-eval",2,["4.15"],2,"gen",function(){
+E("u2-vertex-form-eval",2,["4.15"],1,"gen",function(){
   var a=0,tries=0;while(a===0&&tries<40){a=ri(-4,4);tries++;}
   var h=ri(-6,6),k=ri(-10,10),d=ri(1,5),sgn=Math.random()<0.5?1:-1;
   var x=h+sgn*d,ans=a*d*d+k;
@@ -2995,7 +3005,7 @@ E("u2-vertex-form-eval",2,["4.15"],2,"gen",function(){
     "Substitute \\(x = "+x+"\\): the squared part is \\(("+(h===0?x:x+" "+(h>0?"- "+h:"+ "+(-h)))+")^2 = ("+(sgn*d)+")^2 = "+(d*d)+"\\). So \\(f("+x+") = "+a+" \\times "+(d*d)+(k>0?" + "+k:(k<0?" - "+(-k):""))+" = \\)<b>\\("+ans+"\\)</b>. (The sign of \\("+(sgn*d)+"\\) disappears when it is squared.)",
     {a:a,h:h,k:k,d:d,ans:ans});
 });
-E("u2-factored-y-intercept",2,["4.4"],2,"gen",function(){
+E("u2-factored-y-intercept",2,["4.4"],1,"gen",function(){
   var a=0,tries=0;while(a===0&&tries<40){a=ri(-3,3);tries++;}
   var pool=[-6,-5,-4,-3,-2,-1,1,2,3,4,5,6];
   var r1=pick(pool),r2=pick(pool.filter(function(x){return x!==r1;}));
@@ -3037,7 +3047,7 @@ E("u3-formula-substitution",3,["4.9"],1,"var",varset([
     "Here \\(a = 3\\), \\(b = -4\\), \\(c = -6\\). The formula starts with \\(-b = 4\\), the discriminant is \\(16 - 4(3)(-6) = 16 + 72\\), and the denominator is \\(2a = 6\\).",
     {});}
 ]));
-E("u3-factor-difference",3,["4.8"],2,"gen",function(){
+E("u3-factor-difference",3,["PK.2"],1,"gen",function(){
   var a=ri(1,5),k=ri(2,15),ax=a===1?"x":a+"x";
   var key="\\(("+ax+" - "+k+")("+ax+" + "+k+")\\)";
   return mcq("Factor fully: \\("+(a===1?"x^2":(a*a)+"x^2")+" - "+(k*k)+"\\)",
@@ -3153,7 +3163,18 @@ E("u8-congruence-perimeter",8,["5.6"],2,"gen",function(){
   do{s3=ri(5,18);tries++;}while((s3>=s+s2||s3<=Math.abs(s-s2))&&tries<60);
   var a=ri(2,5),x0=ri(3,12),b,safe=0;
   do{b=s-a*x0;safe++;if(b===0||b<-15||b>25){x0=ri(3,12);}}while((b===0||b<-15||b>25)&&safe<60);
-  var P=s+s2+s3,mode=ri(0,1),ans=mode===0?x0:P;
+  var P=s+s2+s3,mode=0,ans=mode===0?x0:P;
+  return numq("\\(\\triangle ABC \\cong \\triangle DEF\\), with the vertices in corresponding order. \\(AB = "+s+"\\text{ cm}\\), \\(BC = "+s2+"\\text{ cm}\\) and \\(CA = "+s3+"\\text{ cm}\\). Side \\(DE\\) measures \\(("+a+"x "+(b>0?"+ "+b:"- "+(-b))+")\\text{ cm}\\). "+(mode===0?"What is the value of \\(x\\)?":"What is the perimeter of \\(\\triangle DEF\\), in cm?"),
+    ans,0.011,
+    "Corresponding vertices match in order, so side \\(DE\\) corresponds to side \\(AB\\): \\("+a+"x "+(b>0?"+ "+b:"- "+(-b))+" = "+s+"\\), giving \\(x = "+x0+"\\). Congruent triangles have the same perimeter: \\("+s+" + "+s2+" + "+s3+" = "+P+"\\text{ cm}\\)."+(mode===0?" So \\(x = \\)<b>\\("+x0+"\\)</b>.":" So the perimeter of \\(\\triangle DEF\\) is <b>\\("+P+"\\text{ cm}\\)</b>."),
+    {s:s,s2:s2,s3:s3,a:a,b:b,x0:x0,P:P,mode:mode,ans:ans});
+});
+E("u8-congruent-perimeter",8,["5.6"],1,"gen",function(){
+  var s=ri(6,16),s2=ri(5,16),s3,tries=0;
+  do{s3=ri(5,18);tries++;}while((s3>=s+s2||s3<=Math.abs(s-s2))&&tries<60);
+  var a=ri(2,5),x0=ri(3,12),b,safe=0;
+  do{b=s-a*x0;safe++;if(b===0||b<-15||b>25){x0=ri(3,12);}}while((b===0||b<-15||b>25)&&safe<60);
+  var P=s+s2+s3,mode=1,ans=mode===0?x0:P;
   return numq("\\(\\triangle ABC \\cong \\triangle DEF\\), with the vertices in corresponding order. \\(AB = "+s+"\\text{ cm}\\), \\(BC = "+s2+"\\text{ cm}\\) and \\(CA = "+s3+"\\text{ cm}\\). Side \\(DE\\) measures \\(("+a+"x "+(b>0?"+ "+b:"- "+(-b))+")\\text{ cm}\\). "+(mode===0?"What is the value of \\(x\\)?":"What is the perimeter of \\(\\triangle DEF\\), in cm?"),
     ans,0.011,
     "Corresponding vertices match in order, so side \\(DE\\) corresponds to side \\(AB\\): \\("+a+"x "+(b>0?"+ "+b:"- "+(-b))+" = "+s+"\\), giving \\(x = "+x0+"\\). Congruent triangles have the same perimeter: \\("+s+" + "+s2+" + "+s3+" = "+P+"\\text{ cm}\\)."+(mode===0?" So \\(x = \\)<b>\\("+x0+"\\)</b>.":" So the perimeter of \\(\\triangle DEF\\) is <b>\\("+P+"\\text{ cm}\\)</b>."),
@@ -3235,7 +3256,7 @@ E("u2-evaluate-f",2,["4.1"],1,"gen",function(){
     "Substitute \\(x = "+d+"\\): \\(f("+d+") = "+a+" \\times ("+d+")^2 + ("+b+") \\times ("+d+") + ("+c+") = "+(a*d*d)+" + "+(b*d)+" + "+c+" = \\)<b>\\("+ans+"\\)</b>.",
     {a:a,b:b,c:c,d:d,ans:ans});
 });
-E("u2-vertex-shift",2,["4.15"],2,"gen",function(){
+E("u2-vertex-shift",2,["4.15"],1,"gen",function(){
   var a=0,h=0,k=0,tries=0;
   while((a===0||h===0||k===0)&&tries<60){a=ri(-5,5);h=ri(-7,7);k=ri(-9,9);tries++;}
   var open=a>0?"upward":"downward";
@@ -3396,7 +3417,7 @@ E("u7-deductive-chain",7,["2.3"],2,"gen",function(){
     "Deduction follows the chain: all "+R[1]+" are "+R[2]+", and all "+R[2]+" are "+R[4]+", so this "+R[0]+" must be a "+R[3]+". The other options reverse the chain, which deduction does not allow.",
     {row:R,mode:mode});
 });
-E("u7-figure-pattern",7,["2.1"],2,"gen",function(){
+E("u7-figure-pattern",7,["2.1"],1,"gen",function(){
   var p=ri(1,4),q=ri(0,5),N=ri(6,15);
   function cnt(n){return n*n+p*n+q;}
   var ctx=pick(["dots","stars","tiles"]);
@@ -3411,13 +3432,14 @@ E("u7-figure-pattern",7,["2.1"],2,"gen",function(){
    entry is selected-response only in exam mode. Worksheet mode uses these plus
    all numeric-answer entries. u4-rationalize (monomial) carries 1 mark, so the
    exam composer floor keeps it out of Section B, per the 2200 ruling. */
-var CR_MARKS={"u1-ambiguous-count":3,"u1-angle-between-paths":4,"u1-cosine-angle":2,"u1-cosine-context":2,"u1-cosine-side":2,"u1-guy-wire":3,"u1-median-length":4,"u1-sine-angle":2,"u1-sine-side":2,"u1-sine-two-step":2,"u1-smallest-angle":2,"u1-two-station-height":4,"u1-two-triangles":4,"u2-axis-from-intercepts":1,"u2-axis-two-points":1,"u2-count-intercepts":1,"u2-eq-from-vertex":2,"u2-evaluate-f":1,"u2-factored-coeffs":2,"u2-factored-max-height":2,"u2-factored-y-intercept":1,"u2-fence-max":3,"u2-max-area":3,"u2-max-context":2,"u2-max-height":2,"u2-mirror-point":1,"u2-revenue-model":2,"u2-standard-from-factored":2,"u2-vertex-form-eval":1,"u2-vertex-shift":1,"u2-vertex-time":1,"u2-vertex-value":2,"u2-vertex-x":1,"u2-xintercepts":2,"u2-y-intercept":1,"u3-border":3,"u3-context-area":3,"u3-equation-fraction-roots":2,"u3-equation-from-roots":2,"u3-exact-roots":2,"u3-factor-difference":2,"u3-factor-monic":2,"u3-factor-nonmonic":2,"u3-factor-solve":2,"u3-formula":2,"u3-formula-exact-roots":2,"u3-gcf-solve":2,"u3-model-number":2,"u3-number-pair":2,"u3-root-difference":3,"u3-roots-sum-product":1,"u3-setup-equation":1,"u3-solve-height":2,"u3-solve-square":1,"u3-squares-area":3,"u3-standard-coeffs":1,"u3-two-numbers":3,"u3-zeros-factored":1,"u4-add-unlike":2,"u4-binomial-square":2,"u4-combine-multi":2,"u4-compare-radicals":1,"u4-conjugate-area":2,"u4-cube-equation":2,"u4-cube-mixed":2,"u4-diagonal-radical":2,"u4-difference-simplify":2,"u4-divide-radicals":2,"u4-entire-cube":1,"u4-entire-to-mixed":2,"u4-equation-restriction":1,"u4-evaluate-mixed":1,"u4-extraneous":3,"u4-mixed-to-entire":1,"u4-model-equation":2,"u4-multiply":2,"u4-multiply-mixed":2,"u4-order":2,"u4-product-simplify":2,"u4-radical-equation":2,"u4-rationalize":1,"u4-rationalize-coefficient":2,"u4-reciprocal-sum":3,"u4-restrictions":1,"u4-simplify-add":2,"u4-triangle-perimeter":2,"u4-variable-mixed":2,"u4-verify-root":1,"u4-width-radical":2,"u5-ad-claim":3,"u5-centre-mean":1,"u5-centre-median":1,"u5-centre-mode":1,"u5-ci-build":1,"u5-ci-count":2,"u5-ci-endpoint":1,"u5-ci-from-endpoints":1,"u5-ci-level-from-report":1,"u5-ci-majority":3,"u5-ci-read-report":2,"u5-ci-shrink":2,"u5-empirical":2,"u5-freq-countin":1,"u5-freq-missing":1,"u5-freq-total":1,"u5-histogram-read":2,"u5-media":4,"u5-midpoint":1,"u5-normal-count":2,"u5-outlier-range":2,"u5-poll-position":3,"u5-polygon-point":1,"u5-range":1,"u5-relfreq":1,"u5-relfreq-rev":1,"u5-sd-calc":2,"u5-sd-compare":2,"u5-sd-decisions":4,"u5-sd-from-variance":1,"u5-z-applied":2,"u5-z-backwards":1,"u5-z-calc":1,"u5-z-compare":2,"u5-z-prob":2,"u6-area-scale":2,"u6-better-buy":2,"u6-compare-rates":2,"u6-map-distance":2,"u6-pack-cost":2,"u6-poster-cost":3,"u6-poster-dimensions":2,"u6-rate-difference":2,"u6-rate-isolate":1,"u6-rate-solve":1,"u6-scale-factor":1,"u6-similar-dimension":1,"u6-tile-cost":3,"u6-unit-rate":1,"u6-unknown-dimension":1,"u6-volume-scale":2,"u7-counterexample":2,"u7-counterexample-claims":2,"u7-counterexample-gen":2,"u7-everyday-counterexample":2,"u7-figure-pattern":1,"u7-pattern-equation":2,"u7-pattern-next":1,"u7-pattern-quad":2,"u7-race-order":2,"u7-sequence-gap":1,"u8-alternate-algebra":2,"u8-angle-chase":2,"u8-angle-sum-rule":1,"u8-co-interior":1,"u8-cointerior-algebra":2,"u8-congruence-deduce":1,"u8-congruence-perimeter":2,"u8-corresponding-algebra":2,"u8-diagonals":1,"u8-exterior":1,"u8-exterior-algebra":3,"u8-isosceles-angles":2,"u8-multi-angle":2,"u8-polygon-inverse":1,"u8-polygon-ratio":2,"u8-polygon-sum":1,"u8-regular-angle":1,"u8-triangle-algebra":2,"u8-triangle-sum":1};
+var CR_MARKS={"u1-ambiguous-count":3,"u1-angle-between-paths":4,"u1-cosine-angle":2,"u1-cosine-context":2,"u1-cosine-side":2,"u1-guy-wire":3,"u1-median-length":4,"u1-sine-angle":2,"u1-sine-side":2,"u1-sine-two-step":2,"u1-smallest-angle":2,"u1-two-station-height":4,"u1-two-triangles":4,"u2-axis-from-intercepts":1,"u2-axis-two-points":1,"u2-count-intercepts":1,"u2-eq-from-vertex":2,"u2-evaluate-f":1,"u2-factored-coeffs":2,"u2-factored-max-height":2,"u2-factored-y-intercept":1,"u2-fence-max":3,"u2-max-area":3,"u2-max-context":2,"u2-max-height":2,"u2-mirror-point":1,"u2-revenue-model":2,"u2-standard-from-factored":2,"u2-vertex-form-eval":1,"u2-vertex-shift":1,"u2-vertex-time":1,"u2-vertex-value":2,"u2-vertex-x":1,"u2-xintercepts":2,"u2-xintercepts-factored":1,"u2-y-intercept":1,"u3-border":3,"u3-context-area":3,"u3-equation-fraction-roots":2,"u3-equation-from-roots":2,"u3-exact-roots":2,"u3-factor-difference":2,"u3-factor-monic":2,"u3-factor-nonmonic":2,"u3-factor-solve":2,"u3-formula":2,"u3-formula-exact-roots":2,"u3-gcf-solve":2,"u3-model-number":2,"u3-number-pair":2,"u3-root-difference":3,"u3-roots-sum-product":1,"u3-setup-equation":1,"u3-solve-height":2,"u3-solve-square":1,"u3-squares-area":3,"u3-standard-coeffs":1,"u3-two-numbers":3,"u3-zeros-factored":1,"u4-add-unlike":2,"u4-binomial-square":2,"u4-combine-multi":2,"u4-compare-radicals":1,"u4-conjugate-area":2,"u4-cube-equation":2,"u4-cube-mixed":2,"u4-diagonal-radical":2,"u4-difference-simplify":2,"u4-divide-radicals":2,"u4-entire-cube":1,"u4-entire-to-mixed":2,"u4-equation-restriction":1,"u4-evaluate-mixed":1,"u4-extraneous":3,"u4-mixed-to-entire":1,"u4-model-equation":2,"u4-model-evaluate":1,"u4-multiply":2,"u4-multiply-mixed":2,"u4-order":2,"u4-product-simplify":2,"u4-radical-equation":2,"u4-rationalize":1,"u4-rationalize-coefficient":2,"u4-reciprocal-sum":3,"u4-restrictions":1,"u4-simplify-add":2,"u4-triangle-perimeter":2,"u4-variable-mixed":2,"u4-verify-root":1,"u4-width-radical":2,"u5-ad-claim":3,"u5-centre-mean":1,"u5-centre-median":1,"u5-centre-mode":1,"u5-ci-build":1,"u5-ci-count":2,"u5-ci-endpoint":1,"u5-ci-from-endpoints":1,"u5-ci-level-from-report":1,"u5-ci-majority":3,"u5-ci-read-report":2,"u5-ci-shrink":2,"u5-empirical":2,"u5-freq-countin":1,"u5-freq-missing":1,"u5-freq-total":1,"u5-histogram-read":2,"u5-media":4,"u5-midpoint":1,"u5-normal-count":2,"u5-outlier-range":2,"u5-poll-position":3,"u5-polygon-point":1,"u5-range":1,"u5-relfreq":1,"u5-relfreq-rev":1,"u5-sd-calc":2,"u5-sd-compare":2,"u5-sd-decisions":4,"u5-sd-from-variance":1,"u5-z-applied":2,"u5-z-backwards":1,"u5-z-calc":1,"u5-z-compare":2,"u5-z-prob":2,"u6-area-scale":2,"u6-better-buy":2,"u6-compare-rates":2,"u6-map-distance":2,"u6-pack-cost":2,"u6-poster-cost":3,"u6-poster-dimensions":2,"u6-rate-difference":2,"u6-rate-isolate":1,"u6-rate-solve":1,"u6-scale-factor":1,"u6-similar-dimension":1,"u6-tile-cost":3,"u6-unit-rate":1,"u6-unknown-dimension":1,"u6-volume-scale":2,"u7-counterexample":2,"u7-counterexample-claims":2,"u7-counterexample-gen":2,"u7-everyday-counterexample":2,"u7-figure-pattern":1,"u7-pattern-equation":2,"u7-pattern-next":1,"u7-pattern-quad":2,"u7-race-order":2,"u7-sequence-gap":1,"u8-alternate-algebra":2,"u8-angle-chase":2,"u8-angle-sum-rule":1,"u8-co-interior":1,"u8-cointerior-algebra":2,"u8-congruence-deduce":1,"u8-congruence-perimeter":2,"u8-congruent-perimeter":1,"u8-corresponding-algebra":2,"u8-diagonals":1,"u8-exterior":1,"u8-exterior-algebra":3,"u8-isosceles-angles":2,"u8-multi-angle":2,"u8-polygon-inverse":1,"u8-polygon-ratio":2,"u8-polygon-sum":1,"u8-regular-angle":1,"u8-triangle-algebra":2,"u8-triangle-sum":1};
 /* ============ selection engine ============ */
 /* Mid-course scope (Table of Specifications, verified Oct 26, 2026): the mid-course
    exam samples Unit 4 only to Section 4.3, so the two Radical Equations entries
    (Section 4.4) are flagged postMid and held out whenever the Mid preset is active.
    Picking Unit 4 directly still serves the full unit. */
-BANK.forEach(function(e){if(e.id==="u4-radical-equation"||e.id==="u4-extraneous"||e.id==="u4-model-equation"||e.id==="u4-cube-equation")e.postMid=true;});
+BANK.forEach(function(e){if(e.id==="u4-radical-equation"||e.id==="u4-extraneous"||e.id==="u4-model-equation"||e.id==="u4-model-evaluate"||e.id==="u4-cube-equation")e.postMid=true;});
+function isPK(e){return e.indicators.some(function(c){return c.indexOf("PK")===0;});} /* Prior knowledge entries are practice-only (Jason, Nov 9, 2026): composeExam filters them out, so they never appear in practice tests or exams; drawSet keeps them for ordinary practice. */
 function poolFor(units,inds,cap,pred){
   return BANK.filter(function(e){
     if(pred&&!pred(e))return false;
@@ -3884,7 +3906,7 @@ function composeExam(units,inds){
   var single=units.length===1;
   var srT=single?[4,6,1]:[10,15,2];
   var crTotal=single?14:23;
-  var pool=poolFor(units,inds,units.slice().sort(function(a,b){return a-b;}).join()==="1,2,3,4");
+  var pool=poolFor(units,inds,units.slice().sort(function(a,b){return a-b;}).join()==="1,2,3,4",function(e){return !isPK(e);});
   if(!pool.length)return null;
   var seen={};
   function genFrom(e){var q=e.gen();q._entry=e;return q;}
