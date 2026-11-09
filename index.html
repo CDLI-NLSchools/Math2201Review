@@ -1434,6 +1434,41 @@ E("u4-extraneous",4,["1.11"],3,"gen",function(){
     ["\\(x = "+r+"\\) is extraneous - it is the larger answer, and the larger answer from squaring is always false","Neither is extraneous - squaring both sides never creates false roots, so both candidates work in the original equation","Both are extraneous, so the equation has no solution - each candidate fails when substituted back into the equation"],
     "Check \\(x = "+e+"\\): \\(\\sqrt{"+e+" + "+a+"} = \\sqrt{"+(e+a)+"} = "+Math.sqrt(e+a)+"\\), but \\(x - "+b+" = "+(e-b)+" < 0\\). A principal square root cannot equal a negative number, so \\(x = "+e+"\\) crept in when we squared. \\(x = "+r+"\\) checks: \\(\\sqrt{"+(r+a)+"} = "+Math.sqrt(r+a)+" = "+(r-b)+"\\) \u2713.",{b:b,r:r,e:e,a:a});
 });
+E("u4-defined-count",4,["1.5"],3,"gen",function(){
+  function sub(v){return v>=0?"x - "+v:"x + "+(-v);}
+  var mode=ri(0,2),prompt="",sol="",ans=0;
+  if(mode===0){
+    var a=ri(-6,4);var b=a+ri(5,14);ans=b-a+1;
+    prompt="For how many integer values of \\(x\\) is the expression \\(\\sqrt{"+sub(a)+"} + \\sqrt{"+b+" - x}\\) defined?";
+    sol="Each radicand must be non-negative. The first gives \\(x \\ge "+a+"\\), and the second gives \\(x \\le "+b+"\\). Both conditions must hold at once, so \\(x\\) takes every integer from \\("+a+"\\) to \\("+b+"\\) inclusive, a total of <b>\\("+ans+"\\)</b> values. Either condition on its own would allow more.";
+  }else if(mode===1){
+    var a2=ri(-6,4);var b2=a2+ri(5,14);ans=b2-a2;
+    prompt="For how many integer values of \\(x\\) is the expression \\(\\frac{\\sqrt{"+sub(a2)+"}}{\\sqrt{"+b2+" - x}}\\) defined?";
+    sol="The numerator needs \\(x \\ge "+a2+"\\). The denominator needs more: a square root sitting in a denominator must be positive, not just non-negative, so \\("+b2+" - x > 0\\) and \\(x < "+b2+"\\). The integers from \\("+a2+"\\) to \\("+(b2-1)+"\\) inclusive total <b>\\("+ans+"\\)</b> values.";
+  }else{
+    var hi=ri(2,14);var lo=hi-ri(5,14);ans=hi-lo+1;
+    prompt="For how many integer values of \\(x\\) is the expression \\(\\sqrt{"+hi+" - x} + \\sqrt{"+sub(lo)+"}\\) defined?";
+    sol="Each radicand must be non-negative. The first gives \\(x \\le "+hi+"\\), and the second gives \\(x \\ge "+lo+"\\). Both conditions must hold at once, so \\(x\\) takes every integer from \\("+lo+"\\) to \\("+hi+"\\) inclusive, a total of <b>\\("+ans+"\\)</b> values.";
+  }
+  return numq(prompt,ans,0.011,sol,{mode:mode});
+});
+E("u4-repair-simplify",4,["1.2"],3,"gen",function(){
+  var sqf=[2,3,5,6,7,10,11,13,14,15];
+  var mode=ri(0,1);
+  if(mode===0){
+    var f=pick([2,3]);var mult=ri(2,5);var a=f*mult;var b=pick(sqf);
+    var N=a*a*b;var p=a/f;var qq=b*f*f;
+    return numq("A student simplifies \\(\\sqrt{"+N+"}\\) and writes \\("+p+"\\sqrt{"+qq+"}\\). The value is correct, but the radicand still contains a square factor, so the radical is not fully simplified. In the fully simplified form, what is the coefficient of the square root?",
+      a,0.011,
+      "The radicand \\("+qq+"\\) still contains the square factor \\("+f+"^2 = "+(f*f)+"\\). Pulling it out multiplies the coefficient by \\("+f+"\\): \\("+p+" \\times "+f+" = "+a+"\\), and indeed \\(\\sqrt{"+N+"} = \\sqrt{"+(a*a)+" \\times "+b+"} = \\)<b>\\("+a+"\\sqrt{"+b+"}\\)</b>.",
+      {N:N,p:p,qq:qq});
+  }
+  var a2=pick([4,5,6,7,8,9,10]);var b2=pick(sqf);var N2=a2*a2*b2;var pw=a2+pick([-1,1]);if(pw<2)pw=a2+1;
+  return numq("A student simplifies \\(\\sqrt{"+N2+"}\\) and writes \\("+pw+"\\sqrt{"+b2+"}\\). Checking the value, \\("+pw+"^2 \\times "+b2+" \\ne "+N2+"\\), so the student\u2019s answer is wrong. What is the coefficient of the square root in the fully simplified form?",
+    a2,0.011,
+    "Redo the simplification from the start: \\("+N2+" = "+(a2*a2)+" \\times "+b2+"\\), and \\("+(a2*a2)+"\\) is a perfect square, so \\(\\sqrt{"+N2+"} = \\)<b>\\("+a2+"\\sqrt{"+b2+"}\\)</b>. The student\u2019s radicand was right, but the coefficient was not the square root of "+(a2*a2)+".",
+    {N:N2,pw:pw});
+});
 E("u4-order",4,["1.4"],2,"gen",function(){
   var base=ri(5,10),g1=ri(2,4),g2=ri(2,4),g3=ri(2,5);
   var ins=[base,base+g1,base+g1+g2,base+g1+g2+g3];
@@ -1542,6 +1577,82 @@ E("u6-poster-cost",6,["6.14","6.17"],2,"gen",function(){
     "A photo 10 cm by 15 cm is enlarged so its width becomes "+fmt(W)+" cm (the height scales in proportion). A print shop charges $"+fmt(rate)+" per \\(\\text{cm}^2\\) of print area. What does the enlarged print cost, in dollars? (Just the number.)",
     "A print shop enlarges a 10 cm by 15 cm photo to a width of "+fmt(W)+" cm, keeping the proportions. Printing costs $"+fmt(rate)+" per \\(\\text{cm}^2\\). What is the cost of the enlarged print, in dollars? (Just the number.)"]);
   return numq(frame,Math.round(cost*100)/100,0.02,"Scale factor \\(= "+fmt(W)+" \\div 10 = "+fmt(kw)+"\\), so the height becomes \\(15 \\times "+fmt(kw)+" = "+fmt(H)+"\\text{ cm}\\). Area \\(= "+fmt(W)+" \\times "+fmt(H)+" = "+fmt(area)+"\\text{ cm}^2\\) (that is the original \\(150\\text{ cm}^2\\) times \\("+fmt(kw)+"^2\\), as areas scale by \\(k^2\\)). Cost \\(= "+fmt(area)+" \\times \\$"+fmt(rate)+" = \\)<b>\\(\\$"+fmt(cost)+"\\)</b>.",{kw:kw,area:area,rate:rate});
+});
+E("u6-work-rate-solo",6,["6.16","6.23"],3,"gen",function(){
+  var ctx=pick([
+    {b:"hoses",one:"hose",job:"fill a water tank"},
+    {b:"snow blowers",one:"snow blower",job:"clear a parking lot"},
+    {b:"printers",one:"printer",job:"print a stack of programs"},
+    {b:"pipes",one:"pipe",job:"drain a swimming pool"},
+    {b:"machines",one:"machine",job:"bottle a batch of juice"}]);
+  var T=0,k=0,mode=0,tries=0;
+  do{T=pick([2,3,4,6,8]);k=pick([2,3,4]);mode=ri(0,1);tries++;}while(T*(k+1)%k!==0&&tries<60);
+  var slow=T*(k+1),fast=slow/k,ans=mode===0?slow:fast;
+  return numq("Two "+ctx.b+" working together can "+ctx.job+" in "+T+" hours. One "+ctx.one+" works "+k+" times as fast as the other. How many hours would the "+(mode===0?"slower":"faster")+" "+ctx.one+" take to "+ctx.job+" on its own?",
+    ans,0.011,
+    "Rates add when the "+ctx.b+" work together. The combined rate is \\(\\frac{1}{"+T+"}\\) of the job per hour. If the slower "+ctx.one+" works at rate \\(r\\), the faster works at rate \\("+k+"r\\), so \\("+k+"r + r = \\frac{1}{"+T+"}\\), which gives \\(r = \\frac{1}{"+slow+"}\\) of the job per hour. The slower "+ctx.one+" alone takes \\("+slow+"\\) hours, and the faster one takes \\("+slow+" \\div "+k+" = "+fast+"\\) hours. The question asks for the "+(mode===0?"slower":"faster")+" one: <b>\\("+ans+"\\text{ hours}\\)</b>.",
+    {T:T,k:k,mode:mode});
+});
+E("u6-justify-consistency",6,["6.16","6.17"],3,"gen",function(){
+  var ctx=pick([
+    {who:"bus drivers",names:["Mina","Theo"],act:"Trip times for the same route, in minutes"},
+    {who:"ferry captains",names:["June","Omar"],act:"Crossing times for the same crossing, in minutes"},
+    {who:"delivery drivers",names:["Ana","Karl"],act:"Delivery times for the same route, in minutes"}]);
+  var base=ri(18,30);
+  var offA=pick([[-1,0,1,0,-1],[0,1,-1,1,0],[1,1,0,-1,0],[0,0,1,-1,1]]);
+  var offB=pick([[-4,-1,3,5,-3],[-5,2,4,-2,1],[-3,5,-4,0,2],[4,-5,1,-1,3]]);
+  var tight=offA.map(function(o){return base+o;});
+  var wide=offB.map(function(o){return base+o;});
+  var cIdx=Math.random()<0.5?0:1;
+  var lists=[null,null];lists[cIdx]=tight;lists[1-cIdx]=wide;
+  function sum(arr){return arr.reduce(function(s,v){return s+v;},0);}
+  function rng(arr){return Math.max.apply(null,arr)-Math.min.apply(null,arr);}
+  var cName=ctx.names[cIdx],oName=ctx.names[1-cIdx];
+  return textq("Two "+ctx.who+" do the same work on five different days. "+ctx.act+": "+ctx.names[0]+" recorded "+lists[0].join(", ")+"; "+ctx.names[1]+" recorded "+lists[1].join(", ")+". Which one is more consistent? (Type the name.)",
+    [cName],
+    "Consistency is about spread, not speed. "+cName+"\u2019s times run from "+Math.min.apply(null,tight)+" to "+Math.max.apply(null,tight)+", a range of "+rng(tight)+", while "+oName+"\u2019s run from "+Math.min.apply(null,wide)+" to "+Math.max.apply(null,wide)+", a range of "+rng(wide)+". Their averages are close ("+fmt(sum(tight)/5,1)+" min and "+fmt(sum(wide)/5,1)+" min), so the averages do not decide it. The tighter spread makes <b>"+cName+"</b> the more consistent one.",
+    {base:base,cIdx:cIdx});
+});
+E("u6-breakeven-plans",6,["6.17","6.19"],3,"gen",function(){
+  var fr=pick([
+    "A moving company rents trucks under two plans.",
+    "A car rental agency offers two plans."]);
+  var f1=pick([29,39,49,59]);var dr=pick([0.25,0.5]);var r2=pick([0.45,0.55,0.65,0.75]);var r1=r2+dr;
+  var df=pick([10,15,20,25,30,40]);var f2=f1+df;var d=df/dr;
+  return numq(fr+" Plan A charges a fee of \\$"+f1+" plus \\$"+fmtF(r1,2)+" per km driven. Plan B charges a fee of \\$"+f2+" plus \\$"+fmtF(r2,2)+" per km driven. For what distance, in km, do the two plans cost exactly the same?",
+    d,0.011,
+    "Write each cost as a per-km rate times the distance, plus the fixed fee; the per-km charge is the slope of the cost graph. Plan A: \\(C = "+f1+" + "+fmt(r1)+"d\\). Plan B: \\(C = "+f2+" + "+fmt(r2)+"d\\). Setting the costs equal: \\("+f1+" + "+fmt(r1)+"d = "+f2+" + "+fmt(r2)+"d\\), so \\("+fmt(dr)+"d = "+df+"\\), and \\(d = \\)<b>\\("+d+"\\text{ km}\\)</b>. Below that distance the lower fee wins; above it, the lower per-km rate wins.",
+    {f1:f1,f2:f2,r1:r1,r2:r2});
+});
+E("u6-sail-scale-mc",6,["6.10","6.14"],3,"gen",function(){
+  var Am=0,k=0,tries=0,ok=false,key=0,d1=0,d2=0,d3=0;
+  while(!ok&&tries<400){tries++;
+    Am=pick([24,30,36,40,45,48,50,60]);k=pick([20,24,25,30,36,40,50]);
+    key=Am*k*k/10000;d1=Am*k/10000;d2=Am*k*k/100;d3=Am*k*k/1000;
+    var os=[fmt(key,3),fmt(d1,3),fmt(d2,3),fmt(d3,3)];
+    ok=os.filter(function(v,i){return os.indexOf(v)===i;}).length===4;
+  }
+  return mcq("A scale model of a sailboat is built to a scale of \\(1 : "+k+"\\). The sail on the model has an area of "+Am+" \\(\\text{cm}^2\\). What is the area of the real sail, in \\(\\text{m}^2\\)?",
+    fmt(key,3),[fmt(d1,3),fmt(d2,3),fmt(d3,3)],
+    "Areas scale by the square of the scale factor, not by the factor itself: the real sail has area \\("+Am+" \\times "+k+"^2 = "+(Am*k*k)+"\\text{ cm}^2\\). Since \\(1\\text{ m}^2 = 10\\,000\\text{ cm}^2\\), that is \\("+(Am*k*k)+" \\div 10\\,000 = \\)<b>\\("+fmt(key,3)+"\\text{ m}^2\\)</b>.",
+    {Am:Am,k:k});
+});
+E("u6-unit-price-mc",6,["6.16"],1,"gen",function(){
+  var fr=null,n=0,unit=0,P=0,d1=0,d2=0,d3=0,tries=0,ok=false;
+  while(!ok&&tries<400){tries++;
+    fr=pick([{w:"granola bars",s:"bar"},{w:"juice boxes",s:"juice box"},{w:"batteries",s:"battery"},{w:"pencils",s:"pencil"},{w:"muffins",s:"muffin"}]);
+    n=pick([4,5,6,8,10,12]);unit=pick([0.65,0.75,0.85,0.95,1.05,1.15,1.25,1.45,1.55,1.75,1.95,2.25,2.45,2.75,3.25]);
+    P=Math.round(n*unit*100)/100;
+    d1=Math.round((n/P)*100)/100;
+    d2=Math.round((P/(n+2))*100)/100;
+    d3=Math.round((P/(n-1))*100)/100;
+    var os=[fmtF(unit,2),fmtF(d1,2),fmtF(d2,2),fmtF(d3,2)];
+    ok=os.filter(function(v,i){return os.indexOf(v)===i;}).length===4;
+  }
+  return mcq("A pack of "+n+" "+fr.w+" costs \\$"+fmtF(P,2)+". What is the cost per "+fr.s+", in dollars?",
+    fmtF(unit,2),[fmtF(d1,2),fmtF(d2,2),fmtF(d3,2)],
+    "The unit price is the total cost divided by the number of items: \\("+fmtF(P,2)+" \\div "+n+" = \\)<b>\\(\\$"+fmtF(unit,2)+"\\)</b> per "+fr.s+". Dividing the other way would give items per dollar, not dollars per item.",
+    {n:n,P:P});
 });
 /* ============ Unit 7: Inductive and Deductive Reasoning ============ */
 E("u7-pattern-next",7,["2.1"],2,"gen",function(){
@@ -2007,6 +2118,63 @@ E("u8-angle-sum-rule",8,["5.5"],1,"var",varset([
    1.4 but it multiplies radicals (an operation, 1.6). */
 
 /* --- Unit 1: Acute Triangle Trigonometry --- */
+E("u1-sine-side-mc",1,["7.2"],2,"gen",function(){
+  var A=0,B=0,a=0,key=0,d1=0,d2=0,d3=0,tries=0,ok=false;
+  while(!ok&&tries<400){tries++;
+    A=ri(30,60);B=ri(40,80);a=ri(8,24);
+    if(A+B<=95||A+B>=168)continue;
+    var C=180-A-B;if(C<=10||C>=90)continue;
+    var sA=Math.sin(A*Math.PI/180),sB=Math.sin(B*Math.PI/180),sC=Math.sin(C*Math.PI/180);
+    key=a*sB/sA;d1=a*sA/sB;d2=a*sB/sC;d3=a*sC/sA;
+    var os=[fmt(key,1),fmt(d1,1),fmt(d2,1),fmt(d3,1)];
+    ok=os.filter(function(v,i){return os.indexOf(v)===i;}).length===4;
+  }
+  var b=key,cval=a*Math.sin((180-A-B)*Math.PI/180)/Math.sin(A*Math.PI/180);
+  var q=mcq("In \\(\\triangle ABC\\), \\(\\angle A = "+A+"^\\circ\\), \\(\\angle B = "+B+"^\\circ\\), and side \\(a = "+a+"\\text{ cm}\\) (the side opposite \\(\\angle A\\)). What is the length of side \\(b\\), in cm?",
+    fmt(key,1),[fmt(d1,1),fmt(d2,1),fmt(d3,1)],
+    "Use the sine law and pair each side with its opposite angle: \\(\\frac{b}{\\sin "+B+"^\\circ} = \\frac{"+a+"}{\\sin "+A+"^\\circ}\\). So \\(b = \\frac{"+a+" \\sin "+B+"^\\circ}{\\sin "+A+"^\\circ} \\approx \\)<b>\\("+fmt(key,1)+"\\text{ cm}\\)</b>.",
+    {A:A,B:B,a:a});
+  q.figure=triSVG(a,b,cval,{L:["A","B","C"],ang:[A+"°",B+"°",null],side:[a+" cm","?",null]});
+  return q;
+});
+E("u1-cosine-angle-mc",1,["7.2"],2,"gen",function(){
+  var Atar=0,b=0,c=0,a=0,Aang=0,Bang=0,Cang=0,tries=0,ok=false;
+  while(!ok&&tries<400){tries++;
+    Atar=pick([40,45,50,55,60,65,70,75,80]);b=ri(6,14);c=ri(6,14);
+    a=Math.round(Math.sqrt(b*b+c*c-2*b*c*Math.cos(Atar*Math.PI/180))*10)/10;
+    var cosA=(b*b+c*c-a*a)/(2*b*c);if(Math.abs(cosA)>=1)continue;
+    Aang=Math.acos(cosA)*180/Math.PI;
+    var cosB=(a*a+c*c-b*b)/(2*a*c);if(Math.abs(cosB)>=1)continue;
+    Bang=Math.acos(cosB)*180/Math.PI;Cang=180-Aang-Bang;
+    if(Cang<=5||Cang>=90)continue;
+    var os=[""+Math.round(Aang),""+Math.round(Bang),""+Math.round(Cang),""+Math.round(180-Aang)];
+    ok=os.filter(function(v,i){return os.indexOf(v)===i;}).length===4;
+  }
+  var q=mcq("A triangle has sides "+fmt(a,1)+" cm, "+b+" cm and "+c+" cm. What is the angle opposite the side of length "+fmt(a,1)+" cm, in degrees?",
+    ""+Math.round(Aang),[""+Math.round(Bang),""+Math.round(Cang),""+Math.round(180-Aang)],
+    "Rearrange the cosine law for the angle opposite side \\(a\\): \\(\\cos A = \\frac{b^2 + c^2 - a^2}{2bc} = \\frac{"+b+"^2 + "+c+"^2 - "+fmt(a,1)+"^2}{2("+b+")("+c+")}\\). This gives \\(A \\approx \\)<b>\\("+Math.round(Aang)+"^\\circ\\)</b>. The side squared on its own at the end of the numerator is the one opposite the angle being found.",
+    {a:a,b:b,c:c});
+  q.figure=triSVG(a,b,c,{L:["A","B","C"],ang:["?",null,null],side:[fmt(a,1),""+b,""+c]});
+  return q;
+});
+E("u1-crossing-distance",1,["7.3"],2,"gen",function(){
+  var D=0,al=0,be=0,R=0,key=0,d1=0,d2=0,d3=0,tries=0,ok=false;
+  while(!ok&&tries<400){tries++;
+    D=ri(40,120);al=ri(35,70);be=ri(35,70);
+    R=180-al-be;if(R<25||R>80)continue;
+    var sR=Math.sin(R*Math.PI/180);
+    key=D*Math.sin(be*Math.PI/180)/sR;
+    d1=D*Math.sin(al*Math.PI/180)/sR;
+    d2=D*sR/Math.sin(be*Math.PI/180);
+    d3=D*Math.sin(be*Math.PI/180)/Math.sin(al*Math.PI/180);
+    var os=[fmt(key,1),fmt(d1,1),fmt(d2,1),fmt(d3,1)];
+    ok=os.filter(function(v,i){return os.indexOf(v)===i;}).length===4;
+  }
+  return mcq("Two points \\(P\\) and \\(Q\\) on one shore of a lake are "+D+" m apart. A buoy \\(R\\) floats on the lake. From \\(P\\), the angle between the line to \\(Q\\) and the line to the buoy is "+al+"^\\circ\\); from \\(Q\\), the angle between the line to \\(P\\) and the line to the buoy is "+be+"^\\circ\\). How far is the buoy from \\(P\\), in m?",
+    fmt(key,1),[fmt(d1,1),fmt(d2,1),fmt(d3,1)],
+    "The two shore points and the buoy form a triangle. The angle at the buoy is \\(180^\\circ - "+al+"^\\circ - "+be+"^\\circ = "+R+"^\\circ\\). By the sine law, \\(\\frac{PR}{\\sin "+be+"^\\circ} = \\frac{"+D+"}{\\sin "+R+"^\\circ}\\), so \\(PR = \\frac{"+D+" \\sin "+be+"^\\circ}{\\sin "+R+"^\\circ} \\approx \\)<b>\\("+fmt(key,1)+"\\text{ m}\\)</b>.",
+    {D:D,al:al,be:be,R:R});
+});
 E("u1-sine-two-step",1,["7.2"],2,"gen",function(){
   function rd(d){return d*Math.PI/180;}
   var A,B,C,tries=0;
@@ -2220,6 +2388,50 @@ E("u3-border",3,["4.3"],3,"gen",function(){
     w,0.011,
     "Let the width be \\(w\\). The border adds \\(w\\) to every side, so the outside dimensions are \\(("+L+" + 2w)\\) by \\(("+W+" + 2w)\\), and \\[\\begin{aligned} ("+L+" + 2w)("+W+" + 2w) &= "+T+" \\\\ 4w^2 + "+(2*(L+W))+"w + "+(L*W)+" &= "+T+" \\\\ 4w^2 + "+(2*(L+W))+"w - "+(T-L*W)+" &= 0 \\end{aligned}\\] The quadratic formula gives \\(w = "+w+"\\) or a negative value; a width cannot be negative, so the width is <b>\\("+w+"\\) m</b>.",
     {L:L,W:W,w:w});
+});
+E("u3-formula-repair",3,["4.9"],3,"gen",function(){
+  function pair(r1,r2){var lo=Math.min(r1,r2),hi=Math.max(r1,r2);return "\\(x = "+lo+"\\) and \\(x = "+hi+"\\)";}
+  var m=0,n=0,a=1,b=0,c=0,D=0,sq=0,tmpl=0,tries=0,ok=false,keyS="",stuS="",othS="",flipS="";
+  while(!ok&&tries<400){tries++;
+    m=ri(-6,6);n=ri(-6,6);a=pick([1,2]);tmpl=ri(0,1);
+    if(m===0||n===0||m===n||m+n===0)continue;
+    b=-a*(m+n);c=a*m*n;D=b*b-4*a*c;sq=a*Math.abs(m-n);
+    keyS=pair(m,n);
+    stuS=tmpl===0?pair(-m,-n):pair(2*m,2*n);
+    othS=tmpl===0?pair(2*m,2*n):pair(-m,-n);
+    flipS=pair(-m,n);
+    var os=[keyS,stuS,othS,flipS];
+    ok=os.filter(function(v,i){return os.indexOf(v)===i;}).length===4;
+  }
+  var work;
+  if(tmpl===0){
+    work="A student solves the equation "+quadT(a,b,c).slice(0,-2)+" = 0\\) with the quadratic formula. Their first line reads \\(x = \\frac{"+b+" \\pm \\sqrt{"+D+"}}{"+(2*a)+"}\\), and they conclude the roots are "+stuS+". What are the correct roots?";
+  }else{
+    work="A student solves the equation "+quadT(a,b,c).slice(0,-2)+" = 0\\) with the quadratic formula. Their first line reads \\(x = \\frac{"+(-b)+" \\pm \\sqrt{"+D+"}}{"+a+"}\\), and they conclude the roots are "+stuS+". What are the correct roots?";
+  }
+  return mcq(work,keyS,[stuS,othS,flipS],
+    "The quadratic formula needs \\(-b\\) in the numerator and \\(2a\\) in the denominator: \\(x = \\frac{"+(-b)+" \\pm \\sqrt{"+D+"}}{"+(2*a)+"} = \\frac{"+(-b)+" \\pm "+sq+"}{"+(2*a)+"}\\), which gives <b>"+keyS+"</b>. The student\u2019s first line already departs from the formula, so their roots are wrong even though the arithmetic after it was consistent.",
+    {m:m,n:n,a:a,tmpl:tmpl});
+});
+E("u3-discriminant-parameter",3,["4.7"],3,"gen",function(){
+  if(Math.random()<0.5){
+    var pairs=[[1,9],[1,16],[1,25],[1,36],[2,8],[2,18],[4,9]];
+    var pr=pick(pairs);var a=pr[0],c=pr[1];var ac=a*c;var rt=Math.round(Math.sqrt(ac));
+    function os4(p){return "\\(k = "+p+"\\) or \\(k = -"+p+"\\)";}
+    var stems=[
+      "For what values of \\(k\\) does \\("+(a===1?"":a)+"x^2 + kx + "+c+" = 0\\) have exactly one real solution?",
+      "For what values of \\(k\\) does \\("+(a===1?"":a)+"x^2 + kx + "+c+" = 0\\) have two equal real roots?",
+      "For what values of \\(k\\) does \\("+(a===1?"":a)+"x^2 + kx + "+c+" = 0\\) have a repeated root?"];
+    return mcq(pick(stems),os4(2*rt),[os4(rt),os4(2*ac),os4(ac)],
+      "A single repeated solution means the discriminant is zero: \\(k^2 - 4("+a+")("+c+") = 0\\), so \\(k^2 = "+(4*ac)+"\\) and \\(k = \\pm 2\\sqrt{"+ac+"}\\), giving <b>"+os4(2*rt)+"</b>. Both signs work, because only \\(k^2\\) appears in the discriminant.",
+      {a:a,c:c});
+  }
+  var bs=[6,8,10,12,14];var b=pick(bs);var th=b*b/4;var off=ri(1,8);
+  var e1=ri(2,4),e2=e1+ri(2,4);
+  return mcq("The equation \\(x^2 + "+b+"x + k = 0\\) has no real solutions. Which value could \\(k\\) be?",
+    ""+(th+off),[""+th,""+(th-e1),""+(th-e2)],
+    "No real solutions means the discriminant is negative: \\("+b+"^2 - 4k < 0\\), which gives \\(k > \\frac{"+(b*b)+"}{4} = "+th+"\\). Only \\("+(th+off)+"\\) is greater than \\("+th+"\\): at \\(k = "+th+"\\) there would be exactly one solution, and smaller values give two.",
+    {b:b,th:th});
 });
 E("u3-exact-roots",3,["4.9"],2,"gen",function(){
   function g2(a,b){while(b){var t=a%b;a=b;b=t;}return a;}
@@ -2963,6 +3175,71 @@ E("u8-corresponding-algebra",8,["5.8"],2,"gen",function(){
   q.figure=transversalSVG("TR","("+expr(a,b)+")°","BR","?");
   return q;
 });
+E("u8-correspondence",8,["5.6"],3,"gen",function(){
+  var tris=pick([["ABC","DEF"],["PQR","STU"],["XYZ","UVW"],["JKL","MNO"],["FGH","BCD"],["RST","UVW"],["GHJ","KLM"]]);
+  var T1=tris[0],T2=tris[1];
+  var perm=shuffle([0,1,2]);
+  function L2(i){return T2.charAt(perm[i]);}
+  var mode=ri(0,1),givens;
+  if(mode===0){
+    givens="\\("+T1.charAt(0)+T1.charAt(1)+" = "+L2(0)+L2(1)+"\\), \\("+T1.charAt(1)+T1.charAt(2)+" = "+L2(1)+L2(2)+"\\) and \\("+T1.charAt(2)+T1.charAt(0)+" = "+L2(2)+L2(0)+"\\)";
+  }else{
+    givens="\\("+T1.charAt(0)+T1.charAt(1)+" = "+L2(0)+L2(1)+"\\), \\(\\angle "+T1.charAt(1)+" = \\angle "+L2(1)+"\\) and \\("+T1.charAt(1)+T1.charAt(2)+" = "+L2(1)+L2(2)+"\\)";
+  }
+  var keyStmt="\\(\\triangle "+T1+" \\cong \\triangle "+L2(0)+L2(1)+L2(2)+"\\)";
+  var allPerms=[[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]];
+  var others=allPerms.filter(function(p){return !(p[0]===perm[0]&&p[1]===perm[1]&&p[2]===perm[2]);});
+  var ds=shuffle(others).slice(0,3).map(function(p){return "\\(\\triangle "+T1+" \\cong \\triangle "+T2.charAt(p[0])+T2.charAt(p[1])+T2.charAt(p[2])+"\\)";});
+  return mcq("It is given that "+givens+". Which congruence statement matches these givens?",
+    keyStmt,ds,
+    "Match the vertices through the equal parts: "+T1.charAt(0)+" pairs with "+L2(0)+", "+T1.charAt(1)+" pairs with "+L2(1)+", and "+T1.charAt(2)+" pairs with "+L2(2)+". Writing the second triangle in that corresponding order gives <b>"+keyStmt+"</b>. In a congruence statement, the order of the letters is part of the claim.",
+    {perm:perm,mode:mode});
+});
+E("u8-parallel-x-value",8,["5.9"],3,"gen",function(){
+  var p=0,q=0,E=0,a=2,x=0,b=0,tries=0,ok=false;
+  while(!ok&&tries<400){tries++;
+    p=ri(35,70);q=ri(35,70);E=p+q;a=pick([2,3,4]);x=ri(8,30);
+    b=(180-E)-a*x;
+    ok=(E>=85&&E<=130&&b>=2&&b<=30);
+  }
+  return numq("Two lines are cut by a transversal. One co-interior angle is an exterior angle of a triangle, and the two remote interior angles of that triangle measure \\("+p+"^\\circ\\) and \\("+q+"^\\circ\\). The other co-interior angle, on the same side of the transversal, measures \\(("+a+"x + "+b+")^\\circ\\). For what value of \\(x\\) are the two lines parallel?",
+    x,0.011,
+    "Start with the triangle: an exterior angle equals the sum of the two remote interior angles, so the first co-interior angle measures \\("+p+"^\\circ + "+q+"^\\circ = "+E+"^\\circ\\). Two lines are parallel exactly when co-interior angles are supplementary, so \\("+a+"x + "+b+" = 180 - "+E+" = "+(180-E)+"\\). Then \\("+a+"x = "+(180-E-b)+"\\), giving \\(x = \\)<b>\\("+x+"\\)</b>.",
+    {p:p,q:q,a:a,b:b});
+});
+E("u8-isosceles-exterior",8,["5.3"],3,"gen",function(){
+  if(Math.random()<0.5){
+    var E=2*ri(50,80);var ans=E/2;
+    return numq("In \\(\\triangle ABC\\), \\(AB = AC\\). The exterior angle at \\(A\\) measures "+E+"^\\circ\\). What is the measure of \\(\\angle B\\), in degrees?",
+      ans,0.011,
+      "The interior angle at \\(A\\) is supplementary to the exterior angle: \\(180^\\circ - "+E+"^\\circ = "+(180-E)+"^\\circ\\). Since \\(AB = AC\\), the base angles at \\(B\\) and \\(C\\) are equal, and the interior angles of a triangle sum to \\(180^\\circ\\), so each base angle is \\((180^\\circ - "+(180-E)+"^\\circ) \\div 2 = \\)<b>\\("+ans+"^\\circ\\)</b>.",
+      {E:E,mode:0});
+  }
+  var E2=ri(100,130);var ans2=2*E2-180;
+  return numq("In \\(\\triangle ABC\\), \\(AB = AC\\). The exterior angle at \\(B\\) measures "+E2+"^\\circ\\). What is the measure of \\(\\angle A\\), in degrees?",
+    ans2,0.011,
+    "The interior angle at \\(B\\) is \\(180^\\circ - "+E2+"^\\circ = "+(180-E2)+"^\\circ\\). Since \\(AB = AC\\), \\(\\angle C = \\angle B = "+(180-E2)+"^\\circ\\). The interior angles sum to \\(180^\\circ\\), so \\(\\angle A = 180^\\circ - 2 \\times "+(180-E2)+"^\\circ = \\)<b>\\("+ans2+"^\\circ\\)</b>.",
+    {E:E2,mode:1});
+});
+E("u8-regular-sides-from-angle",8,["5.5"],2,"gen",function(){
+  var ns=[5,6,8,9,10,12,15,18,20,24,30,36,40,45,60,72,90];var n=pick(ns);var each=(n-2)*180/n;var sum=(n-2)*180;var mode=ri(0,2);
+  if(mode===0){
+    return numq("Each interior angle of a regular polygon measures "+each+"^\\circ\\). How many sides does the polygon have?",
+      n,0.011,
+      "Work with the exterior angle first: it is \\(180^\\circ - "+each+"^\\circ = "+(180-each)+"^\\circ\\). The exterior angles of a polygon add to \\(360^\\circ\\), so the number of sides is \\(360 \\div "+(180-each)+" = \\)<b>\\("+n+"\\)</b>.",
+      {n:n,each:each,sum:sum,mode:mode});
+  }
+  if(mode===1){
+    return numq("The interior angles of a regular polygon add to "+sum+"^\\circ\\), and each interior angle measures "+each+"^\\circ\\). How many sides does the polygon have?",
+      n,0.011,
+      "Every interior angle has the same measure, so the number of angles, which equals the number of sides, is \\("+sum+" \\div "+each+" = \\)<b>\\("+n+"\\)</b>. Check: \\(("+n+" - 2) \\times 180^\\circ = "+sum+"^\\circ\\), as given.",
+      {n:n,each:each,sum:sum,mode:mode});
+  }
+  return numq("Each interior angle of a regular polygon measures "+each+"^\\circ\\). What is the sum of the interior angles, in degrees?",
+    sum,0.011,
+    "First find the number of sides from the exterior angle: each exterior angle is \\(180^\\circ - "+each+"^\\circ = "+(180-each)+"^\\circ\\), and exterior angles add to \\(360^\\circ\\), so the polygon has \\(360 \\div "+(180-each)+" = "+n+"\\) sides. The sum of the interior angles is then \\(("+n+" - 2) \\times 180^\\circ = \\)<b>\\("+sum+"^\\circ\\)</b>.",
+    {n:n,each:each,sum:sum,mode:mode});
+});
 E("u8-exterior-algebra",8,["5.11"],3,"gen",function(){
   function linT(cf,kn){return cf+"x"+(kn>0?" + "+kn:(kn<0?" - "+(-kn):""));}
   function quadT(B,C){var out="x^2";if(B>0)out+=" + "+B+"x";else if(B<0)out+=" - "+(-B)+"x";if(C>0)out+=" + "+C;else if(C<0)out+=" - "+(-C);return out;}
@@ -2985,6 +3262,49 @@ E("u8-exterior-algebra",8,["5.11"],3,"gen",function(){
    Adds a second Level 3 for Unit 8 and another for Unit 2. */
 
 /* --- Unit 2: Quadratic Functions --- */
+E("u2-revenue-build",2,["4.2"],3,"gen",function(){
+  var fr=null,P=0,N=0,s=0,d=0,tries=0,ok=false,keyS="",d1S="",d2S="",d3S="";
+  function R(t){return "\\(R(x) = "+quadB(t[0],t[1],t[2])+"\\)";}
+  while(!ok&&tries<400){tries++;
+    fr=pick([
+      {w:"A community theatre",item:"tickets",each:"ticket"},
+      {w:"A gym",item:"day passes",each:"day pass"},
+      {w:"A market stall",item:"jars of preserves",each:"jar"}]);
+    P=pick([6,8,9,10,12,15]);N=pick([120,150,180,200,240,300,360]);s=pick([0.5,1,1,2]);d=ri(4,25);
+    if(s===d)continue;
+    var A=-s*d,B=s*N-P*d,C=P*N;
+    if(B===0||B-s*d===0)continue;
+    keyS=R([A,B,C]);
+    d1S=R([A,s*N+P*d,C]);
+    d2S=R([A,B,(P+s)*(N-d)]);
+    d3S=R([A,d*N-s*P,C]);
+    var os=[keyS,d1S,d2S,d3S];
+    ok=os.filter(function(v,i){return os.indexOf(v)===i;}).length===4;
+  }
+  return mcq(fr.w+" sells "+fr.item+" at \\$"+P+" per "+fr.each+" and normally sells "+N+" of them. The seller estimates that for every \\$"+fmt(s,1)+" increase in the price, "+d+" fewer will be sold. Let \\(x\\) be the number of \\$"+fmt(s,1)+" increases. Which function models the revenue, in dollars?",
+    keyS,[d1S,d2S,d3S],
+    "After \\(x\\) increases, the price is \\("+P+" + "+fmt(s,1)+"x\\) dollars and the number sold is \\("+N+" - "+d+"x\\). Revenue is price times number sold: \\(R(x) = ("+P+" + "+fmt(s,1)+"x)("+N+" - "+d+"x)\\). Expanding gives <b>"+keyS+"</b>.",
+    {P:P,N:N,s:s,d:d});
+});
+E("u2-function-from-vertex-point",2,["4.15","4.16"],3,"gen",function(){
+  var a=0,h=0,k=0,side=0,tries=0,ok=false,keyS="",d1S="",d2S="",d3S="",px=0,py=0;
+  while(!ok&&tries<400){tries++;
+    a=pick([-3,-2,-1,1,2,3]);h=ri(-5,5);k=ri(-8,8);side=pick([-2,2]);
+    if(h===0||k===0)continue;
+    px=h+side;py=k+a*side*side;
+    var B=-2*a*h,C=a*h*h+k,a2=a*side;
+    keyS="\\(y = "+quadB(a,B,C)+"\\)";
+    d1S="\\(y = "+quadB(a,2*a*h,C)+"\\)";
+    d2S="\\(y = "+quadB(a2,-2*a2*h,a2*h*h+k)+"\\)";
+    d3S="\\(y = "+quadB(a,B,a*h*h-k)+"\\)";
+    var os=[keyS,d1S,d2S,d3S];
+    ok=os.filter(function(v,i){return os.indexOf(v)===i;}).length===4;
+  }
+  return mcq("A parabola has vertex \\(("+h+", "+k+")\\) and passes through the point \\(("+px+", "+py+")\\). Which equation gives the parabola in standard form?",
+    keyS,[d1S,d2S,d3S],
+    "Start in vertex form and use the point to find \\(a\\): \\("+py+" = a("+side+")^2 + "+k+"\\) gives \\(a = "+a+"\\). So the vertex form is \\(y = "+vertB(a,h,k)+"\\), and expanding it gives <b>"+keyS+"</b>.",
+    {a:a,h:h,k:k,px:px,py:py});
+});
 E("u2-concavity",2,["4.10"],1,"gen",function(){
   var a=0,tries=0;while(a===0&&tries<40){a=ri(-9,9);tries++;}
   var b=ri(-9,9),c=ri(-12,12),up=a>0;
@@ -3377,6 +3697,79 @@ E("u6-map-distance",6,["6.9"],2,"gen",function(){
 });
 
 /* --- Unit 7: Reasoning --- */
+E("u7-proof-repair",7,["2.8"],3,"gen",function(){
+  var f=pick([1,-1]);var a=ri(2,9);var rootA=f*a;var b=ri(2,9);if(b===rootA)b=b+1;
+  var term=rootA>=0?"(x - "+rootA+")":"(x + "+(-rootA)+")";
+  return numq("A student solves \\(x"+term+" = "+b+term+"\\) by cancelling the factor \\("+term+"\\) from both sides, and reports the single solution \\(x = "+b+"\\). Cancelling that factor lost one solution. What is the missing solution?",
+    rootA,0.011,
+    "Cancelling \\("+term+"\\) amounts to dividing both sides by it, which throws away the case where the factor itself is zero. Move everything to one side instead: \\(x"+term+" - "+b+term+" = "+term+"(x - "+b+") = 0\\), so the solutions are \\(x = "+rootA+"\\) and \\(x = "+b+"\\). The missing solution is <b>\\(x = "+rootA+"\\)</b>, exactly the value that makes the cancelled factor zero.",
+    {rootA:rootA,b:b});
+});
+E("u7-smallest-counterexample",7,["2.4"],3,"var",varset([
+  function(){return numq("Conjecture: \u2018Every multiple of \\(4\\) is a multiple of \\(8\\).\u2019 What is the smallest positive multiple of \\(4\\) that disproves it?",
+    4,0.011,"The multiples of \\(4\\) are \\(4, 8, 12, 16, \\ldots\\) The very first one, \\(4\\), is not a multiple of \\(8\\), so it is a counterexample, and no smaller positive multiple of \\(4\\) exists.",{});},
+  function(){return numq("Conjecture: \u2018Every multiple of \\(6\\) is a multiple of \\(9\\).\u2019 What is the smallest positive multiple of \\(6\\) that disproves it?",
+    6,0.011,"The multiples of \\(6\\) are \\(6, 12, 18, \\ldots\\) The number \\(6\\) is not a multiple of \\(9\\), so it disproves the conjecture, and it is the first multiple to check.",{});},
+  function(){return numq("Conjecture: \u2018Every number divisible by \\(10\\) is divisible by \\(15\\).\u2019 What is the smallest positive number that disproves it?",
+    10,0.011,"The number \\(10\\) is divisible by \\(10\\) but not by \\(15\\). It meets the condition and breaks the claim, and no smaller positive number meets the condition at all.",{});},
+  function(){return numq("Conjecture: \u2018Every number divisible by \\(12\\) is divisible by \\(18\\).\u2019 What is the smallest positive number that disproves it?",
+    12,0.011,"The number \\(12\\) is divisible by \\(12\\), but \\(12 \\div 18\\) is not a whole number. So \\(12\\) is a counterexample, and the smallest one possible.",{});},
+  function(){return numq("For whole numbers \\(n\\), the expression \\(n^2 + n + 11\\) gives a prime for \\(n = 0, 1, 2, \\ldots, 9\\). A student conjectures it is prime for every whole number. For what value of \\(n\\) does it first fail?",
+    10,0.011,"Keep testing past the cases given: at \\(n = 10\\), \\(10^2 + 10 + 11 = 121 = 11 \\times 11\\), which is not prime. The pattern survived ten cases and still failed, which is why checking cases can support a conjecture but never prove it.",{});}
+]));
+E("u7-counterexample-name",7,["2.4"],3,"var",varset([
+  function(){return textq("Conjecture: \u2018A quadrilateral with all four sides equal is a square.\u2019 Name a quadrilateral with all sides equal that is not a square. (Type the name of the shape.)",
+    ["rhombus"],
+    "A <b>rhombus</b> has all four sides equal, but its angles need not be right angles, so it need not be a square. A single counterexample disproves the conjecture.",{});},
+  function(){return textq("Conjecture: \u2018If the diagonals of a quadrilateral are perpendicular, the quadrilateral is a rhombus.\u2019 Name a quadrilateral with perpendicular diagonals that is not a rhombus. (Type the name of the shape.)",
+    ["kite"],
+    "A <b>kite</b> has perpendicular diagonals, but its sides are two pairs of adjacent equal sides, not four equal sides, so it is not a rhombus.",{});},
+  function(){return textq("Conjecture: \u2018A quadrilateral with a pair of parallel sides is a parallelogram.\u2019 Name a quadrilateral that has exactly one pair of parallel sides. (Type the name of the shape.)",
+    ["trapezoid","trapezium"],
+    "A <b>trapezoid</b> has exactly one pair of parallel sides; a parallelogram needs two pairs. So the trapezoid is a counterexample.",{});},
+  function(){return textq("Conjecture: \u2018Every prime number is odd.\u2019 Type the prime number that is a counterexample.",
+    ["2"],
+    "The number <b>2</b> is prime, since its only factors are 1 and itself, but it is even. One counterexample is enough to disprove the conjecture.",{});}
+]));
+E("u7-triangular-total",7,["2.1"],2,"gen",function(){
+  var mode=ri(0,3),N=0,ans=0,prompt="",sol="";
+  if(mode===0){N=ri(8,26);ans=N*(N+1)/2;
+    prompt="Blocks are stacked in a staircase: a 1-step staircase uses \\(1\\) block, a 2-step staircase uses \\(3\\) blocks, and a 3-step staircase uses \\(6\\) blocks. How many blocks does a "+N+"-step staircase use?";
+    sol="The totals \\(1, 3, 6, \\ldots\\) grow by \\(2\\), then \\(3\\), then \\(4\\): step \\(k\\) adds \\(k\\) blocks. So the total for \\(n\\) steps is \\(1 + 2 + \\cdots + n = \\frac{n(n+1)}{2}\\). For \\("+N+"\\) steps: \\(\\frac{"+N+" \\times "+(N+1)+"}{2} = \\)<b>\\("+ans+"\\)</b> blocks.";}
+  else if(mode===1){N=ri(7,22);ans=N*(N-1)/2;
+    prompt="At a meeting, every person shakes hands with every other person exactly once. With \\(4\\) people there are \\(6\\) handshakes. How many handshakes are there with "+N+" people?";
+    sol="Each of the \\("+N+"\\) people shakes \\("+(N-1)+"\\) hands, but that counts every handshake twice, once from each end. The total is \\(\\frac{"+N+" \\times "+(N-1)+"}{2} = \\)<b>\\("+ans+"\\)</b>. Check the given case: \\(\\frac{4 \\times 3}{2} = 6\\), as stated.";}
+  else if(mode===2){N=ri(8,28);ans=N*(N+1)/2;
+    prompt="Seats are arranged in rows: row 1 has \\(1\\) seat, row 2 has \\(2\\) seats, row 3 has \\(3\\) seats, and so on. How many seats are there in the first "+N+" rows altogether?";
+    sol="Add the rows: \\(1 + 2 + \\cdots + "+N+"\\). Pair the first and last rows, the second and second-last, and so on: each pair sums to \\("+(N+1)+"\\), and there are \\("+N+" \\div 2\\) pairs, giving \\(\\frac{"+N+" \\times "+(N+1)+"}{2} = \\)<b>\\("+ans+"\\)</b> seats.";}
+  else{N=ri(9,24);ans=N*(N+1)/2;
+    prompt="Counters are arranged in a triangular pattern: the first row has \\(1\\) counter, the second row has \\(2\\) counters, the third row has \\(3\\) counters, and so on. How many counters are there in the first "+N+" rows?";
+    sol="The row counts are consecutive whole numbers, so the total is \\(1 + 2 + \\cdots + "+N+" = \\frac{"+N+" \\times "+(N+1)+"}{2} = \\)<b>\\("+ans+"\\)</b> counters.";}
+  return numq(prompt,ans,0.011,sol,{mode:mode,N:N});
+});
+E("u7-chain-conclusion",7,["2.3"],2,"gen",function(){
+  var pools=[["Amara","Devon","Priya","Tom"],["Liam","Sofia","Noah","Emma"],["Kai","Ruth","Omar","Zoe"],["Maya","Eli","Nina","Sam"]];
+  var names=pick(pools).slice();
+  var order=shuffle(names.slice());
+  var clues=[];for(var i=0;i<3;i++)clues.push(order[i]+" is taller than "+order[i+1]+".");
+  clues=shuffle(clues);
+  var askTall=Math.random()<0.5;
+  var target=askTall?order[0]:order[3];
+  return textq("Four students, "+names.join(", ")+", are compared by height. The clues are: (1) "+clues[0]+" (2) "+clues[1]+" (3) "+clues[2]+" Who is the "+(askTall?"tallest":"shortest")+" student? (Type the name.)",
+    [target],
+    "Chain the clues together: "+order[0]+" is taller than "+order[1]+", who is taller than "+order[2]+", who is taller than "+order[3]+". The clues force one full order, so the "+(askTall?"tallest":"shortest")+" student is <b>"+target+"</b>. This is deductive reasoning: the conclusion has to hold.",
+    {order:order,askTall:askTall});
+});
+E("u7-false-pattern",7,["2.2"],2,"var",varset([
+  function(){return numq("A flatbread is cut with straight cuts that cross the whole flatbread. One cut makes \\(2\\) pieces, \\(2\\) cuts make \\(4\\) pieces, and \\(3\\) cuts make \\(7\\) pieces. A student conjectures the pieces double each time and predicts \\(8\\) pieces for \\(4\\) cuts. How many pieces do \\(4\\) cuts actually make?",
+    11,0.011,"Watch the increases instead: the counts grow by \\(2\\), then by \\(3\\), because each new cut crosses all the earlier cuts and so adds one more piece than the cut before. The next increase is \\(4\\), giving \\(7 + 4 = \\)<b>\\(11\\)</b> pieces. The doubling pattern fit the first step and failed soon after.",{});},
+  function(){return numq("A pattern of counts begins \\(1, 2, 4, 7\\). The increases are \\(1\\), then \\(2\\), then \\(3\\). Following the same pattern of increases, what is the next count?",
+    11,0.011,"The increases grow by \\(1\\) each time: \\(1, 2, 3\\), so the next increase is \\(4\\). The next count is \\(7 + 4 = \\)<b>\\(11\\)</b>. Judging a pattern means looking at how it grows, not just at the terms shown.",{});},
+  function(){return numq("A student computes \\(3 = 3\\), \\(3 + 6 = 9\\) and \\(3 + 6 + 9 = 18\\), and conjectures that the sums are doubling. The sums are actually built by adding the next multiple of \\(3\\) each time. What is the next sum?",
+    30,0.011,"The next multiple of \\(3\\) is \\(12\\), so the next sum is \\(18 + 12 = \\)<b>\\(30\\)</b>, not the \\(36\\) that doubling predicts. The first few terms of a pattern can fit a rule that the pattern is not following.",{});},
+  function(){return numq("Matchsticks form a row of squares: \\(1\\) square uses \\(4\\) matchsticks, \\(2\\) squares use \\(7\\), and \\(3\\) squares use \\(10\\). A student conjectures that each new square adds \\(4\\) matchsticks, because the first square needed \\(4\\). How many matchsticks do \\(6\\) squares use?",
+    19,0.011,"After the first square, each added square shares one side with the square before it, so it adds only \\(3\\) matchsticks: \\(4, 7, 10, 13, 16, 19\\). Six squares use <b>\\(19\\)</b> matchsticks. The first term alone does not set the rule.",{});}
+]));
 E("u7-deductive-chain",7,["2.3"],2,"gen",function(){
   /* rows: [singular A, plural A, plural B, singular C, plural C, singular D, plural D]
      with A in B, B in C, C in D */
@@ -3433,7 +3826,7 @@ E("u7-figure-pattern",7,["2.1"],1,"gen",function(){
    entry is selected-response only in exam mode. Worksheet mode uses these plus
    all numeric-answer entries. u4-rationalize (monomial) carries 1 mark, so the
    exam composer floor keeps it out of Section B, per the 2200 ruling. */
-var CR_MARKS={"u1-ambiguous-count":3,"u1-angle-between-paths":4,"u1-cosine-angle":2,"u1-cosine-context":2,"u1-cosine-side":2,"u1-guy-wire":3,"u1-median-length":4,"u1-sine-angle":2,"u1-sine-side":2,"u1-sine-two-step":2,"u1-smallest-angle":2,"u1-two-station-height":4,"u1-two-triangles":4,"u2-axis-from-intercepts":1,"u2-axis-two-points":1,"u2-count-intercepts":1,"u2-eq-from-vertex":2,"u2-evaluate-f":1,"u2-factored-coeffs":2,"u2-factored-max-height":2,"u2-factored-y-intercept":1,"u2-fence-max":3,"u2-max-area":3,"u2-max-context":2,"u2-max-height":2,"u2-mirror-point":1,"u2-revenue-model":2,"u2-standard-from-factored":2,"u2-vertex-form-eval":1,"u2-vertex-shift":1,"u2-vertex-time":1,"u2-vertex-value":2,"u2-vertex-x":1,"u2-xintercepts":2,"u2-xintercepts-factored":1,"u2-y-intercept":1,"u3-border":3,"u3-context-area":3,"u3-equation-fraction-roots":2,"u3-equation-from-roots":2,"u3-exact-roots":2,"u3-factor-difference":2,"u3-factor-monic":2,"u3-factor-nonmonic":2,"u3-factor-solve":2,"u3-formula":2,"u3-formula-exact-roots":2,"u3-gcf-solve":2,"u3-model-number":2,"u3-number-pair":2,"u3-root-difference":3,"u3-roots-sum-product":1,"u3-setup-equation":1,"u3-solve-height":2,"u3-solve-square":1,"u3-squares-area":3,"u3-standard-coeffs":1,"u3-two-numbers":3,"u3-zeros-factored":1,"u4-add-unlike":2,"u4-binomial-square":2,"u4-combine-multi":2,"u4-compare-radicals":1,"u4-conjugate-area":2,"u4-cube-equation":2,"u4-cube-mixed":2,"u4-diagonal-radical":2,"u4-difference-simplify":2,"u4-divide-radicals":2,"u4-entire-cube":1,"u4-entire-to-mixed":2,"u4-equation-restriction":1,"u4-evaluate-mixed":1,"u4-extraneous":3,"u4-mixed-to-entire":1,"u4-model-equation":2,"u4-model-evaluate":1,"u4-multiply":2,"u4-multiply-mixed":2,"u4-order":2,"u4-product-simplify":2,"u4-radical-equation":2,"u4-rationalize":1,"u4-rationalize-coefficient":2,"u4-reciprocal-sum":3,"u4-restrictions":1,"u4-simplify-add":2,"u4-triangle-perimeter":2,"u4-variable-mixed":2,"u4-verify-root":1,"u4-width-radical":2,"u5-ad-claim":3,"u5-centre-mean":1,"u5-centre-median":1,"u5-centre-mode":1,"u5-ci-build":1,"u5-ci-count":2,"u5-ci-endpoint":1,"u5-ci-from-endpoints":1,"u5-ci-level-from-report":1,"u5-ci-majority":3,"u5-ci-read-report":2,"u5-ci-shrink":2,"u5-empirical":2,"u5-freq-countin":1,"u5-freq-missing":1,"u5-freq-total":1,"u5-histogram-read":2,"u5-media":4,"u5-midpoint":1,"u5-normal-count":2,"u5-outlier-range":2,"u5-poll-position":3,"u5-polygon-point":1,"u5-range":1,"u5-relfreq":1,"u5-relfreq-rev":1,"u5-sd-calc":2,"u5-sd-compare":2,"u5-sd-decisions":4,"u5-sd-from-variance":1,"u5-z-applied":2,"u5-z-backwards":1,"u5-z-calc":1,"u5-z-compare":2,"u5-z-prob":2,"u6-area-scale":2,"u6-better-buy":2,"u6-compare-rates":2,"u6-map-distance":2,"u6-pack-cost":2,"u6-poster-cost":3,"u6-poster-dimensions":2,"u6-rate-difference":2,"u6-rate-isolate":1,"u6-rate-solve":1,"u6-scale-factor":1,"u6-similar-dimension":1,"u6-tile-cost":3,"u6-unit-rate":1,"u6-unknown-dimension":1,"u6-volume-scale":2,"u7-counterexample":2,"u7-counterexample-claims":2,"u7-counterexample-gen":2,"u7-everyday-counterexample":2,"u7-figure-pattern":1,"u7-pattern-equation":2,"u7-pattern-next":1,"u7-pattern-quad":2,"u7-race-order":2,"u7-sequence-gap":1,"u8-alternate-algebra":2,"u8-angle-chase":2,"u8-angle-sum-rule":1,"u8-co-interior":1,"u8-cointerior-algebra":2,"u8-congruence-deduce":1,"u8-congruence-perimeter":2,"u8-congruent-perimeter":1,"u8-corresponding-algebra":2,"u8-diagonals":1,"u8-exterior":1,"u8-exterior-algebra":3,"u8-isosceles-angles":2,"u8-multi-angle":2,"u8-polygon-inverse":1,"u8-polygon-ratio":2,"u8-polygon-sum":1,"u8-regular-angle":1,"u8-triangle-algebra":2,"u8-triangle-sum":1};
+var CR_MARKS={"u1-ambiguous-count":3,"u1-angle-between-paths":4,"u1-cosine-angle":2,"u1-cosine-context":2,"u1-cosine-side":2,"u1-guy-wire":3,"u1-median-length":4,"u1-sine-angle":2,"u1-sine-side":2,"u1-sine-two-step":2,"u1-smallest-angle":2,"u1-two-station-height":4,"u1-two-triangles":4,"u2-axis-from-intercepts":1,"u2-axis-two-points":1,"u2-count-intercepts":1,"u2-eq-from-vertex":2,"u2-evaluate-f":1,"u2-factored-coeffs":2,"u2-factored-max-height":2,"u2-factored-y-intercept":1,"u2-fence-max":3,"u2-max-area":3,"u2-max-context":2,"u2-max-height":2,"u2-mirror-point":1,"u2-revenue-model":2,"u2-standard-from-factored":2,"u2-vertex-form-eval":1,"u2-vertex-shift":1,"u2-vertex-time":1,"u2-vertex-value":2,"u2-vertex-x":1,"u2-xintercepts":2,"u2-xintercepts-factored":1,"u2-y-intercept":1,"u3-border":3,"u3-context-area":3,"u3-equation-fraction-roots":2,"u3-equation-from-roots":2,"u3-exact-roots":2,"u3-factor-difference":2,"u3-factor-monic":2,"u3-factor-nonmonic":2,"u3-factor-solve":2,"u3-formula":2,"u3-formula-exact-roots":2,"u3-gcf-solve":2,"u3-model-number":2,"u3-number-pair":2,"u3-root-difference":3,"u3-roots-sum-product":1,"u3-setup-equation":1,"u3-solve-height":2,"u3-solve-square":1,"u3-squares-area":3,"u3-standard-coeffs":1,"u3-two-numbers":3,"u3-zeros-factored":1,"u4-add-unlike":2,"u4-binomial-square":2,"u4-combine-multi":2,"u4-compare-radicals":1,"u4-conjugate-area":2,"u4-cube-equation":2,"u4-cube-mixed":2,"u4-diagonal-radical":2,"u4-difference-simplify":2,"u4-divide-radicals":2,"u4-entire-cube":1,"u4-entire-to-mixed":2,"u4-equation-restriction":1,"u4-evaluate-mixed":1,"u4-extraneous":3,"u4-mixed-to-entire":1,"u4-model-equation":2,"u4-model-evaluate":1,"u4-multiply":2,"u4-multiply-mixed":2,"u4-order":2,"u4-product-simplify":2,"u4-radical-equation":2,"u4-rationalize":1,"u4-rationalize-coefficient":2,"u4-reciprocal-sum":3,"u4-restrictions":1,"u4-simplify-add":2,"u4-triangle-perimeter":2,"u4-variable-mixed":2,"u4-verify-root":1,"u4-width-radical":2,"u4-defined-count":3,"u4-repair-simplify":2,"u5-ad-claim":3,"u5-centre-mean":1,"u5-centre-median":1,"u5-centre-mode":1,"u5-ci-build":1,"u5-ci-count":2,"u5-ci-endpoint":1,"u5-ci-from-endpoints":1,"u5-ci-level-from-report":1,"u5-ci-majority":3,"u5-ci-read-report":2,"u5-ci-shrink":2,"u5-empirical":2,"u5-freq-countin":1,"u5-freq-missing":1,"u5-freq-total":1,"u5-histogram-read":2,"u5-media":4,"u5-midpoint":1,"u5-normal-count":2,"u5-outlier-range":2,"u5-poll-position":3,"u5-polygon-point":1,"u5-range":1,"u5-relfreq":1,"u5-relfreq-rev":1,"u5-sd-calc":2,"u5-sd-compare":2,"u5-sd-decisions":4,"u5-sd-from-variance":1,"u5-z-applied":2,"u5-z-backwards":1,"u5-z-calc":1,"u5-z-compare":2,"u5-z-prob":2,"u6-area-scale":2,"u6-better-buy":2,"u6-compare-rates":2,"u6-map-distance":2,"u6-pack-cost":2,"u6-poster-cost":3,"u6-poster-dimensions":2,"u6-rate-difference":2,"u6-rate-isolate":1,"u6-rate-solve":1,"u6-scale-factor":1,"u6-similar-dimension":1,"u6-tile-cost":3,"u6-unit-rate":1,"u6-unknown-dimension":1,"u6-volume-scale":2,"u6-work-rate-solo":3,"u6-justify-consistency":3,"u6-breakeven-plans":2,"u7-counterexample":2,"u7-counterexample-claims":2,"u7-counterexample-gen":2,"u7-everyday-counterexample":2,"u7-figure-pattern":1,"u7-pattern-equation":2,"u7-pattern-next":1,"u7-pattern-quad":2,"u7-race-order":2,"u7-sequence-gap":1,"u7-proof-repair":3,"u7-smallest-counterexample":2,"u7-counterexample-name":2,"u7-triangular-total":3,"u7-chain-conclusion":3,"u7-false-pattern":2,"u8-alternate-algebra":2,"u8-angle-chase":2,"u8-angle-sum-rule":1,"u8-co-interior":1,"u8-cointerior-algebra":2,"u8-congruence-deduce":1,"u8-congruence-perimeter":2,"u8-congruent-perimeter":1,"u8-corresponding-algebra":2,"u8-diagonals":1,"u8-exterior":1,"u8-exterior-algebra":3,"u8-isosceles-angles":2,"u8-multi-angle":2,"u8-polygon-inverse":1,"u8-polygon-ratio":2,"u8-polygon-sum":1,"u8-regular-angle":1,"u8-triangle-algebra":2,"u8-triangle-sum":1,"u8-parallel-x-value":3,"u8-isosceles-exterior":2,"u8-regular-sides-from-angle":3};
 /* ============ selection engine ============ */
 /* Mid-course scope (Table of Specifications, verified Oct 26, 2026): the mid-course
    exam samples Unit 4 only to Section 4.3, so the two Radical Equations entries
