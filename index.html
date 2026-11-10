@@ -75,6 +75,8 @@
   .tpick h4{margin:10px 0 4px;font-size:.95rem;}
   .tpick button{display:block;width:100%;text-align:left;margin:3px 0;padding:6px 8px;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:6px;cursor:pointer;font-size:.9rem;line-height:1.45;}
   .tpick button:hover{border-color:var(--accent2);}
+  .tpick .tsamp{display:block;margin-top:3px;font-size:.86rem;color:#4b5a61;line-height:1.4;}
+  .tpick .tsamp svg{max-width:100%;height:auto;max-height:90px;}
   .endmode [data-check],.endmode [data-sol]{display:none;}
   .modebar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
   .group{border:1px solid var(--line);border-radius:8px;padding:10px 12px 12px;margin-top:12px;}
@@ -190,6 +192,7 @@
   html[data-a11y-theme="dark"] .indbox{background:var(--card);}
   html[data-a11y-theme="dark"] .tpick{background:var(--card);}
   html[data-a11y-theme="dark"] .tpick button{background:var(--card);}
+  html[data-a11y-theme="dark"] .tpick .tsamp{color:#b9c6cc;}
   html[data-a11y-theme="dark"] details#builderBox>summary,html[data-a11y-theme="dark"] details#a11yBox>summary{background:var(--card);border-color:var(--line);}
   html[data-a11y-theme="dark"] input,html[data-a11y-theme="dark"] select,html[data-a11y-theme="dark"] textarea{background:#222e35;color:var(--ink);border-color:var(--line);}
   html[data-a11y-theme="dark"] :focus-visible{outline-color:#ffd166;}
@@ -4259,11 +4262,12 @@ function tOpenPicker(title,pool,onPick){
     byUnit[u].slice().sort(function(a,b){return a.level-b.level||(a.id<b.id?-1:1);}).forEach(function(e){
       var desc=INDICATORS[e.indicators[0]]||"";
       if(desc.length>110)desc=desc.slice(0,107)+"...";
-      h+='<button type="button" data-tpent="'+e.id+'">Unit '+e.unit+" \u00B7 "+e.indicators.join(", ")+" \u00B7 Level "+e.level+" \u2014 "+esc(desc)+' <span class="tid">'+e.id+"</span></button>";
+      var samp="";try{var sq=e.gen();if(sq&&sq.prompt)samp=sq.prompt;}catch(err){}
+      h+='<button type="button" data-tpent="'+e.id+'">Unit '+e.unit+" \u00B7 "+e.indicators.join(", ")+" \u00B7 Level "+e.level+" \u2014 "+esc(desc)+' <span class="tid">'+e.id+"</span>"+(samp?'<span class="tsamp">Sample: '+samp+"</span>":"")+"</button>";
     });
   });
   h+="</div>";
-  pk.innerHTML=h;pk.hidden=false;
+  pk.innerHTML=h;pk.hidden=false;typesetMath(pk);
   $("tPickClose").addEventListener("click",function(){pk.hidden=true;pk.innerHTML="";});
   Array.prototype.forEach.call(pk.querySelectorAll("[data-tpent]"),function(b){
     b.addEventListener("click",function(){var id=b.getAttribute("data-tpent");pk.hidden=true;pk.innerHTML="";onPick(id);});
