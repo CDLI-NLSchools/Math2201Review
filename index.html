@@ -4245,6 +4245,24 @@ function tFreezeSlot(e,wantType,avoid,salt){
   if(avoid)avoid[canonQ(nq)]=1;
   nq._tuid="u"+(++_tUid);nq._ts={n:0,i:0,t:nq.type,raw:tRawQ(nq)};return nq;
 }
+function tTypeOk(q,wantType){
+  if(!q)return false;
+  if(!wantType)return true;
+  if(wantType==="mc")return q.type==="mc";
+  if(wantType==="nonmc")return q.type!=="mc";
+  return q.type===wantType;
+}
+/* WYSIWYG pick (Jason's ruling, Nov 10, 2026): the sample question the
+   picker displays for an entry is the exact question inserted when the
+   teacher picks that entry. It is adopted as a raw-frozen slot (the
+   same storage the freeze fallback uses), so set links reopen it
+   verbatim. If the sample would duplicate a question already in the
+   set, the caller falls back to a stream freeze of the same entry. */
+function tAdoptPicked(e,q,avoid){
+  q._entry=e;
+  if(avoid)avoid[canonQ(q)]=1;
+  q._tuid="u"+(++_tUid);q._ts={n:0,i:0,t:q.type,raw:tRawQ(q)};return q;
+}
 function tScopePool(){
   if(!T)return [];
   if(T.view==="exam")return poolFor(T.scope.units,T.scope.inds,T.scope.examCap,function(e){return T.scope.includePK||!isPK(e);});
@@ -4253,8 +4271,9 @@ function tScopePool(){
 function tCrPool(){return tScopePool().filter(function(e){return typeof CR_MARKS!=="undefined"&&CR_MARKS[e.id]!==undefined&&CR_MARKS[e.id]>=2&&e.level>=2;});}
 function tAvoidAll(items){var a={};items.forEach(function(q){if(q)a[canonQ(q)]=1;});return a;}
 function tSwapCands(curE,type,pool){return pool.filter(function(e){return e.id!==curE.id&&tCanMake(e,type);});}
-function tOpenPicker(title,pool,onPick){
+function tOpenPicker(title,pool,onPick,wantType){
   var pk=$("tPicker");if(!pk)return;
+  var samples={};
   var byUnit={};pool.forEach(function(e){(byUnit[e.unit]=byUnit[e.unit]||[]).push(e);});
   var h='<div class="tpick"><b>'+esc(title)+'</b> <button type="button" class="alt" id="tPickClose">Close</button>';
   Object.keys(byUnit).sort(function(a,b){return a-b;}).forEach(function(u){
@@ -4262,7 +4281,9 @@ function tOpenPicker(title,pool,onPick){
     byUnit[u].slice().sort(function(a,b){return a.level-b.level||(a.id<b.id?-1:1);}).forEach(function(e){
       var desc=INDICATORS[e.indicators[0]]||"";
       if(desc.length>110)desc=desc.slice(0,107)+"...";
-      var samp="";try{var sq=e.gen();if(sq&&sq.prompt)samp=sq.prompt;}catch(err){}
+      var samp="",sq=null;
+      try{for(var k=0;k<40;k++){var cand=e.gen();if(cand&&tTypeOk(cand,wantType)){sq=cand;break;}}}catch(err){}
+      if(sq&&sq.prompt){sq._entry=e;samples[e.id]=sq;samp=sq.prompt;}
       h+='<button type="button" data-tpent="'+e.id+'">Unit '+e.unit+" \u00B7 "+e.indicators.join(", ")+" \u00B7 Level "+e.level+" \u2014 "+esc(desc)+' <span class="tid">'+e.id+"</span>"+(samp?'<span class="tsamp">Sample: '+samp+"</span>":"")+"</button>";
     });
   });
@@ -4270,7 +4291,7 @@ function tOpenPicker(title,pool,onPick){
   pk.innerHTML=h;pk.hidden=false;typesetMath(pk);
   $("tPickClose").addEventListener("click",function(){pk.hidden=true;pk.innerHTML="";});
   Array.prototype.forEach.call(pk.querySelectorAll("[data-tpent]"),function(b){
-    b.addEventListener("click",function(){var id=b.getAttribute("data-tpent");pk.hidden=true;pk.innerHTML="";onPick(id);});
+    b.addEventListener("click",function(){var id=b.getAttribute("data-tpent");var sq2=samples[id]||null;pk.hidden=true;pk.innerHTML="";onPick(id,sq2);});
   });
   pk.scrollIntoView({behavior:scrollBehavior(),block:"nearest"});
 }
@@ -4427,7 +4448,7 @@ function tRestoreOnline(){
   updateScore();maybeSummary();
 }
 function tAfterOnlineEdit(){renderOnline(false);tRestoreOnline();}
-function tOpOnline(op,i,entryId){
+function tOpOnline(op,i,entryId,pickedQ){
   if(!T||T.view!=="online")return;
   var q=current[i];if(!q)return;
   tSyncOnline();
@@ -4439,14 +4460,14 @@ function tOpOnline(op,i,entryId){
     if(!cands.length){tOnlineStatus("No other question of this kind is available in the current scope to swap in.");return;}
     current[i]=tFreezeSlot(pick(cands),q.type,avoid,T.salt);T.edited=true;tAfterOnlineEdit();return;
   }
-  if(op==="pick"){var e2=tEntryById(entryId);if(!e2)return;current[i]=tFreezeSlot(e2,null,avoid,T.salt);T.edited=true;tAfterOnlineEdit();return;}
+  if(op==="pick"){var e2=tEntryById(entryId);if(!e2)return;current[i]=(pickedQ&&pickedQ._entry===e2&&!avoid[canonQ(pickedQ)])?tAdoptPicked(e2,pickedQ,avoid):tFreezeSlot(e2,null,avoid,T.salt);T.edited=true;tAfterOnlineEdit();return;}
 }
 function tPickOnline(i){
-  tOpenPicker("Replace question "+(i+1)+" from the bank",tScopePool(),function(id){tOpOnline("pick",i,id);});
+  tOpenPicker("Replace question "+(i+1)+" from the bank",tScopePool(),function(id,q){tOpOnline("pick",i,id,q);});
 }
 function tAddOnline(fromBank){
   if(!T||T.view!=="online")return;
-  if(fromBank){tOpenPicker("Add a question from the bank",tScopePool(),function(id){tAddOnlineEntry(id);});return;}
+  if(fromBank){tOpenPicker("Add a question from the bank",tScopePool(),function(id,q){tAddOnlineEntry(id,q);});return;}
   tSyncOnline();
   var pool=tScopePool(),inSet={};
   current.forEach(function(q){inSet[q._entry.id]=1;});
@@ -4456,10 +4477,11 @@ function tAddOnline(fromBank){
   current.push(tFreezeSlot(pick(cands),null,tAvoidAll(current),T.salt));
   T.edited=true;tAfterOnlineEdit();
 }
-function tAddOnlineEntry(id){
+function tAddOnlineEntry(id,pickedQ){
   var e=tEntryById(id);if(!e)return;
   tSyncOnline();
-  current.push(tFreezeSlot(e,null,tAvoidAll(current),T.salt));
+  var avoid=tAvoidAll(current);
+  current.push((pickedQ&&pickedQ._entry===e&&!avoid[canonQ(pickedQ)])?tAdoptPicked(e,pickedQ,avoid):tFreezeSlot(e,null,avoid,T.salt));
   T.edited=true;tAfterOnlineEdit();
 }
 /* ---- composed practice tests and exams ---- */
@@ -4511,7 +4533,7 @@ function tWireExam(){
   if(T.textEdited)tPanelPause("tExamPanel");
 }
 function tExamAllQ(){var a=[];examState.ex.srItems.forEach(function(it){a.push(it.q);});examState.ex.crItems.forEach(function(it){a.push(it.q);});return a;}
-function tOpExam(section,op,i,entryId){
+function tOpExam(section,op,i,entryId,pickedQ){
   if(!T||T.view!=="exam"||!examState)return;
   var ex=examState.ex,items=section==="sr"?ex.srItems:ex.crItems,it=items[i];if(!it)return;
   if(op==="remove"){items.splice(i,1);T.edited=true;renderExam();return;}
@@ -4526,17 +4548,17 @@ function tOpExam(section,op,i,entryId){
     if(section==="cr")it.marks=CR_MARKS[e2.id];
     T.edited=true;renderExam();return;
   }
-  if(op==="pick"){var e3=tEntryById(entryId);if(!e3)return;it.q=tFreezeSlot(e3,section==="sr"?"mc":null,avoid,T.salt);if(section==="cr")it.marks=CR_MARKS[e3.id];T.edited=true;renderExam();return;}
+  if(op==="pick"){var e3=tEntryById(entryId);if(!e3)return;var useQ=(pickedQ&&pickedQ._entry===e3&&!avoid[canonQ(pickedQ)]&&(section!=="sr"||pickedQ.type==="mc"))?pickedQ:null;it.q=useQ?tAdoptPicked(e3,useQ,avoid):tFreezeSlot(e3,section==="sr"?"mc":null,avoid,T.salt);if(section==="cr")it.marks=CR_MARKS[e3.id];T.edited=true;renderExam();return;}
 }
 function tPickExam(section,i){
   var pool=section==="sr"?tScopePool().filter(function(e){return probeType(e)==="mc";}):tCrPool();
-  tOpenPicker("Replace "+(section==="sr"?"Section A":"Section B")+" question "+(i+1)+" from the bank",pool,function(id){tOpExam(section,"pick",i,id);});
+  tOpenPicker("Replace "+(section==="sr"?"Section A":"Section B")+" question "+(i+1)+" from the bank",pool,function(id,q){tOpExam(section,"pick",i,id,q);},section==="sr"?"mc":null);
 }
 function tAddExam(section,fromBank){
   if(!T||T.view!=="exam"||!examState)return;
   if(fromBank){
     var pool=section==="sr"?tScopePool().filter(function(e){return probeType(e)==="mc";}):tCrPool();
-    tOpenPicker(section==="sr"?"Add a selected-response question from the bank":"Add a constructed-response question from the bank",pool,function(id){tAddExamEntry(section,id);});
+    tOpenPicker(section==="sr"?"Add a selected-response question from the bank":"Add a constructed-response question from the bank",pool,function(id,q){tAddExamEntry(section,id,q);},section==="sr"?"mc":null);
     return;
   }
   var pool2=section==="sr"?tScopePool().filter(function(e){return tCanMake(e,"mc");}):tCrPool();
@@ -4546,11 +4568,12 @@ function tAddExam(section,fromBank){
   if(!cands.length){var st=$("tExamStatus");if(st)st.textContent="The bank has no questions in the current scope to add.";return;}
   tAddExamEntry(section,pick(cands).id);
 }
-function tAddExamEntry(section,id){
+function tAddExamEntry(section,id,pickedQ){
   var e=tEntryById(id);if(!e)return;
   var ex=examState.ex,avoid=tAvoidAll(tExamAllQ());
-  if(section==="sr")ex.srItems.push({q:tFreezeSlot(e,"mc",avoid,T.salt),marks:1});
-  else ex.crItems.push({q:tFreezeSlot(e,null,avoid,T.salt),marks:CR_MARKS[e.id]});
+  var useQ=(pickedQ&&pickedQ._entry===e&&!avoid[canonQ(pickedQ)]&&(section!=="sr"||pickedQ.type==="mc"))?pickedQ:null;
+  if(section==="sr")ex.srItems.push({q:useQ?tAdoptPicked(e,useQ,avoid):tFreezeSlot(e,"mc",avoid,T.salt),marks:1});
+  else ex.crItems.push({q:useQ?tAdoptPicked(e,useQ,avoid):tFreezeSlot(e,null,avoid,T.salt),marks:CR_MARKS[e.id]});
   T.edited=true;renderExam();
 }
 /* ---- practice sheet ---- */
@@ -4579,7 +4602,7 @@ function tWireSheet(){
   var ct=$("tCopyTeacherBtn");if(ct)ct.addEventListener("click",function(){tCopyLink(true,$("tSheetStatus"));});
   if(T.textEdited)tPanelPause("tSheetPanel");
 }
-function tOpSheet(op,i,entryId){
+function tOpSheet(op,i,entryId,pickedQ){
   if(!T||T.view!=="sheet"||!sheetState)return;
   var items=sheetState.items,q=items[i];if(!q)return;
   if(op==="remove"){items.splice(i,1);T.edited=true;renderSheet();return;}
@@ -4590,29 +4613,30 @@ function tOpSheet(op,i,entryId){
     if(!cands.length){tSheetStatus("No other question of this kind is available in the current scope to swap in.");return;}
     items[i]=tFreezeSlot(pick(cands),q.type,avoid,T.salt);T.edited=true;renderSheet();return;
   }
-  if(op==="pick"){var e2=tEntryById(entryId);if(!e2)return;items[i]=tFreezeSlot(e2,null,avoid,T.salt);T.edited=true;renderSheet();return;}
+  if(op==="pick"){var e2=tEntryById(entryId);if(!e2)return;items[i]=(pickedQ&&pickedQ._entry===e2&&!avoid[canonQ(pickedQ)])?tAdoptPicked(e2,pickedQ,avoid):tFreezeSlot(e2,null,avoid,T.salt);T.edited=true;renderSheet();return;}
 }
 function tPickSheet(i){
   var q=sheetState.items[i];if(!q)return;
   var mc=q.type==="mc";
   var pool=tScopePool().filter(function(e){return (probeType(e)==="mc")===mc;});
-  tOpenPicker("Replace question "+(i+1)+" from the bank",pool,function(id){tOpSheet("pick",i,id);});
+  tOpenPicker("Replace question "+(i+1)+" from the bank",pool,function(id,q2){tOpSheet("pick",i,id,q2);},mc?"mc":"nonmc");
 }
 function tAddSheet(fromBank){
   if(!T||T.view!=="sheet"||!sheetState)return;
   var items=sheetState.items;
   var mc=items.length?(items[items.length-1].type==="mc"):true;
   var pool=tScopePool().filter(function(e){return (probeType(e)==="mc")===mc;});
-  if(fromBank){tOpenPicker("Add a question from the bank",pool,function(id){tAddSheetEntry(id);});return;}
+  if(fromBank){tOpenPicker("Add a question from the bank",pool,function(id,q){tAddSheetEntry(id,q);},mc?"mc":"nonmc");return;}
   var inSet={};items.forEach(function(q){inSet[q._entry.id]=1;});
   var cands=pool.filter(function(e){return !inSet[e.id];});
   if(!cands.length)cands=pool.slice();
   if(!cands.length){tSheetStatus("The bank has no questions of that kind in the current scope to add.");return;}
   tAddSheetEntry(pick(cands).id);
 }
-function tAddSheetEntry(id){
+function tAddSheetEntry(id,pickedQ){
   var e=tEntryById(id);if(!e)return;
-  sheetState.items.push(tFreezeSlot(e,null,tAvoidAll(sheetState.items),T.salt));
+  var avoid=tAvoidAll(sheetState.items);
+  sheetState.items.push((pickedQ&&pickedQ._entry===e&&!avoid[canonQ(pickedQ)])?tAdoptPicked(e,pickedQ,avoid):tFreezeSlot(e,null,avoid,T.salt));
   T.edited=true;renderSheet();
 }
 var lastSettings=null,onlineThin=false;
