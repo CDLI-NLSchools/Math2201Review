@@ -4293,6 +4293,18 @@ function tAdoptPicked(e,q,avoid){
   if(avoid)avoid[canonQ(q)]=1;
   q._tuid="u"+(++_tUid);q._ts={n:0,i:0,t:q.type,raw:tRawQ(q)};return q;
 }
+/* Seeded set adoption (Jason's ruling, Nov 10, 2026): when a set was
+   drawn from a seed, students opening the same link see exactly the
+   drawn questions, numbers included. Teacher mode therefore adopts the
+   drawn questions as its starting slots, stored raw-frozen like
+   WYSIWYG picks, instead of stream-refreezing them under a random
+   salt, so the teacher's screen matches the class's screen digit for
+   digit and copied set links reopen the set verbatim. Unseeded sets
+   keep the stream freeze exactly as before. */
+function tAdoptDrawn(q,avoid){
+  if(avoid)avoid[canonQ(q)]=1;
+  q._tuid="u"+(++_tUid);q._ts={n:0,i:0,t:q.type,raw:tRawQ(q)};return q;
+}
 function tScopePool(){
   if(!T)return [];
   if(T.view==="exam")return poolFor(T.scope.units,T.scope.inds,T.scope.examCap,function(e){return T.scope.includePK||!isPK(e);});
@@ -4719,7 +4731,7 @@ function startOnline(){
   if(TEACHER&&current.length){
     T={view:"online",salt:tSalt(),scope:{units:s.units.slice(),inds:s.inds.slice(),midCap:!!s.midCap},edited:false,state:{},endGraded:false,picker:null};
     var _av={};
-    current=current.map(function(q){return tFreezeSlot(q._entry,q.type,_av,T.salt);});
+    current=current.map(function(q){return _sd?tAdoptDrawn(q,_av):tFreezeSlot(q._entry,q.type,_av,T.salt);});
   }
   renderOnline(true);
 }
@@ -4954,8 +4966,8 @@ function startExam(){
   if(TEACHER){
     T={view:"exam",salt:tSalt(),scope:{units:s.units.slice(),inds:s.inds.slice(),includePK:pkOn,examCap:(s.units.slice().sort(function(a,b){return a-b;}).join()==="1,2,3,4")},edited:false,textEdited:false,picker:null};
     var _av={};
-    ex.srItems.forEach(function(it){it.q=tFreezeSlot(it.q._entry,"mc",_av,T.salt);});
-    ex.crItems.forEach(function(it){it.q=tFreezeSlot(it.q._entry,it.q.type,_av,T.salt);});
+    ex.srItems.forEach(function(it){it.q=_sd?tAdoptDrawn(it.q,_av):tFreezeSlot(it.q._entry,"mc",_av,T.salt);});
+    ex.crItems.forEach(function(it){it.q=_sd?tAdoptDrawn(it.q,_av):tFreezeSlot(it.q._entry,it.q.type,_av,T.salt);});
   }
   renderExam();
 }
@@ -5024,7 +5036,7 @@ function startSheet(){
   if(TEACHER){
     T={view:"sheet",salt:tSalt(),scope:{units:s.units.slice(),inds:s.inds.slice(),midCap:!!s.midCap},edited:false,textEdited:false,picker:null};
     var _av={};
-    sheetState.items=sheetState.items.map(function(q){return tFreezeSlot(q._entry,q.type,_av,T.salt);});
+    sheetState.items=sheetState.items.map(function(q){return _sd?tAdoptDrawn(q,_av):tFreezeSlot(q._entry,q.type,_av,T.salt);});
   }
   renderSheet();
 }
