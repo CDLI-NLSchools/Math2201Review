@@ -4213,7 +4213,13 @@ function retryMissed(){
    (tShareURL); only the labelled teacher link buttons keep it.
    Answer state: edits to the online set preserve every untouched
    question's answer, feedback and score; a replaced or removed
-   question's state is cleared (tSyncOnline / tRestoreOnline). */
+   question's state is cleared (tSyncOnline / tRestoreOnline).
+   Reordering (Nov 10, 2026 follow-on): Move up, Move down, Move to
+   top and Move to bottom on every question, in the online strip, the
+   exam panel (within the question's own section only) and the sheet
+   panel. A move only reorders the item array: state stays keyed to
+   the question's _tuid, totals are untouched, and set links store
+   tokens in set order, so a reordered set reopens in its new order. */
 var TEACHER=false;
 var T=null; /* teacher context for the set on screen, or null */
 var examState=null,sheetState=null;
@@ -4421,9 +4427,16 @@ function tRebuildFromURL(){
   return false;
 }
 /* ---- online practice set ---- */
+function tMoveHtml(key,i,n){
+  var atFirst=i<=0,atLast=i>=n-1;
+  return '<button type="button" class="alt" data-tup="'+key+'"'+(atFirst?" disabled":"")+'>Move up</button>'
+   +'<button type="button" class="alt" data-tdown="'+key+'"'+(atLast?" disabled":"")+'>Move down</button>'
+   +'<button type="button" class="alt" data-ttop="'+key+'"'+(atFirst?" disabled":"")+'>Move to top</button>'
+   +'<button type="button" class="alt" data-tbot="'+key+'"'+(atLast?" disabled":"")+'>Move to bottom</button>';
+}
 function tctlHtml(i){
   if(!TEACHER||!T||T.view!=="online")return "";
-  return '<div class="tctl"><span class="tlab">Teacher:</span><button type="button" class="alt" data-tnew="'+i+'">New numbers</button><button type="button" class="alt" data-tswap="'+i+'">Swap question</button><button type="button" class="alt" data-tpick="'+i+'">Pick from bank</button><button type="button" class="alt" data-trem="'+i+'">Remove</button></div>';
+  return '<div class="tctl"><span class="tlab">Teacher:</span><button type="button" class="alt" data-tnew="'+i+'">New numbers</button><button type="button" class="alt" data-tswap="'+i+'">Swap question</button><button type="button" class="alt" data-tpick="'+i+'">Pick from bank</button><button type="button" class="alt" data-trem="'+i+'">Remove</button>'+tMoveHtml(i,i,current.length)+'</div>';
 }
 function tBarHtml(){
   if(!TEACHER||!T||T.view!=="online")return "";
@@ -4437,6 +4450,10 @@ function tWireOnline(){
   Array.prototype.forEach.call(box.querySelectorAll("[data-tswap]"),function(b){b.addEventListener("click",function(){tOpOnline("swap",+b.getAttribute("data-tswap"));});});
   Array.prototype.forEach.call(box.querySelectorAll("[data-tpick]"),function(b){b.addEventListener("click",function(){tPickOnline(+b.getAttribute("data-tpick"));});});
   Array.prototype.forEach.call(box.querySelectorAll("[data-trem]"),function(b){b.addEventListener("click",function(){tOpOnline("remove",+b.getAttribute("data-trem"));});});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-tup]"),function(b){b.addEventListener("click",function(){tOpOnline("up",+b.getAttribute("data-tup"));});});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-tdown]"),function(b){b.addEventListener("click",function(){tOpOnline("down",+b.getAttribute("data-tdown"));});});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-ttop]"),function(b){b.addEventListener("click",function(){tOpOnline("top",+b.getAttribute("data-ttop"));});});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-tbot]"),function(b){b.addEventListener("click",function(){tOpOnline("bottom",+b.getAttribute("data-tbot"));});});
   var ab=$("tAddBtn");if(ab)ab.addEventListener("click",function(){tAddOnline(false);});
   var abb=$("tAddBankBtn");if(abb)abb.addEventListener("click",function(){tAddOnline(true);});
   var cs=$("tCopyStudentBtn");if(cs)cs.addEventListener("click",function(){tCopyLink(false,$("tStatus"));});
@@ -4480,6 +4497,12 @@ function tOpOnline(op,i,entryId,pickedQ){
   var q=current[i];if(!q)return;
   tSyncOnline();
   if(op==="remove"){current.splice(i,1);T.edited=true;tAfterOnlineEdit();return;}
+  if(op==="up"||op==="down"||op==="top"||op==="bottom"){
+    var j=op==="up"?i-1:op==="down"?i+1:op==="top"?0:current.length-1;
+    if(j===i||j<0||j>=current.length)return;
+    var mv=current.splice(i,1)[0];current.splice(j,0,mv);
+    T.edited=true;tAfterOnlineEdit();return;
+  }
   var e=q._entry,avoid=tAvoidAll(current);
   if(op==="new"){current[i]=tFreezeSlot(e,q.type,avoid,T.salt);T.edited=true;tAfterOnlineEdit();return;}
   if(op==="swap"){
@@ -4523,7 +4546,7 @@ function tExamPanelHtml(){
   var ex=examState.ex;
   function row(section,it,i){
     var q=it.q,e=q._entry;
-    return '<li><b>'+(section==="sr"?"A":"B")+(i+1)+".</b> Unit "+e.unit+" \u00B7 "+e.indicators.join(", ")+" \u00B7 Level "+e.level+(section==="cr"?(" \u00B7 "+it.marks+" marks"):"")+' <span class="tid">'+e.id+'</span> <button type="button" class="alt" data-tnew="'+section+":"+i+'">New numbers</button><button type="button" class="alt" data-tswap="'+section+":"+i+'">Swap question</button><button type="button" class="alt" data-tpick="'+section+":"+i+'">Pick from bank</button><button type="button" class="alt" data-trem="'+section+":"+i+'">Remove</button></li>';
+    return '<li><b>'+(section==="sr"?"A":"B")+(i+1)+".</b> Unit "+e.unit+" \u00B7 "+e.indicators.join(", ")+" \u00B7 Level "+e.level+(section==="cr"?(" \u00B7 "+it.marks+" marks"):"")+' <span class="tid">'+e.id+'</span> <button type="button" class="alt" data-tnew="'+section+":"+i+'">New numbers</button><button type="button" class="alt" data-tswap="'+section+":"+i+'">Swap question</button><button type="button" class="alt" data-tpick="'+section+":"+i+'">Pick from bank</button><button type="button" class="alt" data-trem="'+section+":"+i+'">Remove</button>'+tMoveHtml(section+":"+i,i,section==="sr"?ex.srItems.length:ex.crItems.length)+'</li>';
   }
   return '<div class="tpanel" id="tExamPanel"><b>Teacher tools: edit this paper</b>'
    +'<p class="hint">Changes update the paper, the answer key and the totals at once. These controls and the free text editor (Edit the exam) are alternatives: once free text editing is on, the question controls, set links and the Brightspace download pause for this paper, because they work from the question set rather than edited text. Print, Word and Copy above always use the paper exactly as shown.</p>'
@@ -4548,6 +4571,10 @@ function tWireExam(){
   wire("data-tswap",function(sec,i){tOpExam(sec,"swap",i);});
   wire("data-trem",function(sec,i){tOpExam(sec,"remove",i);});
   wire("data-tpick",function(sec,i){tPickExam(sec,i);});
+  wire("data-tup",function(sec,i){tOpExam(sec,"up",i);});
+  wire("data-tdown",function(sec,i){tOpExam(sec,"down",i);});
+  wire("data-ttop",function(sec,i){tOpExam(sec,"top",i);});
+  wire("data-tbot",function(sec,i){tOpExam(sec,"bottom",i);});
   var a1=$("tAddSrBtn");if(a1)a1.addEventListener("click",function(){tAddExam("sr",false);});
   var a2=$("tAddSrBankBtn");if(a2)a2.addEventListener("click",function(){tAddExam("sr",true);});
   var a3=$("tAddCrBtn");if(a3)a3.addEventListener("click",function(){tAddExam("cr",false);});
@@ -4564,6 +4591,12 @@ function tOpExam(section,op,i,entryId,pickedQ){
   if(!T||T.view!=="exam"||!examState)return;
   var ex=examState.ex,items=section==="sr"?ex.srItems:ex.crItems,it=items[i];if(!it)return;
   if(op==="remove"){items.splice(i,1);T.edited=true;renderExam();return;}
+  if(op==="up"||op==="down"||op==="top"||op==="bottom"){
+    var j=op==="up"?i-1:op==="down"?i+1:op==="top"?0:items.length-1;
+    if(j===i||j<0||j>=items.length)return;
+    var mv=items.splice(i,1)[0];items.splice(j,0,mv);
+    T.edited=true;renderExam();return;
+  }
   var avoid=tAvoidAll(tExamAllQ());
   var wantType=section==="sr"?"mc":it.q.type;
   if(op==="new"){it.q=tFreezeSlot(it.q._entry,wantType,avoid,T.salt);T.edited=true;renderExam();return;}
@@ -4607,7 +4640,7 @@ function tAddExamEntry(section,id,pickedQ){
 function tSheetPanelHtml(){
   if(!TEACHER||!T||T.view!=="sheet"||!sheetState)return "";
   function row(q,i){var e=q._entry;
-    return '<li><b>'+(i+1)+'.</b> '+(q.type==="mc"?"Multiple choice":"Constructed response")+" \u00B7 Unit "+e.unit+" \u00B7 "+e.indicators.join(", ")+" \u00B7 Level "+e.level+' <span class="tid">'+e.id+'</span> <button type="button" class="alt" data-tnew="'+i+'">New numbers</button><button type="button" class="alt" data-tswap="'+i+'">Swap question</button><button type="button" class="alt" data-tpick="'+i+'">Pick from bank</button><button type="button" class="alt" data-trem="'+i+'">Remove</button></li>';}
+    return '<li><b>'+(i+1)+'.</b> '+(q.type==="mc"?"Multiple choice":"Constructed response")+" \u00B7 Unit "+e.unit+" \u00B7 "+e.indicators.join(", ")+" \u00B7 Level "+e.level+' <span class="tid">'+e.id+'</span> <button type="button" class="alt" data-tnew="'+i+'">New numbers</button><button type="button" class="alt" data-tswap="'+i+'">Swap question</button><button type="button" class="alt" data-tpick="'+i+'">Pick from bank</button><button type="button" class="alt" data-trem="'+i+'">Remove</button>'+tMoveHtml(i,i,sheetState.items.length)+'</li>';}
   return '<div class="tpanel" id="tSheetPanel"><b>Teacher tools: edit this sheet</b>'
    +'<p class="hint">Changes update the sheet and its answer key at once. These controls and the free text editor (Edit the sheet) are alternatives: once free text editing is on, the question controls and set links pause for this sheet, because they work from the question set rather than edited text. Print, Word and Copy above always use the sheet exactly as shown.</p>'
    +'<p class="hint" id="tPanelNote" hidden>Free text editing is on for this sheet, so the question controls are paused. Make a new sheet to use them again.</p>'
@@ -4623,6 +4656,10 @@ function tWireSheet(){
   Array.prototype.forEach.call(box.querySelectorAll("[data-tswap]"),function(b){b.addEventListener("click",function(){tOpSheet("swap",+b.getAttribute("data-tswap"));});});
   Array.prototype.forEach.call(box.querySelectorAll("[data-tpick]"),function(b){b.addEventListener("click",function(){tPickSheet(+b.getAttribute("data-tpick"));});});
   Array.prototype.forEach.call(box.querySelectorAll("[data-trem]"),function(b){b.addEventListener("click",function(){tOpSheet("remove",+b.getAttribute("data-trem"));});});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-tup]"),function(b){b.addEventListener("click",function(){tOpSheet("up",+b.getAttribute("data-tup"));});});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-tdown]"),function(b){b.addEventListener("click",function(){tOpSheet("down",+b.getAttribute("data-tdown"));});});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-ttop]"),function(b){b.addEventListener("click",function(){tOpSheet("top",+b.getAttribute("data-ttop"));});});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-tbot]"),function(b){b.addEventListener("click",function(){tOpSheet("bottom",+b.getAttribute("data-tbot"));});});
   var ab=$("tAddBtn");if(ab)ab.addEventListener("click",function(){tAddSheet(false);});
   var abb=$("tAddBankBtn");if(abb)abb.addEventListener("click",function(){tAddSheet(true);});
   var cs=$("tCopyStudentBtn");if(cs)cs.addEventListener("click",function(){tCopyLink(false,$("tSheetStatus"));});
@@ -4633,6 +4670,12 @@ function tOpSheet(op,i,entryId,pickedQ){
   if(!T||T.view!=="sheet"||!sheetState)return;
   var items=sheetState.items,q=items[i];if(!q)return;
   if(op==="remove"){items.splice(i,1);T.edited=true;renderSheet();return;}
+  if(op==="up"||op==="down"||op==="top"||op==="bottom"){
+    var j=op==="up"?i-1:op==="down"?i+1:op==="top"?0:items.length-1;
+    if(j===i||j<0||j>=items.length)return;
+    var mv=items.splice(i,1)[0];items.splice(j,0,mv);
+    T.edited=true;renderSheet();return;
+  }
   var avoid=tAvoidAll(items);
   if(op==="new"){items[i]=tFreezeSlot(q._entry,q.type,avoid,T.salt);T.edited=true;renderSheet();return;}
   if(op==="swap"){
