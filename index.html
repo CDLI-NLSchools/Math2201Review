@@ -66,6 +66,7 @@
   .tctl button{margin:2px 4px 2px 0;}
   .tbar{margin-top:12px;padding:10px 12px;border:1px solid var(--accent2);border-radius:8px;background:#f4f7fb;}
   .tbar button{margin:2px 4px 2px 0;}
+  .tbar .texports{margin-top:6px;}
   .tpanel{margin-top:12px;padding:10px 12px;border:1px solid var(--accent2);border-radius:8px;background:#f4f7fb;}
   .tpanel button{margin:2px 4px 2px 0;}
   .tlist{margin:6px 0 10px;padding-left:22px;font-size:.92rem;line-height:1.5;}
@@ -4063,12 +4064,35 @@ function updatePoolInfo(){refreshFace();
   $("poolInfo").textContent=p.length?"Question bank for this selection: "+p.length+" question templates (Level 1: "+byL[1]+", Level 2: "+byL[2]+", Level 3: "+byL[3]+"). Generators make a fresh question every draw."+(state.midCap?" Mid-course scope: Unit 4 stops at Section 4.3, so the Radical Equations questions are held out.":""):
    "No questions match that selection yet \u2014 try adding a unit or clearing the indicator filter.";
 }
+/* Teacher-mode UI split (Nov 10, 2026): the level percentage fields,
+   the paper count fields and the prior knowledge checkbox render only
+   in teacher mode. Their values are captured at boot, after the URL
+   parameters have been applied (tGateStudentUI), so settings still
+   resolve when the controls are absent from the DOM: hiding a control
+   never disables the setting behind it, and a link a teacher built
+   composes the identical set for a student. */
+var hidCtl={mc:10,nc:5,mix:[20,60,20],pk:false};
+function tCtlVal(id,fb){var el=$(id);return el?el.value:fb;}
+function tPkOn(){var el=$("pkChk");return el?!!el.checked:!!hidCtl.pk;}
+function tGateStudentUI(){
+  var mc=$("mcCountIn"),nc=$("ncCountIn"),l1=$("lv1"),l2=$("lv2"),l3=$("lv3"),pk=$("pkChk");
+  if(mc)hidCtl.mc=mc.value;
+  if(nc)hidCtl.nc=nc.value;
+  if(l1&&l2&&l3)hidCtl.mix=[l1.value,l2.value,l3.value];
+  if(pk)hidCtl.pk=!!pk.checked;
+  if(TEACHER)return;
+  ["mcCountIn","ncCountIn","lv1","lv2","lv3","pkChk"].forEach(function(id){
+    var el=$(id);if(!el)return;
+    var lab=(el.closest?el.closest("label"):null)||el;
+    if(lab.parentNode)lab.parentNode.removeChild(lab);
+  });
+}
 function settings(){
   readUnits();readInds();
   return {units:state.units.slice(),inds:state.inds.slice(),midCap:state.midCap,
     count:Math.max(1,Math.min(60,+$("countIn").value||10)),
-    mcCount:Math.max(0,Math.min(60,+$("mcCountIn").value||0)),
-    ncCount:Math.max(0,Math.min(60,+$("ncCountIn").value||0)),
+    mcCount:Math.max(0,Math.min(60,+tCtlVal("mcCountIn",hidCtl.mc)||0)),
+    ncCount:Math.max(0,Math.min(60,+tCtlVal("ncCountIn",hidCtl.nc)||0)),
     wantKey:!($("keyChk")&&$("keyChk").checked===false),
     order:$("orderIn").value,
     wsMc:($("wsMcIn")?parseFloat($("wsMcIn").value):0),
@@ -4076,7 +4100,7 @@ function settings(){
     chk:($("chkIn")?$("chkIn").value:"each"),
     timer:($("timerChk")?$("timerChk").checked:false),
     seed:($("seedIn")?$("seedIn").value.trim():""),
-    mix:[+$("lv1").value||0,+$("lv2").value||0,+$("lv3").value||0]};
+    mix:[+tCtlVal("lv1",hidCtl.mix[0])||0,+tCtlVal("lv2",hidCtl.mix[1])||0,+tCtlVal("lv3",hidCtl.mix[2])||0]};
 }
 function tags(q){
   var e=q._entry;
@@ -4403,7 +4427,7 @@ function tctlHtml(i){
 }
 function tBarHtml(){
   if(!TEACHER||!T||T.view!=="online")return "";
-  return '<div class="tbar"><b>Teacher tools:</b> <button type="button" class="alt" id="tAddBtn">Add question</button><button type="button" class="alt" id="tAddBankBtn">Add from bank</button><button type="button" class="alt" id="tCopyStudentBtn">Copy link for students</button><button type="button" class="alt" id="tCopyTeacherBtn">Copy teacher link (teacher only)</button> <span class="hint" id="tStatus" role="status"></span><div id="tPicker" hidden></div></div>';
+  return '<div class="tbar"><b>Teacher tools:</b> <button type="button" class="alt" id="tAddBtn">Add question</button><button type="button" class="alt" id="tAddBankBtn">Add from bank</button><button type="button" class="alt" id="tCopyStudentBtn">Copy link for students</button><button type="button" class="alt" id="tCopyTeacherBtn">Copy teacher link (teacher only)</button> <span class="hint" id="tStatus" role="status"></span><div class="texports"><button type="button" class="alt" data-kahoot="1">Download for Kahoot</button><button type="button" class="alt" data-blooket="1">Download for Blooket</button><button type="button" class="alt" data-brightspace="1">Download for Brightspace</button> <label class="hint">Variants per question <select id="bsVarSel"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option></select></label> <span class="hint" id="gameStatus" role="status"></span></div><div id="tPicker" hidden></div></div>';
 }
 function tOnlineStatus(m){var st=$("tStatus");if(st)st.textContent=m;}
 function tWireOnline(){
@@ -4417,6 +4441,9 @@ function tWireOnline(){
   var abb=$("tAddBankBtn");if(abb)abb.addEventListener("click",function(){tAddOnline(true);});
   var cs=$("tCopyStudentBtn");if(cs)cs.addEventListener("click",function(){tCopyLink(false,$("tStatus"));});
   var ct=$("tCopyTeacherBtn");if(ct)ct.addEventListener("click",function(){tCopyLink(true,$("tStatus"));});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-kahoot]"),function(b){b.addEventListener("click",function(){exportGame("kahoot",current,$("gameStatus"));});});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-blooket]"),function(b){b.addEventListener("click",function(){exportGame("blooket",current,$("gameStatus"));});});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-brightspace]"),function(b){b.addEventListener("click",function(){exportBrightspace(current,$("gameStatus"));});});
 }
 function tSyncOnline(){
   if(!T||T.view!=="online"||!current)return;
@@ -4673,14 +4700,11 @@ function renderOnline(scroll){
       +(REPORT_FORM.url?'<p><button type="button" data-repsend="'+i+'">Send report</button> <button type="button" class="alt" data-repcopy="'+i+'">Copy report text instead</button></p>':'<p><button type="button" data-repcopy="'+i+'">Copy report text</button></p>')
       +'<div class="repstat" id="repstat'+i+'"></div></div>'+tctlHtml(i)+'</div>';
   });
-  html+='<p>'+(checkMode==="end"?'<button type="button" id="gradeBtn">Check all my answers</button> ':"")+'<button type="button" id="againBtn">New set of questions</button></p><p><button type="button" class="alt" data-kahoot="1">Download for Kahoot</button> <button type="button" class="alt" data-blooket="1">Download for Blooket</button> <button type="button" class="alt" data-brightspace="1">Download for Brightspace</button> <label class="hint">Variants per question <select id="bsVarSel"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option></select></label></p><p class="hint" id="gameStatus"></p>'+tBarHtml()+'<div id="setSummary"></div></div>';
+  html+='<p>'+(checkMode==="end"?'<button type="button" id="gradeBtn">Check all my answers</button> ':"")+'<button type="button" id="againBtn">New set of questions</button></p>'+tBarHtml()+'<div id="setSummary"></div></div>';
   box.innerHTML=html;updateScore();typesetMath(box);
   Array.prototype.forEach.call(box.querySelectorAll("[data-check]"),function(b){b.addEventListener("click",function(){checkQ(+b.getAttribute("data-check"));});});
   Array.prototype.forEach.call(box.querySelectorAll("[data-sol]"),function(b){b.addEventListener("click",function(){$("sol"+b.getAttribute("data-sol")).classList.toggle("show");});});
   Array.prototype.forEach.call(box.querySelectorAll("[data-ex]"),function(b){b.addEventListener("click",function(){toggleExample(+b.getAttribute("data-ex"));});});
-  Array.prototype.forEach.call(box.querySelectorAll("[data-kahoot]"),function(b){b.addEventListener("click",function(){exportGame("kahoot",current,$("gameStatus"));});});
-  Array.prototype.forEach.call(box.querySelectorAll("[data-blooket]"),function(b){b.addEventListener("click",function(){exportGame("blooket",current,$("gameStatus"));});});
-  Array.prototype.forEach.call(box.querySelectorAll("[data-brightspace]"),function(b){b.addEventListener("click",function(){exportBrightspace(current,$("gameStatus"));});});
   Array.prototype.forEach.call(box.querySelectorAll("[data-rep]"),function(b){b.addEventListener("click",function(){$("rep"+b.getAttribute("data-rep")).classList.toggle("show");});});
   Array.prototype.forEach.call(box.querySelectorAll("[data-repsend]"),function(b){b.addEventListener("click",function(){openReport(+b.getAttribute("data-repsend"));});});
   Array.prototype.forEach.call(box.querySelectorAll("[data-repcopy]"),function(b){b.addEventListener("click",function(){copyReport(+b.getAttribute("data-repcopy"));});});
@@ -4874,7 +4898,7 @@ function recGrid(items,withKey){
 function startExam(){
   stopExamTimer();
   var s=settings();var _sd=activeSeed(s);sessionSeed=_sd;
-  var pkOn=!!(document.getElementById("pkChk")&&document.getElementById("pkChk").checked);
+  var pkOn=tPkOn();
   var ex=withSeed(_sd,function(){return composeExam(s.units,s.inds,pkOn);});
   if(!ex||(!ex.srItems.length&&!ex.crItems.length)){$("session").innerHTML='<div class="card"><p>'+(s.units.length?"No questions match that selection yet.":"Choose at least one unit above, or use the Mid-course review or Final review button, then start again.")+'</p></div>';return;}
   var single=s.units.length===1;
@@ -4928,13 +4952,13 @@ function renderExam(){
   $("printArea").innerHTML=paper;
   $("session").innerHTML='<div class="card"><p>Your '+(single?"practice unit test":"practice exam")+' is ready: '+ex.srItems.length+' selected-response questions and '+ex.crItems.length+' constructed-response questions, '+lv.total+' marks in total. The exam paper and the answer key print separately.</p>'
     +((T&&T.edited)?'<p class="thinNote">You edited this paper: it now has '+lv.sr+' selected-response marks and '+lv.cr+' constructed-response marks, '+lv.total+' marks in total. The paper, the answer key and the totals all follow the edited set.</p>':((ex.short||examShortNow(ex))?'<p class="thinNote">Heads up: the bank could not fill every exam slot for this selection yet, so this paper runs short of the full blueprint.</p>':""))
-    +'<div class="row"><button type="button" id="editExamBtn">Edit the exam</button><button type="button" id="printPaperBtn">Print the exam paper</button><button type="button" id="printKeyBtn" class="sec">Print the answer key</button><button type="button" id="wordBtn" class="sec">Download Word file</button><button type="button" id="copyDocsBtn" class="sec">Copy for Google Docs</button></div>'
+    +'<div class="row">'+(TEACHER?'<button type="button" id="editExamBtn">Edit the exam</button>':"")+'<button type="button" id="printPaperBtn">Print the exam paper</button><button type="button" id="printKeyBtn" class="sec">Print the answer key</button><button type="button" id="wordBtn" class="sec">Download Word file</button><button type="button" id="copyDocsBtn" class="sec">Copy for Google Docs</button></div>'
     +'<p class="hint" id="editHint" hidden>Editing is on: click any text in the exam below and type to change it, or delete a question you do not want. Drag the bar at the bottom of a Section B answer box to make that box taller or shorter. What you see is what prints and what copies.</p>'
     +'<p class="hint" id="copyStatus" role="status"></p>'
     +tExamPanelHtml()+'<div class="sheetPrev" id="sheetPrev">'+paper+'<div class="keybreak">'+key+'</div></div></div>';
   typesetMath($("sheetPrev"));typesetMath($("printArea"));
   if(s.timer){var tc=document.createElement("div");tc.className="timerbar";tc.id="examTimer";var _card=$("session").querySelector(".card");if(_card)_card.insertBefore(tc,_card.firstChild);var _t0=examState.t0;var _tick=function(){var sec=Math.floor((Date.now()-_t0)/1000);var mm=Math.floor(sec/60),ss=sec%60;tc.textContent="Time so far: "+mm+":"+(ss<10?"0":"")+ss+" \u00B7 This timer is just a guide.";};_tick();window._examTimerInt=setInterval(_tick,1000);}
-  $("editExamBtn").addEventListener("click",function(){
+  if($("editExamBtn"))$("editExamBtn").addEventListener("click",function(){
     var prev=$("sheetPrev"),on=prev.getAttribute("contenteditable")==="true";
     if(on){prev.removeAttribute("contenteditable");prev.classList.remove("editing");$("editExamBtn").textContent="Edit the exam";$("editHint").hidden=true;}
     else{prev.setAttribute("contenteditable","true");prev.classList.add("editing");$("editExamBtn").textContent="Done editing";$("editHint").hidden=false;setHandles(prev);prev.focus();if(T&&T.view==="exam"){T.textEdited=true;tPanelPause("tExamPanel");}}
@@ -4989,12 +5013,12 @@ function renderSheet(){
   $("printArea").innerHTML=html;
   $("session").innerHTML='<div class="card"><p>Your practice sheet is ready ('+res.items.length+' questions'+(s.wantKey?', with the answer key on its own pages at the end':'')+'). It is shown below, exactly as it will print.</p>'
     +(res.thin?'<p class="thinNote">Heads up: the question bank is still thin for this selection, so this sheet repeats practice on the same question shape (with new numbers) because there are not yet enough different questions to fill it.</p>':"")
-    +'<div class="row"><button type="button" id="editBtn">Edit the sheet</button><button type="button" id="wordBtn" class="sec">Download Word file</button><button type="button" id="copyDocsBtn" class="sec">Copy for Google Docs</button><button type="button" id="printBtn" class="sec">Print / save the sheet</button></div>'
+    +'<div class="row">'+(TEACHER?'<button type="button" id="editBtn">Edit the sheet</button>':"")+'<button type="button" id="wordBtn" class="sec">Download Word file</button><button type="button" id="copyDocsBtn" class="sec">Copy for Google Docs</button><button type="button" id="printBtn" class="sec">Print / save the sheet</button></div>'
     +'<p class="hint" id="editHint" hidden>Editing is on: click any text in the sheet below and type to change it, or delete a question you do not want. Drag the bar at the bottom of an answer box to make that box taller or shorter. What you see is what prints and what copies. Most math is regular text and can be changed directly; typeset expressions are rendered, so if you need different numbers in one of those, regenerate the sheet instead.</p>'
     +'<p class="hint" id="copyStatus" role="status"></p>'
     +tSheetPanelHtml()+'<div class="sheetPrev" id="sheetPrev">'+html+'</div></div>';
   typesetMath($("sheetPrev"));typesetMath($("printArea"));
-  $("editBtn").addEventListener("click",function(){
+  if($("editBtn"))$("editBtn").addEventListener("click",function(){
     var prev=$("sheetPrev"),on=prev.getAttribute("contenteditable")==="true";
     if(on){prev.removeAttribute("contenteditable");prev.classList.remove("editing");$("editBtn").textContent="Edit the sheet";$("editHint").hidden=true;}
     else{prev.setAttribute("contenteditable","true");prev.classList.add("editing");$("editBtn").textContent="Done editing";$("editHint").hidden=false;setHandles(prev);prev.focus();if(T&&T.view==="sheet"){T.textEdited=true;tPanelPause("tSheetPanel");}}
@@ -5973,6 +5997,7 @@ function applyURL(){
   else if(p.get("ws")!==null&&$("wsCrIn"))$("wsCrIn").value=p.get("ws");
   if(p.get("chk")==="end"&&$("chkIn"))$("chkIn").value="end";
   if(p.get("tm")==="1"&&$("timerChk"))$("timerChk").checked=true;
+  if(p.get("pk")==="1"&&$("pkChk"))$("pkChk").checked=true;
   if(p.get("seed")&&$("seedIn"))$("seedIn").value=p.get("seed");
   if(p.get("levels")){var lv=p.get("levels").split(",").map(Number);if(lv.length===3){$("lv1").value=lv[0];$("lv2").value=lv[1];$("lv3").value=lv[2];$("advBox").open=true;}}
   if(p.get("teacher")==="1"){TEACHER=true;var tn=$("teacherNote");if(tn)tn.hidden=false;}
@@ -6002,6 +6027,7 @@ $("copyLink").addEventListener("click",function(){
 });
 a11yInit();
 var urlTouched=applyURL();
+tGateStudentUI();
 unitCheckboxes();renderIndicators();updatePoolInfo();
 if(new URLSearchParams(location.search).get("set")&&tRebuildFromURL()){
   /* A set link was opened: the exact set it encodes is on screen. */
