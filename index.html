@@ -2194,7 +2194,7 @@ E("u1-crossing-distance",1,["7.3"],2,"gen",function(){
     var os=[fmt(key,1),fmt(d1,1),fmt(d2,1),fmt(d3,1)];
     ok=os.filter(function(v,i){return os.indexOf(v)===i;}).length===4;
   }
-  return mcq("Two points \\(P\\) and \\(Q\\) on one shore of a lake are "+D+" m apart. A buoy \\(R\\) floats on the lake. From \\(P\\), the angle between the line to \\(Q\\) and the line to the buoy is "+al+"^\\circ\\); from \\(Q\\), the angle between the line to \\(P\\) and the line to the buoy is "+be+"^\\circ\\). How far is the buoy from \\(P\\), in m?",
+  return mcq("Two points \\(P\\) and \\(Q\\) on one shore of a lake are "+D+" m apart. A buoy \\(R\\) floats on the lake. From \\(P\\), the angle between the line to \\(Q\\) and the line to the buoy is \\("+al+"^\\circ\\); from \\(Q\\), the angle between the line to \\(P\\) and the line to the buoy is \\("+be+"^\\circ\\). How far is the buoy from \\(P\\), in m?",
     fmt(key,1),[fmt(d1,1),fmt(d2,1),fmt(d3,1)],
     "The two shore points and the buoy form a triangle. The angle at the buoy is \\(180^\\circ - "+al+"^\\circ - "+be+"^\\circ = "+R+"^\\circ\\). By the sine law, \\(\\frac{PR}{\\sin "+be+"^\\circ} = \\frac{"+D+"}{\\sin "+R+"^\\circ}\\), so \\(PR = \\frac{"+D+" \\sin "+be+"^\\circ}{\\sin "+R+"^\\circ} \\approx \\)<b>\\("+fmt(key,1)+"\\text{ m}\\)</b>.",
     {D:D,al:al,be:be,R:R});
@@ -3234,13 +3234,13 @@ E("u8-parallel-x-value",8,["5.9"],3,"gen",function(){
 E("u8-isosceles-exterior",8,["5.3"],3,"gen",function(){
   if(Math.random()<0.5){
     var E=2*ri(50,80);var ans=E/2;
-    return numq("In \\(\\triangle ABC\\), \\(AB = AC\\). The exterior angle at \\(A\\) measures "+E+"^\\circ\\). What is the measure of \\(\\angle B\\), in degrees?",
+    return numq("In \\(\\triangle ABC\\), \\(AB = AC\\). The exterior angle at \\(A\\) measures \\("+E+"^\\circ\\). What is the measure of \\(\\angle B\\), in degrees?",
       ans,0.011,
       "The interior angle at \\(A\\) is supplementary to the exterior angle: \\(180^\\circ - "+E+"^\\circ = "+(180-E)+"^\\circ\\). Since \\(AB = AC\\), the base angles at \\(B\\) and \\(C\\) are equal, and the interior angles of a triangle sum to \\(180^\\circ\\), so each base angle is \\((180^\\circ - "+(180-E)+"^\\circ) \\div 2 = \\)<b>\\("+ans+"^\\circ\\)</b>.",
       {E:E,mode:0});
   }
   var E2=ri(100,130);var ans2=2*E2-180;
-  return numq("In \\(\\triangle ABC\\), \\(AB = AC\\). The exterior angle at \\(B\\) measures "+E2+"^\\circ\\). What is the measure of \\(\\angle A\\), in degrees?",
+  return numq("In \\(\\triangle ABC\\), \\(AB = AC\\). The exterior angle at \\(B\\) measures \\("+E2+"^\\circ\\). What is the measure of \\(\\angle A\\), in degrees?",
     ans2,0.011,
     "The interior angle at \\(B\\) is \\(180^\\circ - "+E2+"^\\circ = "+(180-E2)+"^\\circ\\). Since \\(AB = AC\\), \\(\\angle C = \\angle B = "+(180-E2)+"^\\circ\\). The interior angles sum to \\(180^\\circ\\), so \\(\\angle A = 180^\\circ - 2 \\times "+(180-E2)+"^\\circ = \\)<b>\\("+ans2+"^\\circ\\)</b>.",
     {E:E2,mode:1});
@@ -3248,18 +3248,18 @@ E("u8-isosceles-exterior",8,["5.3"],3,"gen",function(){
 E("u8-regular-sides-from-angle",8,["5.5"],2,"gen",function(){
   var ns=[5,6,8,9,10,12,15,18,20,24,30,36,40,45,60,72,90];var n=pick(ns);var each=(n-2)*180/n;var sum=(n-2)*180;var mode=ri(0,2);
   if(mode===0){
-    return numq("Each interior angle of a regular polygon measures "+each+"^\\circ\\). How many sides does the polygon have?",
+    return numq("Each interior angle of a regular polygon measures \\("+each+"^\\circ\\). How many sides does the polygon have?",
       n,0.011,
       "Work with the exterior angle first: it is \\(180^\\circ - "+each+"^\\circ = "+(180-each)+"^\\circ\\). The exterior angles of a polygon add to \\(360^\\circ\\), so the number of sides is \\(360 \\div "+(180-each)+" = \\)<b>\\("+n+"\\)</b>.",
       {n:n,each:each,sum:sum,mode:mode});
   }
   if(mode===1){
-    return numq("The interior angles of a regular polygon add to "+sum+"^\\circ\\), and each interior angle measures "+each+"^\\circ\\). How many sides does the polygon have?",
+    return numq("The interior angles of a regular polygon add to \\("+sum+"^\\circ\\), and each interior angle measures \\("+each+"^\\circ\\). How many sides does the polygon have?",
       n,0.011,
       "Every interior angle has the same measure, so the number of angles, which equals the number of sides, is \\("+sum+" \\div "+each+" = \\)<b>\\("+n+"\\)</b>. Check: \\(("+n+" - 2) \\times 180^\\circ = "+sum+"^\\circ\\), as given.",
       {n:n,each:each,sum:sum,mode:mode});
   }
-  return numq("Each interior angle of a regular polygon measures "+each+"^\\circ\\). What is the sum of the interior angles, in degrees?",
+  return numq("Each interior angle of a regular polygon measures \\("+each+"^\\circ\\). What is the sum of the interior angles, in degrees?",
     sum,0.011,
     "First find the number of sides from the exterior angle: each exterior angle is \\(180^\\circ - "+each+"^\\circ = "+(180-each)+"^\\circ\\), and exterior angles add to \\(360^\\circ\\), so the polygon has \\(360 \\div "+(180-each)+" = "+n+"\\) sides. The sum of the interior angles is then \\(("+n+" - 2) \\times 180^\\circ = \\)<b>\\("+sum+"^\\circ\\)</b>.",
     {n:n,each:each,sum:sum,mode:mode});
