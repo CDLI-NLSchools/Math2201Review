@@ -4674,7 +4674,7 @@ function tExamPanelHtml(){
     return '<li><b>'+(section==="sr"?"A":"B")+(i+1)+".</b> Unit "+e.unit+" \u00B7 "+e.indicators.join(", ")+" \u00B7 Level "+e.level+(section==="cr"?(" \u00B7 "+it.marks+" marks"):"")+' <span class="tid">'+e.id+'</span> <button type="button" class="alt" data-tnew="'+section+":"+i+'">New numbers</button><button type="button" class="alt" data-tswap="'+section+":"+i+'">Replace (random)</button><button type="button" class="alt" data-tpick="'+section+":"+i+'">Pick from bank</button><button type="button" class="alt" data-trem="'+section+":"+i+'">Remove</button>'+tMoveHtml(section+":"+i,i,section==="sr"?ex.srItems.length:ex.crItems.length)+tQPromptHtml(q)+'<span class="hint tqstatus" data-tqstatus="'+section+":"+i+'" role="status"></span></li>';
   }
   return '<div class="tpanel" id="tExamPanel"><b>Teacher tools: edit this paper</b>'
-   +'<p class="hint">Changes update the paper, the answer key and the totals at once. These controls and the free text editor (Edit the exam) are alternatives: once free text editing is on, the question controls, set links and the Brightspace download pause for this paper, because they work from the question set rather than edited text. Print, Word and Copy above always use the paper exactly as shown.</p>'
+   +'<p class="hint">Changes update the paper, the answer key and the totals at once. These controls and the free text editor (Edit the exam) are alternatives: once free text editing is on, the question controls, set links and the Brightspace download pause for this paper, because they work from the question set rather than edited text. Print, Word and Copy below always use the paper exactly as shown.</p>'
    +'<p class="hint" id="tPanelNote" hidden>Free text editing is on for this paper, so the question controls are paused. Make a new paper to use them again.</p>'
    +'<div><b>Section A: selected response</b> <button type="button" class="alt" id="tAddSrBtn">Add question</button><button type="button" class="alt" id="tAddSrBankBtn">Add from bank</button></div>'
    +'<ol class="tlist">'+ex.srItems.map(function(it,i){return row("sr",it,i);}).join("")+"</ol>"
@@ -4767,7 +4767,7 @@ function tSheetPanelHtml(){
   function row(q,i){var e=q._entry;
     return '<li><b>'+(i+1)+'.</b> '+(q.type==="mc"?"Multiple choice":"Constructed response")+" \u00B7 Unit "+e.unit+" \u00B7 "+e.indicators.join(", ")+" \u00B7 Level "+e.level+' <span class="tid">'+e.id+'</span> <button type="button" class="alt" data-tnew="'+i+'">New numbers</button><button type="button" class="alt" data-tswap="'+i+'">Replace (random)</button><button type="button" class="alt" data-tpick="'+i+'">Pick from bank</button><button type="button" class="alt" data-trem="'+i+'">Remove</button>'+tMoveHtml(i,i,sheetState.items.length)+tQPromptHtml(q)+'<span class="hint tqstatus" data-tqstatus="'+i+'" role="status"></span></li>';}
   return '<div class="tpanel" id="tSheetPanel"><b>Teacher tools: edit this sheet</b>'
-   +'<p class="hint">Changes update the sheet and its answer key at once. These controls and the free text editor (Edit the sheet) are alternatives: once free text editing is on, the question controls and set links pause for this sheet, because they work from the question set rather than edited text. Print, Word and Copy above always use the sheet exactly as shown.</p>'
+   +'<p class="hint">Changes update the sheet and its answer key at once. These controls and the free text editor (Edit the sheet) are alternatives: once free text editing is on, the question controls and set links pause for this sheet, because they work from the question set rather than edited text. Print, Word and Copy below always use the sheet exactly as shown.</p>'
    +'<p class="hint" id="tPanelNote" hidden>Free text editing is on for this sheet, so the question controls are paused. Make a new sheet to use them again.</p>'
    +'<ol class="tlist">'+sheetState.items.map(row).join("")+"</ol>"
    +'<div><button type="button" class="alt" id="tAddBtn">Add question</button><button type="button" class="alt" id="tAddBankBtn">Add from bank</button><button type="button" class="alt" id="tCopyStudentBtn">Copy link for students</button><button type="button" class="alt" id="tCopyTeacherBtn">Copy teacher link (teacher only)</button> <span class="hint" id="tSheetStatus" role="status"></span></div>'
@@ -5120,10 +5120,11 @@ function renderExam(){
   $("printArea").innerHTML=paper;
   $("session").innerHTML='<div class="card"><p>Your '+(single?"practice unit test":"practice exam")+' is ready: '+ex.srItems.length+' selected-response questions and '+ex.crItems.length+' constructed-response questions, '+lv.total+' marks in total. The exam paper and the answer key print separately.</p>'
     +((T&&T.edited)?'<p class="thinNote">You edited this paper: it now has '+lv.sr+' selected-response marks and '+lv.cr+' constructed-response marks, '+lv.total+' marks in total. The paper, the answer key and the totals all follow the edited set.</p>':((ex.short||examShortNow(ex))?'<p class="thinNote">Heads up: the bank could not fill every exam slot for this selection yet, so this paper runs short of the full blueprint.</p>':""))
+    +tExamPanelHtml()
     +'<div class="row">'+(TEACHER?'<button type="button" id="editExamBtn">Edit the exam</button>':"")+'<button type="button" id="printPaperBtn">Print the exam paper</button><button type="button" id="printKeyBtn" class="sec">Print the answer key</button><button type="button" id="wordBtn" class="sec">Download Word file</button><button type="button" id="copyDocsBtn" class="sec">Copy for Google Docs</button></div>'
     +'<p class="hint" id="editHint" hidden>Editing is on: click any text in the exam below and type to change it, or delete a question you do not want. Drag the bar at the bottom of a Section B answer box to make that box taller or shorter. What you see is what prints and what copies.</p>'
     +'<p class="hint" id="copyStatus" role="status"></p>'
-    +tExamPanelHtml()+'<div class="sheetPrev" id="sheetPrev">'+paper+'<div class="keybreak">'+key+'</div></div></div>';
+    +'<div class="sheetPrev" id="sheetPrev">'+paper+'<div class="keybreak">'+key+'</div></div></div>';
   typesetMath($("sheetPrev"));typesetMath($("printArea"));if($("tExamPanel"))typesetMath($("tExamPanel"));
   if(s.timer){var tc=document.createElement("div");tc.className="timerbar";tc.id="examTimer";var _card=$("session").querySelector(".card");if(_card)_card.insertBefore(tc,_card.firstChild);var _t0=examState.t0;var _tick=function(){var sec=Math.floor((Date.now()-_t0)/1000);var mm=Math.floor(sec/60),ss=sec%60;tc.textContent="Time so far: "+mm+":"+(ss<10?"0":"")+ss+" \u00B7 This timer is just a guide.";};_tick();window._examTimerInt=setInterval(_tick,1000);}
   if($("editExamBtn"))$("editExamBtn").addEventListener("click",function(){
@@ -5181,10 +5182,11 @@ function renderSheet(){
   $("printArea").innerHTML=html;
   $("session").innerHTML='<div class="card"><p>Your practice sheet is ready ('+res.items.length+' questions'+(s.wantKey?', with the answer key on its own pages at the end':'')+'). It is shown below, exactly as it will print.</p>'
     +(res.thin?'<p class="thinNote">Heads up: the question bank is still thin for this selection, so this sheet repeats practice on the same question shape (with new numbers) because there are not yet enough different questions to fill it.</p>':"")
+    +tSheetPanelHtml()
     +'<div class="row">'+(TEACHER?'<button type="button" id="editBtn">Edit the sheet</button>':"")+'<button type="button" id="wordBtn" class="sec">Download Word file</button><button type="button" id="copyDocsBtn" class="sec">Copy for Google Docs</button><button type="button" id="printBtn" class="sec">Print / save the sheet</button></div>'
     +'<p class="hint" id="editHint" hidden>Editing is on: click any text in the sheet below and type to change it, or delete a question you do not want. Drag the bar at the bottom of an answer box to make that box taller or shorter. What you see is what prints and what copies. Most math is regular text and can be changed directly; typeset expressions are rendered, so if you need different numbers in one of those, regenerate the sheet instead.</p>'
     +'<p class="hint" id="copyStatus" role="status"></p>'
-    +tSheetPanelHtml()+'<div class="sheetPrev" id="sheetPrev">'+html+'</div></div>';
+    +'<div class="sheetPrev" id="sheetPrev">'+html+'</div></div>';
   typesetMath($("sheetPrev"));typesetMath($("printArea"));if($("tSheetPanel"))typesetMath($("tSheetPanel"));
   if($("editBtn"))$("editBtn").addEventListener("click",function(){
     var prev=$("sheetPrev"),on=prev.getAttribute("contenteditable")==="true";
