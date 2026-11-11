@@ -78,6 +78,9 @@
   .tpick button:hover{border-color:var(--accent2);}
   .tpick .tsamp{display:block;margin-top:3px;font-size:.86rem;color:#4b5a61;line-height:1.4;}
   .tpick .tsamp svg{max-width:100%;height:auto;max-height:90px;}
+  .tflash{outline:3px solid var(--accent2);outline-offset:2px;border-radius:8px;animation:tflashA 1.8s ease-out 1;}
+  @keyframes tflashA{0%{background:rgba(217,164,65,.45);}100%{background:transparent;}}
+  @media (prefers-reduced-motion: reduce){.tflash{animation:none;}}
   .endmode [data-check],.endmode [data-sol]{display:none;}
   .modebar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
   .group{border:1px solid var(--line);border-radius:8px;padding:10px 12px 12px;margin-top:12px;}
@@ -4313,6 +4316,24 @@ function tScopePool(){
 function tCrPool(){return tScopePool().filter(function(e){return typeof CR_MARKS!=="undefined"&&CR_MARKS[e.id]!==undefined&&CR_MARKS[e.id]>=2&&e.level>=2;});}
 function tAvoidAll(items){var a={};items.forEach(function(q){if(q)a[canonQ(q)]=1;});return a;}
 function tSwapCands(curE,type,pool){return pool.filter(function(e){return e.id!==curE.id&&tCanMake(e,type);});}
+/* After a bank pick, take the teacher back to the slot they were working
+   on (Jason, Nov 11, 2026): the picker sits away from the question, below
+   the set in the online view and at the foot of the panel in the exam and
+   sheet views, and closing it shifts the page, so the replaced question
+   was easy to lose. Scrolls the slot to the middle of the screen and
+   flashes its outline. */
+function tReturnToPick(attrVal){
+  var box=$("session");if(!box||!box.querySelectorAll)return;
+  var btn=null;
+  Array.prototype.forEach.call(box.querySelectorAll("[data-tpick]"),function(b){if(b.getAttribute("data-tpick")===attrVal)btn=b;});
+  if(!btn)return;
+  var el=btn;
+  if(btn.closest)el=btn.closest("li")||btn.closest(".q")||btn;
+  try{
+    if(el.scrollIntoView)el.scrollIntoView({behavior:scrollBehavior(),block:"center"});
+    if(el.classList){el.classList.add("tflash");setTimeout(function(){el.classList.remove("tflash");},1900);}
+  }catch(err){}
+}
 function tOpenPicker(title,pool,onPick,wantType){
   var pk=$("tPicker");if(!pk)return;
   var samples={};
@@ -4525,11 +4546,11 @@ function tOpOnline(op,i,entryId,pickedQ){
   if(op==="pick"){var e2=tEntryById(entryId);if(!e2)return;current[i]=(pickedQ&&pickedQ._entry===e2&&!avoid[canonQ(pickedQ)])?tAdoptPicked(e2,pickedQ,avoid):tFreezeSlot(e2,null,avoid,T.salt);T.edited=true;tAfterOnlineEdit();return;}
 }
 function tPickOnline(i){
-  tOpenPicker("Replace question "+(i+1)+" from the bank",tScopePool(),function(id,q){tOpOnline("pick",i,id,q);});
+  tOpenPicker("Replace question "+(i+1)+" from the bank",tScopePool(),function(id,q){tOpOnline("pick",i,id,q);tReturnToPick(String(i));});
 }
 function tAddOnline(fromBank){
   if(!T||T.view!=="online")return;
-  if(fromBank){tOpenPicker("Add a question from the bank",tScopePool(),function(id,q){tAddOnlineEntry(id,q);});return;}
+  if(fromBank){tOpenPicker("Add a question from the bank",tScopePool(),function(id,q){tAddOnlineEntry(id,q);tReturnToPick(String(current.length-1));});return;}
   tSyncOnline();
   var pool=tScopePool(),inSet={};
   current.forEach(function(q){inSet[q._entry.id]=1;});
@@ -4624,13 +4645,13 @@ function tOpExam(section,op,i,entryId,pickedQ){
 }
 function tPickExam(section,i){
   var pool=section==="sr"?tScopePool().filter(function(e){return probeType(e)==="mc";}):tCrPool();
-  tOpenPicker("Replace "+(section==="sr"?"Section A":"Section B")+" question "+(i+1)+" from the bank",pool,function(id,q){tOpExam(section,"pick",i,id,q);},section==="sr"?"mc":null);
+  tOpenPicker("Replace "+(section==="sr"?"Section A":"Section B")+" question "+(i+1)+" from the bank",pool,function(id,q){tOpExam(section,"pick",i,id,q);tReturnToPick(section+":"+i);},section==="sr"?"mc":null);
 }
 function tAddExam(section,fromBank){
   if(!T||T.view!=="exam"||!examState)return;
   if(fromBank){
     var pool=section==="sr"?tScopePool().filter(function(e){return probeType(e)==="mc";}):tCrPool();
-    tOpenPicker(section==="sr"?"Add a selected-response question from the bank":"Add a constructed-response question from the bank",pool,function(id,q){tAddExamEntry(section,id,q);},section==="sr"?"mc":null);
+    tOpenPicker(section==="sr"?"Add a selected-response question from the bank":"Add a constructed-response question from the bank",pool,function(id,q){tAddExamEntry(section,id,q);tReturnToPick(section+":"+((section==="sr"?examState.ex.srItems:examState.ex.crItems).length-1));},section==="sr"?"mc":null);
     return;
   }
   var pool2=section==="sr"?tScopePool().filter(function(e){return tCanMake(e,"mc");}):tCrPool();
@@ -4701,14 +4722,14 @@ function tPickSheet(i){
   var q=sheetState.items[i];if(!q)return;
   var mc=q.type==="mc";
   var pool=tScopePool().filter(function(e){return (probeType(e)==="mc")===mc;});
-  tOpenPicker("Replace question "+(i+1)+" from the bank",pool,function(id,q2){tOpSheet("pick",i,id,q2);},mc?"mc":"nonmc");
+  tOpenPicker("Replace question "+(i+1)+" from the bank",pool,function(id,q2){tOpSheet("pick",i,id,q2);tReturnToPick(String(i));},mc?"mc":"nonmc");
 }
 function tAddSheet(fromBank){
   if(!T||T.view!=="sheet"||!sheetState)return;
   var items=sheetState.items;
   var mc=items.length?(items[items.length-1].type==="mc"):true;
   var pool=tScopePool().filter(function(e){return (probeType(e)==="mc")===mc;});
-  if(fromBank){tOpenPicker("Add a question from the bank",pool,function(id,q){tAddSheetEntry(id,q);},mc?"mc":"nonmc");return;}
+  if(fromBank){tOpenPicker("Add a question from the bank",pool,function(id,q){tAddSheetEntry(id,q);tReturnToPick(String(sheetState.items.length-1));},mc?"mc":"nonmc");return;}
   var inSet={};items.forEach(function(q){inSet[q._entry.id]=1;});
   var cands=pool.filter(function(e){return !inSet[e.id];});
   if(!cands.length)cands=pool.slice();
