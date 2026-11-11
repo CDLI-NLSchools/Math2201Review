@@ -4330,15 +4330,63 @@ function tShapeSig(q){
   if(q.type==="mc"&&q.options)sig+="||"+q.options.map(function(o){return mask(typeof o==="string"?o:o.t);}).sort().join("|");
   return sig;
 }
+/* Walk a slot's full seeded stream in order (nonce 0 to 24, index 0 to
+   120 within each nonce), calling visit(cand, nonce, idx) for every
+   candidate of an acceptable type. visit returns false to stop early.
+   Candidates carry the same stream coordinates tStreamDraw uses, so a
+   visited candidate can be frozen in place with _ts {n, i}. */
+function tStreamWalk(e,wantType,salt,visit){
+  var stop=false;
+  for(var nonce=0;nonce<25&&!stop;nonce++){
+    withSeed("tset|"+salt+"|"+e.id+"|"+nonce,function(){
+      for(var k=0;k<=120;k++){
+        var cand=e.gen();cand._entry=e;
+        if(!tTypeOk(cand,wantType))continue;
+        if(visit(cand,nonce,k)===false){stop=true;break;}
+      }
+    });
+  }
+}
 function tNumbersOnly(e,curQ,wantType,avoid,salt){
   if(!e||!curQ)return null;
-  var sig=tShapeSig(curQ),curCanon=canonQ(curQ),myAvoid={},k;
+  var sig=tShapeSig(curQ),curCanon=canonQ(curQ);
+  /* "First stream candidate that is not the current one" toggles: the
+     seeded stream is deterministic, so click two hands back the first
+     candidate and every supported entry bounces between exactly two
+     questions (Jason's toggle report, Nov 11, 2026, confirmed
+     bank-wide). Taking only the first acceptable candidate per nonce
+     (what tFreezeSlot does) also starves the pool: some entries yield
+     just 2 to 3 distinct questions that way. So walk the FULL stream,
+     find the current question in it, and return the NEXT distinct
+     mask-matching candidate after it, wrapping to the first. Repeated
+     clicks walk every variant the entry can make. If the current
+     question is not in the stream (a raw-frozen pick, for example),
+     the first stream candidate that differs wins. */
+  var seen={},foundCur=false,firstAlt=null,answer=null;
+  var stamp=function(cand,n,i){cand._tuid="u"+(++_tUid);cand._ts={n:n,i:i,t:cand.type,raw:null};return cand;};
+  tStreamWalk(e,wantType,salt,function(cand,n,i){
+    var cn=canonQ(cand);
+    if(seen[cn])return true;
+    seen[cn]=1;
+    if(cand.type!==curQ.type||tShapeSig(cand)!==sig)return true;
+    if(cn!==curCanon&&avoid&&avoid[cn])return true;
+    if(foundCur){answer=stamp(cand,n,i);return false;}
+    if(cn===curCanon)foundCur=true;
+    else if(!firstAlt)firstAlt=stamp(cand,n,i);
+    return true;
+  });
+  if(answer)return answer;
+  if(firstAlt)return firstAlt;
+  /* The stream holds no other mask-matching variant (or none at all).
+     Fall back to redraws, which can still find one for entries whose
+     generator only occasionally keeps the shape. */
+  var myAvoid={},k;
   for(k in avoid)myAvoid[k]=1;
   myAvoid[curCanon]=1;
   for(var tries=0;tries<50;tries++){
-    var cand=tFreezeSlot(e,wantType,myAvoid,salt);
-    if(!cand)return null;
-    if(cand.type===curQ.type&&tShapeSig(cand)===sig&&canonQ(cand)!==curCanon)return cand;
+    var cand2=tFreezeSlot(e,wantType,myAvoid,salt);
+    if(!cand2)return null;
+    if(cand2.type===curQ.type&&tShapeSig(cand2)===sig&&canonQ(cand2)!==curCanon)return cand2;
   }
   return null;
 }
