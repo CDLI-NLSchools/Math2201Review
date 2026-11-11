@@ -4457,9 +4457,39 @@ function tStripTeacher(url){
   var p=new URLSearchParams(url.slice(qi+1));p.delete("teacher");
   var q=p.toString();return q?url.slice(0,qi)+"?"+q:url.slice(0,qi);
 }
+/* Answer-choice shuffle for shared student links (Jason, Nov 11, 2026):
+   options are sorted at generation, so the correct letter is sticky
+   across a class opening the same link (measured that evening: 51 of
+   70 numbers-friendly MC entries in this bank kept the same correct
+   letter across 7 generations). A teacher copying a student link can
+   choose "Shuffled per student" instead: the link carries shuf=1 and
+   each opening of it permutes every multiple choice question's options
+   on a fresh copy, remapping the correct index, so classmates cannot
+   copy answers by letter. The teacher's own view is never shuffled,
+   the teacher's preference is remembered on their device, and a link
+   without the flag behaves exactly as before. */
+var SHUFFLE_OPTS=false;
+function shufQ(q){
+  if(!q||q.type!=="mc"||!q.options||q.options.length<2)return q;
+  var idx=q.options.map(function(_,j){return j;});
+  for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  if(idx.every(function(v,j){return v===j;}))return q;
+  var nq=Object.assign({},q);
+  nq.options=idx.map(function(k){return q.options[k];});
+  nq.correct=idx.indexOf(q.correct);
+  return nq;
+}
+function tShufPref(){try{return localStorage.getItem("shufPref")==="shuf"?"shuf":"sorted";}catch(e){return "sorted";}}
+function tShufSelHtml(){
+  var pref=tShufPref();
+  return ' <label class="hint">Answer choices in student links: <select id="tShufSel"><option value="sorted"'+(pref==="sorted"?" selected":"")+'>Sorted</option><option value="shuf"'+(pref==="shuf"?" selected":"")+'>Shuffled per student</option></select></label>';
+}
 function tShareURL(teacher){
   var p=new URLSearchParams(settingsToURL().split("?")[1]||"");
-  p.delete("teacher");p.delete("seed");
+  p.delete("teacher");p.delete("seed");p.delete("shuf");
+  var shufSel=$("tShufSel");
+  if(shufSel){try{localStorage.setItem("shufPref",shufSel.value);}catch(e){}
+    if(!teacher&&shufSel.value==="shuf")p.set("shuf","1");}
   if(T){var sv=tSetValue();if(sv)p.set("set",sv);
     if(T.view==="exam")p.set("mode","exam");else if(T.view==="sheet")p.set("mode","sheet");else p.delete("mode");}
   if(teacher)p.set("teacher","1");
@@ -4497,6 +4527,7 @@ function tRebuildFromURL(){
     current=items;checkedCount=0;correctCount=0;checkMode=(s.chk==="end")?"end":"each";endGraded=false;setResults={};sessionSeed="";
     lastSettings=s;onlineThin=false;T=null;
     if(TEACHER)T={view:"online",salt:salt,scope:{units:s.units.slice(),inds:s.inds.slice(),midCap:!!s.midCap},edited:edited,state:{},endGraded:false,picker:null};
+    if(!TEACHER&&SHUFFLE_OPTS)current=current.map(shufQ);
     renderOnline(false);
     $("session").scrollIntoView({behavior:scrollBehavior()});
     return true;
@@ -4520,6 +4551,7 @@ function tRebuildFromURL(){
     examState={ex:exO,s:s,single:single,wsCrF:wsCrF,scope:scope,title:title,t0:Date.now()};
     if(TEACHER){var anyPK=srItems.concat(crItems).some(function(it){return isPK(it.q._entry);});
       T={view:"exam",salt:salt,scope:{units:s.units.slice(),inds:s.inds.slice(),includePK:anyPK,examCap:(s.units.slice().sort(function(a,b){return a-b;}).join()==="1,2,3,4")},edited:edited,textEdited:false,picker:null};}
+    if(!TEACHER&&SHUFFLE_OPTS){srItems.forEach(function(it){it.q=shufQ(it.q);});crItems.forEach(function(it){it.q=shufQ(it.q);});}
     renderExam();
     return true;
   }
@@ -4531,6 +4563,7 @@ function tRebuildFromURL(){
     T=null;
     sheetState={items:items3,s:s,thin:false};
     if(TEACHER)T={view:"sheet",salt:salt,scope:{units:s.units.slice(),inds:s.inds.slice(),midCap:!!s.midCap},edited:edited,textEdited:false,picker:null};
+    if(!TEACHER&&SHUFFLE_OPTS)sheetState.items=sheetState.items.map(shufQ);
     renderSheet();
     return true;
   }
@@ -4565,7 +4598,7 @@ function tctlHtml(i){
 }
 function tBarHtml(){
   if(!TEACHER||!T||T.view!=="online")return "";
-  return '<div class="tbar"><b>Teacher tools:</b> <button type="button" class="alt" id="tAddBtn">Add question</button><button type="button" class="alt" id="tAddBankBtn">Add from bank</button><button type="button" class="alt" id="tCopyStudentBtn">Copy link for students</button><button type="button" class="alt" id="tCopyTeacherBtn">Copy teacher link (teacher only)</button> <span class="hint" id="tStatus" role="status"></span><div class="texports"><button type="button" class="alt" data-kahoot="1">Download for Kahoot</button><button type="button" class="alt" data-blooket="1">Download for Blooket</button><button type="button" class="alt" data-brightspace="1">Download for Brightspace</button> <label class="hint">Variants per question <select id="bsVarSel"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option></select></label> <span class="hint" id="gameStatus" role="status"></span></div><div id="tPicker" hidden></div></div>';
+  return '<div class="tbar"><b>Teacher tools:</b> <button type="button" class="alt" id="tAddBtn">Add question</button><button type="button" class="alt" id="tAddBankBtn">Add from bank</button><button type="button" class="alt" id="tCopyStudentBtn">Copy link for students</button><button type="button" class="alt" id="tCopyTeacherBtn">Copy teacher link (teacher only)</button>'+tShufSelHtml()+' <span class="hint" id="tStatus" role="status"></span><div class="texports"><button type="button" class="alt" data-kahoot="1">Download for Kahoot</button><button type="button" class="alt" data-blooket="1">Download for Blooket</button><button type="button" class="alt" data-brightspace="1">Download for Brightspace</button> <label class="hint">Variants per question <select id="bsVarSel"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option></select></label> <span class="hint" id="gameStatus" role="status"></span></div><div id="tPicker" hidden></div></div>';
 }
 function tOnlineStatus(m){var st=$("tStatus");if(st)st.textContent=m;}
 function tWireOnline(){
@@ -4680,7 +4713,7 @@ function tExamPanelHtml(){
    +'<ol class="tlist">'+ex.srItems.map(function(it,i){return row("sr",it,i);}).join("")+"</ol>"
    +'<div><b>Section B: constructed response</b> <button type="button" class="alt" id="tAddCrBtn">Add question</button><button type="button" class="alt" id="tAddCrBankBtn">Add from bank</button></div>'
    +'<ol class="tlist">'+ex.crItems.map(function(it,i){return row("cr",it,i);}).join("")+"</ol>"
-   +'<div><button type="button" class="alt" id="tCopyStudentBtn">Copy link for students</button><button type="button" class="alt" id="tCopyTeacherBtn">Copy teacher link (teacher only)</button><button type="button" class="alt" id="tBsBtn">Download for Brightspace</button> <span class="hint" id="tExamStatus" role="status"></span></div>'
+   +'<div><button type="button" class="alt" id="tCopyStudentBtn">Copy link for students</button><button type="button" class="alt" id="tCopyTeacherBtn">Copy teacher link (teacher only)</button><button type="button" class="alt" id="tBsBtn">Download for Brightspace</button>'+tShufSelHtml()+' <span class="hint" id="tExamStatus" role="status"></span></div>'
    +'<div id="tPicker" hidden></div></div>';
 }
 function tPanelPause(panelId){
@@ -4770,7 +4803,7 @@ function tSheetPanelHtml(){
    +'<p class="hint">Changes update the sheet and its answer key at once. These controls and the free text editor (Edit the sheet) are alternatives: once free text editing is on, the question controls and set links pause for this sheet, because they work from the question set rather than edited text. Print, Word and Copy below always use the sheet exactly as shown.</p>'
    +'<p class="hint" id="tPanelNote" hidden>Free text editing is on for this sheet, so the question controls are paused. Make a new sheet to use them again.</p>'
    +'<ol class="tlist">'+sheetState.items.map(row).join("")+"</ol>"
-   +'<div><button type="button" class="alt" id="tAddBtn">Add question</button><button type="button" class="alt" id="tAddBankBtn">Add from bank</button><button type="button" class="alt" id="tCopyStudentBtn">Copy link for students</button><button type="button" class="alt" id="tCopyTeacherBtn">Copy teacher link (teacher only)</button> <span class="hint" id="tSheetStatus" role="status"></span></div>'
+   +'<div><button type="button" class="alt" id="tAddBtn">Add question</button><button type="button" class="alt" id="tAddBankBtn">Add from bank</button><button type="button" class="alt" id="tCopyStudentBtn">Copy link for students</button><button type="button" class="alt" id="tCopyTeacherBtn">Copy teacher link (teacher only)</button>'+tShufSelHtml()+' <span class="hint" id="tSheetStatus" role="status"></span></div>'
    +'<div id="tPicker" hidden></div></div>';
 }
 function tSheetStatus(m){var st=$("tSheetStatus");if(st)st.textContent=m;}
@@ -4846,6 +4879,7 @@ function startOnline(){
     var _av={};
     current=current.map(function(q){return _sd?tAdoptDrawn(q,_av):tFreezeSlot(q._entry,q.type,_av,T.salt);});
   }
+  if(!TEACHER&&SHUFFLE_OPTS)current=current.map(shufQ);
   renderOnline(true);
 }
 function renderOnline(scroll){
@@ -5082,6 +5116,7 @@ function startExam(){
     ex.srItems.forEach(function(it){it.q=_sd?tAdoptDrawn(it.q,_av):tFreezeSlot(it.q._entry,"mc",_av,T.salt);});
     ex.crItems.forEach(function(it){it.q=_sd?tAdoptDrawn(it.q,_av):tFreezeSlot(it.q._entry,it.q.type,_av,T.salt);});
   }
+  if(!TEACHER&&SHUFFLE_OPTS){ex.srItems.forEach(function(it){it.q=shufQ(it.q);});ex.crItems.forEach(function(it){it.q=shufQ(it.q);});}
   renderExam();
 }
 function renderExam(){
@@ -5152,6 +5187,7 @@ function startSheet(){
     var _av={};
     sheetState.items=sheetState.items.map(function(q){return _sd?tAdoptDrawn(q,_av):tFreezeSlot(q._entry,q.type,_av,T.salt);});
   }
+  if(!TEACHER&&SHUFFLE_OPTS)sheetState.items=sheetState.items.map(shufQ);
   renderSheet();
 }
 function renderSheet(){
@@ -6171,6 +6207,7 @@ function applyURL(){
   if(p.get("seed")&&$("seedIn"))$("seedIn").value=p.get("seed");
   if(p.get("levels")){var lv=p.get("levels").split(",").map(Number);if(lv.length===3){$("lv1").value=lv[0];$("lv2").value=lv[1];$("lv3").value=lv[2];$("advBox").open=true;}}
   if(p.get("teacher")==="1"){TEACHER=true;var tn=$("teacherNote");if(tn)tn.hidden=false;}
+  if(p.get("shuf")==="1")SHUFFLE_OPTS=true;
   return touched;
 }
 function setPreset(units,cap){state.units=units;state.inds=[];state.midCap=!!cap;unitCheckboxes();renderIndicators();updatePoolInfo();}
