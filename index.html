@@ -1646,7 +1646,7 @@ E("u6-breakeven-plans",6,["6.17","6.19"],3,"gen",function(){
     "A car rental agency offers two plans."]);
   var f1=pick([29,39,49,59]);var dr=pick([0.25,0.5]);var r2=pick([0.45,0.55,0.65,0.75]);var r1=r2+dr;
   var df=pick([10,15,20,25,30,40]);var f2=f1+df;var d=df/dr;
-  return numq(fr+" Plan A charges a fee of \\$"+f1+" plus \\$"+fmtF(r1,2)+" per km driven. Plan B charges a fee of \\$"+f2+" plus \\$"+fmtF(r2,2)+" per km driven. For what distance, in km, do the two plans cost exactly the same?",
+  return numq(fr+" Plan A charges a fee of $"+f1+" plus $"+fmtF(r1,2)+" per km driven. Plan B charges a fee of $"+f2+" plus $"+fmtF(r2,2)+" per km driven. For what distance, in km, do the two plans cost exactly the same?",
     d,0.011,
     "Write each cost as a per-km rate times the distance, plus the fixed fee; the per-km charge is the slope of the cost graph. Plan A: \\(C = "+f1+" + "+fmt(r1)+"d\\). Plan B: \\(C = "+f2+" + "+fmt(r2)+"d\\). Setting the costs equal: \\("+f1+" + "+fmt(r1)+"d = "+f2+" + "+fmt(r2)+"d\\), so \\("+fmt(dr)+"d = "+df+"\\), and \\(d = \\)<b>\\("+d+"\\text{ km}\\)</b>. Below that distance the lower fee wins; above it, the lower per-km rate wins.",
     {f1:f1,f2:f2,r1:r1,r2:r2});
@@ -1676,7 +1676,7 @@ E("u6-unit-price-mc",6,["6.16"],1,"gen",function(){
     var os=[fmtF(unit,2),fmtF(d1,2),fmtF(d2,2),fmtF(d3,2)];
     ok=os.filter(function(v,i){return os.indexOf(v)===i;}).length===4;
   }
-  return mcq("A pack of "+n+" "+fr.w+" costs \\$"+fmtF(P,2)+". What is the cost per "+fr.s+", in dollars?",
+  return mcq("A pack of "+n+" "+fr.w+" costs $"+fmtF(P,2)+". What is the cost per "+fr.s+", in dollars?",
     fmtF(unit,2),[fmtF(d1,2),fmtF(d2,2),fmtF(d3,2)],
     "The unit price is the total cost divided by the number of items: \\("+fmtF(P,2)+" \\div "+n+" = \\)<b>\\(\\$"+fmtF(unit,2)+"\\)</b> per "+fr.s+". Dividing the other way would give items per dollar, not dollars per item.",
     {n:n,P:P});
@@ -3308,7 +3308,7 @@ E("u2-revenue-build",2,["4.2"],3,"gen",function(){
     var os=[keyS,d1S,d2S,d3S];
     ok=os.filter(function(v,i){return os.indexOf(v)===i;}).length===4;
   }
-  return mcq(fr.w+" sells "+fr.item+" at \\$"+P+" per "+fr.each+" and normally sells "+N+" of them. The seller estimates that for every \\$"+fmt(s,1)+" increase in the price, "+d+" fewer will be sold. Let \\(x\\) be the number of \\$"+fmt(s,1)+" increases. Which function models the revenue, in dollars?",
+  return mcq(fr.w+" sells "+fr.item+" at $"+P+" per "+fr.each+" and normally sells "+N+" of them. The seller estimates that for every $"+fmt(s,1)+" increase in the price, "+d+" fewer will be sold. Let \\(x\\) be the number of $"+fmt(s,1)+" increases. Which function models the revenue, in dollars?",
     keyS,[d1S,d2S,d3S],
     "After \\(x\\) increases, the price is \\("+P+" + "+fmt(s,1)+"x\\) dollars and the number sold is \\("+N+" - "+d+"x\\). Revenue is price times number sold: \\(R(x) = ("+P+" + "+fmt(s,1)+"x)("+N+" - "+d+"x)\\). Expanding gives <b>"+keyS+"</b>.",
     {P:P,N:N,s:s,d:d});
